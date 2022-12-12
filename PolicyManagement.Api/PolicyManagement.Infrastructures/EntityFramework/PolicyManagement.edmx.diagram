@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="926e612bf698436e8b81c4559ae26c46" Name="Diagram1" ZoomLevel="40">
+        <EntityTypeShape EntityType="PolicyManagerModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblAddonPlanOption" Width="1.5" PointX="5.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblAddonPlanOptionMapping" Width="1.5" PointX="7.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblAddonRider" Width="1.5" PointX="5.75" PointY="7.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblAgentSwapping" Width="1.5" PointX="8.75" PointY="7.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblBank" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblBasementExposer" Width="1.5" PointX="10.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblBounceReason" Width="1.5" PointX="10.75" PointY="8.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblBranch" Width="1.5" PointX="0.75" PointY="12.375" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblBranchServiceProvider" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblBusinessType" Width="1.5" PointX="12.75" PointY="5.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCategory" Width="1.5" PointX="12.75" PointY="9.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblChequeFromAccount" Width="1.5" PointX="10.75" PointY="13.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCity" Width="1.5" PointX="12.75" PointY="13.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblClaimData" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblClaimFollowupDetails" Width="1.5" PointX="14.75" PointY="10.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblClaimStatus" Width="1.5" PointX="14.75" PointY="13.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblClaimSubStatus" Width="1.5" PointX="16.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblClaimType" Width="1.5" PointX="16.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCluster" Width="1.5" PointX="3" PointY="4.625" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCommissionPayType" Width="1.5" PointX="16.75" PointY="8.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCommissionSlab" Width="1.5" PointX="16.75" PointY="12.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCommissionSlabType" Width="1.5" PointX="5.75" PointY="17.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCommissionTurnoverType" Width="1.5" PointX="7.75" PointY="17.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCoverage" Width="1.5" PointX="9.75" PointY="17.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCoverageInland" Width="1.5" PointX="11.75" PointY="17.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCoverageOverseas" Width="1.5" PointX="13.75" PointY="17.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCustomer" Width="1.5" PointX="3" PointY="16.5" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblDepartment" Width="1.5" PointX="1.5" PointY="31.5" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblDesignation" Width="1.5" PointX="1.5" PointY="34.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblDocmentType" Width="1.5" PointX="18.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblEndorsementData" Width="1.5" PointX="18.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblEndorsementReason" Width="1.5" PointX="18.75" PointY="16.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblEndorsementType" Width="1.5" PointX="15.75" PointY="19.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblFinancer" Width="1.5" PointX="20.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblFireCoverage" Width="1.5" PointX="20.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblFormList" Width="1.5" PointX="20.75" PointY="10.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblFuelType" Width="1.5" PointX="20.75" PointY="14.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblGender" Width="1.5" PointX="17.75" PointY="20.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblGenerator" Width="1.5" PointX="20.75" PointY="18.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblGST" Width="1.5" PointX="5.75" PointY="21.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblIndustry" Width="1.5" PointX="7.75" PointY="21.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblInspectionCompany" Width="1.5" PointX="9.75" PointY="21.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblInspectionData" Width="1.5" PointX="11.75" PointY="21.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblInspectionReason" Width="1.5" PointX="19.75" PointY="21.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblInspectionStatus" Width="1.5" PointX="21.75" PointY="21.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblInspectionSubStatus" Width="1.5" PointX="22.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblInsuranceCompany" Width="1.5" PointX="22.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblInsuranceCompanyBranch" Width="1.5" PointX="22.75" PointY="10.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblInsuredPerson" Width="1.5" PointX="13.75" PointY="23.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblMakeYear" Width="1.5" PointX="22.75" PointY="16.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblManufacturer" Width="1.5" PointX="5.75" PointY="1" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblMaritalStatus" Width="1.5" PointX="23.75" PointY="20.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblMenuItem" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblModel" Width="1.5" PointX="8" PointY="1" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblMonthCycle" Width="1.5" PointX="24.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblMotorPolicyData" Width="1.5" PointX="15.75" PointY="24.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblNCB" Width="1.5" PointX="24.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblNoofMember" Width="1.5" PointX="24.75" PointY="8.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblNoofYear" Width="1.5" PointX="24.75" PointY="12.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblOccupation" Width="1.5" PointX="24.75" PointY="16.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPaymentMode" Width="1.5" PointX="23.75" PointY="24.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPaymentType" Width="1.5" PointX="5.75" PointY="25.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPED" Width="1.5" PointX="17.75" PointY="25.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPlan" Width="1.5" PointX="19.75" PointY="25.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPlanType" Width="1.5" PointX="25.75" PointY="20.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPolicyAddonOptionDetails" Width="1.5" PointX="25.75" PointY="24.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPolicyPackageType" Width="1.5" PointX="26.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPolicyPaymentData" Width="1.5" PointX="26.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPolicyStatus" Width="1.5" PointX="26.75" PointY="9.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPolicyTerm" Width="1.5" PointX="26.75" PointY="13.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPolicyType" Width="1.5" PointX="7.75" PointY="27.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPortability" Width="1.5" PointX="27.75" PointY="18.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPOS" Width="1.5" PointX="27.75" PointY="22.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPOSContact" Width="1.5" PointX="28.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblPPC" Width="1.5" PointX="28.75" PointY="5.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblProduct" Width="1.5" PointX="28.75" PointY="9.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblProfession" Width="1.5" PointX="28.75" PointY="13.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblReceivedStatus" Width="1.5" PointX="21.75" PointY="28.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblReference" Width="1.5" PointX="23.75" PointY="28.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblReferenceLead" Width="1.5" PointX="29.75" PointY="17.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblReferType" Width="1.5" PointX="17.75" PointY="29.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblRelationShip" Width="1.5" PointX="29.75" PointY="28.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblRiskClass" Width="1.5" PointX="30.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblRTOZone" Width="1.5" PointX="30.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblServiceProvider" Width="1.5" PointX="30.75" PointY="8.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblSession" Width="1.5" PointX="9.75" PointY="30.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblState" Width="1.5" PointX="30.75" PointY="12.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblStatus" Width="1.5" PointX="5.75" PointY="31.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblStorageRisk" Width="1.5" PointX="11.75" PointY="31.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblSubStatus" Width="1.5" PointX="31.75" PointY="16.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblTeamMember" Width="1.5" PointX="3.75" PointY="30.625" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblTerritory" Width="1.5" PointX="31.75" PointY="20.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblTitle" Width="1.5" PointX="31.75" PointY="24.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblType" Width="1.5" PointX="25.75" PointY="31.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblUploadedDocuments" Width="1.5" PointX="31.75" PointY="28.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblUser" Width="1.5" PointX="6" PointY="12" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblUserRights" Width="1.5" PointX="32.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblUserRole" Width="1.5" PointX="3.75" PointY="11.875" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblUserType" Width="1.5" PointX="32.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVariant" Width="1.5" PointX="32.75" PointY="8.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVehicleClass" Width="1.5" PointX="19.75" PointY="32.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVehicleSegment" Width="1.5" PointX="27.75" PointY="32.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVehicleUsage" Width="1.5" PointX="33.75" PointY="14.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVertical" Width="1.5" PointX="33.75" PointY="18.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVerticalSegment" Width="1.5" PointX="33.75" PointY="22.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVoucherDetails" Width="1.5" PointX="33.75" PointY="26.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVoucherStatus" Width="1.5" PointX="29.75" PointY="33.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVoucherType" Width="1.5" PointX="34.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVoyageOverseasType" Width="1.5" PointX="34.75" PointY="4.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVoyageType" Width="1.5" PointX="7.75" PointY="34.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.PolicyDataView" Width="1.5" PointX="21.75" PointY="34.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.qryCustomerCarePerformance" Width="1.5" PointX="34.75" PointY="8.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.SearchClaims" Width="1.5" PointX="9.75" PointY="35.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.SearchClaimsPolicy" Width="1.5" PointX="11.75" PointY="35.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.SearchInspection" Width="1.5" PointX="35.75" PointY="14.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.SearchVoucher" Width="1.5" PointX="35.75" PointY="20.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.View_SearchForm" Width="1.5" PointX="23.75" PointY="35.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.View_SearchForm_Policies" Width="1.5" PointX="35.75" PointY="27.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.ViewAllDatatypeInOne" Width="1.5" PointX="35.75" PointY="35.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.viewCustomerCare" Width="1.5" PointX="36.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.ViewCustomerCareCrossSell" Width="1.5" PointX="17.75" PointY="36.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.ViewCustomerEmailID" Width="1.5" PointX="36.75" PointY="9.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.ViewCustomerMobileNo" Width="1.5" PointX="25.75" PointY="36.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.ViewDSAAllEmailId" Width="1.5" PointX="31.75" PointY="36.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.ViewDSAAllMobileNo" Width="1.5" PointX="37.75" PointY="12.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.ViewMasterWithMotorPolicy" Width="1.5" PointX="37.75" PointY="15.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.ViewPendingCommission" Width="1.5" PointX="27.75" PointY="37.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.ViewPersonDataBirthdayWish" Width="1.5" PointX="37.75" PointY="36.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.viewRenewPerformance" Width="1.5" PointX="38.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.viewRenewPerformanceNonMotor" Width="1.5" PointX="0.75" PointY="38.75" />
+        <AssociationConnector Association="PolicyManagerModel.FK_tblCluster_tblBranch" />
+        <AssociationConnector Association="PolicyManagerModel.FK_tblCustomer_tblBranch" />
+        <AssociationConnector Association="PolicyManagerModel.FK_tblUser_tblBranch" />
+        <AssociationConnector Association="PolicyManagerModel.FK_tblEmployee_tblDepartment" />
+        <AssociationConnector Association="PolicyManagerModel.FK_tblEmployee_tblDesignation" />
+        <AssociationConnector Association="PolicyManagerModel.FK_tblModal_tblManufacturer" />
+        <AssociationConnector Association="PolicyManagerModel.FK_tblMenuItem_tblMenuItem" />
+        <AssociationConnector Association="PolicyManagerModel.FK_tblUser_tblEmployee" />
+        <AssociationConnector Association="PolicyManagerModel.FK_tblUser_tblUserRole" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
