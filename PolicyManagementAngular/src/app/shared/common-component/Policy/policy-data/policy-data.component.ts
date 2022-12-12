@@ -1792,10 +1792,12 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
     this.calculateGrossPremium();
     this.calculateCommissionablePremium(this._commissionPaidOnId);
+    this.calculateNetPremium();
+
   }
 
   calculateTotalGrossPremium() {
-    let grossPremium: any = this.premiumForm.controls.grossPremium.value;
+    let grossPremium: any = this.premiumForm.controls.grossPremiumAmt.value;
     let endorseGrossPremium: any = this.premiumForm.controls.endorseGrossPremium.value;
 
     let sum = parseInt(grossPremium == "" ? 0 : grossPremium) + parseInt(endorseGrossPremium == "" ? 0 : endorseGrossPremium);
@@ -1814,29 +1816,32 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   calculateGrossPremium() {
     let od: any = this.premiumForm.controls.od.value;
     let addOnRiderOd: any = this.premiumForm.controls.addOnRiderOd.value;
-    let tp: any = this.premiumForm.controls.tp.value;
+    let basictp: any = this.premiumForm.controls.tp.value;
     let passengerCover: any = this.premiumForm.controls.passengerCover.value;
     let nonCommissionComponentPremium: any = this.premiumForm.controls.nonCommissionComponentPremium.value;
     let gstValue: any = this.premiumForm.controls.gstValue.value;
     let gst: any = this.premiumForm.controls.gst.value;
     let basicTPgstPercent: any = this.premiumForm.controls.basicTPgstPercent.value;
+    let endroseTp :any =  this.premiumForm.controls.endorseTp.value;
+    let endorseOd :any =  this.premiumForm.controls.endorseOd.value;
 
-
-    let sum = parseInt(od == "" ? 0 : od) + parseInt(addOnRiderOd == "" ? 0 : addOnRiderOd)
-      + parseInt(tp == "" ? 0 : tp) + parseInt(passengerCover == "" ? 0 : passengerCover)
+    let sum = parseInt(od == "" ? 0 : od) + parseInt(addOnRiderOd == "" ? 0 : addOnRiderOd) + 
+      parseInt(endorseOd == "" ? 0 : endorseOd)+
+      + parseInt(endroseTp == "" ? 0 : endroseTp) + parseInt(passengerCover == "" ? 0 : passengerCover)
       + parseInt(nonCommissionComponentPremium == "" ? 0 : nonCommissionComponentPremium);
 
-    let sum2 =    parseInt(tp == "" ? 0 : tp) 
+    let sum2 =    parseInt(basictp == "" ? 0 : basictp) 
     let sum2gst = (basicTPgstPercent / 100) * sum2;
-    gstValue = (gst / 100) * sum;
+    gstValue = ((gst / 100) * sum);
     let gstFinalValue = gstValue + sum2gst
-    this.premiumForm.patchValue({ gstValue: gstFinalValue });
-
-
-    sum += parseInt(gstFinalValue == "" ? 0 : gstFinalValue);
-    this.premiumForm.patchValue({ grossPremium: sum.toFixed(2) });
-
+    this.premiumForm.patchValue({ gstValue: gstFinalValue.toFixed(2) });
+    this.calculateNetPremium();
+    // Calculating gross premium after updating net
+    let netpremium: any = this.premiumForm.controls.netpremium.value;
+    let grossPremiumAmt = parseInt(gstFinalValue == "" ? 0 : gstFinalValue) + parseInt(netpremium);
+    this.premiumForm.patchValue({ grossPremium: grossPremiumAmt.toFixed(2) });
     this.calculateTotalGrossPremium();
+
   }
 
   getCustomerShortDetailById(customerId: number) {
@@ -2652,7 +2657,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   calculateNetPremium(){ 
-    let sm= this.premiumForm.controls.nonCommissionComponentPremium.value +  this.premiumForm.controls.totalTp.value  +  this.premiumForm.controls.totalOd.value;
+    let sm= parseInt(this.premiumForm.controls.nonCommissionComponentPremium.value) +  parseInt(this.premiumForm.controls.totalTp.value)  +  parseInt(this.premiumForm.controls.totalOd.value);
     this.premiumForm.patchValue({ netpremium: sm });
    
   }
