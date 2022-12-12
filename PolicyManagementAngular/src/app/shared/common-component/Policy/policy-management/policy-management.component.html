@@ -1,0 +1,66 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header>
+        <mat-card-title>{{MenuVertical}} Policy Management</mat-card-title>
+    </mat-card-header> 
+    <hr class="hrClass" /> 
+    <mat-card-content>  
+      <div class="row">
+        <div class="col-lg-4">
+          <mat-card class="mat-elevation-z2 handOnHover" (click)="routeWithEnum('New')">
+            <mat-card-content>
+              New Policy Data Entry
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-4">
+          <mat-card class="mat-elevation-z2 handOnHover" (click)="routeWithEnum('rollover')">
+            <mat-card-content>
+              Rollover Policy
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-4">
+          <mat-card class="mat-elevation-z2 handOnHover" (click)="routeWithEnum('Renew')">
+            <mat-card-content>
+              Renew Policy Data Entry
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-4">
+          <mat-card class="mat-elevation-z2 handOnHover" (click)="routeWithEnum('Incomplete')">
+            <mat-card-content>
+              Data entry Incomplete
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-4">
+          <mat-card class="mat-elevation-z2 handOnHover" (click)="routeWithEnum('Correction')">
+            <mat-card-content>
+              Data Entry Correction
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-4">
+          <mat-card class="mat-elevation-z2 handOnHover" (click)="routeWithEnum('Verify')">
+            <mat-card-content>
+              Verify Policy Data Entry
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-4">
+          <mat-card class="mat-elevation-z2 handOnHover" (click)="routeWithEnum('Modify')">
+            <mat-card-content>
+              Modify Policy Data Entry
+            </mat-card-content>
+          </mat-card>
+        </div>
+        <div class="col-lg-4">
+          <mat-card class="mat-elevation-z2 handOnHover" (click)="routeWithEnum('View')">
+            <mat-card-content>
+              View Policy Data
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>

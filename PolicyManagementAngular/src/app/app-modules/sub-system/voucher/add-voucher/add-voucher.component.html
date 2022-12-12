@@ -1,0 +1,505 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-4" style="text-align: center;">
+                <mat-card-title>{{_header}}</mat-card-title>
+            </div>
+            <div class="col-md-4" style="display: flex;flex-direction: row;justify-content: flex-end;"
+                *ngIf="_mode != 0">
+                <div style="padding-right: 10px;">
+                    <span
+                        [ngClass]="{'active-badge': _status === 'ACTIVE', 'cancel-badge' : _status === 'CANCEL' ||  _status === 'REJECT','bounced-badge': _status === 'BOUNCED' }">
+                        {{_status}}
+                    </span>
+                </div>
+                <div style="padding-right: 10px;">
+                    <span
+                        [ngClass]="{'active-badge': _verificationStatus === 'VERIFIED', 'cancel-badge' : _verificationStatus === 'NOT VERIFIED'}">
+                        {{_verificationStatus}}
+                    </span>
+                </div>
+                <div>
+                    <span class="secondary-badge">
+                        {{_voucherType}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+        <form [formGroup]="voucherForm" #ngForm="ngForm" (ngSubmit)="onSubmit()" autocomplete="off">
+            <div class="row" *ngIf="_mode != 0">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Voucher Number</mat-label>
+                        <input type="text" matInput style="line-height: 32px;" formControlName="voucherNumber"
+                            [readonly]="_isFormControlDisabled || _disabledControlsInUpdate">
+                        <mat-error>
+                            This field is required <strong>required</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Voucher Date</mat-label>
+                        <input matInput [matDatepicker]="voucherDate" formControlName="voucherDate"
+                            [disabled]="_isFormControlDisabled || _disabledControlsInUpdate">
+                        <mat-datepicker-toggle matSuffix [for]="voucherDate"></mat-datepicker-toggle>
+                        <mat-datepicker #voucherDate></mat-datepicker>
+                        <mat-error>
+                            This field is required <strong>Payment Date</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
+                    <mat-form-field>
+                        <mat-label>Control Number</mat-label>
+                        <input type="text" matInput style="line-height: 32px;" formControlName="controlNumber"
+                            [readonly]="_isControlNumberDisabled || _disabledControlsInUpdate">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" mat-raised-button color="primary" class="searchB btn-block"
+                        [disabled]="_isControlNumberSearchDisabled" (click)="openDialog();">
+                        <mat-icon style="font-size: 22px;">search</mat-icon> Search
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Insurance Company <span style="color:red">*</span></mat-label>
+                        <input type="text" placeholder="Insurance Company" aria-label="Insurance Company" matInput
+                            [readonly]="_isFormControlDisabled || _disabledControlsInUpdate"
+                            formControlName="insuranceCompany" [matAutocomplete]="autoInsuranceCompany">
+                        <mat-autocomplete autoActiveFirstOption #autoInsuranceCompany="matAutocomplete"
+                            [displayWith]="getInsuranceCompanyName.bind(this)">
+                            <mat-option *ngFor="let insuranceCompany of _filteredInsuranceCompaniesOptions"
+                                [value]="insuranceCompany.Value">
+                                {{insuranceCompany.Name}}
+                            </mat-option>
+                        </mat-autocomplete>
+
+                        <mat-error style="padding-right: 0px; margin-left: 0px;">Please Select <strong>Insurance
+                                Company</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Customer <span style="color:red">*</span></mat-label>
+                        <input type="text" placeholder="Customer" aria-label="Customer" matInput
+                            [readonly]="_isFormControlDisabled || _disabledControlsInUpdate"
+                            formControlName="customerName" [matAutocomplete]="auto">
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+                            <mat-option *ngFor="let customer of _filteredOptions" [value]="customer">
+                                {{customer.Name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error>
+                            This field is required <strong>Customer</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field>
+                        <mat-label>Policy Number</mat-label>
+                        <input matInput style="line-height: 32px;" formControlName="policyNumber"
+                            [readonly]="_isFormControlDisabled || _disabledControlsInUpdate">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Vertical <span style="color:red">*</span></mat-label>
+                        <mat-select formControlName="vertical"
+                            [disabled]="_isFormControlDisabled || _disabledControlsInUpdate">
+                            <mat-option aria-disabled="true">Select</mat-option>
+                            <mat-option *ngFor="let vertical of _verticals" [value]="vertical.VerticalId">
+                                {{vertical.VerticalName}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            Please Select <strong>Vertical</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <mat-radio-group formControlName="referTypeId">
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-md-12">
+                                <mat-radio-button value="2" color="primary"
+                                    [disabled]="_isFormControlDisabled || _disabledControlsInUpdate"
+                                    [checked]="voucherForm.get('referTypeId')?.value == '2'"> POS</mat-radio-button>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 45px;">
+                            <div class="col-md-12">
+                                <mat-radio-button value="1" color="primary"
+                                    [disabled]="_isFormControlDisabled || _disabledControlsInUpdate"
+                                    [checked]="voucherForm.get('referTypeId')?.value == '1'"> In House
+                                </mat-radio-button>
+                            </div>
+                        </div>
+                    </mat-radio-group>
+                </div>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field>
+                                <mat-label>POS <span style="color:red">*</span></mat-label>
+                                <input type="text" placeholder="POS" aria-label="POS" matInput
+                                    [readonly]="_isFormControlDisabled || _disabledControlsInUpdate"
+                                    formControlName="pos" [matAutocomplete]="autoPos">
+                                <mat-autocomplete autoActiveFirstOption #autoPos="matAutocomplete"
+                                    [displayWith]="getPosName.bind(this)">
+                                    <mat-option *ngFor="let pos of _filteredPosOptions" [value]="pos.Value">
+                                        {{pos.Name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <mat-error>
+                                    Please Select <strong>POS</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field>
+                                <mat-label>In House <span style="color:red">*</span></mat-label>
+                                <input type="text" placeholder="In House" aria-label="In House" matInput
+                                    [readonly]="_isFormControlDisabled || _disabledControlsInUpdate"
+                                    formControlName="inhouse" [matAutocomplete]="autoInHouse">
+                                <mat-autocomplete autoActiveFirstOption #autoInHouse="matAutocomplete"
+                                    [displayWith]="getInHouseName.bind(this)">
+                                    <mat-option *ngFor="let data of _filteredInHouseOptions" [value]="data.Value">
+                                        {{data.Name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+
+                                <mat-error>
+                                    Please Select <strong>In House</strong>
+                                </mat-error>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Voucher Type <span style="color:red">*</span></mat-label>
+                        <mat-select formControlName="voucherType" [disabled]="_isVoucherTypeDisabled">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let voucherType of _voucherTypes" [value]="voucherType.Value">
+                                {{voucherType.Name}}</mat-option>
+                        </mat-select>
+                        <mat-error>
+                            Please Select <strong>Voucher Type</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Payment Mode <span style="color:red">*</span></mat-label>
+                        <mat-select formControlName="paymentMode" [disabled]="_isFormControlDisabled">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let paymentType of _paymentTypes" [value]="paymentType.Value">
+                                {{paymentType.Name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            Please Select <strong>Payment Mode</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Instrument Number</mat-label>
+                        <input type="text" matInput placeholder="Instrument Number" style="line-height: 32px;"
+                            [readonly]="_isFormControlDisabled" formControlName="instrumentNumber">
+                        <mat-error>
+                            This field is required <strong>Instrument Number</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <mat-form-field>
+                        <mat-label>Payment Amount<span style="color:red">*</span></mat-label>
+                        <input type="text" matInput placeholder="Payment Amount" style="line-height: 32px;"
+                            [readonly]="_isFormControlDisabled" formControlName="amount">
+                        <mat-error>
+                            This field is required <strong>Amount</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Payment Date <span style="color:red">*</span></mat-label>
+                        <input matInput [matDatepicker]="paymentDate" formControlName="paymentDate"
+                            [disabled]="_isFormControlDisabled">
+                        <mat-datepicker-toggle matSuffix [for]="paymentDate"></mat-datepicker-toggle>
+                        <mat-datepicker #paymentDate></mat-datepicker>
+                        <mat-error>
+                            This field is required <strong>Payment Date</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Bank <span style="color:red">*</span></mat-label>
+                        <mat-select formControlName="bank" [disabled]="_isFormControlDisabled">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let bank of _banks" [value]="bank.Value">{{bank.Name}}</mat-option>
+                        </mat-select>
+                        <mat-error>
+                            This field is required <strong>Bank</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <mat-form-field>
+                        <mat-label>Account used for cheque issue</mat-label>
+                        <input type="text" matInput placeholder="Account used for cheque issue"
+                            [readonly]="_isFormControlDisabled" formControlName="accountUsedForChequeIssue"
+                            style="line-height: 32px;">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field>
+                        <mat-label>Remarks</mat-label>
+                        <input type="text" matInput placeholder="Remarks" style="line-height: 32px;"
+                            formControlName="remarks" [readonly]="_isRemarksDisabled">
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="_mode != 0">
+                <mat-radio-group formControlName="updateMode">
+                    <div class="col-md-4">
+                        <mat-radio-button value="1" color="primary" [disabled]="_isFormControlDisabled">Modification
+                        </mat-radio-button>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-radio-button value="2" color="primary" [disabled]="_isFormControlDisabled">Cancel
+                        </mat-radio-button>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-radio-button value="3" color="primary" [disabled]="_isFormControlDisabled">Bounced
+                        </mat-radio-button>
+                    </div>
+                </mat-radio-group>
+
+            </div>
+            <div class="row" *ngIf="_mode != 0 && ngForm.submitted && voucherForm.get('updateMode')?.invalid">
+                <div class="col-md-12">
+                    <mat-error>
+                        <small> Please select atleast <strong>one reason</strong> for updation</small>
+                    </mat-error>
+                </div>
+            </div>
+
+            <div class="row"
+                *ngIf="_mode != 0 && voucherForm.get('updateMode')?.value != '' && voucherForm.get('updateMode')?.value != '3'">
+                <div class="col-md-12">
+                    <mat-form-field>
+                        <mat-label>{{_labelText}}<span style="color:red">*</span></mat-label>
+                        <input type="text" matInput [placeholder]="_labelText" style="line-height: 32px;"
+                            formControlName="reason" [readonly]="_isFormControlDisabled">
+                        <mat-error>
+                            This field is required <strong>{{_labelText}}</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="_mode != 0 && voucherForm.get('updateMode')?.value == '3'">
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Bounced Amount<span style="color:red">*</span></mat-label>
+                        <input type="text" matInput placeholder="Bounced Amount" style="line-height: 32px;"
+                            formControlName="bouncedAmount" [readonly]="_isFormControlDisabled">
+                        <mat-error>
+                            This field is required <strong>Bounced Amount</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Bounced Date <span style="color:red">*</span></mat-label>
+                        <input matInput [matDatepicker]="bouncedDate" formControlName="bouncedDate"
+                            [disabled]="_isFormControlDisabled">
+                        <mat-datepicker-toggle matSuffix [for]="bouncedDate"></mat-datepicker-toggle>
+                        <mat-datepicker #bouncedDate></mat-datepicker>
+                        <mat-error>
+                            This field is required <strong>Bounced Date</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Bounced Receipt Number<span style="color:red">*</span></mat-label>
+                        <input type="text" matInput placeholder="Bounced Receipt Number" style="line-height: 32px;"
+                            formControlName="bouncedReceiptNumber" [readonly]="_isFormControlDisabled">
+                        <mat-error>
+                            This field is required <strong>Bounced Receipt Number</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <hr />
+            <div class="row" *ngIf="_modificationReason!=''">
+                <div class="col-md-12">
+                    <strong>Modification Reason</strong>
+                    <p>{{_modificationReason}}</p>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="_cancelReason!=''">
+                <div class="col-md-12">
+                    <strong>Cancel Reason</strong>
+                    <p>{{_cancelReason}}</p>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="_bouncedAmount != 0 && _bouncedDate != '' && _bouncedReceiptNumber != ''">
+                <div class="col-md-4">
+                    <strong>Bounced Amount</strong>
+                    <p>{{_bouncedAmount}}</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Bounced Date</strong>
+                    <p>{{_bouncedDate}}</p>
+                </div>
+                <div class="col-md-4">
+                    <strong>Bounced Receipt Number</strong>
+                    <p>{{_bouncedReceiptNumber}}</p>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="_mode != 0">
+                <div class="col-md-4">
+                    <mat-list>
+                        <mat-list-item>
+                            <div mat-line>Voucher Created By</div>
+                            <div mat-line> {{_createdBy}} </div>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item>
+                            <div mat-line>Voucher Created Date</div>
+                            <div mat-line> {{_createdDate}} </div>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+                <div class="col-md-4">
+                    <mat-list>
+                        <mat-list-item>
+                            <div mat-line>Voucher Modified By</div>
+                            <div mat-line> {{_modifiedBy}} </div>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item>
+                            <div mat-line>Voucher Modified Date</div>
+                            <div mat-line> {{_modifiedDate}} </div>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+                <div class="col-md-4">
+                    <mat-list>
+                        <mat-list-item>
+                            <div mat-line>Voucher Verified By</div>
+                            <div mat-line> {{_verifiedBy}} </div>
+                        </mat-list-item>
+                        <mat-divider></mat-divider>
+                        <mat-list-item>
+                            <div mat-line>Voucher Verified Date</div>
+                            <div mat-line> {{_verifiedDate}} </div>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+            </div>
+
+            <!--Add Mode-->
+            <div class="row" *ngIf="_mode == 0">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-3">
+                    <button type="submit" mat-raised-button color="primary" class="btn-block">
+                        <mat-icon style="font-size: 22px;">save</mat-icon> Save
+                    </button>
+                </div>
+                <div class="col-lg-3">
+                    <button type="button" mat-raised-button color="warn" class="btn-block" (click)="onClose()">
+                        <mat-icon style="font-size: 22px;">cancel</mat-icon> Close
+                    </button>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+            <!--Add Mode-->
+            <!--View Mode-->
+            <div class="row" *ngIf="_mode == 1">
+                <div class="col-lg-5"></div>
+                <div class="col-lg-2">
+                    <button type="button" mat-raised-button color="warn" class="btn-block" (click)="onClose()">
+                        <mat-icon style="font-size: 22px;">cancel</mat-icon> Close
+                    </button>
+                </div>
+                <div class="col-lg-5"></div>
+            </div>
+            <!--View Mode-->
+            <!--Verification Mode-->
+            <div class="row" *ngIf="_mode == 2">
+                <div class="col-lg-4">
+                    <button type="button" mat-raised-button color="primary" class="btn-block" (click)="approveVoucher()"
+                        [disabled]="_verificationStatus == 'VERIFIED'">
+                        <mat-icon style="font-size: 22px;">done</mat-icon> Approve
+                    </button>
+                </div>
+                <div class="col-lg-4">
+                    <button type="button" mat-raised-button color="warn" class="btn-block" (click)="rejectVoucher()"
+                        [disabled]="_verificationStatus == 'VERIFIED' ||  _status == 'CANCEL' ||  _status == 'BOUNCED'">
+                        <mat-icon style="font-size: 22px;">close</mat-icon> Reject
+                    </button>
+                </div>
+                <div class="col-lg-4">
+                    <button type="button" mat-raised-button color="warn" class="btn-block" (click)="onClose()">
+                        <mat-icon style="font-size: 22px;">cancel</mat-icon> Close
+                    </button>
+                </div>
+            </div>
+            <!--Verification Mode-->
+            <!--Update Mode-->
+            <div class="row" *ngIf="_mode == 3 || _mode == 4">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-3">
+                    <button type="submit" mat-raised-button color="primary" class="btn-block">
+                        <mat-icon style="font-size: 22px;">save</mat-icon> Update {{ _mode == 4 ? 'Control Number' : ''
+                        }}
+                    </button>
+                </div>
+                <div class="col-lg-3">
+                    <button type="button" mat-raised-button color="warn" class="btn-block" (click)="onClose()">
+                        <mat-icon style="font-size: 22px;">cancel</mat-icon> Close
+                    </button>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+            <!--Update Mode-->
+        </form>
+    </mat-card-content>
+</mat-card>

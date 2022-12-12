@@ -1,0 +1,12 @@
+.row {
+    margin: 0 0 !important;
+}
+
+tr.mat-row,
+tr.mat-footer-row {
+    height: 30px !important;
+}
+
+tr.mat-header-row {
+    height: 30px !important;
+}

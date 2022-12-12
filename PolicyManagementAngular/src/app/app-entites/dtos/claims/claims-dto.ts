@@ -1,0 +1,41 @@
+import { IDateDto } from "../common/date-dto";
+
+export interface IClaimsDto {
+    ClaimsId: number;
+    PatientName: string;
+    ContactPerson: string;
+    ContactNumber: string;
+    ClaimsNumber: string;
+    ClaimsRegistrationDateDto: IDateDto;
+    ClaimsTypeId: number;
+    ClaimsSubmittedBy: string;
+    AdmissionDateDto: IDateDto;
+    DischargeDateDto: IDateDto;
+    ClaimsReason: string;
+    HospitalName: string;
+    DocumentSubmissionDateDto: IDateDto;
+    AmountClaimed: number;
+    AmountApproved: number;
+    InsuranceComapnyRemarks: string;
+    ClaimsStatusId: number;
+    ClaimsSubStatusId: number;
+    FollowUpDateDto: IDateDto;
+    FollowUpReason: string;
+    Remarks: string;
+    ClaimsStatus: string;
+    ClaimsSubStatus: string;
+    AccidentDateTimePlace: string;
+    WorkshopName: string;
+    WorkshopNumber: string;
+    ServiceAdvisorName: string;
+    ServiceAdvisorNumber: string;
+    SurveyorName: string;
+    SurveyorNumber: string;
+    SurveyorEmail: string;
+    VisibleDamages: string;
+    PendingConcerns: string;
+    RegistrationNumber: string;
+    ClaimNature: string;
+    DateOfIncidentDateDto: IDateDto;
+    PersonLocation: string;
+}

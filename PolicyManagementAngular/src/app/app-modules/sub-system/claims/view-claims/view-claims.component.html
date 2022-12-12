@@ -1,0 +1,341 @@
+<h4 mat-dialog-title>Claims Details</h4>
+<hr class="hrClass" />
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="claimsForm" autocomplete="off">
+        <div class="row" style="margin-top: 10px;">
+            <!--Motor Section-->
+            <div class="col-md-4" *ngIf="_verticalId === 1">
+                <mat-form-field>
+                    <mat-label>Registration Number</mat-label>
+                    <input type="text" matInput formControlName="registrationNumber">
+                </mat-form-field>
+            </div>
+            <!--Motor Section-->
+            <!--Health Section-->
+            <div class="col-md-4" *ngIf="_verticalId === 2">
+                <mat-form-field>
+                    <mat-label>Patient Name <span style="color:red">*</span></mat-label>
+                    <input type="text" matInput formControlName="patientName">
+                    <mat-error style="padding-right: 0px; margin-left: 0px;">Please Enter <strong>Patient
+                            Name</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <!--Health Section-->
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Contact Person <span style="color:red">*</span></mat-label>
+                    <input type="text" matInput formControlName="contactPerson">
+                    <mat-error style="padding-right: 0px; margin-left: 0px;">Please Enter <strong>Contact
+                            Person</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4">
+                <mat-form-field>
+                    <mat-label>Contact Number <span style="color:red">*</span></mat-label>
+                    <input type="text" matInput formControlName="contactNumber">
+                    <mat-error style="padding-right: 0px; margin-left: 0px;">Please Enter <strong>Contact
+                            Number</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-4" *ngIf="_verticalId > 2">
+                <mat-form-field>
+                    <mat-label>Person/Location </mat-label>
+                    <input type="text" matInput formControlName="personLocation">
+                </mat-form-field>
+            </div>
+        </div>
+        <!--Only for Motor and Health Section-->
+        <section *ngIf="_verticalId <= 2">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Claim Number</mat-label>
+                        <input type="text" matInput formControlName="claimNumber">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Claim Registration Date</mat-label>
+                        <input matInput [matDatepicker]="claimRegistrationDate" formControlName="claimRegistrationDate">
+                        <mat-datepicker-toggle matSuffix [for]="claimRegistrationDate"></mat-datepicker-toggle>
+                        <mat-datepicker #claimRegistrationDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Claim Type <span style="color:red">*</span></mat-label>
+                        <mat-select formControlName="claimType">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let claimType of _claimTypes" [value]="claimType.Value">
+                                {{claimType.Name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error style="padding-right: 0px; margin-left: 0px;">Please Select <strong>Claim
+                                Type</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Claim Submitted By</mat-label>
+                        <input type="text" matInput formControlName="claimSubmittedBy">
+                    </mat-form-field>
+                </div>
+            </div>
+        </section>
+        <!--Only for Motor and Health Section-->
+
+        <!--Other Section-->
+        <section  *ngIf="_verticalId > 2">
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Nature of Claim <span style="color:red">*</span></mat-label>
+                        <input type="text" matInput formControlName="claimNature">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Claim Submitted By</mat-label>
+                        <input type="text" matInput formControlName="claimSubmittedBy">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Date of Incident <span style="color:red">*</span></mat-label>
+                        <input matInput [matDatepicker]="dateOfIncident" formControlName="dateOfIncident">
+                        <mat-datepicker-toggle matSuffix [for]="dateOfIncident"></mat-datepicker-toggle>
+                        <mat-datepicker #dateOfIncident></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Document Submission Date</mat-label>
+                        <input matInput [matDatepicker]="documentSubmissionDate"
+                            formControlName="documentSubmissionDate">
+                        <mat-datepicker-toggle matSuffix [for]="documentSubmissionDate"></mat-datepicker-toggle>
+                        <mat-datepicker #documentSubmissionDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+        </section>
+        <!--Other Section-->
+
+
+        <!--Motor Section-->
+        <section *ngIf="_verticalId === 1">
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field>
+                        <mat-label>Date/Time/Place of Accident</mat-label>
+                        <textarea matInput cdkTextareaAutosize formControlName="accidentDateTimePlace"
+                            #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="3" cdkAutosizeMaxRows="4"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Workshop Name</mat-label>
+                        <input type="text" matInput formControlName="workshopName">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Workshop Number</mat-label>
+                        <input type="text" matInput formControlName="workshopNumber">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Service Advisor Name</mat-label>
+                        <input type="text" matInput formControlName="serviceAdvisorName">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Service Advisor Number</mat-label>
+                        <input type="text" matInput formControlName="serviceAdvisorNumber">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Surveyor Name</mat-label>
+                        <input type="text" matInput formControlName="surveyorName">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Surveyor Number</mat-label>
+                        <input type="text" matInput formControlName="surveyorNumber">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Surveyor Email</mat-label>
+                        <input type="text" matInput formControlName="surveyorEmail">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Visible Damages</mat-label>
+                        <textarea matInput cdkTextareaAutosize formControlName="visibleDamages"
+                            #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="3" cdkAutosizeMaxRows="4"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Pending Concerns</mat-label>
+                        <textarea matInput cdkTextareaAutosize formControlName="pendingConcerns"
+                            #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="3" cdkAutosizeMaxRows="4"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+        </section>
+        <!--Motor Section-->
+        <!--Health Section-->
+        <section *ngIf="_verticalId === 2">
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Date of Admission</mat-label>
+                        <input matInput [matDatepicker]="dateOfAdmission" formControlName="dateOfAdmission">
+                        <mat-datepicker-toggle matSuffix [for]="dateOfAdmission"></mat-datepicker-toggle>
+                        <mat-datepicker #dateOfAdmission></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Date of Discharge</mat-label>
+                        <input matInput [matDatepicker]="dateOfDischarge" formControlName="dateOfDischarge">
+                        <mat-datepicker-toggle matSuffix [for]="dateOfDischarge"></mat-datepicker-toggle>
+                        <mat-datepicker #dateOfDischarge></mat-datepicker>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Document Submission Date</mat-label>
+                        <input matInput [matDatepicker]="documentSubmissionDate"
+                            formControlName="documentSubmissionDate">
+                        <mat-datepicker-toggle matSuffix [for]="documentSubmissionDate"></mat-datepicker-toggle>
+                        <mat-datepicker #documentSubmissionDate></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Diagnosis/Reason for Claim</mat-label>
+                        <input type="text" matInput formControlName="reasonForClaim">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Hospital Name</mat-label>
+                        <input type="text" matInput formControlName="hospitalName">
+                    </mat-form-field>
+                </div>
+            </div>
+        </section>
+        <!--Health Section-->
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Amount Claimed</mat-label>
+                    <input type="text" matInput formControlName="amountClaimed">
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Amount Approved</mat-label>
+                    <input type="text" matInput formControlName="amountApproved">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <mat-form-field>
+                    <mat-label>Claim Remarks by Insurance Company</mat-label>
+                    <input type="text" matInput formControlName="claimRemarksByInsuranceCompany">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Final Status <span style="color:red">*</span></mat-label>
+                    <mat-select formControlName="finalStatus" (selectionChange)="getSubClaimStatus($event.value)">
+                        <mat-option>Select</mat-option>
+                        <mat-option *ngFor="let status of _claimStatus" [value]="status.Value">
+                            {{status.Name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error style="padding-right: 0px; margin-left: 0px;">Please Select <strong>Final
+                            Status</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Claim Sub Status <span style="color:red">*</span></mat-label>
+                    <mat-select formControlName="claimSubStatus">
+                        <mat-option>Select</mat-option>
+                        <mat-option *ngFor="let subStatus of _claimSubStatus" [value]="subStatus.Value">
+                            {{subStatus.Name}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error style="padding-right: 0px; margin-left: 0px;">Please Select <strong>Claim
+                            Sub Status</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Follow-Up Date <span style="color:red">*</span></mat-label>
+                    <input matInput [matDatepicker]="followUpDate" formControlName="followUpDate">
+                    <mat-datepicker-toggle matSuffix [for]="followUpDate"></mat-datepicker-toggle>
+                    <mat-datepicker #followUpDate></mat-datepicker>
+                    <mat-error style="padding-right: 0px; margin-left: 0px;">Please Enter <strong>Follow-Up
+                            Date</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Reason for Following</mat-label>
+                    <input type="text" matInput formControlName="reasonForFollowing">
+                    <mat-error style="padding-right: 0px; margin-left: 0px;">Please Enter <strong>Insurance Reason
+                            for following</strong>
+                    </mat-error>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <mat-form-field>
+                    <mat-label>Remarks</mat-label>
+                    <input type="text" matInput formControlName="remarks">
+                </mat-form-field>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+<hr class="hrClass" />
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+</mat-dialog-actions>

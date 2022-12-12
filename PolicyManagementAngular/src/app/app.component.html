@@ -1,0 +1,25 @@
+<!-- <router-outlet></router-outlet> -->
+<div class="main-container" *ngIf="!showLoginRouter"> 
+    <mat-toolbar class="topbar relative"> 
+      <div class="navbar-header">
+        <a class="navbar-brand" href="index.html">
+          <img src="assets/images/logo.png" alt="homepage" style="margin:auto; width: 100px;" />
+        </a>
+      </div>  
+        <span fxFlex style="flex: 1 1 0%;"> <app-top-menu></app-top-menu></span> 
+        <app-header></app-header> 
+    </mat-toolbar> 
+  
+    <mat-sidenav-container class="example-sidenav-container"> 
+      <mat-sidenav-content class="page-wrapper">
+        <div class="page-content">
+          <router-outlet></router-outlet>
+        </div>
+      </mat-sidenav-content> 
+    </mat-sidenav-container>
+  </div>
+
+  <router-outlet *ngIf="showLoginRouter"></router-outlet>
+
+ 
+  

@@ -1,0 +1,94 @@
+<h4 mat-dialog-title>Voucher Details</h4>
+<hr class="hrClass" />
+<mat-dialog-content class="mat-typography">
+    <div class="row">
+        <div class="col-lg-4">
+            <mat-list>
+                <mat-list-item>
+                    <div mat-line>Voucher Number</div>
+                    <div mat-line> {{_voucher?.VoucherNumber}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Payment Mode</div>
+                    <div mat-line> {{_voucher?.PaymentMode}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Bank</div>
+                    <div mat-line> {{_voucher?.Bank}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Cancel Reason</div>
+                    <div mat-line> {{_voucher?.CancelReason}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Voucher Status</div>
+                    <div mat-line> {{_voucher?.VoucherStatus}}</div>
+                </mat-list-item>
+            </mat-list>
+        </div>
+        <div class="col-lg-4">
+            <mat-list>
+                <mat-list-item>
+                    <div mat-line>Voucher Date</div>
+                    <div mat-line> {{_voucher?.VoucherDateString}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Payment Amount</div>
+                    <div mat-line> {{_voucher?.PaymentAmount}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Instrument Number</div>
+                    <div mat-line> {{_voucher?.InstrumentNumber}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Bounce Date</div>
+                    <div mat-line> {{_voucher?.BoucneDateString}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Verification</div>
+                    <div mat-line> {{_voucher?.Verification}}</div>
+                </mat-list-item>
+            </mat-list>
+        </div>
+        <div class="col-lg-4">
+            <mat-list>
+                <mat-list-item>
+                    <div mat-line>Voucher Type</div>
+                    <div mat-line> {{_voucher?.VoucherType}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Payment Date</div>
+                    <div mat-line> {{_voucher?.PaymentDateString}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Remarks</div>
+                    <div mat-line> {{_voucher?.VoucherRemark}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Bounce Amount</div>
+                    <div mat-line> {{_voucher?.BounceAmount}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <!-- <mat-list-item>
+                    <div mat-line></div>
+                    <div mat-line> {{_voucher?.}}</div>
+                </mat-list-item> -->
+            </mat-list>
+        </div>
+    </div>
+</mat-dialog-content>
+<hr class="hrClass" />
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+</mat-dialog-actions>

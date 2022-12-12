@@ -1,0 +1,620 @@
+<mat-card class="mat-elevation-z2">
+  <mat-card-header>
+    <mat-card-title>Add Customer</mat-card-title>
+  </mat-card-header>
+  <hr class="hrClass" />
+  <mat-card-content>
+    <form [formGroup]="searchCustomerForm" autocomplete="off" (ngSubmit)="getCustomerByCode()">
+      <div class="row">
+        <div class="col-lg-4">
+          <mat-form-field>
+            <mat-label>Customer Code</mat-label>
+            <input type="text" matInput formControlName="customerCode" placeholder="Customer Code">
+          </mat-form-field>
+        </div>
+        <div class="col-lg-2">
+          <button mat-raised-button color="primary">
+            <mat-icon style="font-size: 22px;">search</mat-icon> Search
+          </button>
+        </div>
+        <div class="col-lg-4">
+          <mat-checkbox color="primary">Show Inactive Records</mat-checkbox>
+        </div>
+      </div>
+      <hr>
+    </form>
+
+    <form [formGroup]="addCustomerForm" autocomplete="off" (ngSubmit)="addCustomer()">
+      <div class="row">
+        <div class="col-lg-2">
+          <mat-form-field appearance="fill">
+            <mat-label>Salutation</mat-label>
+            <mat-select formControlName="customerNameSalutation" [errorStateMatcher]="matcher">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let title of _titles" [value]="title.Value">{{title.Name}}</mat-option>
+            </mat-select>
+            <!-- <mat-error *ngIf="addCustomerForm.controls.customerNameSalutation">
+              Salutation <strong>required</strong>
+            </mat-error> -->
+          </mat-form-field>
+        </div>
+        <div class="col-lg-7">
+          <mat-form-field>
+            <mat-label>Customer Name <span style="color:red">*</span></mat-label>
+            <input type="text" matInput formControlName="customerName" [errorStateMatcher]="matcher"
+              placeholder="Customer Name" style="line-height: 32px;" minlength="4">
+            <mat-error
+              *ngIf="addCustomerForm.controls.customerName.errors && addCustomerForm.controls.customerName.errors.required">
+              Customer Name <strong>required</strong>
+            </mat-error>
+            <mat-error
+              *ngIf="addCustomerForm.controls.customerName.errors && addCustomerForm.controls.customerName.errors.minlength">
+              Minimum 4 character <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field appearance="fill">
+            <mat-label>Customer Type</mat-label>
+            <mat-select formControlName="customerType" (selectionChange)="customerContactValidation($event.value)"
+              required>
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let customerType of _customerTypes" [value]="customerType.Value">{{customerType.Name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="addCustomerForm.controls.customerType">Please choose Customer Type</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-lg-2">
+          <mat-form-field appearance="fill">
+            <mat-label>Salutation</mat-label>
+            <mat-select formControlName="customerContactSalutation" [errorStateMatcher]="matcher">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let title of _titlesWithoutMS" [value]="title.Value">{{title.Name}}</mat-option>
+            </mat-select>
+            <!-- <mat-error *ngIf="addCustomerForm.controls.customerContactSalutation">
+              Salutation <strong>required</strong>
+            </mat-error> -->
+          </mat-form-field>
+        </div>
+        <div class="col-lg-7">
+          <mat-form-field>
+            <mat-label>Customer Contact <span *ngIf="_customerContactAsterisk"  style="color:red">*</span></mat-label>
+            <input type="text" matInput formControlName="customerContact" [errorStateMatcher]="matcher"
+              placeholder="Customer Contact" style="line-height: 32px;">
+            <mat-error *ngIf="addCustomerForm.controls.customerContact">
+              Customer Contact is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <section style="margin-top: 30px;">
+            <mat-checkbox class="example-margin" color="primary" formControlName="decisionMaker">Decision Maker
+            </mat-checkbox>
+          </section>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-lg-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Customer Cluster</mat-label>
+            <mat-select formControlName="customerCluster">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let cluster of _clusters" [value]="cluster.Value">{{cluster.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Customer Territory</mat-label>
+            <mat-select formControlName="companyTerritory">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let territory of _territories" [value]="territory.Value">{{territory.Name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-lg-4">
+          <mat-form-field>
+            <mat-label>Address 1 <span style="color:red">*</span></mat-label>
+            <input type="text" matInput formControlName="address1" [errorStateMatcher]="matcher" placeholder="Address 1"
+              style="line-height: 32px;">
+            <mat-error *ngIf="addCustomerForm.controls.address1">
+              Address 1 <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-2">
+          <mat-form-field appearance="fill">
+
+            <input type="text" placeholder="city1" aria-label="city1" matInput formControlName="city1"
+            [matAutocomplete]="autocity1">
+
+            <mat-autocomplete autoActiveFirstOption #autocity1="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let city of _filteredCity1Options" [value]="city">
+                  {{city.Name}}
+              </mat-option>
+          </mat-autocomplete>
+ 
+            <mat-error *ngIf="addCustomerForm.controls.city1">Please Select City 1</mat-error> 
+          </mat-form-field>
+        </div>
+        <div class="col-lg-2">
+          <mat-form-field>
+            <mat-label>Pincode 1</mat-label>
+            <input type="text" matInput formControlName="pincode1" [errorStateMatcher]="matcher" placeholder="Pincode 1"
+              style="line-height: 32px;" minlength="6" maxlength="6">
+            <!-- <mat-error
+              *ngIf="addCustomerForm.controls.pincode1.errors && addCustomerForm.controls.pincode1.errors.required">
+              Pincode 1 is <strong>required</strong>
+            </mat-error> -->
+            <mat-error
+              *ngIf="addCustomerForm.controls.pincode1.errors && (addCustomerForm.controls.pincode1.errors.minlength || addCustomerForm.controls.pincode1.errors.pattern)">
+              Pincode 1 is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-4">
+          <mat-form-field>
+            <mat-label>GSTIN 1</mat-label>
+            <input type="text" #gstin1 matInput formControlName="gstin1" [errorStateMatcher]="matcher"
+              placeholder="GSTIN 1" style="line-height: 32px;" (change)="getPanFromGstNumber()" maxlength="15"
+              (input)="gstin1.value = gstin1.value.toUpperCase()" (change)="validateMultipleGstin()">
+            <mat-error *ngIf="addCustomerForm.controls.gstin1.errors && addCustomerForm.controls.gstin1.errors.pattern">
+              GSTIN 1 is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-lg-4">
+          <mat-form-field>
+            <mat-label>Address 2</mat-label>
+            <input type="text" matInput formControlName="address2" [errorStateMatcher]="matcher" placeholder="Address 2"
+              style="line-height: 32px;">
+          </mat-form-field>
+        </div>
+        <div class="col-lg-2">
+          <mat-form-field appearance="fill">
+            <input type="text" placeholder="city2" aria-label="city2" matInput formControlName="city2"
+            [matAutocomplete]="autocity2"> 
+            <mat-autocomplete autoActiveFirstOption #autocity2="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let city of _filteredCity2Options" [value]="city">
+                  {{city.Name}}
+              </mat-option>
+          </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-2">
+          <mat-form-field>
+            <mat-label>Pincode 2</mat-label>
+            <input type="text" matInput formControlName="pincode2" [errorStateMatcher]="matcher" placeholder="Pincode 2"
+              style="line-height: 32px;" minlength="6" maxlength="6">
+            <mat-error
+              *ngIf="addCustomerForm.controls.pincode2.errors && (addCustomerForm.controls.pincode2.errors.minlength || addCustomerForm.controls.pincode2.errors.pattern)">
+              Pincode 2 is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-4">
+          <mat-form-field>
+            <mat-label>GSTIN 2</mat-label>
+            <input type="text" #gstin2 matInput formControlName="gstin2" [errorStateMatcher]="matcher"
+              placeholder="GSTIN 2" style="line-height: 32px;" maxlength="15"
+              (input)="gstin2.value = gstin2.value.toUpperCase()" (change)="validateMultipleGstin()">
+            <mat-error *ngIf="addCustomerForm.controls.gstin2.errors && addCustomerForm.controls.gstin2.errors.pattern">
+              GSTIN 2 is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-lg-4">
+          <mat-form-field>
+            <mat-label>Address 3</mat-label>
+            <input type="text" matInput formControlName="address3" [errorStateMatcher]="matcher" placeholder="Address 3"
+              style="line-height: 32px;">
+          </mat-form-field>
+        </div>
+        <div class="col-lg-2">
+          <mat-form-field appearance="fill">
+            
+            <input type="text" placeholder="city3" aria-label="city3" matInput formControlName="city3"
+            [matAutocomplete]="autocity3"> 
+            <mat-autocomplete autoActiveFirstOption #autocity3="matAutocomplete" [displayWith]="displayFn">
+              <mat-option *ngFor="let city of _filteredCity3Options" [value]="city">
+                  {{city.Name}}
+              </mat-option>
+          </mat-autocomplete>
+
+          </mat-form-field>
+        </div>
+        <div class="col-lg-2">
+          <mat-form-field>
+            <mat-label>Pincode 3</mat-label>
+            <input type="text" matInput formControlName="pincode3" [errorStateMatcher]="matcher" placeholder="Pincode 3"
+              style="line-height: 32px;" minlength="6" maxlength="6">
+            <mat-error
+              *ngIf="addCustomerForm.controls.pincode3.errors && (addCustomerForm.controls.pincode3.errors.minlength || addCustomerForm.controls.pincode3.errors.pattern)">
+              Pincode 3 is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-4">
+          <mat-form-field>
+            <mat-label>GSTIN 3</mat-label>
+            <input type="text" #gstin3 matInput formControlName="gstin3" [errorStateMatcher]="matcher"
+              placeholder="GSTIN 3" style="line-height: 32px;" maxlength="15"
+              (input)="gstin3.value = gstin3.value.toUpperCase()" (change)="validateMultipleGstin()">
+            <mat-error *ngIf="addCustomerForm.controls.gstin3.errors && addCustomerForm.controls.gstin3.errors.pattern">
+              GSTIN 3 is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-lg-3">
+          <mat-form-field>
+            <mat-label>Mobile 1 <span style="color:red">*</span></mat-label>
+            <input type="text" matInput formControlName="mobile1" [errorStateMatcher]="matcher" placeholder="Mobile 1"
+              minlength="10" maxlength="10" (change)="mobileOrPhoneComparision($event)">
+            <mat-error
+              *ngIf="addCustomerForm.controls.mobile1.errors && addCustomerForm.controls.mobile1.errors.required">
+              Mobile 1 <strong>required</strong>
+            </mat-error>
+            <mat-error
+              *ngIf="addCustomerForm.controls.mobile1.errors && (addCustomerForm.controls.mobile1.errors.minlength || addCustomerForm.controls.mobile1.errors.pattern)">
+              Mobile 1 is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field>
+            <mat-label>Mobile 2</mat-label>
+            <input type="text" matInput formControlName="mobile2" [errorStateMatcher]="matcher" placeholder="Mobile 2"
+              minlength="10" maxlength="10" (change)="mobileOrPhoneComparision($event)">
+            <mat-error
+              *ngIf="addCustomerForm.controls.mobile2.errors && (addCustomerForm.controls.mobile2.errors.minlength || addCustomerForm.controls.mobile2.errors.pattern)">
+              Mobile 2 is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field>
+            <mat-label>Phone 1</mat-label>
+            <input type="text" matInput formControlName="phone1" [errorStateMatcher]="matcher" placeholder="Phone 1"
+              minlength="10" maxlength="13" (change)="mobileOrPhoneComparision($event)">
+            <mat-error
+              *ngIf="addCustomerForm.controls.phone1.errors && (addCustomerForm.controls.phone1.errors.minlength || addCustomerForm.controls.phone1.errors.pattern)">
+              Phone 1 is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field>
+            <mat-label>Phone 2</mat-label>
+            <input type="text" matInput formControlName="phone2" [errorStateMatcher]="matcher" placeholder="Phone 2"
+              minlength="10" maxlength="13" (change)="mobileOrPhoneComparision($event)">
+            <mat-error
+              *ngIf="addCustomerForm.controls.phone2.errors && (addCustomerForm.controls.phone2.errors.minlength || addCustomerForm.controls.phone2.errors.pattern)">
+              Phone 2 is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-lg-3">
+          <mat-checkbox color="primary" formControlName="communicationOptOut1">Communication Opt-Out</mat-checkbox>
+        </div>
+        <div class="col-lg-3">
+          <mat-checkbox color="primary" formControlName="communicationOptOut2">Communication Opt-Out</mat-checkbox>
+        </div>
+        <div class="col-lg-3">
+          <mat-checkbox color="primary" formControlName="communicationOptOut3">Communication Opt-Out</mat-checkbox>
+        </div>
+        <div class="col-lg-3">
+          <mat-checkbox color="primary" formControlName="communicationOptOut4">Communication Opt-Out</mat-checkbox>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-lg-6">
+          <mat-form-field>
+            <mat-label>Email 1</mat-label>
+            <input type="email" matInput formControlName="email1" placeholder="Email 1">
+            <mat-error *ngIf="addCustomerForm.controls.email1">Email 1 is <strong>invalid</strong></mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field>
+            <mat-label>Email 2</mat-label>
+            <input type="email" matInput formControlName="email2" placeholder="Email 2">
+            <mat-error *ngIf="addCustomerForm.controls.email2">Email 2 is <strong>invalid</strong></mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <hr />
+      <mat-radio-group formControlName="selectedPolicyAddress">
+        <div class="row">
+          <div class="col-lg-4">
+            Address selected for policy
+          </div>
+          <div class="col-lg-2">
+            <mat-radio-button value="1" color="primary" [checked]="_selectedPolicyAddress == 1">
+              Address 1
+            </mat-radio-button>
+          </div>
+          <div class="col-lg-2">
+            <mat-radio-button value="2" color="primary" [checked]="_selectedPolicyAddress == 2">
+              Address 2
+            </mat-radio-button>
+          </div>
+          <div class="col-lg-2">
+            <mat-radio-button value="3" color="primary" [checked]="_selectedPolicyAddress == 3">
+              Address 3
+            </mat-radio-button>
+          </div>
+        </div>
+      </mat-radio-group>
+
+      <mat-radio-group formControlName="selectedMobileCommunication">
+        <div class="row">
+          <div class="col-lg-4">Mobile number selected for communication</div>
+          <div class="col-lg-2">
+            <mat-radio-button value="1" color="primary" [checked]="_selectedMobileCommunication == 1">
+              Mobile 1
+            </mat-radio-button>
+          </div>
+          <div class="col-lg-2">
+            <mat-radio-button value="2" color="primary" [checked]="_selectedMobileCommunication == 2">
+              Mobile 2
+            </mat-radio-button>
+          </div>
+          <div class="col-lg-2">
+            <mat-radio-button value="3" color="primary" [checked]="_selectedMobileCommunication == 3">
+              Phone 1
+            </mat-radio-button>
+          </div>
+          <div class="col-lg-2">
+            <mat-radio-button value="4" color="primary" [checked]="_selectedMobileCommunication == 4">
+              Phone 2
+            </mat-radio-button>
+          </div>
+        </div>
+      </mat-radio-group>
+
+      <mat-radio-group formControlName="selectedWhatsAppCommunication">
+        <div class="row">
+          <div class="col-lg-4">Whatsapp number for communication</div>
+          <div class="col-lg-2">
+            <mat-radio-button value="1" color="primary" [checked]="_selectedWhatsAppCommunication == 1">
+              Mobile 1
+            </mat-radio-button>
+          </div>
+          <div class="col-lg-2">
+            <mat-radio-button value="2" color="primary" [checked]="_selectedWhatsAppCommunication == 2">
+              Mobile 2
+            </mat-radio-button>
+          </div>
+          <div class="col-lg-2">
+            <mat-radio-button value="3" color="primary" [checked]="_selectedWhatsAppCommunication == 3">
+              Phone 1
+            </mat-radio-button>
+          </div>
+          <div class="col-lg-2">
+            <mat-radio-button value="4" color="primary" [checked]="_selectedWhatsAppCommunication == 4">
+              Phone 2
+            </mat-radio-button>
+          </div>
+        </div>
+      </mat-radio-group>
+      <hr />
+
+      <div class="row">
+        <div class="col-lg-5">
+          <mat-form-field appearance="fill">
+            <mat-label>Refer By</mat-label>
+            <mat-select formControlName="referBy" (selectionChange)="referByValidation($event.value)" required>
+              <mat-option>Select</mat-option>
+              <mat-option value="1">POS</mat-option>
+              <mat-option value="2">Team Member</mat-option>
+              <mat-option value="3">Reference</mat-option>
+            </mat-select>
+            <mat-error *ngIf="addCustomerForm.controls.referBy">Please choose Refer By</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-7" *ngIf="addCustomerForm.controls.referBy.value == 1">
+          <mat-form-field appearance="fill">
+            <mat-label>POS <span style="color:red">*</span></mat-label>
+            <mat-select formControlName="pos">
+              <mat-option value="">Select</mat-option>
+              <mat-option *ngFor="let pos of _posDatas" [value]="pos.Value">{{pos.Name}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="addCustomerForm.controls.pos">Please choose POS</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-7" *ngIf="addCustomerForm.controls.referBy.value == 2">
+          <mat-form-field appearance="fill">
+            <mat-label>Team Member <span style="color:red">*</span></mat-label>
+            <mat-select formControlName="teamMember">
+              <mat-option value="">Select</mat-option>
+              <mat-option *ngFor="let teamMember of _teamMembers" [value]="teamMember.Value">{{teamMember.Name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="addCustomerForm.controls.teamMember">Please choose Team Member</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-7" *ngIf="addCustomerForm.controls.referBy.value == 3">
+          <mat-form-field appearance="fill">
+            <mat-label>Reference <span style="color:red">*</span></mat-label>
+            <mat-select formControlName="reference">
+              <mat-option value="">Select</mat-option>
+              <mat-option *ngFor="let reference of _references" [value]="reference.Value">{{reference.Name}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="addCustomerForm.controls.reference">Please choose Reference</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-3">
+          <mat-form-field appearance="fill">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let gender of _genders" [value]="gender.Value">{{gender.Name}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="addCustomerForm.controls.gender">Please Select Gender</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field>
+            <mat-label>Passport Number</mat-label>
+            <input type="text" matInput formControlName="passportNumber" placeholder="Passport Number"
+              style="line-height: 32px;">
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-checkbox color="primary" formControlName="isPos" style="margin-top: 30px;"
+            (change)="checkboxSelection('pos')">Is POS</mat-checkbox>
+        </div>
+        <div class="col-lg-3">
+          <mat-checkbox color="primary" formControlName="isTeamMember" style="margin-top: 30px;"
+            (change)="checkboxSelection('teamMember')">Is TeamMember</mat-checkbox>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-lg-3">
+          <mat-form-field>
+            <mat-label>PAN</mat-label>
+            <input type="text" matInput formControlName="pan" placeholder="PAN" style="line-height: 32px;"
+              maxlength="10">
+            <mat-error *ngIf="addCustomerForm.controls.pan.errors && addCustomerForm.controls.pan.errors.pattern">
+              PAN is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field appearance="fill">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="dateofbirth" formControlName="dateOfBirth">
+            <mat-datepicker-toggle matSuffix [for]="dateofbirth"></mat-datepicker-toggle>
+            <mat-datepicker #dateofbirth></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field appearance="fill">
+            <mat-label>Date of Anniversary</mat-label>
+            <input matInput [matDatepicker]="dateofanniversary" formControlName="dateOfAnniversary">
+            <mat-datepicker-toggle matSuffix [for]="dateofanniversary"></mat-datepicker-toggle>
+            <mat-datepicker #dateofanniversary></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field>
+            <mat-label>Aadhaar</mat-label>
+            <input type="text" matInput formControlName="aadhaar" minlength="12" maxlength="12" placeholder="Aadhaar"
+              style="line-height: 32px;">
+            <mat-error
+              *ngIf="addCustomerForm.controls.aadhaar.errors && (addCustomerForm.controls.aadhaar.errors.minlength || addCustomerForm.controls.aadhaar.errors.pattern)">
+              Aadhaar is <strong>invalid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-lg-3">
+          <mat-form-field appearance="fill">
+            <mat-label>Marital Status</mat-label>
+            <mat-select formControlName="maritalStatus">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let maritalStatus of _maritalStatus" [value]="maritalStatus.Value">
+                {{maritalStatus.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field>
+            <mat-label>Number of Dependents</mat-label>
+            <input type="text" matInput formControlName="numberOfDependent" placeholder="Number of Dependents"
+              style="line-height: 30px;">
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field appearance="fill">
+            <mat-label>Profession</mat-label>
+            <mat-select formControlName="profession">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let profession of _professions" [value]="profession.Value">{{profession.Name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3">
+          <mat-form-field appearance="fill">
+            <mat-label>Line of business</mat-label>
+            <mat-select formControlName="lineOfBusiness">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let businessLine of _businessLines" [value]="businessLine.Value">{{businessLine.Name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Industry</mat-label>
+            <mat-select formControlName="industry">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let industry of _industries" [value]="industry.Value">{{industry.Name}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Designation</mat-label>
+            <mat-select formControlName="designation">
+              <mat-option>Select</mat-option>
+              <mat-option *ngFor="let designation of _designations" [value]="designation.Value">{{designation.Name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-lg-3"></div>
+        <div class="col-lg-2">
+          <button type="reset" class="btn-block" mat-raised-button color="accent">
+            <mat-icon style="font-size: 22px;">refresh</mat-icon> Reset
+          </button>
+        </div>
+        <div class="col-lg-2">
+          <button type="button" class="btn-block" mat-raised-button color="warn" (click)="cancelCustomer()">
+            <mat-icon style="font-size: 22px;"> cancel_presentation</mat-icon> Cancel
+          </button>
+        </div>
+        <div class="col-lg-2">
+          <button type="submit" class="btn-block" mat-raised-button color="primary">
+            <mat-icon style="font-size: 22px;">save</mat-icon> Save
+          </button>
+        </div>
+        <div class="col-lg-3"></div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

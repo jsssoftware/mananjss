@@ -1,0 +1,42 @@
+import { IClaimsDocumentModel } from "./claims-document-model";
+
+export interface IAddUpdateClaimsModel {
+    PolicyId: number;
+    VerticalId: number;
+    BranchId: number;
+    PatientName: string;
+    ContactPerson: string;
+    ContactNumber: string;
+    ClaimNumber: string;
+    ClaimRegistrationDate: string;
+    ClaimTypeId: number;
+    ClaimSubmittedBy: string;
+    AdmissionDate: string;
+    DischargeDate: string;
+    ClaimReason: string;
+    HospitalName: string;
+    DocumentSubmissionDate: string;
+    AmountClaimed: number;
+    AmountApproved: number;
+    InsuranceCompanyRemark: string;
+    ClaimStatusId: number;
+    ClaimSubStatusId: number;
+    FollowUpDate: string;
+    FollowingReason: string;
+    Remark: string;
+    CustomerId: number;
+    ClaimsDocuments: IClaimsDocumentModel[];
+    AccidentDateTimePlace: string;
+    WorkshopName: string;
+    WorkshopNumber: string;
+    ServiceAdvisorName: string;
+    ServiceAdvisorNumber: string;
+    SurveyorName: string;
+    SurveyorNumber: string;
+    SurveyorEmail: string;
+    VisibleDamages: string;
+    PendingConcerns: string;
+    ClaimNature: string;
+    DateOfIncident: string;
+    PersonLocation: string;
+}

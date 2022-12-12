@@ -1,0 +1,66 @@
+<h4 mat-dialog-title>Inspection Details</h4>
+<hr class="hrClass" />
+<mat-dialog-content class="mat-typography">
+    <div class="row">
+        <div class="col-lg-6">
+            <mat-list>
+                <mat-list-item>
+                    <div mat-line>Inspection Date</div>
+                    <div mat-line> {{_inspection?.DateString}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Inspection Lead Number</div>
+                    <div mat-line> {{_inspection?.LeadNumber}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Surveyor Name</div>
+                    <div mat-line> {{_inspection?.SurveyorName}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Inspection Status</div>
+                    <div mat-line> {{_inspection?.Status}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Remarks</div>
+                    <div mat-line> {{_inspection?.Remarks}}</div>
+                </mat-list-item>
+            </mat-list>
+        </div>
+        <div class="col-lg-6">
+            <mat-list>
+                <mat-list-item>
+                    <div mat-line>Reason of Inspection</div>
+                    <div mat-line> {{_inspection?.Reason}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Inspection Company</div>
+                    <div mat-line> {{_inspection?.InspectionCompany}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Contact Person</div>
+                    <div mat-line> {{_inspection?.ContactPerson}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Inspection Sub-Status</div>
+                    <div mat-line> {{_inspection?.SubStatus}}</div>
+                </mat-list-item>
+                <hr class="hrClass" />
+                <mat-list-item>
+                    <div mat-line>Inspection Created By</div>
+                    <div mat-line> {{_inspection?.CreatedBy}}</div>
+                </mat-list-item>
+            </mat-list>
+        </div>
+    </div>
+</mat-dialog-content>
+<hr class="hrClass" />
+<mat-dialog-actions align="end">
+    <button mat-raised-button color="warn" mat-dialog-close>Close</button>
+</mat-dialog-actions>

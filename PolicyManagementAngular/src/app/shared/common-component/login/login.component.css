@@ -1,0 +1,29 @@
+.container-class {
+    height: 100vh;
+    display: flex;
+    background-size: cover;
+    align-items: center;
+    margin-left:0px;
+    margin-right:0px;
+  }
+  
+.login-box {
+    max-width: 400px;
+    min-width: 280px;
+    margin: 0 auto;
+    vertical-align: middle;
+  }
+
+  .mat-card-header-text {
+    margin-left: 0px !important;
+  }
+  
+  .matInput{
+   
+    width: 300px !important;
+  }
+  
+  .mat-form-field-appearance-fill
+  .mat-form-field-flex {
+    padding: 0 .75em 0 0 !important;
+}

@@ -1,0 +1,45 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header>
+        <mat-card-title>Voucher</mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+        <div class="row">
+            <div class="col-lg-4">
+                <mat-card class="mat-elevation-z2 handOnHover" (click)="navigate('New')">
+                    <mat-card-content>
+                        Add New Voucher
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-lg-4">
+                <mat-card class="mat-elevation-z2 handOnHover" (click)="navigate('View')">
+                    <mat-card-content>
+                        View Voucher
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-lg-4">
+                <mat-card class="mat-elevation-z2 handOnHover" (click)="navigate('Verify')">
+                    <mat-card-content>
+                        Verify Voucher
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-lg-4">
+                <mat-card class="mat-elevation-z2 handOnHover" (click)="navigate('Update')">
+                    <mat-card-content>
+                        Update Voucher
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-lg-4">
+                <mat-card class="mat-elevation-z2 handOnHover" (click)="navigate('UpdateControlNumber')">
+                    <mat-card-content>
+                        Update Voucher (Control Number Only)
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

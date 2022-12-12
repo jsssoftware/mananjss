@@ -1,0 +1,19 @@
+<div class="basic-container">
+<mat-toolbar class="menu-bar mat-elevation-z1">
+    <span *ngFor="let item of responseMenus">
+      <!-- Handle branch node buttons here -->
+      <span *ngIf="item.tblMenuItem1 && item.tblMenuItem1.length > 0">
+        <button mat-button [matMenuTriggerFor]="menu.childMenu">
+          {{item.DisplayName}}
+        </button>
+        <app-menu-item #menu [items]="item.tblMenuItem1"></app-menu-item>
+      </span>
+      <!-- Leaf node buttons here -->
+      <span *ngIf="!item.tblMenuItem1 || item.tblMenuItem1.length === 0">
+        <button mat-button  [routerLink]="item.Link">
+          {{item.DisplayName}}
+        </button>
+      </span>
+    </span>
+  </mat-toolbar>
+</div>

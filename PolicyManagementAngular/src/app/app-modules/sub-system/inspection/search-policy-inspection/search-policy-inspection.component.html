@@ -1,0 +1,197 @@
+<h4 mat-dialog-title>Search Policy</h4>
+<hr class="hrClass" />
+<mat-dialog-content class="mat-typography">
+    <form [formGroup]="policySearchForm" (ngSubmit)="onSubmit()" autocomplete="off">
+        <div class="row">
+            <div class="col-md-12">
+                <mat-form-field>
+                    <mat-label>Control Number</mat-label>
+                    <input type="text" matInput formControlName="controlNumber">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Registration Number</mat-label>
+                    <input type="text" matInput formControlName="registrationNumber">
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Policy Number</mat-label>
+                    <input type="text" matInput formControlName="policyNumber">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Manufacturer </mat-label>
+                    <input type="text" placeholder="Manufacturer" aria-label="Manufacture" matInput
+                        formControlName="manufacturer" [matAutocomplete]="autoManufacture">
+                    <mat-autocomplete autoActiveFirstOption #autoManufacture="matAutocomplete" [displayWith]="displayFn"
+                        (optionSelected)='getModels($event.option.value.Value)'>
+                        <mat-option *ngFor="let manufacture of _filteredManufacturers" [value]="manufacture">
+                            {{manufacture.Name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Model </mat-label>
+                    <mat-select formControlName="modelId">
+                        <mat-option>Select</mat-option>
+                        <mat-option *ngFor="let model of _models" [value]="model.Value">{{model.Name}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Customer</mat-label>
+                    <input type="text" placeholder="Customer" aria-label="Customer" matInput
+                        formControlName="customerName" [matAutocomplete]="auto">
+                    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option *ngFor="let customer of _filteredOptions" [value]="customer">
+                            {{customer.Name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Customer Phone</mat-label>
+                    <input type="text" matInput formControlName="customerPhone">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>Insurance Company</mat-label>
+                    <input type="text" placeholder="Insurance Company" aria-label="Insurance Company" matInput
+                        formControlName="insuranceCompanyId" [matAutocomplete]="autoInsuranceCompany">
+                    <mat-autocomplete autoActiveFirstOption #autoInsuranceCompany="matAutocomplete"
+                        [displayWith]="displayFn">
+                        <mat-option *ngFor="let insuranceCompany of _filteredInsuranceCompaniesOptions"
+                            [value]="insuranceCompany">
+                            {{insuranceCompany.Name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+            <div class="col-md-6">
+                <mat-form-field>
+                    <mat-label>POS</mat-label>
+                    <input type="text" placeholder="POS" aria-label="POS" matInput formControlName="posId"
+                        [matAutocomplete]="autoPos">
+                    <mat-autocomplete autoActiveFirstOption #autoPos="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option *ngFor="let pos of _filteredPosOptions" [value]="pos">
+                            {{pos.Name}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <div class="row" style="align-items: center;">
+            <div class="col-lg-2">
+                <label>Policy Start From Date</label>
+            </div>
+            <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                    <input matInput [matDatepicker]="policyStartFromDatePicker" formControlName="policyStartFromDate">
+                    <mat-datepicker-toggle matSuffix [for]="policyStartFromDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #policyStartFromDatePicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-2">
+                <label>Policy Start To Date</label>
+            </div>
+            <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                    <input matInput [matDatepicker]="policyStartToDatePicker" formControlName="policyStartToDate">
+                    <mat-datepicker-toggle matSuffix [for]="policyStartToDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #policyStartToDatePicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3"></div>
+            <div class="col-lg-2">
+                <button type="button" class="btn-block" mat-raised-button color="warn" (click)="close()">
+                    <mat-icon style="font-size: 22px;">cancel</mat-icon> Close
+                </button>
+            </div>
+            <div class="col-lg-2">
+                <button type="button" class="btn-block" mat-raised-button color="accent" (click)="onReset()">
+                    <!-- <mat-icon style="font-size: 22px;"> reset </mat-icon> --> Reset
+                </button>
+            </div>
+            <div class="col-lg-2">
+                <button type="submit" class="btn-block" mat-raised-button color="primary">
+                    <mat-icon style="font-size: 22px;">search</mat-icon> Search
+                </button>
+            </div>
+            <div class="col-lg-3"></div>
+        </div>
+    </form>
+
+    <div class="row" style="height: 300px; overflow-y: scroll;" *ngIf="_policies.length > 0">
+        <div class="col-lg-12">
+            <table mat-table [dataSource]="_policies" style="width: 100%; margin-top: 15px; ">
+                <ng-container matColumnDef="ControlNumber">
+                    <th mat-header-cell *matHeaderCellDef> Control Number </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.ControlNumber}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Customer">
+                    <th mat-header-cell *matHeaderCellDef> Customer </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.Customer}} </td>
+                </ng-container>
+                <ng-container matColumnDef="RegistrationNumber">
+                    <th mat-header-cell *matHeaderCellDef> Registration Number</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.RegistrationNumber}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Manufacturer">
+                    <th mat-header-cell *matHeaderCellDef> Manufacturer </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.Manufacturer}} </td>
+                </ng-container>
+                <ng-container matColumnDef="Model">
+                    <th mat-header-cell *matHeaderCellDef> Model </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.Model}}</td>
+                </ng-container>
+                <ng-container matColumnDef="MakeYear">
+                    <th mat-header-cell *matHeaderCellDef> Make Year </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.MakeYear }}</td>
+                </ng-container>
+                <ng-container matColumnDef="InsuranceCompany">
+                    <th mat-header-cell *matHeaderCellDef> Insurance Company</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.InsuranceCompany}}</td>
+                </ng-container>
+                <ng-container matColumnDef="Pos">
+                    <th mat-header-cell *matHeaderCellDef> Pos </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.Pos}}</td>
+                </ng-container>
+                <ng-container matColumnDef="PolicyExpiryString">
+                    <th mat-header-cell *matHeaderCellDef> Policy End Date </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.PolicyExpiryString}}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="'handOnHover'"
+                    (click)="setPolicyData(row);"></tr>
+            </table>
+        </div>
+    </div>
+</mat-dialog-content>

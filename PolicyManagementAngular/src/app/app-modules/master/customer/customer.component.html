@@ -1,0 +1,83 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header>
+        <mat-card-title>Customer : {{_headerTitle}}</mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+        <div class="row">
+            <div class="col-lg-10">
+                <mat-form-field>
+                    <mat-label>Search Customer</mat-label>
+                    <input matInput autocomplete="off" (keyup)="searchCustomer($event)">
+                </mat-form-field>
+            </div>
+            <div class="col-lg-2" style="text-align: center; margin-top: 10px;">
+                <button mat-raised-button color="primary" class="btn-block" (click)="addCustomer()"
+                    [disabled]="_input.length==0">
+                    <mat-icon style="font-size: 20px;">person_add</mat-icon> Add
+                </button>
+            </div>
+        </div>
+        <!--Start Code for Table-->
+        <div class="row">
+            <div class="col-lg-12">
+                <table mat-table [dataSource]="_customerDatas">
+                    <ng-container matColumnDef="Name">
+                        <th mat-header-cell *matHeaderCellDef>Customer Name</th>
+                        <td mat-cell *matCellDef="let row" (click)="routeToMotorPolicy(row.Id)">{{row.Name}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Address">
+                        <th mat-header-cell *matHeaderCellDef>Address 1</th>
+                        <td mat-cell *matCellDef="let row" (click)="routeToMotorPolicy(row.Id)">{{row.Address}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Mobile">
+                        <th mat-header-cell *matHeaderCellDef>Mobile 1</th>
+                        <td mat-cell *matCellDef="let row" (click)="routeToMotorPolicy(row.Id)">{{row.Mobile}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ClusterName">
+                        <th mat-header-cell *matHeaderCellDef>Cluster</th>
+                        <td mat-cell *matCellDef="let row" (click)="routeToMotorPolicy(row.Id)">{{row.ClusterName}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Code">
+                        <th mat-header-cell *matHeaderCellDef>Customer Code</th>
+                        <td mat-cell *matCellDef="let row" (click)="routeToMotorPolicy(row.Id)">{{row.Code}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Type">
+                        <th mat-header-cell *matHeaderCellDef>Customer Type</th>
+                        <td mat-cell *matCellDef="let row" (click)="routeToMotorPolicy(row.Id)">{{row.Type}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="City">
+                        <th mat-header-cell *matHeaderCellDef>City</th>
+                        <td mat-cell *matCellDef="let row" (click)="routeToMotorPolicy(row.Id)">{{row.City}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="PinCode">
+                        <th mat-header-cell *matHeaderCellDef>Pincode</th>
+                        <td mat-cell *matCellDef="let row" (click)="routeToMotorPolicy(row.Id)">{{row.PinCode}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Id">
+                        <th mat-header-cell *matHeaderCellDef>Modify</th>
+                        <td mat-cell *matCellDef="let row" [ngStyle]="{'text-align':'end'}">
+                            <button mat-icon-button (click)="editCustomer(row.Id)">
+                                <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="_columns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: _columns;"></tr>
+                </table>
+            </div>
+
+            <mat-paginator [length]="_length" [pageSize]="_pageSize" (page)="pageChanged($event)"></mat-paginator>
+        </div>
+        <!--End Code for Table-->
+    </mat-card-content>
+</mat-card>

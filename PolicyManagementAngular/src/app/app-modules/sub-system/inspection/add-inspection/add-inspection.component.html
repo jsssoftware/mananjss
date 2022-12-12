@@ -1,0 +1,475 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header>
+        <div class="row">
+            <div class="col-md-6">
+                <mat-card-title>{{_header}} Inspection</mat-card-title>
+            </div>
+            <div class="col-md-6" style="display: flex;flex-direction: row;justify-content: flex-end;"
+                *ngIf="_form != 1">
+
+                <div style="padding-right: 10px;" *ngIf="_status">
+                    <span class="active-badge">
+                        {{_status}}
+                    </span>
+                </div>
+                <div style="padding-right: 10px;" *ngIf="_subStatus">
+                    <span class="info-badge">
+                        {{_subStatus}}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+        <form [formGroup]="inspectionForm" #ngForm="ngForm" (ngSubmit)="onSubmit()" autocomplete="off">
+            <div class="row">
+                <div class="col-md-9">
+                    <mat-form-field>
+                        <mat-label>Control Number</mat-label>
+                        <input type="text" matInput formControlName="controlNumber" [readonly]="_isFormControlDisabled">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" mat-raised-button color="primary" class="searchB btn-block"
+                        [disabled]="_isFormControlDisabled" (click)="openDialog();">
+                        <mat-icon style="font-size: 22px;">search</mat-icon> Search
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Customer <span style="color:red">*</span></mat-label>
+                        <input type="text" matInput formControlName="customerName" [readonly]="_isFormControlDisabled">
+                        <mat-error>
+                            This field is required <strong>Customer</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Contact Person</mat-label>
+                        <input type="text" matInput formControlName="contactPerson" [readonly]="_isFormControlDisabled">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Mobile Number <span style="color:red">*</span></mat-label>
+                        <input type="text" matInput formControlName="mobileNumber" maxlength="10"
+                            [readonly]="_isFormControlDisabled">
+                        <mat-error>
+                            This field is required <strong>Mobile Number</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Email</mat-label>
+                        <input type="text" matInput formControlName="email" [readonly]="_isFormControlDisabled">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field>
+                        <mat-label>Location Address <span style="color:red">*</span></mat-label>
+                        <input type="text" matInput formControlName="locationAddress"
+                            [readonly]="_isFormControlDisabled">
+                        <mat-error>
+                            This field is required <strong>Location Address</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Registration Number <span style="color:red">*</span></mat-label>
+                        <input type="text" matInput formControlName="registrationNumber"
+                            [readonly]="_isFormControlDisabled">
+                        <mat-error>
+                            This field is required <strong>Registration Number</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Make Year</mat-label>
+                        <mat-select formControlName="makeYearId" [disabled]="_isFormControlDisabled">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let makeYear of _makeYears" [value]="makeYear.Value">{{makeYear.Name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <input type="text" placeholder="Manufacture" aria-label="Manufacture" matInput
+                            formControlName="manufacturer" [matAutocomplete]="autoManufacture"
+                            [readonly]="_isFormControlDisabled">
+                        <mat-autocomplete autoActiveFirstOption #autoManufacture="matAutocomplete"
+                            [displayWith]="displayFn" (optionSelected)='getModels($event.option.value.Value)'>
+                            <mat-option *ngFor="let manufacture of _filteredManufacturers" [value]="manufacture">
+                                {{manufacture.Name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Model </mat-label>
+                        <mat-select formControlName="modelId" [disabled]="_isFormControlDisabled">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let model of _models" [value]="model.Value">{{model.Name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field>
+                        <mat-label>Required Insurance Company <span style="color:red">*</span></mat-label>
+                        <input type="text" placeholder="Required Insurance Company"
+                            aria-label="Required Insurance Company" matInput formControlName="insuranceCompanyId"
+                            [matAutocomplete]="autoInsuranceCompany" [readonly]="_isFormControlDisabled">
+                        <mat-autocomplete autoActiveFirstOption #autoInsuranceCompany="matAutocomplete"
+                            [displayWith]="displayFn">
+                            <mat-option *ngFor="let insuranceCompany of _filteredInsuranceCompaniesOptions"
+                                [value]="insuranceCompany">
+                                {{insuranceCompany.Name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                        <mat-error>
+                            This field is required <strong>Insurance Company</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Engine Number</mat-label>
+                        <input type="text" matInput formControlName="engineNumber" [readonly]="_isFormControlDisabled">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Chassis Number</mat-label>
+                        <input type="text" matInput formControlName="chassisNumber" [readonly]="_isFormControlDisabled">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Inspection Date <span style="color:red">*</span></mat-label>
+                        <input matInput [matDatepicker]="inspectionDate" formControlName="inspectionDate"
+                            [disabled]="_isFormControlDisabled">
+                        <mat-datepicker-toggle matSuffix [for]="inspectionDate"></mat-datepicker-toggle>
+                        <mat-datepicker #inspectionDate></mat-datepicker>
+                        <mat-error>
+                            This field is required <strong>Inspection Date</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Reason of Inspection <span style="color:red">*</span></mat-label>
+                        <mat-select formControlName="inspectionReasonId" [disabled]="_isFormControlDisabled">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let reason of _inspectionReasons" [value]="reason.Value">
+                                {{reason.Name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error>
+                            This field is required <strong>Reason of Inspection</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-label>Source of Request <span style="color:red">*</span></mat-label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <mat-radio-group formControlName="referTypeId" [disabled]="_isFormControlDisabled">
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-md-12">
+                                <mat-radio-button value="2" color="primary"
+                                    [checked]="inspectionForm.get('referTypeId')?.value == '2'"> POS</mat-radio-button>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 45px;">
+                            <div class="col-md-12">
+                                <mat-radio-button value="1" color="primary"
+                                    [checked]="inspectionForm.get('referTypeId')?.value == '1'"> In House
+                                </mat-radio-button>
+                            </div>
+                        </div>
+                    </mat-radio-group>
+                </div>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field>
+                                <mat-label>POS </mat-label>
+                                <input type="text" placeholder="POS" aria-label="POS" matInput formControlName="posId"
+                                    [readonly]="_isFormControlDisabled" [matAutocomplete]="autoPos">
+                                <mat-autocomplete autoActiveFirstOption #autoPos="matAutocomplete"
+                                    [displayWith]="getPosName.bind(this)">
+                                    <mat-option *ngFor="let pos of _filteredPosOptions" [value]="pos.Value">
+                                        {{pos.Name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <mat-form-field>
+                                <mat-label>Team Member </mat-label>
+                                <input type="text" placeholder="Team Member" aria-label="Team Member" matInput
+                                    [readonly]="_isFormControlDisabled" formControlName="teamMemberId"
+                                    [matAutocomplete]="autoTeamMember">
+                                <mat-autocomplete autoActiveFirstOption #autoTeamMember="matAutocomplete"
+                                    [displayWith]="getTeamMemberName.bind(this)">
+                                    <mat-option *ngFor="let data of _filteredTeamMemberOptions" [value]="data.Value">
+                                        {{data.Name}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="ngForm.submitted && inspectionForm.get('referTypeId')?.invalid">
+                <div class="col-md-12">
+                    <mat-error>
+                        <small> This field is required <strong>Source of Request</strong></small>
+                    </mat-error>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Inspection Lead Number</mat-label>
+                        <input type="text" matInput formControlName="inspectionLeadNumber"
+                            [readonly]="_isFormControlDisabled">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Inspection Company Name</mat-label>
+                        <mat-select formControlName="inspectionCompanyId" [disabled]="_isFormControlDisabled">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let company of _inspectionCompanies" [value]="company.Value">
+                                {{company.Name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Surveyor Name</mat-label>
+                        <input type="text" matInput formControlName="surveyorName" [readonly]="_isFormControlDisabled">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Surveyor Mobile</mat-label>
+                        <input type="text" matInput formControlName="surveyorMobile" maxlength="10"
+                            [readonly]="_isFormControlDisabled">
+                    </mat-form-field>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <mat-label>Surveyor Email</mat-label>
+                        <input type="text" matInput formControlName="surveyorEmail" [readonly]="_isFormControlDisabled">
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Inspection Status</mat-label>
+                        <mat-select formControlName="inspectionStatusId" [disabled]="_isFormControlDisabled"
+                            (selectionChange)="getInspectionSubStatus($event.value)">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let status of _inspectionStatus" [value]="status.Value">
+                                {{status.Name}}
+                            </mat-option>
+
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md-6">
+                    <mat-form-field>
+                        <mat-label>Inspection Sub Status</mat-label>
+                        <mat-select formControlName="inspectionSubStatusId" [disabled]="_isFormControlDisabled">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let subStatus of _inspectionSubStatus" [value]="subStatus.Value">
+                                {{subStatus.Name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-form-field>
+                        <mat-label>Remarks</mat-label>
+                        <input type="text" matInput formControlName="remarks" [readonly]="_isFormControlDisabled">
+                    </mat-form-field>
+                </div>
+            </div>
+            <hr style="margin-top: 0px;" />
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4>Upload Documents <span style="color:red; font-style: italic;">(File type should be PDF
+                            file and max
+                            size 2 MB)</span></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-label>Document Type</mat-label>
+                        <mat-select formControlName="documentType" [disabled]="_isFormControlDisabled">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let documentType of _documentTypes" [value]="documentType">
+                                {{documentType.Name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-6">
+                    <mat-form-field>
+                        <ngx-mat-file-input placeholder="Browse" formControlName="browse"
+                            [disabled]="_isFormControlDisabled" [errorStateMatcher]="_matcher">
+                        </ngx-mat-file-input>
+                        <mat-icon matSuffix>folder</mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+
+                </div>
+            </div>
+            <hr style="margin-top: 0px;" />
+            <div class="row">
+                <div class="col-lg-10">
+                    <mat-form-field>
+                        <mat-label>Remarks</mat-label>
+                        <textarea matInput cdkTextareaAutosize formControlName="documentRemarks"
+                            [readonly]="_isFormControlDisabled" #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                            cdkAutosizeMaxRows="1"></textarea>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <button type="button" class="btn-block" mat-raised-button color="primary" (click)="addDocument()"
+                        [disabled]="_isFormControlDisabled">
+                        <mat-icon>note_add</mat-icon> Add
+                    </button>
+                </div>
+            </div>
+            <section *ngIf="_inspectionDocuments.length > 0; else elseBlockNoDocuments;">
+                <hr>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h4>Uploaded Files</h4>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table mat-table [dataSource]="_dataSourceUploadDocuments" style="width: 100%;">
+                            <ng-container matColumnDef="sno">
+                                <th mat-header-cell *matHeaderCellDef> S.No. </th>
+                                <td mat-cell *matCellDef="let element;  let i = index">
+                                    <strong>{{i+1}}.</strong>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="documentTypeName">
+                                <th mat-header-cell *matHeaderCellDef> Document Type </th>
+                                <td mat-cell *matCellDef="let element"> {{element.DocumentTypeName}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="fileName">
+                                <th mat-header-cell *matHeaderCellDef> File Name </th>
+                                <td mat-cell *matCellDef="let element"> {{element.FileName}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="remarks">
+                                <th mat-header-cell *matHeaderCellDef> Remarks </th>
+                                <td mat-cell *matCellDef="let element"> {{element.Remarks}} </td>
+                            </ng-container>
+                            <ng-container matColumnDef="documentTypeId">
+                                <th mat-header-cell *matHeaderCellDef style="text-align: end;"> Action
+                                </th>
+                                <td mat-cell *matCellDef="let element">
+                                    <div class="row" style="justify-content: flex-end">
+                                        <div class="col-lg-1">
+                                            <mat-icon *ngIf="element.Id == 0; else elseBlock;" matTooltip="Delete"
+                                                color="warn" class="handOnHover"
+                                                (click)="deleteUploadDocument(element.UniqueId)">
+                                                delete_outline
+                                            </mat-icon>
+                                            <ng-template #elseBlock>
+                                                <mat-icon matTooltip="Delete" color="warn" class="handOnHover"
+                                                    (click)="deleteInspectionDocumentFromServer(element)">
+                                                    delete_outline
+                                                </mat-icon>
+                                            </ng-template>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <mat-icon matTooltip="Download" class="handOnHover">download
+                                            </mat-icon>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="_displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: _displayedColumns;"></tr>
+                        </table>
+                    </div>
+                </div>
+            </section>
+            <ng-template #elseBlockNoDocuments>
+                <div class="alert alert-danger" role="alert">
+                    There is no any inspection documents uploaded.
+                </div>
+            </ng-template>
+            <hr style="margin-top: 0px;" />
+            <div class="row" *ngIf="_form == 1 || _form == 2">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-3">
+                    <button type="submit" mat-raised-button color="primary" class="btn-block">
+                        <mat-icon style="font-size: 22px;">save</mat-icon> {{_form == 1 ?'Save':'Update'}}
+                    </button>
+                </div>
+                <div class="col-lg-3">
+                    <button type="button" mat-raised-button color="warn" class="btn-block" (click)="onClose()">
+                        <mat-icon style="font-size: 22px;">cancel</mat-icon> Close
+                    </button>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+            <div class="row" *ngIf="_form == 3">
+                <div class="col-lg-4"></div>
+                <div class="col-lg-4" style="text-align: center;">
+                    <button type="button" mat-raised-button color="warn" class="btn-block" (click)="onClose()">
+                        <mat-icon style="font-size: 22px;">cancel</mat-icon> Cancel
+                    </button>
+                </div>
+                <div class="col-lg-4">
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

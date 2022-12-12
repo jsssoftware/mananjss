@@ -1,0 +1,31 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header>
+        <mat-card-title>Inspection</mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+        <div class="row">
+            <div class="col-lg-4">
+                <mat-card class="mat-elevation-z2 handOnHover" (click)="navigate(1)">
+                    <mat-card-content>
+                        Add New Inspection
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-lg-4">
+                <mat-card class="mat-elevation-z2 handOnHover" (click)="navigate(3)">
+                    <mat-card-content>
+                        View Inspection
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-lg-4">
+                <mat-card class="mat-elevation-z2 handOnHover" (click)="navigate(2)">
+                    <mat-card-content>
+                        Update Inspection
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
