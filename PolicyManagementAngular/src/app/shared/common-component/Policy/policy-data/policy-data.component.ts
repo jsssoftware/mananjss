@@ -1797,7 +1797,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   calculateTotalGrossPremium() {
-    let grossPremium: any = this.premiumForm.controls.grossPremiumAmt.value;
+    let grossPremium: any = this.premiumForm.controls.grossPremium.value;
     let endorseGrossPremium: any = this.premiumForm.controls.endorseGrossPremium.value;
 
     let sum = parseInt(grossPremium == "" ? 0 : grossPremium) + parseInt(endorseGrossPremium == "" ? 0 : endorseGrossPremium);

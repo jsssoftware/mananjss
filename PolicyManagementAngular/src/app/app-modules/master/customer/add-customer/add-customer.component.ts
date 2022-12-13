@@ -337,9 +337,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   }
 
   addCustomer(): void {
-alert()    
-debugger;
-if (this.addCustomerForm.invalid) return;
+    if (this.addCustomerForm.invalid) return;
     let model = this.getAddCustomerPayload();
     console.log(model);
 
@@ -350,7 +348,7 @@ if (this.addCustomerForm.invalid) return;
           text: response.Message
         }).then((result) => {
           if (result.isConfirmed) {
-            this.router.navigate(['./pms/motor/motor-policy-management']);
+            this.router.navigate(['./master/customer']);
           }
         });
       }

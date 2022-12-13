@@ -1061,7 +1061,7 @@
                 <mat-form-field>
                   <mat-label>Basic TP GST % <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="basicTPgstPercent" [errorStateMatcher]="matcher" placeholder="Basic TP GST %"
-                    (change)="calculateChanges()">
+                    (change)="calculateTotalTp()">
                   <mat-error *ngIf="premiumForm.controls.basicTPgstPercent">
                     Basic TP GST % is <strong>required</strong>
                   </mat-error>

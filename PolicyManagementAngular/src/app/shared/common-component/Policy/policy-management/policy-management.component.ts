@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router ,ActivatedRoute} from '@angular/router';
 import { PolicyManagement, SearchPolicyType, Vertical } from 'src/app/shared/utilities/enums/enum';
+
 @Component({
   selector: 'app-policy-management',
   templateUrl: './policy-management.component.html',
@@ -10,9 +11,15 @@ export class PolicyManagementComponent implements OnInit {
   @Input('MenuVertical') public MenuVertical:string='';
   verticalData :Vertical = Vertical.Motor;
   panelOpenState = false;
-  constructor(private router: Router) { }
+  newPolicyContent:string = "New Policy Data Entry";
+
+  constructor(private router: Router,private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    if(this.MenuVertical=='Motor')
+    {
+      this.newPolicyContent ="New Motor Policy Data Entry";
+    }
   }
 
   routeWithEnum(enumName: string) {
