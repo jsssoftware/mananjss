@@ -309,23 +309,23 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   });
   //#endregion
   private ChequeValidators = [
-    Validators.pattern('^[a-zA-Z0-9]+$')
+    Validators.pattern('^[a-zA-Z0-9]+$'),
 ];
   //#region Payment Form
   paymentForm = new FormGroup({
     mode1: new FormControl('', [Validators.required]),
     amount1: new FormControl('', [Validators.required]),
-    instrumentNumber1: new FormControl('', this.ChequeValidators),
+    instrumentNumber1: new FormControl({value:'',disabled:false}, this.ChequeValidators),
     dated1: new FormControl(''),
     bank1: new FormControl(''),
     mode2: new FormControl(''),
     amount2: new FormControl(''),
-    instrumentNumber2: new FormControl('', [Validators.pattern('^[a-zA-Z0-9]+$')]),
+    instrumentNumber2: new FormControl({value:'',disabled:false}, [Validators.pattern('^[a-zA-Z0-9]+$')]),
     dated2: new FormControl(''),
     bank2: new FormControl(''),
     mode3: new FormControl(''),
     amount3: new FormControl(''),
-    instrumentNumber3: new FormControl('', [Validators.pattern('^[a-zA-Z0-9]+$')]),
+    instrumentNumber3: new FormControl({value:'',disabled:false}, [Validators.pattern('^[a-zA-Z0-9]+$')]),
     dated3: new FormControl(''),
     bank3: new FormControl(''),
   });
@@ -556,35 +556,63 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       else
         this.filterdManufacturerData(input.Name);
     });
-
+     const CHEQUE ="1";
+     const AGENTCHEQUE ="3"
+     const CASH ="2"
     this.paymentForm.get('mode1')?.valueChanges
     .subscribe(value => {
-      if(value == "1") {
+      this.paymentForm.get('instrumentNumber1')?.enable({onlySelf: true});
+      this.paymentForm.get('bank1')?.enable({onlySelf: true});
+
+      if(value == CASH ) {
+        this.paymentForm.get('instrumentNumber1')?.disable({onlySelf: true});
+        this.paymentForm.get('bank1')?.disable({onlySelf: true});
+      }
+        
+      if(value == CHEQUE || value == AGENTCHEQUE) {
         this.paymentForm.get('instrumentNumber1')?.setValidators(this.ChequeValidators.concat(Validators.maxLength(6)))
       } else {
         this.paymentForm.get('instrumentNumber1')?.setValidators(this.ChequeValidators);
       }
+       
         this.paymentForm.get('instrumentNumber1')?.updateValueAndValidity();
+        this.paymentForm.get('bank1')?.updateValueAndValidity();
     });
    
     this.paymentForm.get('mode2')?.valueChanges
     .subscribe(value => {
-      if(value == "1") {
+      this.paymentForm.get('instrumentNumber2')?.enable();
+      this.paymentForm.get('bank2')?.enable();
+      if(value == CASH ) {
+        this.paymentForm.get('instrumentNumber2')?.disable({onlySelf: true});
+        this.paymentForm.get('bank1')?.disable({onlySelf: true});
+      }
+      if(value == CHEQUE || value == AGENTCHEQUE) {
         this.paymentForm.get('instrumentNumber2')?.setValidators(this.ChequeValidators.concat(Validators.maxLength(6)))
       } else {
         this.paymentForm.get('instrumentNumber2')?.setValidators(this.ChequeValidators);
       }
         this.paymentForm.get('instrumentNumber2')?.updateValueAndValidity();
+        this.paymentForm.get('bank2')?.updateValueAndValidity();
+
     });
    
     this.paymentForm.get('mode3')?.valueChanges
     .subscribe(value => {
-      if(value == "1") {
+      this.paymentForm.get('instrumentNumber3')?.enable();
+      this.paymentForm.get('bank3')?.enable();
+      if(value == CASH ) {
+        this.paymentForm.get('instrumentNumber3')?.disable({onlySelf: true});
+        this.paymentForm.get('bank1')?.disable({onlySelf: true});
+      }
+      if(value == CHEQUE || value == AGENTCHEQUE) {
         this.paymentForm.get('instrumentNumber3')?.setValidators(this.ChequeValidators.concat(Validators.maxLength(6)))
       } else {
         this.paymentForm.get('instrumentNumber3')?.setValidators(this.ChequeValidators);
       }
         this.paymentForm.get('instrumentNumber3')?.updateValueAndValidity();
+        this.paymentForm.get('bank3')?.updateValueAndValidity();
+
     });
    
   }
@@ -921,7 +949,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   
   createPolicy(): any {
-    debugger
    let model: IMotorPolicyFormDataModel = {
      BranchId: this._branchId, 
      VerticalCode: this._verticalDetail.VerticalCode,
