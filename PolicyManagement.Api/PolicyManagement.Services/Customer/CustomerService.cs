@@ -78,7 +78,7 @@ namespace PolicyManagement.Services.Customer
             Name = s.TitleName,
             Value = s.TitleId
         })
-        .OrderBy(o => o.Name)
+        .OrderBy(o => o.Value)
         .ToListAsync();
 
         public async Task<DataTableDto<List<CustomerDto>>> FindCustomrByName(string name, int pageNumber, int pageSize)
