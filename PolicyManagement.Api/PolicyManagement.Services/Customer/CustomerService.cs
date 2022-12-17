@@ -9,6 +9,7 @@ using PolicyManagement.Services.Customer.Interface;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -145,16 +146,16 @@ namespace PolicyManagement.Services.Customer
         {
             try
             {
-                var checkAadharExist = await _dataContext.tblCustomer.Select(s => new { s.AadhaarNo, s.CustomerName, s.CustomerCode }).AsNoTracking().FirstOrDefaultAsync(f => !string.IsNullOrEmpty(model.Aadhaar) && f.AadhaarNo == model.Aadhaar);
-                if (checkAadharExist != null)
+                var checkAadharExist = await _dataContext.tblCustomer.Select(s => new { s.AadhaarNo, s.CustomerName, s.CustomerCode,s.CustomerId}).AsNoTracking().FirstOrDefaultAsync(f => !string.IsNullOrEmpty(model.Aadhaar) && f.AadhaarNo == model.Aadhaar);
+                if (model.Id !=0 && checkAadharExist != null && checkAadharExist.CustomerId != model.Id)
                     return new CommonDto<object>
                     {
                         Message = $"Aadhar Number {model.Aadhaar} is already exists with Customer {checkAadharExist.CustomerName} ({checkAadharExist.CustomerCode})"
                     };
 
 
-                var checkPanExist = await _dataContext.tblCustomer.Select(s => new { s.PAN, s.CustomerName, s.CustomerCode }).AsNoTracking().FirstOrDefaultAsync(f => !string.IsNullOrEmpty(model.Pan) && !string.IsNullOrEmpty(f.PAN) && f.PAN.ToLower() == model.Pan.ToLower());
-                if (checkPanExist != null)
+                var checkPanExist = await _dataContext.tblCustomer.Select(s => new { s.PAN, s.CustomerName, s.CustomerCode, s.CustomerId }).AsNoTracking().FirstOrDefaultAsync(f => !string.IsNullOrEmpty(model.Pan) && !string.IsNullOrEmpty(f.PAN) && f.PAN.ToLower() == model.Pan.ToLower());
+                if (model.Id != 0&& checkPanExist != null && checkPanExist.CustomerId != model.Id)
                     return new CommonDto<object>
                     {
                         Message = $"PAN Number {model.Pan} is already exists with Customer {checkPanExist.CustomerName} ({checkPanExist.CustomerCode})"
@@ -184,6 +185,7 @@ namespace PolicyManagement.Services.Customer
 
                 tblCustomer customer = new tblCustomer
                 {
+                    CustomerId = model.Id,
                     AadhaarNo = model.Aadhaar,
                     BranchId = model.BranchId,
                     BusinessTypeId = model.LineOfBusiness,
@@ -206,7 +208,7 @@ namespace PolicyManagement.Services.Customer
                     CustomerMobile1 = model.Mobile1,
                     CustomerMobile2 = model.Mobile2,
                     CustomerName = model.CustomerName,
-                    // CustomerNoofDependent = model.NumberOfDependent,
+                    CustomerNoofDependent = model.NumberOfDependent,
                     CustomerPhone1 = model.Phone1,
                     CustomerPhone2 = model.Phone2,
                     CustomerPinCode1 = model.Pincode1,
@@ -223,7 +225,7 @@ namespace PolicyManagement.Services.Customer
                     MaritalStatusId = model.MaritalStatus,
                     PAN = model.Pan,
                     POSId = model.Pos,
-                    // ReferId = model.ReferBy,
+                    ReferById = model.ReferBy,
                     ProfessionId = model.Profession,
                     ReferenceId = model.Reference,
                     TeamMemberId = model.TeamMember,
@@ -231,10 +233,14 @@ namespace PolicyManagement.Services.Customer
                     DefaultAddress = model.SelectedPolicyAddress,
                     DefaultContactNo = model.SelectedMobileCommunication,
                     DefaultWhatsAppNo = model.SelectedWhatsAppCommunication,
-                    IsCompany = model.CustomerType == 1 // 1 for Company
+                    IsCompany = model.CustomerType == 1, // 1 for Company
+                    IsCommunicationOptOut1 = model.CommunicationOptOut1,
+                    IsCommunicationOptOut2 = model.CommunicationOptOut2,
+                    IsCommunicationOptOut3 = model.CommunicationOptOut3,
+                    GenderId = model.Gender
                 };
 
-                _dataContext.tblCustomer.Add(customer);
+                _dataContext.tblCustomer.AddOrUpdate(customer);
 
                 await _dataContext.SaveChangesAsync();
 
@@ -786,20 +792,24 @@ namespace PolicyManagement.Services.Customer
                     MaritalStatus = customer.MaritalStatusId ?? 0,
                     Mobile1 = customer.CustomerMobile1,
                     Mobile2 = customer.CustomerMobile2,
-                    // NumberOfDependent = customer.CustomerNoofDependent ?? 0,
+                    NumberOfDependent = customer.CustomerNoofDependent ?? 0,
                     Pan = customer.PAN,
                     Phone1 = customer.CustomerPhone1,
                     Phone2 = customer.CustomerPhone2,
                     Pos = customer.POSId ?? 0,
                     Profession = customer.ProfessionId ?? 0,
-                    // ReferBy = customer.ReferId ?? 0,
+                    ReferBy = (int)customer.ReferById ,
                     Reference = customer.ReferenceId ?? 0,
                     SelectedMobileCommunication = customer.DefaultContactNo ?? 0,
                     SelectedPolicyAddress = customer.DefaultAddress ?? 0,
                     SelectedWhatsAppCommunication = customer.DefaultWhatsAppNo ?? 0,
                     TeamMember = customer.TeamMemberId ?? 0,
                     PassportNumber = customer.PassportNo,
-                    Gender = customer.GenderId
+                    Gender = customer.GenderId,
+                    CommunicationOptOut1 = (bool)customer.IsCommunicationOptOut1 ,
+                    CommunicationOptOut2 = (bool)customer.IsCommunicationOptOut2,
+                    CommunicationOptOut3 = (bool)customer.IsCommunicationOptOut3
+
                 }
             };
         }

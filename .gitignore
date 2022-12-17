@@ -62,3 +62,7 @@ Thumbs.db
 /PolicyManagement.Api/PolicyManagement.Utilities/obj
 /PolicyManagement.Api/PolicyManagement.Api/Documents
 /PolicyManagement.Api/.vs 
+/PolicyManagement.Api/PolicyManagement.Api/packages
+PolicyManagement.Api/packages
+PolicyManagement.Api/packages/
+PolicyManagement.Api/packages/

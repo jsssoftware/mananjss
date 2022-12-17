@@ -493,6 +493,11 @@
           <Property Name="GenderId" Type="smallint" />
           <Property Name="PassportNo" Type="nvarchar" MaxLength="20" />
           <Property Name="IsTeamMember" Type="bit" />
+          <Property Name="IsCommunicationOptOut1" Type="bit" />
+          <Property Name="IsCommunicationOptOut2" Type="bit" />
+          <Property Name="IsCommunicationOptOut3" Type="bit" />
+          <Property Name="ReferById" Type="int" />
+          <Property Name="CustomerNoofDependent" Type="int" />
         </EntityType>
         <EntityType Name="tblDepartment">
           <Key>
@@ -891,15 +896,15 @@
           <Property Name="PEDId" Type="smallint" />
           <Property Name="PEDExclusion" Type="nvarchar" MaxLength="100" />
           <Property Name="PPCId" Type="smallint" />
+          <Property Name="AnnualIncome" Type="int" />
+          <Property Name="OccupationId" Type="smallint" />
+          <Property Name="RiskClassId" Type="smallint" />
+          <Property Name="BranchId" Type="smallint" Nullable="false" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
-          <Property Name="AnnualIncome" Type="int" />
-          <Property Name="OccupationId" Type="smallint" />
-          <Property Name="RiskClassId" Type="smallint" />
-          <Property Name="BranchId" Type="smallint" Nullable="false" />
         </EntityType>
         <EntityType Name="tblMakeYear">
           <Key>
@@ -1036,6 +1041,8 @@
           <Property Name="PreviousInsuranceCompanyId" Type="smallint" />
           <Property Name="PreviousPolicyNo" Type="nvarchar" MaxLength="50" />
           <Property Name="PreviousPolicyEndDate" Type="smalldatetime" />
+          <Property Name="PreviousPolicyPlan" Type="nvarchar" MaxLength="100" />
+          <Property Name="PreviousSumInsured" Type="int" />
           <Property Name="NomineeName" Type="nvarchar" MaxLength="30" />
           <Property Name="NomineeRelationShipId" Type="smallint" Nullable="false" />
           <Property Name="NomineeAge" Type="smallint" />
@@ -1083,6 +1090,7 @@
           <Property Name="SpecialDiscount" Type="decimal" Precision="5" Scale="2" />
           <Property Name="Loading" Type="decimal" Precision="5" Scale="2" />
           <Property Name="AddonRiderId" Type="smallint" Nullable="false" />
+          <Property Name="AddOnSelected" Type="nvarchar" MaxLength="100" />
           <Property Name="TeleCallerId" Type="smallint" Nullable="false" />
           <Property Name="FOSId" Type="smallint" Nullable="false" />
           <Property Name="POSId" Type="int" Nullable="false" />
@@ -1155,9 +1163,6 @@
           <Property Name="FlagPostCall" Type="int" />
           <Property Name="FlagMidCall" Type="int" />
           <Property Name="FlagPreRenewCall" Type="int" />
-          <Property Name="AddOnSelected" Type="nvarchar" MaxLength="100" />
-          <Property Name="PreviousPolicyPlan" Type="nvarchar" MaxLength="100" />
-          <Property Name="PreviousSumInsured" Type="int" />
         </EntityType>
         <EntityType Name="tblNCB">
           <Key>
@@ -2017,7 +2022,7 @@
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.PolicyDataView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.PolicyDataView' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PolicyDataView">
           <Key>
             <PropertyRef Name="PolicyId" />
@@ -2187,7 +2192,7 @@ warning 6002: The table/view 'PolicyManager.dbo.PolicyDataView' does not have a 
           <Property Name="PolicyPackageTypeId" Type="smallint" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.qryCustomerCarePerformance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.qryCustomerCarePerformance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="qryCustomerCarePerformance">
           <Key>
             <PropertyRef Name="CallDurationTypeName" />
@@ -2220,7 +2225,7 @@ warning 6002: The table/view 'PolicyManager.dbo.qryCustomerCarePerformance' does
           <Property Name="EmployeeName" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.SearchClaims' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.SearchClaims' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SearchClaims">
           <Key>
             <PropertyRef Name="ClaimsId" />
@@ -2255,7 +2260,7 @@ warning 6002: The table/view 'PolicyManager.dbo.SearchClaims' does not have a pr
           <Property Name="PosId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.SearchClaimsPolicy' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.SearchClaimsPolicy' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SearchClaimsPolicy">
           <Key>
             <PropertyRef Name="PolicyId" />
@@ -2283,7 +2288,7 @@ warning 6002: The table/view 'PolicyManager.dbo.SearchClaimsPolicy' does not hav
           <Property Name="MakeYear" Type="nvarchar" MaxLength="4" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.SearchInspection' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.SearchInspection' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SearchInspection">
           <Key>
             <PropertyRef Name="InspectionId" />
@@ -2316,7 +2321,7 @@ warning 6002: The table/view 'PolicyManager.dbo.SearchInspection' does not have 
           <Property Name="InspectionSubStatus" Type="nvarchar" MaxLength="30" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.SearchVoucher' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.SearchVoucher' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="SearchVoucher">
           <Key>
             <PropertyRef Name="VoucherId" />
@@ -2359,7 +2364,7 @@ warning 6002: The table/view 'PolicyManager.dbo.SearchVoucher' does not have a p
           <Property Name="InsuranceCompanyId" Type="smallint" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.View_SearchForm' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.View_SearchForm' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="View_SearchForm">
           <Key>
             <PropertyRef Name="PolicyId" />
@@ -2424,7 +2429,7 @@ warning 6002: The table/view 'PolicyManager.dbo.View_SearchForm' does not have a
           <Property Name="MakeYearId" Type="smallint" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.View_SearchForm_Policies' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.View_SearchForm_Policies' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="View_SearchForm_Policies">
           <Key>
             <PropertyRef Name="PolicyId" />
@@ -2470,7 +2475,7 @@ warning 6002: The table/view 'PolicyManager.dbo.View_SearchForm_Policies' does n
           <Property Name="MakeYearId" Type="smallint" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.ViewAllDatatypeInOne' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.ViewAllDatatypeInOne' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ViewAllDatatypeInOne">
           <Key>
             <PropertyRef Name="InvitedDataId" />
@@ -2495,7 +2500,7 @@ warning 6002: The table/view 'PolicyManager.dbo.ViewAllDatatypeInOne' does not h
           <Property Name="Premiumoffered" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.viewCustomerCare' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.viewCustomerCare' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="viewCustomerCare">
           <Key>
             <PropertyRef Name="CustomerCallDataId" />
@@ -2541,7 +2546,7 @@ warning 6002: The table/view 'PolicyManager.dbo.viewCustomerCare' does not have 
           <Property Name="MakeYearId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.ViewCustomerCareCrossSell' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.ViewCustomerCareCrossSell' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ViewCustomerCareCrossSell">
           <Key>
             <PropertyRef Name="CustomerCallDataId" />
@@ -2646,7 +2651,7 @@ warning 6002: The table/view 'PolicyManager.dbo.ViewCustomerCareCrossSell' does 
           <Property Name="FollowupTimePrerenew" Type="smalldatetime" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.ViewCustomerEmailID' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.ViewCustomerEmailID' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ViewCustomerEmailID">
           <Key>
             <PropertyRef Name="SRNo" />
@@ -2657,7 +2662,7 @@ warning 6002: The table/view 'PolicyManager.dbo.ViewCustomerEmailID' does not ha
           <Property Name="CustomerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.ViewCustomerMobileNo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.ViewCustomerMobileNo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ViewCustomerMobileNo">
           <Key>
             <PropertyRef Name="CustomerId" />
@@ -2666,7 +2671,7 @@ warning 6002: The table/view 'PolicyManager.dbo.ViewCustomerMobileNo' does not h
           <Property Name="CustomerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.ViewDSAAllEmailId' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.ViewDSAAllEmailId' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ViewDSAAllEmailId">
           <Key>
             <PropertyRef Name="SRNo" />
@@ -2677,7 +2682,7 @@ warning 6002: The table/view 'PolicyManager.dbo.ViewDSAAllEmailId' does not have
           <Property Name="DSAName" Type="nvarchar" MaxLength="302" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.ViewDSAAllMobileNo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.ViewDSAAllMobileNo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ViewDSAAllMobileNo">
           <Key>
             <PropertyRef Name="SRNo" />
@@ -2688,7 +2693,7 @@ warning 6002: The table/view 'PolicyManager.dbo.ViewDSAAllMobileNo' does not hav
           <Property Name="DSAName" Type="nvarchar" MaxLength="267" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.ViewMasterWithMotorPolicy' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.ViewMasterWithMotorPolicy' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ViewMasterWithMotorPolicy">
           <Key>
             <PropertyRef Name="PolicyId" />
@@ -2822,7 +2827,7 @@ warning 6002: The table/view 'PolicyManager.dbo.ViewMasterWithMotorPolicy' does 
           <Property Name="GSTIN" Type="nvarchar" MaxLength="15" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.ViewPendingCommission' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPendingCommission' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ViewPendingCommission">
           <Key>
             <PropertyRef Name="InsureCompanyId" />
@@ -2863,7 +2868,7 @@ warning 6002: The table/view 'PolicyManager.dbo.ViewPendingCommission' does not 
           <Property Name="BranchId" Type="tinyint" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.ViewPersonDataBirthdayWish' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ViewPersonDataBirthdayWish">
           <Key>
             <PropertyRef Name="BranchId" />
@@ -2875,7 +2880,7 @@ warning 6002: The table/view 'PolicyManager.dbo.ViewPersonDataBirthdayWish' does
           <Property Name="BranchId" Type="tinyint" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.viewRenewPerformance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="viewRenewPerformance">
           <Key>
             <PropertyRef Name="ControlNo" />
@@ -2936,7 +2941,7 @@ warning 6002: The table/view 'PolicyManager.dbo.viewRenewPerformance' does not h
           <Property Name="PrevInsCompanyODId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'PolicyManager.dbo.viewRenewPerformanceNonMotor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="viewRenewPerformanceNonMotor">
           <Key>
             <PropertyRef Name="ControlNo" />
@@ -5806,7 +5811,7 @@ warning 6002: The table/view 'PolicyManager.dbo.viewRenewPerformanceNonMotor' do
           <Parameter Name="policyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="Usp_InspectionByPolicyId" ReturnType="Collection(PolicyManagerModel.Usp_InspectionByPolicyId_Result1)">
-            <Parameter Name="policyId" Mode="In" Type="Int32" />
+          <Parameter Name="policyId" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetPolicyFamilyDtl_Result">
@@ -6344,6 +6349,11 @@ warning 6002: The table/view 'PolicyManager.dbo.viewRenewPerformanceNonMotor' do
           <Property Name="PassportNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="IsTeamMember" Type="Boolean" />
           <NavigationProperty Name="tblBranch" Relationship="PolicyManagerModel.FK_tblCustomer_tblBranch" FromRole="tblCustomer" ToRole="tblBranch" />
+          <Property Name="IsCommunicationOptOut1" Type="Boolean" />
+          <Property Name="IsCommunicationOptOut2" Type="Boolean" />
+          <Property Name="IsCommunicationOptOut3" Type="Boolean" />
+          <Property Name="ReferById" Type="Int32" />
+          <Property Name="CustomerNoofDependent" Type="Int32" />
         </EntityType>
         <EntityType Name="tblDepartment">
           <Key>
@@ -9422,6 +9432,11 @@ warning 6002: The table/view 'PolicyManager.dbo.viewRenewPerformanceNonMotor' do
           <EntitySetMapping Name="tblCustomer">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblCustomer">
               <MappingFragment StoreEntitySet="tblCustomer">
+                <ScalarProperty Name="CustomerNoofDependent" ColumnName="CustomerNoofDependent" />
+                <ScalarProperty Name="ReferById" ColumnName="ReferById" />
+                <ScalarProperty Name="IsCommunicationOptOut3" ColumnName="IsCommunicationOptOut3" />
+                <ScalarProperty Name="IsCommunicationOptOut2" ColumnName="IsCommunicationOptOut2" />
+                <ScalarProperty Name="IsCommunicationOptOut1" ColumnName="IsCommunicationOptOut1" />
                 <ScalarProperty Name="IsTeamMember" ColumnName="IsTeamMember" />
                 <ScalarProperty Name="PassportNo" ColumnName="PassportNo" />
                 <ScalarProperty Name="GenderId" ColumnName="GenderId" />

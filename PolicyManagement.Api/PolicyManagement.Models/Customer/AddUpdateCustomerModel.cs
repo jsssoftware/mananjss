@@ -40,7 +40,7 @@ namespace PolicyManagement.Models.Customer
         public short SelectedPolicyAddress { get; set; }
         public short SelectedWhatsAppCommunication { get; set; }
         public short SelectedMobileCommunication { get; set; }
-        public byte ReferBy { get; set; }
+        public int ReferBy { get; set; }
         public int Pos { get; set; }
         public int TeamMember { get; set; }
         public int Reference { get; set; }
@@ -49,7 +49,7 @@ namespace PolicyManagement.Models.Customer
         public string DateOfAnniversary { get; set; }
         public string Aadhaar { get; set; }
         public short MaritalStatus { get; set; }
-        public byte NumberOfDependent { get; set; }
+        public int NumberOfDependent { get; set; }
         public int Profession { get; set; }
         public int LineOfBusiness { get; set; }
         public int Industry { get; set; }

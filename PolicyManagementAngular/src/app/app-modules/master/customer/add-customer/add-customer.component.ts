@@ -49,6 +49,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   public _filteredCity2Options : IDropDownDto<number>[] = [];
   public _filteredCity3Options : IDropDownDto<number>[] = [];
   public defaultVertical = 0;
+  public _customerId:any =0;
   //#endregion
 
   //#region Search Customer Form
@@ -131,7 +132,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
 
     let customerId = this.route.snapshot.paramMap.get('customerId');
     if (customerId != null) {
-      this.getCustomerById(parseInt(customerId));
+      this._customerId = parseInt(customerId);
     }
     this._customerName = this.route.snapshot.paramMap.get('name') as string;
 
@@ -189,6 +190,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
     this.getTeamMembers(this._branchId);
     this.getGenders();
     this.getClusters();
+    this.getCustomerById(this._customerId);
 
     if (this._customerName != null) {
       this.addCustomerForm.patchValue({ customerName: this._customerName });
@@ -278,15 +280,15 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
 
     let branchId: any = sessionStorage.getItem("branchId");
     let model: IAddUpdateCustomerModel = {
-      Id: 0,
+      Id: this._customerId,
       Aadhaar: this.addCustomerForm.value.aadhaar,
       BranchId: parseInt(branchId),
       Address1: this.addCustomerForm.value.address1,
       Address2: this.addCustomerForm.value.address2,
       Address3: this.addCustomerForm.value.address3,
-      City1: this.addCustomerForm.value.city1,
-      City2: this.addCustomerForm.value.city2,
-      City3: this.addCustomerForm.value.city3,
+      City1: this.addCustomerForm.value.city1.Value,
+      City2: this.addCustomerForm.value.city2.Value,
+      City3: this.addCustomerForm.value.city3.Value,
       CommunicationOptOut1: this.addCustomerForm.value.communicationOptOut1,
       CommunicationOptOut2: this.addCustomerForm.value.communicationOptOut2,
       CommunicationOptOut3: this.addCustomerForm.value.communicationOptOut3,
@@ -330,7 +332,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       Gender: this.addCustomerForm.value.gender,
       IsPos: this.addCustomerForm.value.isPos,
       IsTeamMember: this.addCustomerForm.value.isTeamMember,
-      PassportNumber: this.addCustomerForm.value.passportNumber
+      PassportNumber: this.addCustomerForm.value.passportNumber,
     };
 
     return model;
@@ -449,6 +451,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   }
 
   setCustomerData(data: IAddUpdateCustomerModel): void {
+    debugger
     this.addCustomerForm.setValue({
       customerNameSalutation: data.CustomerNameSalutation,
       customerName: data.CustomerName,

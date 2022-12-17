@@ -426,10 +426,10 @@
           <mat-form-field appearance="fill">
             <mat-label>Refer By</mat-label>
             <mat-select formControlName="referBy" (selectionChange)="referByValidation($event.value)" required>
-              <mat-option>Select</mat-option>
-              <mat-option value="1">POS</mat-option>
-              <mat-option value="2">Team Member</mat-option>
-              <mat-option value="3">Reference</mat-option>
+              <mat-option value="">Select</mat-option>
+              <mat-option [value]="1">POS</mat-option>
+              <mat-option [value]="2">Team Member</mat-option>
+              <mat-option [value]="3">Reference</mat-option>
             </mat-select>
             <mat-error *ngIf="addCustomerForm.controls.referBy">Please choose Refer By</mat-error>
           </mat-form-field>
