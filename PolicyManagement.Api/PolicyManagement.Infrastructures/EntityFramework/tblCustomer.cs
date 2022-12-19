@@ -146,6 +146,10 @@ public partial class tblCustomer
 
     public Nullable<int> CustomerNoofDependent { get; set; }
 
+    public Nullable<bool> IsPos { get; set; }
+
+    public Nullable<bool> IsCommunicationOptOut4 { get; set; }
+
 
 
     public virtual tblBranch tblBranch { get; set; }

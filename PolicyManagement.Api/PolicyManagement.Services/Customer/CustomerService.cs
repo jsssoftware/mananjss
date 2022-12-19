@@ -233,21 +233,30 @@ namespace PolicyManagement.Services.Customer
                     DefaultAddress = model.SelectedPolicyAddress,
                     DefaultContactNo = model.SelectedMobileCommunication,
                     DefaultWhatsAppNo = model.SelectedWhatsAppCommunication,
-                    IsCompany = model.CustomerType == 1, // 1 for Company
+                    IsCompany = model.CustomerType == 1 , // 1 for Company
                     IsCommunicationOptOut1 = model.CommunicationOptOut1,
                     IsCommunicationOptOut2 = model.CommunicationOptOut2,
                     IsCommunicationOptOut3 = model.CommunicationOptOut3,
-                    GenderId = model.Gender
+                    IsCommunicationOptOut4 = model.CommunicationOptOut4,
+                    GenderId = model.Gender,
+                    IsTeamMember =  model.IsTeamMember,
+                    PassportNo = model.PassportNumber,
+                    IsPos=  model.IsPos 
+
                 };
 
                 _dataContext.tblCustomer.AddOrUpdate(customer);
 
                 await _dataContext.SaveChangesAsync();
-
+                var Message = "Customer added successfully";
+                if(model.Id != 0)
+                {
+                    Message = "Customer Modified successfully";
+                }
                 return new CommonDto<object>
                 {
                     IsSuccess = true,
-                    Message = "Customer added successfully"
+                    Message = Message
                 };
             }
             catch (Exception ex)
@@ -265,7 +274,7 @@ namespace PolicyManagement.Services.Customer
             List<ClusterErrorDto> clusterErrorDtos = new List<ClusterErrorDto>();
 
             #region POS Mobile Validation
-            if (!model.IsPos)
+            if ((bool)model.IsPos)
             {
                 if (!string.IsNullOrEmpty(model.Mobile1))
                 {
@@ -377,7 +386,7 @@ namespace PolicyManagement.Services.Customer
             #endregion
 
             #region TeamMember Mobile Validation
-            if (!model.IsTeamMember)
+            if ((bool)model.IsTeamMember)
             {
                 var teamMemberByMobile1 = await _dataContext.tblTeamMember.Where(w => w.TeamMemberMobile1 == model.Mobile1
                                                                                     || w.TeamMemberMobile2 == model.Mobile1
@@ -802,13 +811,16 @@ namespace PolicyManagement.Services.Customer
                     Reference = customer.ReferenceId ?? 0,
                     SelectedMobileCommunication = customer.DefaultContactNo ?? 0,
                     SelectedPolicyAddress = customer.DefaultAddress ?? 0,
-                    SelectedWhatsAppCommunication = customer.DefaultWhatsAppNo ?? 0,
+                    SelectedWhatsAppCommunication = customer    .DefaultWhatsAppNo ?? 0,
                     TeamMember = customer.TeamMemberId ?? 0,
                     PassportNumber = customer.PassportNo,
                     Gender = customer.GenderId,
-                    CommunicationOptOut1 = (bool)customer.IsCommunicationOptOut1 ,
-                    CommunicationOptOut2 = (bool)customer.IsCommunicationOptOut2,
-                    CommunicationOptOut3 = (bool)customer.IsCommunicationOptOut3
+                    IsPos = customer.IsPos,
+                    CommunicationOptOut1 = customer.IsCommunicationOptOut1 ,
+                    CommunicationOptOut2 = customer.IsCommunicationOptOut2,
+                    CommunicationOptOut3 = customer.IsCommunicationOptOut3,
+                    CommunicationOptOut4 = customer.IsCommunicationOptOut4,
+                    IsTeamMember =  customer.IsTeamMember
 
                 }
             };

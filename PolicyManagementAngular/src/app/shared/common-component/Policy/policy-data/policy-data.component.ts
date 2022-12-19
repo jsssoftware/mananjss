@@ -2542,7 +2542,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   resetForm() {
-    debugger
     this.customerForm.reset();
     this.policyTermForm.reset();
     this.policyForm.reset();
