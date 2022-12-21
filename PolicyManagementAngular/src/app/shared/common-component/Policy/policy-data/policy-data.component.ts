@@ -272,7 +272,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     ncb: new FormControl('', [Validators.required]),
     commissionPaidOn: new FormControl(''),
     commissionablePremium: new FormControl(''),
-    basicTPgstPercent: new FormControl(18, [Validators.required]),
+    basicTPgstPercent: new FormControl('', [Validators.required]),
     netpremium : new FormControl(''),
   });
   //#endregion
@@ -456,8 +456,53 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this._branchId = sessionStorage.getItem("branchId");
     this._addOnRiderModel = {
       AddOnRiderId: 0,
-      AddOnRiderOptionId: []
+      AddOnRiderOptionId: [],
+      AddOnValue:[]
     };    
+  }
+
+  ngOnInit(): void {
+    this.vehicleForm.get("vehicle")?.valueChanges.subscribe(input => {
+      if (typeof (input) == "string")
+        this.filterData(input);
+      else
+        this.filterData(input.Name);
+    })
+
+    this._customerId = this.route.snapshot.paramMap.get('customerId');
+    this._policyTypeId = this.route.snapshot.paramMap.get('policyTypeId');
+    this._policyId = Number(this.route?.snapshot?.paramMap.get('policyId') || 0);
+    switch (this._policyTypeId) {
+      case "1":
+        this._type = 1;
+        this._isDisableBlockAgentCheckbox = this._isDisableChangeAgentCheckbox = true;
+        break;
+      case "2":
+        this._type = 2;
+        break;
+      case "3":
+        this._type = 3;
+        break;
+      case "4":
+        this._type = 4;
+        break;
+      case "5":
+        this._type = 5;
+        break;
+      case "6":
+        this._type = 6;
+        break;
+      case "7":
+        this._type = 7;
+        this._isViewPolicyActive  = true;
+        break;
+      case "8":
+        this._type = 8;
+        break;
+    }
+
+    this.policyForm.get("numberOfKiloMeterCovered")?.disable();
+    this.policyForm.get("extendedKiloMeterCovered")?.disable();
   }
 
   ngAfterViewInit(): void {
@@ -499,11 +544,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       case "5":
       case "6":
       case "7":
-        this.getMotorPolicyById(this._policyId);
         this.getPolicyClaims();
         this.getPolicyVouchers();
         this.getPolicyInspections();
         this.getPolicyDocuments();
+        this.getMotorPolicyById(this._policyId);
         break;
     }
 
@@ -617,49 +662,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
    
   }
 
-  ngOnInit(): void {
-    this.vehicleForm.get("vehicle")?.valueChanges.subscribe(input => {
-      if (typeof (input) == "string")
-        this.filterData(input);
-      else
-        this.filterData(input.Name);
-    })
-
-    this._customerId = this.route.snapshot.paramMap.get('customerId');
-    this._policyTypeId = this.route.snapshot.paramMap.get('policyTypeId');
-    this._policyId = this.route.snapshot.paramMap.get('policyId');
-    switch (this._policyTypeId) {
-      case "1":
-        this._type = 1;
-        this._isDisableBlockAgentCheckbox = this._isDisableChangeAgentCheckbox = true;
-        break;
-      case "2":
-        this._type = 2;
-        break;
-      case "3":
-        this._type = 3;
-        break;
-      case "4":
-        this._type = 4;
-        break;
-      case "5":
-        this._type = 5;
-        break;
-      case "6":
-        this._type = 6;
-        break;
-      case "7":
-        this._type = 7;
-        this._isViewPolicyActive  = true;
-        break;
-      case "8":
-        this._type = 8;
-        break;
-    }
-
-    this.policyForm.get("numberOfKiloMeterCovered")?.disable();
-    this.policyForm.get("extendedKiloMeterCovered")?.disable();
-  }
+  
 
   setvalues(){
      
@@ -949,7 +952,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   
   createPolicy(): any {
+    debugger
+    let menu = this.MenuVertical;
+    console.log(this.PolicyTermForm)
    let model: IMotorPolicyFormDataModel = {
+     PolicyId:this._policyId,
      BranchId: this._branchId, 
      VerticalCode: this._verticalDetail.VerticalCode,
      CoverNoteIssueDateString: this.commonService.getDateInString(this.PolicyForm.coverNoteIssueDate),
@@ -1028,7 +1035,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
        AcknowledgementSlipIssueDateString: this.commonService.getDateInString(this.PolicyTermForm.acknowledgementSlipIssueDate),
        AcknowledgementSlipIssueDateDto: null,
        AcknowledgementSlipNumber: this.PolicyTermForm.acknowledgementSlipNumber,
-       PackageTypeId:  (this.MenuVertical=='Motor')? this.PolicyTermForm.packageType?.Id:0,  
+       PackageTypeId:  (this.MenuVertical=='Motor')? this.PolicyTermForm.packageType:0,  
        PolicyTerm: (this.MenuVertical=='Motor')? this.PolicyTermForm.policyTerm?.Id:0,
        PolicyType: this.PolicyTermForm.policyType,
        VehicleClass: this.PolicyTermForm.vehicleClass,
@@ -1058,7 +1065,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
        TotalOd: this.PremiumForm.totalOd,
        TotalTp: this.PremiumForm.totalTp,
        Tp: this.PremiumForm.tp,
-       VehicleIdv: this.PremiumForm.vehicleIdv
+       VehicleIdv: this.PremiumForm.vehicleIdv,
+       BasicTpGstPercentage:this.PremiumForm.basicTPgstPercent,
+       NetPremium: this.PremiumForm.netpremium
      },
      Vehicle: {
        Cc: this.VehicleForm.cc,
@@ -1385,6 +1394,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   createPolicyAfterWarning(response: ICommonDto<any>) {
 
     let model: IMotorPolicyFormDataModel = {
+      PolicyId:this._policyId,
       BranchId: this._branchId,
       VerticalCode: this._verticalDetail.VerticalCode,
       CoverNoteIssueDateString: this.commonService.getDateInString(this.PolicyForm.coverNoteIssueDate),
@@ -1493,7 +1503,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         TotalOd: this.PremiumForm.totalOd,
         TotalTp: this.PremiumForm.totalTp,
         Tp: this.PremiumForm.tp,
-        VehicleIdv: this.PremiumForm.vehicleIdv
+        VehicleIdv: this.PremiumForm.vehicleIdv,
+        BasicTpGstPercentage:this.PremiumForm.basicTPgstPercent,
+        NetPremium: this.PremiumForm.netpremium
       },
       Vehicle: {
         Cc: this.VehicleForm.cc,
@@ -1732,6 +1744,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this._addOnPlanOptions.forEach(f => {
       if (f.IsPlanAvailable) {
         this._addOnRiderModel.AddOnRiderOptionId.push(f.AddonPlanOptionId);
+        this._addOnRiderModel.AddOnValue.push(Number(f.AddonValue));
       }
     });
     return this._addOnRiderModel;
@@ -1968,7 +1981,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         loading: response.Premium.Loading,
         ncb: response.Premium.Ncb,
         commissionPaidOn: response.Premium.CommissionPaidOn,
-        commissionablePremium: response.Premium.CommissionablePremium
+        commissionablePremium: response.Premium.CommissionablePremium,
+        basicTPgstPercent:response.Premium.BasicTpGstPercentage,
+        netpremium:response.Premium.NetPremium
       });
 
       this.policySourceForm.patchValue({
@@ -2089,7 +2104,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         });
       }
     }
-
+    //Calling insurance company branch api location
+    this.getInsuranceCompanyBranches();
+    this.policyForm.patchValue({
+      insuranceBranch: response.InsuranceBranch,
+    });
     this.setvalues();  
   }
 

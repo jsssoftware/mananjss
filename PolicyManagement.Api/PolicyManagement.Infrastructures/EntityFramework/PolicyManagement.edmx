@@ -1171,6 +1171,10 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="FlagPostCall" Type="int" />
           <Property Name="FlagMidCall" Type="int" />
           <Property Name="FlagPreRenewCall" Type="int" />
+          <Property Name="InsuranceBranchId" Type="int" />
+          <Property Name="BasicTpGstPercentage" Type="int" />
+          <Property Name="NetPremium" Type="int" />
+          <Property Name="NonCommissionComponentPremium" Type="int" />
         </EntityType>
         <EntityType Name="tblNCB">
           <Key>
@@ -7162,6 +7166,10 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="AddOnSelected" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="PreviousPolicyPlan" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="PreviousSumInsured" Type="Int32" />
+          <Property Name="InsuranceBranchId" Type="Int32" />
+          <Property Name="BasicTpGstPercentage" Type="Int32" />
+          <Property Name="NetPremium" Type="Int32" />
+          <Property Name="NonCommissionComponentPremium" Type="Int32" />
         </EntityType>
         <EntityType Name="tblNCB">
           <Key>
@@ -10159,6 +10167,10 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <EntitySetMapping Name="tblMotorPolicyData">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblMotorPolicyData">
               <MappingFragment StoreEntitySet="tblMotorPolicyData">
+                <ScalarProperty Name="NonCommissionComponentPremium" ColumnName="NonCommissionComponentPremium" />
+                <ScalarProperty Name="NetPremium" ColumnName="NetPremium" />
+                <ScalarProperty Name="BasicTpGstPercentage" ColumnName="BasicTpGstPercentage" />
+                <ScalarProperty Name="InsuranceBranchId" ColumnName="InsuranceBranchId" />
                 <ScalarProperty Name="PreviousSumInsured" ColumnName="PreviousSumInsured" />
                 <ScalarProperty Name="PreviousPolicyPlan" ColumnName="PreviousPolicyPlan" />
                 <ScalarProperty Name="AddOnSelected" ColumnName="AddOnSelected" />
