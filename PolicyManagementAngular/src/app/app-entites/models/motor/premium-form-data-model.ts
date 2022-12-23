@@ -23,4 +23,6 @@ export interface IPremiumFormDataModel {
     Ncb: number;
     CommissionPaidOn: number;
     CommissionablePremium: number;
+    BasicTpGstPercentage :number;
+    NetPremium:Number
 }

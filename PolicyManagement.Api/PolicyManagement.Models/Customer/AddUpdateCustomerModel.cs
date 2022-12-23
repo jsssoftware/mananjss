@@ -33,10 +33,10 @@ namespace PolicyManagement.Models.Customer
         public string Phone2 { get; set; }
         public string Email1 { get; set; }
         public string Email2 { get; set; }
-        public bool CommunicationOptOut1 { get; set; }
-        public bool CommunicationOptOut2 { get; set; }
-        public bool CommunicationOptOut3 { get; set; }
-        public bool CommunicationOptOut4 { get; set; }
+        public bool? CommunicationOptOut1 { get; set; }
+        public bool? CommunicationOptOut2 { get; set; }
+        public bool? CommunicationOptOut3 { get; set; }
+        public bool? CommunicationOptOut4 { get; set; }
         public short SelectedPolicyAddress { get; set; }
         public short SelectedWhatsAppCommunication { get; set; }
         public short SelectedMobileCommunication { get; set; }
@@ -54,8 +54,8 @@ namespace PolicyManagement.Models.Customer
         public int LineOfBusiness { get; set; }
         public int Industry { get; set; }
         public int Designation { get; set; }
-        public bool IsPos { get; set; }
-        public bool IsTeamMember { get; set; }
+        public bool? IsPos { get; set; }
+        public bool? IsTeamMember { get; set; }
         public string PassportNumber { get; set; }
         public Nullable<short> Gender { get; set; }
 
