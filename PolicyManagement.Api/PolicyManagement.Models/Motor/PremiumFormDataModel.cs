@@ -26,7 +26,5 @@
         public short Ncb { get; set; }
         public short CommissionPaidOn { get; set; }
         public decimal CommissionablePremium { get; set; }
-        public int BasicTpGstPercentage { get; set; }
-        public int NetPremium { get; set; }
     }
 }

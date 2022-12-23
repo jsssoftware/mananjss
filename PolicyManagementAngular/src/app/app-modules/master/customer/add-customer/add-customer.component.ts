@@ -1,6 +1,6 @@
 import { element } from 'protractor';
 import { UpperCasePipe } from '@angular/common';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,7 +11,6 @@ import { ICommonService } from 'src/app/app-services/common-service/abstracts/co
 import { ICustomerService } from 'src/app/app-services/customer-service/abstracts/customer.iservice';
 import { Vertical } from 'src/app/shared/utilities/enums/enum';
 import Swal from 'sweetalert2';
-
 
 @Component({
   selector: 'app-add-customer',
@@ -51,7 +50,6 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   public _filteredCity3Options : IDropDownDto<number>[] = [];
   public defaultVertical = 0;
   public _customerId:any =0;
-  public _cityName:string="";
   //#endregion
 
   //#region Search Customer Form
@@ -82,8 +80,8 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
     city3: new FormControl(''),
     pincode3: new FormControl('', [Validators.pattern('^[1-9][0-9]{5}$')]),
     gstin3: new FormControl('', [Validators.pattern('^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$')]),
-    mobile1: new FormControl('', [Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),
-    mobile2: new FormControl('', [Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),
+    mobile1: new FormControl('', [Validators.pattern('^[1-9][0-9]+$')]),
+    mobile2: new FormControl('', [Validators.pattern('^[1-9][0-9]+$')]),
     phone1: new FormControl('', [Validators.pattern('^[0-9]+$')]),
     phone2: new FormControl('', [Validators.pattern('^[0-9]+$')]),
     email1: new FormControl('', [Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]), //pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
@@ -95,7 +93,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
     gender: new FormControl(''),
     passportNumber: new FormControl(''),
     pan: new FormControl('', [Validators.pattern('^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$')]),
-    aadhaar: new FormControl('', [Validators.pattern('^[0-9]+$'),Validators.minLength(12), Validators.maxLength(12)]),
+    aadhaar: new FormControl('', [Validators.pattern('^[0-9]+$')]),
     maritalStatus: new FormControl(''),
     numberOfDependent: new FormControl(''),
     profession: new FormControl(''),
@@ -175,13 +173,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
 
   }
 
-  keyPress(event: any) {
-    const pattern = /[0-9\+\-\ ]/;
-    let inputChar = String.fromCharCode(event.charCode);
-    if (event.keyCode != 8 && !pattern.test(inputChar)) {
-      event.preventDefault();
-    }
-  }
+
 
 
   ngAfterViewInit(): void {
@@ -459,6 +451,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   }
 
   setCustomerData(data: IAddUpdateCustomerModel): void {
+    debugger
     this.addCustomerForm.setValue({
       customerNameSalutation: data.CustomerNameSalutation,
       customerName: data.CustomerName,
@@ -469,15 +462,15 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       customerCluster: data.CustomerCluster,
       companyTerritory: data.CompanyTerritory,
       address1: data.Address1,
-      city1: this._cities.find(x=>x.Value ==data.City1),
+      city1: data.City1,
       pincode1: data.Pincode1,
       gstin1: data.Gstin1,
       address2: data.Address2,
-      city2:  this._cities.find(x=>x.Value ==data.City2),
+      city2: data.City2,
       pincode2: data.Pincode2,
       gstin2: data.Gstin2,
       address3: data.Address3,
-      city3:  this._cities.find(x=>x.Value ==data.City3),
+      city3: data.City3,
       pincode3: data.Pincode3,
       gstin3: data.Gstin3,
       mobile1: data.Mobile1,
@@ -511,8 +504,8 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       passportNumber: data.PassportNumber,
       isPos: data.IsPos,
       isTeamMember: data.IsTeamMember
-    })
-    this.addCustomerForm.controls.city1.setValue(this._cities.find(x=>x.Value ==data.City1));
+    });
+
     this._selectedPolicyAddress = data.SelectedPolicyAddress;
     this._selectedMobileCommunication = data.SelectedMobileCommunication;
     this._selectedWhatsAppCommunication = data.SelectedWhatsAppCommunication;

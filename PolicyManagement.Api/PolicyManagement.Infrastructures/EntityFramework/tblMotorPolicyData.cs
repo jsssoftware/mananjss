@@ -358,14 +358,6 @@ public partial class tblMotorPolicyData
 
     public Nullable<int> PreviousSumInsured { get; set; }
 
-    public Nullable<int> InsuranceBranchId { get; set; }
-
-    public Nullable<int> BasicTpGstPercentage { get; set; }
-
-    public Nullable<int> NetPremium { get; set; }
-
-    public Nullable<int> NonCommissionComponentPremium { get; set; }
-
 }
 
 }
