@@ -513,11 +513,17 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.getNumberOfYears();
     this.getFinancers();
     this.getInspectionCompanies();
+    if(this._policyId == 0){
     this.getAddOnRiders();
+    }
     this.getManufacturers();
     this.getMakeYears();
     this.getRtoZones();
-    this.getAddOnPlanOptions(-1);
+    //Not calling on edit
+    if(this._policyId == 0){
+      this.getAddOnPlanOptions(-1);
+
+    }
     this.getDocumentTypes();
     this.getPaymentModes();
     this.getRelations();
@@ -952,7 +958,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   
   createPolicy(): any {
-    debugger
     let menu = this.MenuVertical;
     console.log(this.PolicyTermForm)
    let model: IMotorPolicyFormDataModel = {
@@ -1175,7 +1180,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
            icon: 'success',
            title: 'Done',
            text: response.Message,
-         });
+         }).then((result) => {
+          if (result.isConfirmed) {
+            this.redirectRoute();
+          }
+        });
        }
        else {
          if (response.Response == null) {
@@ -1570,6 +1579,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
           icon: 'success',
           title: 'Done',
           text: response.Message,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.redirectRoute();
+          }
         });
       }
       else {
@@ -1919,6 +1932,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   setMotorPolicyData(response: IMotorPolicyFormDataModel): void {
+
     if (this._type == 6)
       this._policyTypes = (<IDropDownDto<number>[]>this._policyTypes).filter(f => f.Value == response.PolicyTerm.PolicyType);
 
@@ -1995,6 +2009,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         posManagedBy: response.PolicySource.PosManagedBy,
         policyRemarks: response.PolicySource.PolicyRemarks
       });
+      this.businessDoneBy();
     }
 
     if (this._policyTypeId === "2") {
@@ -2072,43 +2087,58 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       });
     });
 
-    if (response.AddOnSelected != null && response.AddOnSelected != "")
-      this._addOnRiderArray = response.AddOnSelected.split(/\s*,\s*/);
-
-    for (var i = 0; i < response.PaymentData.length; i++) {
-      if (i == 0) {
-        this.paymentForm.patchValue({
-          mode1: response.PaymentData[i].Mode,
-          amount1: response.PaymentData[i].Amount,
-          instrumentNumber1: response.PaymentData[i].InstrumentNumber,
-          dated1: moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)),
-          bank1: response.PaymentData[i].Bank
+    if (response.AddOnRider){
+      this._addOnRiderModel.AddOnRiderId = response?.AddOnRider?.AddOnRiderId;
+      this.commonService.getAddOnPlanOptions(this._addOnRiderModel.AddOnRiderId, Vertical.Motor,0).subscribe((addOnResponse: IAddOnPlanOptionDto[]) => {
+        addOnResponse.forEach((value, index) => {
+          value.IsDisabled = value.IsPlanAvailable;
+          if (value.IsPlanAvailable) {
+            this._addOnRiderArray.push(value.AddonPlanOptionName);
+          }
         });
-      }
-      if (i == 1) {
-        this.paymentForm.patchValue({
-          mode2: response.PaymentData[i].Mode,
-          amount2: response.PaymentData[i].Amount,
-          instrumentNumber2: response.PaymentData[i].InstrumentNumber,
-          dated2: moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)),
-          bank2: response.PaymentData[i].Bank
-        });
-      }
-      if (i == 2) {
-        this.paymentForm.patchValue({
-          mode3: response.PaymentData[i].Mode,
-          amount3: response.PaymentData[i].Amount,
-          instrumentNumber3: response.PaymentData[i].InstrumentNumber,
-          dated3: moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)),
-          bank3: response.PaymentData[i].Bank
-        });
-      }
+        this._addOnPlanOptions = addOnResponse;
+        this.UpdateAddonPlanValue(response)
+      });
     }
-    //Calling insurance company branch api location
-    this.getInsuranceCompanyBranches();
-    this.policyForm.patchValue({
-      insuranceBranch: response.InsuranceBranch,
-    });
+
+    if(this._type !== PolicyType.SameCompanyRetention){
+      for (var i = 0; i < response.PaymentData.length; i++) {
+        if (i == 0) {
+          this.paymentForm.patchValue({
+            mode1: response.PaymentData[i].Mode,
+            amount1: response.PaymentData[i].Amount,
+            instrumentNumber1: response.PaymentData[i].InstrumentNumber,
+            dated1: moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)),
+            bank1: response.PaymentData[i].Bank
+          });
+        }
+        if (i == 1) {
+          this.paymentForm.patchValue({
+            mode2: response.PaymentData[i].Mode,
+            amount2: response.PaymentData[i].Amount,
+            instrumentNumber2: response.PaymentData[i].InstrumentNumber,
+            dated2: moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)),
+            bank2: response.PaymentData[i].Bank
+          });
+        }
+        if (i == 2) {
+          this.paymentForm.patchValue({
+            mode3: response.PaymentData[i].Mode,
+            amount3: response.PaymentData[i].Amount,
+            instrumentNumber3: response.PaymentData[i].InstrumentNumber,
+            dated3: moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)),
+            bank3: response.PaymentData[i].Bank
+          });
+        }
+      }
+
+       //Calling insurance company branch api location
+      this.getInsuranceCompanyBranches();
+      this.policyForm.patchValue({
+        insuranceBranch: response.InsuranceBranch,
+      });
+    }
+   
     this.setvalues();  
   }
 
@@ -2718,37 +2748,30 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     {
       this.verticalData = Vertical.Health; 
     }
-
-    switch (enumName) {
-      case "New":
-        this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_New + "/" +this.verticalData + ""]);
-        break;
-      case "Renew":
-        this.router.navigate(["/user/search-policy/" + SearchPolicyType.Motor_Renew + "/" +this.verticalData + ""]);
-        break;
-      case "Incomplete":
-        this.router.navigate(["/user/search-policy/" + SearchPolicyType.Motor_Incomplete + "/" + this.verticalData+ ""]);
-        break;
-      case "Correction":
-        this.router.navigate(["/user/search-policy/" + SearchPolicyType.Motor_Correction + "/" + this.verticalData+ ""]);
-        break;
-      case "Verify":
-        this.router.navigate(["/user/search-policy/" + SearchPolicyType.Motor_Verify + "/" + this.verticalData + ""]);
-        break;
-      case "Modify":
-        this.router.navigate(["/user/search-policy/" + SearchPolicyType.Motor_Modify + "/" + this.verticalData + ""]);
-        break;
-      case "View":
-        this.router.navigate(["/user/search-policy/" + SearchPolicyType.Motor_View + "/" + this.verticalData+ ""]);
-        break;
-      case "rollover":
-        this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_rollover + "/" +this.verticalData + ""]);
-
-    }
   }
 
 
- 
+ UpdateAddonPlanValue(response:any){
+    this._addOnPlanOptions.forEach(f => {
+      let addonPlanOptionIdIndex =  response?.AddOnRider?.AddOnRiderOptionId.findIndex((x: number)=>x == f.AddonPlanOptionId);
+      if(addonPlanOptionIdIndex >=0){
+        let addOnValue =  response?.AddOnRider?.AddOnValue[addonPlanOptionIdIndex].toString();
+        f.AddonValue = addOnValue;
+        f.IsPlanAvailable = true;
+      }
+    });
+ }
+
+ redirectRoute(){
+    if(this.MenuVertical=='Motor')
+    {
+      this.router.navigate(["../pms/motor/motor-policy-management"]);
+    }
+    else if(this.MenuVertical=='Health')
+    {
+      this.verticalData = Vertical.Health; 
+    }
+ }
 
 }
 

@@ -273,25 +273,19 @@ namespace PolicyManagement.Services.Motor
                     var addOnValue = model.AddOnRider.AddOnValue;
                     var addPlanOptionId = model.AddOnRider.AddOnRiderOptionId;
                     var length = model.AddOnRider.AddOnRiderOptionId.Count();
-                    /*for (int i = 0; i < length; i++)
+                    List<tblPolicyAddonOptionDetails> addOnOptionDetails = new List<tblPolicyAddonOptionDetails>();
+
+                    for (int i = 0; i < length; i++)
                     {
-                        List<tblPolicyAddonOptionDetails> addOnOptionDetails = new List<tblPolicyAddonOptionDetails>();
                         addOnOptionDetails.Add(new tblPolicyAddonOptionDetails
                         {
                             AddonPlanOptionId = addPlanOptionId[i],
+                            AddonValue= addOnValue[i],
                             PolicyId = motorPolicyData.PolicyId,
                         });
 
-                    }*/
-                    List<tblPolicyAddonOptionDetails> addOnOptionDetails = new List<tblPolicyAddonOptionDetails>();
-                    model.AddOnRider.AddOnRiderOptionId.ForEach(f =>
-                    {
-                        addOnOptionDetails.Add(new tblPolicyAddonOptionDetails
-                        {
-                            AddonPlanOptionId = f,
-                            PolicyId = motorPolicyData.PolicyId,
-                        });
-                    });
+                    }
+                   
 
                     _dataContext.tblPolicyAddonOptionDetails.AddRange(addOnOptionDetails);
                     await _dataContext.SaveChangesAsync();
@@ -318,8 +312,6 @@ namespace PolicyManagement.Services.Motor
             MotorPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
                                                   .Join(_dataContext.tblRTOZone, T3 => T3.T1.RTOZoneId, T4 => T4.RTOZoneId, (T3, T4) => new { T3, T4 })
                                                     .GroupJoin(_dataContext.tblCluster, T5 => T5.T3.T2.ClusterId, T6 => T6.ClusterId, (T5, T6) => new { T5, T6 })
-                                                    .Join(_dataContext.tblAddonPlanOption, T7 => T7.T5.T3.T1.PolicyId, T7 => T7., (T3, T4) => new { T3, T4 })
-
                                                   .SelectMany(s => s.T6.DefaultIfEmpty(), (policyWithCustomer, cluster) => new { policyWithCustomer.T5, T6 = cluster })
                                                   .Where(w => w.T5.T3.T1.PolicyId == policyId)
                                                   .Select(s => new MotorPolicyFormDataModel
@@ -328,6 +320,10 @@ namespace PolicyManagement.Services.Motor
                                                       BranchId = s.T5.T3.T1.BranchId.ToString(),
                                                       CoverNoteIssueDate = s.T5.T3.T1.CoverNoteDate,
                                                       CoverNoteNumber = s.T5.T3.T1.CoverNoteNo,
+                                                      AddOnRider = new AddOnRiderModel
+                                                      {
+                                                          AddOnRiderId = s.T5.T3.T1.AddonRiderId
+                                                      },
                                                       Customer = new CustomerFormDataModel
                                                       {
                                                           AddressInPolicy = s.T5.T3.T1.AddressInPolicy,
@@ -391,7 +387,7 @@ namespace PolicyManagement.Services.Motor
                                                       },
                                                       Premium = new PremiumFormDataModel
                                                       {
-                                                          AddOnRiderOd = s.T5.T3.T1.AddonRiderId,
+                                                          AddOnRiderOd = s.T5.T3.T1.AddonOD??0,
                                                           CngLpgIdv = s.T5.T3.T1.CNGIDV ?? 0,
                                                           CommissionablePremium = s.T5.T3.T1.CommissionablePremium ?? 0,
                                                           CommissionPaidOn = s.T5.T3.T1.CommissionPayTypeId ?? 0,
@@ -472,7 +468,7 @@ namespace PolicyManagement.Services.Motor
                                                       POSCommMonthCycleId = s.T5.T3.T1.POSCommMonthCycleId,
                                                       CommissionStatusColor = HtmlColor.White,
                                                       ReconStatusColor = HtmlColor.White,
-                                                      AddOnSelected = s.T5.T3.T1.AddOnSelected
+                                                      AddOnSelected = s.T5.T3.T1.AddOnSelected,
                                                   })
                                                   .FirstOrDefaultAsync();
 
@@ -520,6 +516,25 @@ namespace PolicyManagement.Services.Motor
 
                 }
                     
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message.ToString());
+
+            }
+
+            try
+            {
+                var data = await _dataContext.tblPolicyAddonOptionDetails.Where(w => w.PolicyId == policyId).Distinct().ToListAsync();
+                var addOnRiderId = motorPolicy.AddOnRider.AddOnRiderId;
+                if (data != null && data.Count > 0)
+                    motorPolicy.AddOnRider = new AddOnRiderModel
+                    {
+                        AddOnRiderId = addOnRiderId,
+                        AddOnRiderOptionId = data.Select(x => x.AddonPlanOptionId).ToList(),
+                        AddOnValue = data.Select(x => x.AddonValue).ToList(),
+
+                    };
             }
             catch (Exception ex)
             {
@@ -839,14 +854,19 @@ namespace PolicyManagement.Services.Motor
                 }
 
                 List<tblPolicyAddonOptionDetails> addOnOptionDetails = new List<tblPolicyAddonOptionDetails>();
-                model.AddOnRider.AddOnRiderOptionId.ForEach(f =>
+                var addOnValue = model.AddOnRider.AddOnValue;
+                var addPlanOptionId = model.AddOnRider.AddOnRiderOptionId;
+                var length = model.AddOnRider.AddOnRiderOptionId.Count();
+                for (int i = 0; i < length; i++)
                 {
                     addOnOptionDetails.Add(new tblPolicyAddonOptionDetails
                     {
-                        AddonPlanOptionId = f,
-                        PolicyId = motorPolicyData.PolicyId
+                        AddonPlanOptionId = addPlanOptionId[i],
+                        AddonValue = addOnValue[i],
+                        PolicyId = motorPolicyData.PolicyId,
                     });
-                });
+
+                }
 
                 _dataContext.tblPolicyAddonOptionDetails.AddRange(addOnOptionDetails);
                 await _dataContext.SaveChangesAsync();

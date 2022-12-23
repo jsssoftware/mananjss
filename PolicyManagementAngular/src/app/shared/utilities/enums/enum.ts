@@ -18,7 +18,8 @@ export enum PolicyType {
     New = 1,
     SameCompanyRetention,
     Rollover,
-    OtherCompanyRetention
+    OtherCompanyRetention,
+    Renewal
 }
 
 export enum FormMode {
