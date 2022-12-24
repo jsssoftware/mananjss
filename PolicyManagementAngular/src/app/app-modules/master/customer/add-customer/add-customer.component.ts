@@ -459,7 +459,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   }
 
   setCustomerData(data: IAddUpdateCustomerModel): void {
-    this.addCustomerForm.setValue({
+    this.addCustomerForm.patchValue({
       customerNameSalutation: data.CustomerNameSalutation,
       customerName: data.CustomerName,
       customerType: data.CustomerType,
@@ -512,7 +512,6 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       isPos: data.IsPos,
       isTeamMember: data.IsTeamMember
     })
-    this.addCustomerForm.controls.city1.setValue(this._cities.find(x=>x.Value ==data.City1));
     this._selectedPolicyAddress = data.SelectedPolicyAddress;
     this._selectedMobileCommunication = data.SelectedMobileCommunication;
     this._selectedWhatsAppCommunication = data.SelectedWhatsAppCommunication;

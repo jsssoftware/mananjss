@@ -274,7 +274,7 @@ namespace PolicyManagement.Services.Customer
             List<ClusterErrorDto> clusterErrorDtos = new List<ClusterErrorDto>();
 
             #region POS Mobile Validation
-            if ((bool)model.IsPos)
+            if (model.IsPos !=null &&(bool)model.IsPos)
             {
                 if (!string.IsNullOrEmpty(model.Mobile1))
                 {
@@ -386,7 +386,7 @@ namespace PolicyManagement.Services.Customer
             #endregion
 
             #region TeamMember Mobile Validation
-            if ((bool)model.IsTeamMember)
+            if (model.IsTeamMember != null && (bool)model.IsTeamMember)
             {
                 var teamMemberByMobile1 = await _dataContext.tblTeamMember.Where(w => w.TeamMemberMobile1 == model.Mobile1
                                                                                     || w.TeamMemberMobile2 == model.Mobile1
