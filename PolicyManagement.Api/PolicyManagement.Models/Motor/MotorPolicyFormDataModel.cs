@@ -65,5 +65,6 @@ namespace PolicyManagement.Models.Motor
         public bool IsBlockAgent { get; set; }
         public bool IsChangeAgent { get; set; }
         public string AddOnSelected { get; set; }
+
     }
 }

@@ -13,6 +13,7 @@ import { ITpOdPolicyFormDataModel } from "./tp-od-policy-form-data-model";
 import { IVehicleFormDataModel } from "./vehicle-form-data-model";
 
 export interface IMotorPolicyFormDataModel {
+    PolicyId:number;
     BranchId: string;
     VerticalCode: string;
     Customer: ICustomerFormDataModel;

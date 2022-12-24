@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -49,6 +50,7 @@ namespace PolicyManagement.Services.Motor
                 #region Insert Policy Data
                 tblMotorPolicyData motorPolicyData = new tblMotorPolicyData
                 {
+                    PolicyId = model.PolicyId,
                     NameInPolicy = model.Customer.NameInPolicy,
                     AddressInPolicy = model.Customer.AddressInPolicy,
                     CustomerType = model.Customer.CustomerType,
@@ -120,6 +122,7 @@ namespace PolicyManagement.Services.Motor
                     NCBId = model.Premium.Ncb,
                     CommissionPayTypeId = model.Premium.CommissionPaidOn,
                     CommissionablePremium = Convert.ToInt32(model.Premium.CommissionablePremium),
+                    NonCommissionComponentPremium= Convert.ToInt32(model.Premium.NonCommissionComponentPremium),
                     CoverNoteNo = model.CoverNoteNumber,
                     BranchId = byte.Parse(model.BranchId),
                     KMCovered = model.NumberOfKiloMeterCovered,
@@ -136,7 +139,9 @@ namespace PolicyManagement.Services.Motor
                     VerticalSegmentId = model.VerticalSegmentId,
                     LoyaltyCounter = model.RenewalCounter,
                     IsActive = true,
-                    // InsuranceBranchId = model.InsuranceBranch,
+                    InsuranceBranchId = model.InsuranceBranch,
+                    BasicTpGstPercentage= model.Premium.BasicTpGstPercentage,
+                    NetPremium = model.Premium.NetPremium,
                     //  AddOnSelected = !string.IsNullOrEmpty(model.AddOnSelected) ? model.AddOnSelected : null,
                     RenewalPOSId = (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4) ? model.PolicySource.Pos : 0
                 };
@@ -184,7 +189,7 @@ namespace PolicyManagement.Services.Motor
                 motorPolicyData.Flag1 = IsFlag1True(model);
                 motorPolicyData.Flag2 = IsFlag2True(model);
 
-                _dataContext.tblMotorPolicyData.Add(motorPolicyData);
+                _dataContext.tblMotorPolicyData.AddOrUpdate(motorPolicyData);
                 await _dataContext.SaveChangesAsync();
 
                 // Renewal Case
@@ -395,7 +400,7 @@ namespace PolicyManagement.Services.Motor
                                                           GstValue = s.T5.T3.T1.TotalGST ?? 0,
                                                           Loading = s.T5.T3.T1.Loading ?? 0M,
                                                           Ncb = s.T5.T3.T1.NCBId,
-                                                          //NonCommissionComponentPremium = s.T3.T1. //ask later
+                                                          NonCommissionComponentPremium = s.T5.T3.T1.NonCommissionComponentPremium ?? 0,//ask later
                                                           NonElectricAccessoriesIdv = s.T5.T3.T1.NonElectricAssessoriesIDV ?? 0,
                                                           Od = s.T5.T3.T1.OD ?? 0,
                                                           PassengerCover = s.T5.T3.T1.PassengerCover ?? 0,
@@ -405,7 +410,9 @@ namespace PolicyManagement.Services.Motor
                                                           TotalOd = s.T5.T3.T1.TotalOD ?? 0,
                                                           TotalTp = s.T5.T3.T1.TotalTP ?? 0,
                                                           Tp = s.T5.T3.T1.TPPremium ?? 0,
-                                                          VehicleIdv = s.T5.T3.T1.VehicleIDV ?? 0
+                                                          VehicleIdv = s.T5.T3.T1.VehicleIDV ?? 0,
+                                                          BasicTpGstPercentage = s.T5.T3.T1.BasicTpGstPercentage?? 0,
+                                                          NetPremium = s.T5.T3.T1.NetPremium ?? 0
                                                       },
                                                       PreviousPolicy = new PreviousPolicyFormDataModel
                                                       {
@@ -420,7 +427,7 @@ namespace PolicyManagement.Services.Motor
                                                           InsuranceCompany = s.T5.T3.T1.InsuranceCompanyId ?? 0,
                                                           NumberOfYear = s.T5.T3.T1.NoofYearId ?? 0,
                                                           PolicyNumber = s.T5.T3.T1.PolicyNo,
-                                                          StartDate = s.T5.T3.T1.PolicyStartDate
+                                                          StartDate = s.T5.T3.T1.PolicyStartDate,
                                                       },
                                                       Vehicle = new VehicleFormDataModel
                                                       {
@@ -443,7 +450,7 @@ namespace PolicyManagement.Services.Motor
                                                           Varient = s.T5.T3.T1.VariantId,
                                                           VehicleSegment = s.T5.T3.T1.VehicleSegmentId ?? 0
                                                       },
-                                                      // InsuranceBranch = s.T5.T3.T1.InsuranceBranchId ?? 0,
+                                                      InsuranceBranch = s.T5.T3.T1.InsuranceBranchId ?? 0,
                                                       ControlNumber = s.T5.T3.T1.ControlNo,
                                                       VerticalId = s.T5.T3.T1.VerticalId,
                                                       VerticalSegmentId = s.T5.T3.T1.VerticalSegmentId ?? 0,
@@ -607,7 +614,7 @@ namespace PolicyManagement.Services.Motor
             {
                 tblMotorPolicyData data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(predicate);
 
-                if (data != null) return new CommonDto<object>
+                if (data != null && data.PolicyId != model.PolicyId) return new CommonDto<object>
                 {
                     Message = $"Same Engine Number and Chassis Number Data already in database as Control Number {data.ControlNo}, Please check for duplicate data entry.",
                     Response = new
@@ -696,6 +703,7 @@ namespace PolicyManagement.Services.Motor
             motorPolicyData.NCBId = model.Premium.Ncb;
             motorPolicyData.CommissionPayTypeId = model.Premium.CommissionPaidOn;
             motorPolicyData.CommissionablePremium = Convert.ToInt32(model.Premium.CommissionablePremium);
+            motorPolicyData.NonCommissionComponentPremium = Convert.ToInt32(model.Premium.NonCommissionComponentPremium);
             motorPolicyData.CoverNoteNo = model.CoverNoteNumber;
             motorPolicyData.KMCovered = model.NumberOfKiloMeterCovered;
             motorPolicyData.ExtendedKMCovered = model.ExtendedKiloMeterCovered;
@@ -704,7 +712,9 @@ namespace PolicyManagement.Services.Motor
             motorPolicyData.AddonRiderId = model.AddOnRider.AddOnRiderId;
             motorPolicyData.ModifiedBy = baseModel.LoginUserId;
             motorPolicyData.ModifiedTime = DateTime.Now;
-
+            motorPolicyData.InsuranceBranchId = model.InsuranceBranch;
+            motorPolicyData.BasicTpGstPercentage = model.Premium.BasicTpGstPercentage;
+            motorPolicyData.NetPremium = model.Premium.NetPremium;
 
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;
