@@ -266,8 +266,8 @@
         <div class="col-lg-3">
           <mat-form-field>
             <mat-label>Mobile 1 <span style="color:red">*</span></mat-label>
-            <input type="number" matInput formControlName="mobile1" [errorStateMatcher]="matcher" placeholder="Mobile 1"
-              minlength="10" maxlength="10" (change)="mobileOrPhoneComparision($event)">
+            <input type="text" matInput formControlName="mobile1" [errorStateMatcher]="matcher" placeholder="Mobile 1"
+              minlength="10" maxlength="10" (change)="mobileOrPhoneComparision($event)" (keypress)="keyPress($event)" >
             <mat-error
               *ngIf="addCustomerForm.controls.mobile1.errors && addCustomerForm.controls.mobile1.errors.required">
               Mobile 1 <strong>required</strong>
@@ -282,7 +282,7 @@
           <mat-form-field>
             <mat-label>Mobile 2</mat-label>
             <input type="number" matInput formControlName="mobile2" [errorStateMatcher]="matcher" placeholder="Mobile 2"
-              minlength="10" maxlength="10" (change)="mobileOrPhoneComparision($event)">
+              minlength="10" maxlength="10" (change)="mobileOrPhoneComparision($event)"  (keypress)="keyPress($event)">
             <mat-error
               *ngIf="addCustomerForm.controls.mobile2.errors && (addCustomerForm.controls.mobile2.errors.minlength || addCustomerForm.controls.mobile2.errors.pattern)">
               Mobile 2 is <strong>invalid</strong>
@@ -293,7 +293,7 @@
           <mat-form-field>
             <mat-label>Phone 1</mat-label>
             <input type="number" matInput formControlName="phone1" [errorStateMatcher]="matcher" placeholder="Phone 1"
-              minlength="10" maxlength="13" (change)="mobileOrPhoneComparision($event)">
+              minlength="10" maxlength="13" (change)="mobileOrPhoneComparision($event)"  (keypress)="keyPress($event)">
             <mat-error
               *ngIf="addCustomerForm.controls.phone1.errors && (addCustomerForm.controls.phone1.errors.minlength || addCustomerForm.controls.phone1.errors.pattern)">
               Phone 1 is <strong>invalid</strong>
@@ -525,10 +525,10 @@
         <div class="col-lg-3">
           <mat-form-field>
             <mat-label>Aadhaar</mat-label>
-            <input type="number" matInput formControlName="aadhaar" minlength="12" maxlength="12" placeholder="Aadhaar"
-              style="line-height: 32px;">
+            <input type="text" matInput formControlName="aadhaar"  placeholder="Aadhaar"
+              style="line-height: 32px;"  (keypress)="keyPress($event)" maxlength="12">
             <mat-error
-              *ngIf="addCustomerForm.controls.aadhaar.errors && (addCustomerForm.controls.aadhaar.errors.minlength || addCustomerForm.controls.aadhaar.errors.pattern)">
+              *ngIf="addCustomerForm.controls.aadhaar.errors && (addCustomerForm.controls.aadhaar.errors.minlength || addCustomerForm.controls.aadhaar.errors.pattern || addCustomerForm.controls.aadhaar.errors.maxlength )">
               Aadhaar is <strong>invalid</strong>
             </mat-error>
           </mat-form-field>
@@ -609,7 +609,7 @@
           </button>
         </div>
         <div class="col-lg-2">
-          <button type="submit" class="btn-block" mat-raised-button color="primary">
+          <button type="submit" class="btn-block" mat-raised-button color="primary" [disabled]="!addCustomerForm.valid">
             <mat-icon style="font-size: 22px;">save</mat-icon> Save
           </button>
         </div>
