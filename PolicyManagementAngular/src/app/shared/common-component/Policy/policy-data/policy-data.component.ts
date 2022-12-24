@@ -1122,7 +1122,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
      VerticalSegmentId: this._verticalDetail.VerticalSegmentId
    }
 
-    if(this._policyId==null)
+    if(this._policyId==0)
     { 
      console.log(model,'model')
      this.motorService.createPolicy(model).subscribe((response: ICommonDto<any>) => {
