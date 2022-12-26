@@ -261,7 +261,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     passengerCover: new FormControl(''),
     endorseTp: new FormControl(''),
     totalTp: new FormControl(''),
-    nonCommissionComponentPremium: new FormControl(''),
+    nonCommissionComponentPremium: new FormControl(0),
     gst: new FormControl(18),
     gstValue: new FormControl(''),
     grossPremium: new FormControl(''),
@@ -636,7 +636,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.paymentForm.get('bank2')?.enable();
       if(value == CASH ) {
         this.paymentForm.get('instrumentNumber2')?.disable({onlySelf: true});
-        this.paymentForm.get('bank1')?.disable({onlySelf: true});
+        this.paymentForm.get('bank2')?.disable({onlySelf: true});
       }
       if(value == CHEQUE || value == AGENTCHEQUE) {
         this.paymentForm.get('instrumentNumber2')?.setValidators(this.ChequeValidators.concat(Validators.maxLength(6)))
@@ -654,7 +654,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.paymentForm.get('bank3')?.enable();
       if(value == CASH ) {
         this.paymentForm.get('instrumentNumber3')?.disable({onlySelf: true});
-        this.paymentForm.get('bank1')?.disable({onlySelf: true});
+        this.paymentForm.get('bank3')?.disable({onlySelf: true});
       }
       if(value == CHEQUE || value == AGENTCHEQUE) {
         this.paymentForm.get('instrumentNumber3')?.setValidators(this.ChequeValidators.concat(Validators.maxLength(6)))

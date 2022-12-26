@@ -172,7 +172,9 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       else
         this.filterCity3Data(input.Name);
     }); 
-
+    if (this._customerName != null) {
+      this.addCustomerForm.patchValue({ customerName: this._customerName });
+    }
   }
 
   keyPress(event: any) {
@@ -199,10 +201,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
     this.getGenders();
     this.getClusters();
     this.getCustomerById(this._customerId);
-
-    if (this._customerName != null) {
-      this.addCustomerForm.patchValue({ customerName: this._customerName });
-    }
+    
   }
 
   filterCity1Data(input: any) {
@@ -441,9 +440,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       if (response.IsSuccess) {
         this.setCustomerData(response.Response);
       }
-      else {
-        alert(response.Message);
-      }
+     
     });
   }
 
@@ -452,9 +449,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       if (response.IsSuccess) {
         this.setCustomerData(response.Response);
       }
-      else {
-        alert(response.Message);
-      }
+     
     });
   }
 
