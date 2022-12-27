@@ -41,6 +41,8 @@ namespace PolicyManagement.Dtos.Common
         public int CreatedBy { get; set; }
         public bool RenewalDone { get; set; }
         public short VerticalSegmentId { get; set; }
+        public short PolicyTypeId { get; set; }
+
     }
 
     public class SearchPolicyDownloadDto
@@ -63,7 +65,8 @@ namespace PolicyManagement.Dtos.Common
         public string PolicyNumber { get; set; }
         public short InsuranceCompanyIdNumber { get; set; }
         public string InsuranceCompany { get; set; }
-        public string PolicyRemarks { get; set; }  
+        public string PolicyRemarks { get; set; }
+        public short PolicyTypeId { get; set; }
     }
 
     public class SearchPolicyFinalDownloadDto
@@ -85,5 +88,7 @@ namespace PolicyManagement.Dtos.Common
         public short InsuranceCompanyIdNumber { get; set; }
         public string InsuranceCompany { get; set; }
         public string PolicyRemarks { get; set; }
+        public short PolicyTypeId { get; set; }
+
     }
 }

@@ -216,11 +216,11 @@ export class SearchPolicyComponent implements OnInit {
     })
   }
 
-  routeToMotorPolicy(policyId: number) {
+  routeToMotorPolicy(policyId: number,policyTypeId:number) {
     if(this._verticalTypeId==Vertical.Motor)
-      this.router.navigate(["/pms/motor", { policyId, policyTypeId: this._policyTypeId }]);
+      this.router.navigate(["/pms/motor", { policyId, policyTypeId: policyTypeId }]);
     if(this._verticalTypeId==Vertical.Health)
-      this.router.navigate(["/pms/health", { policyId, policyTypeId: this._policyTypeId }]);
+      this.router.navigate(["/pms/health", { policyId, policyTypeId: policyTypeId }]);
   }
 
   searchPolicy(): void {

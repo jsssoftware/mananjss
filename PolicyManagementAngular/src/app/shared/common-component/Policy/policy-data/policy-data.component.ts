@@ -539,8 +539,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.getProduct();
     this.getPlanType();
     this.getPortability();
+    debugger
     switch (this._policyTypeId) {
+      
       case "1":
+        break
       case "8":
         this.getCustomerShortDetailById(this._customerId);
         break;
@@ -554,8 +557,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         this.getPolicyVouchers();
         this.getPolicyInspections();
         this.getPolicyDocuments();
-        this.getMotorPolicyById(this._policyId);
         break;
+    }
+
+    if(this._policyId!=0){
+      this.getMotorPolicyById(this._policyId);
     }
 
     this.policyForm.get("tpInsuranceCompany")?.valueChanges.subscribe(input => {
