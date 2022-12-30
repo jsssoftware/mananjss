@@ -394,12 +394,6 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblCompanyDetails">
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
-        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -1175,6 +1169,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="BasicTpGstPercentage" Type="int" />
           <Property Name="NetPremium" Type="int" />
           <Property Name="NonCommissionComponentPremium" Type="int" />
+          <Property Name="VehicleSegment" Type="int" />
         </EntityType>
         <EntityType Name="tblNCB">
           <Key>
@@ -1915,13 +1910,6 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblVersion">
-          <Property Name="Major" Type="tinyint" />
-          <Property Name="Minor" Type="tinyint" />
-          <Property Name="Revision" Type="tinyint" />
-        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -2454,6 +2442,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.View_SearchForm_Policies' does
             <PropertyRef Name="PolicyId" />
             <PropertyRef Name="ControlNo" />
             <PropertyRef Name="VerticalId" />
+            <PropertyRef Name="PolicyTypeId" />
             <PropertyRef Name="BranchId" />
             <PropertyRef Name="PolicyType" />
             <PropertyRef Name="VerticalName" />
@@ -2470,6 +2459,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.View_SearchForm_Policies' does
           <Property Name="IsActive" Type="bit" />
           <Property Name="Flag1" Type="bit" />
           <Property Name="Flag2" Type="bit" />
+          <Property Name="PolicyTypeId" Type="smallint" Nullable="false" />
           <Property Name="IsVerified" Type="bit" />
           <Property Name="BranchId" Type="smallint" Nullable="false" />
           <Property Name="BranchCode" Type="nvarchar" MaxLength="2" />
@@ -2564,96 +2554,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewCustomerCare' does not hav
           <Property Name="ModelId" Type="int" />
           <Property Name="MakeYearId" Type="int" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.viewCustomerCare_With CustomerAndPolicytable' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="viewCustomerCare_With CustomerAndPolicytable">
-          <Property Name="CustomerCallDataId" Type="int" />
-          <Property Name="ControlNo" Type="int" />
-          <Property Name="PolicyId" Type="int" />
-          <Property Name="VerticalName" Type="nvarchar" MaxLength="50" />
-          <Property Name="CustomerId" Type="int" />
-          <Property Name="CustomerName" Type="nvarchar" MaxLength="100" />
-          <Property Name="CustomerContact" Type="nvarchar" MaxLength="50" />
-          <Property Name="CustomerSTD1" Type="nvarchar" MaxLength="5" />
-          <Property Name="CustomerPhone1" Type="nvarchar" MaxLength="10" />
-          <Property Name="CustomerSTD2" Type="nvarchar" MaxLength="5" />
-          <Property Name="CustomerPhone2" Type="nvarchar" MaxLength="10" />
-          <Property Name="CustomerSTD3" Type="nvarchar" MaxLength="5" />
-          <Property Name="CustomerPhone3" Type="nvarchar" MaxLength="10" />
-          <Property Name="CustomerMobile1" Type="nvarchar" MaxLength="15" />
-          <Property Name="InactiveMobile1" Type="tinyint" />
-          <Property Name="CustomerMobile2" Type="nvarchar" MaxLength="15" />
-          <Property Name="InactiveMobile2" Type="tinyint" />
-          <Property Name="CustomerMobile3" Type="nvarchar" MaxLength="15" />
-          <Property Name="InactiveMobile3" Type="tinyint" />
-          <Property Name="CustomerMobile4" Type="nvarchar" MaxLength="15" />
-          <Property Name="InactiveMobile4" Type="tinyint" />
-          <Property Name="CustomerEmail1" Type="nvarchar" MaxLength="50" />
-          <Property Name="CustomerEmail2" Type="nvarchar" MaxLength="50" />
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="RegistrationNo" Type="nvarchar" MaxLength="11" />
-          <Property Name="CallTypeName" Type="nvarchar" MaxLength="50" />
-          <Property Name="PolicyStartDate" Type="smalldatetime" />
-          <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
-          <Property Name="MakeYear" Type="nvarchar" MaxLength="4" />
-          <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
-          <Property Name="Q1Response" Type="tinyint" />
-          <Property Name="Q1Comment" Type="nvarchar" MaxLength="100" />
-          <Property Name="Q2Response" Type="tinyint" />
-          <Property Name="Q2Comment" Type="nvarchar" MaxLength="100" />
-          <Property Name="Q3Response" Type="tinyint" />
-          <Property Name="Q3Comment" Type="nvarchar" MaxLength="100" />
-          <Property Name="Q5Comment" Type="nvarchar" MaxLength="100" />
-          <Property Name="CallStatusId" Type="tinyint" />
-          <Property Name="SubStatusId" Type="tinyint" />
-          <Property Name="FollowupDate" Type="smalldatetime" />
-          <Property Name="FinalComment" Type="nvarchar" MaxLength="500" />
-          <Property Name="DSAId" Type="smallint" />
-          <Property Name="SubStatusName" Type="nvarchar" MaxLength="50" />
-          <Property Name="LastCallDate" Type="smalldatetime" />
-          <Property Name="CallTypeId" Type="int" />
-          <Property Name="CallDurationTypeId" Type="int" />
-          <Property Name="Expr1" Type="int" />
-          <Property Name="Q4Response" Type="tinyint" />
-          <Property Name="Q4Comment" Type="nvarchar" MaxLength="100" />
-          <Property Name="Q5Response" Type="tinyint" />
-        </EntityType>-->
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.viewCustomerCare_With_PolicyTable' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="viewCustomerCare_With_PolicyTable">
-          <Property Name="CustomerCallDataId" Type="int" />
-          <Property Name="ControlNo" Type="int" />
-          <Property Name="VerticalName" Type="nvarchar" MaxLength="50" />
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="RegistrationNo" Type="nvarchar" MaxLength="11" />
-          <Property Name="CallTypeName" Type="nvarchar" MaxLength="50" />
-          <Property Name="PolicyStartDate" Type="smalldatetime" />
-          <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
-          <Property Name="MakeYear" Type="nvarchar" MaxLength="4" />
-          <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
-          <Property Name="Q1Response" Type="tinyint" />
-          <Property Name="Q1Comment" Type="nvarchar" MaxLength="100" />
-          <Property Name="Q2Response" Type="tinyint" />
-          <Property Name="Q2Comment" Type="nvarchar" MaxLength="100" />
-          <Property Name="Q3Response" Type="tinyint" />
-          <Property Name="Q3Comment" Type="nvarchar" MaxLength="100" />
-          <Property Name="Q5Comment" Type="nvarchar" MaxLength="100" />
-          <Property Name="CallStatusId" Type="tinyint" />
-          <Property Name="SubStatusId" Type="tinyint" />
-          <Property Name="FollowupDate" Type="smalldatetime" />
-          <Property Name="FinalComment" Type="nvarchar" MaxLength="500" />
-          <Property Name="DSAId" Type="smallint" />
-          <Property Name="SubStatusName" Type="nvarchar" MaxLength="50" />
-          <Property Name="LastCallDate" Type="smalldatetime" />
-          <Property Name="CallTypeId" Type="int" />
-          <Property Name="CallDurationTypeId" Type="int" />
-          <Property Name="Q4Response" Type="tinyint" />
-          <Property Name="Q4Comment" Type="nvarchar" MaxLength="100" />
-          <Property Name="Q5Response" Type="tinyint" />
-          <Property Name="CustomerId" Type="int" />
-          <Property Name="NameInPolicy" Type="nvarchar" MaxLength="100" />
-          <Property Name="PolicyId" Type="int" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'PolicyManagerQA.dbo.ViewCustomerCareCrossSell' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ViewCustomerCareCrossSell">
@@ -2988,36 +2888,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="CustomerEmail1" Type="nvarchar" MaxLength="50" />
           <Property Name="BranchId" Type="tinyint" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.ViewReferenceLeads' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="ViewReferenceLeads">
-          <Property Name="CrossSellChkNewPost" Type="int" />
-          <Property Name="VerticalName" Type="nvarchar" MaxLength="50" />
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="CrossSellExpiryDate" Type="smalldatetime" />
-          <Property Name="assignee" Type="nvarchar" MaxLength="50" />
-          <Property Name="CustomerCode" Type="nvarchar" MaxLength="20" />
-          <Property Name="ControlNo" Type="int" />
-          <Property Name="NameInPolicy" Type="nvarchar" MaxLength="100" />
-          <Property Name="CustomerName" Type="nvarchar" MaxLength="100" />
-          <Property Name="CustomerMobile1" Type="nvarchar" MaxLength="15" />
-          <Property Name="CustomerMobile2" Type="nvarchar" MaxLength="15" />
-          <Property Name="CustomerMobile3" Type="nvarchar" MaxLength="15" />
-          <Property Name="CustomerMobile4" Type="nvarchar" MaxLength="15" />
-          <Property Name="CustomerId" Type="int" />
-          <Property Name="CustomerContact" Type="nvarchar" MaxLength="50" />
-          <Property Name="CustomerAddress1" Type="nvarchar" MaxLength="200" />
-          <Property Name="CallDurationTypeName" Type="nvarchar" MaxLength="50" />
-          <Property Name="Q5Comment" Type="nvarchar" MaxLength="100" />
-          <Property Name="LastCallDate" Type="smalldatetime" />
-          <Property Name="ReferenceProvider" Type="nvarchar" MaxLength="50" />
-          <Property Name="CrossSellInsureCompanyIdPost" Type="int" />
-          <Property Name="CrossSellVerticalIdPost" Type="int" />
-          <Property Name="CrossSellTelecallerIdPost" Type="int" />
-          <Property Name="AssigneeId" Type="int" />
-          <Property Name="ReferenceProviderId" Type="int" />
-          <Property Name="CallDurationTypeId" Type="int" />
-        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="viewRenewPerformance">
@@ -4212,6 +4082,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
     [View_SearchForm_Policies].[IsActive] AS [IsActive], 
     [View_SearchForm_Policies].[Flag1] AS [Flag1], 
     [View_SearchForm_Policies].[Flag2] AS [Flag2], 
+    [View_SearchForm_Policies].[PolicyTypeId] AS [PolicyTypeId], 
     [View_SearchForm_Policies].[IsVerified] AS [IsVerified], 
     [View_SearchForm_Policies].[BranchId] AS [BranchId], 
     [View_SearchForm_Policies].[BranchCode] AS [BranchCode], 
@@ -7170,6 +7041,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="BasicTpGstPercentage" Type="Int32" />
           <Property Name="NetPremium" Type="Int32" />
           <Property Name="NonCommissionComponentPremium" Type="Int32" />
+          <Property Name="VehicleSegment" Type="Int32" />
         </EntityType>
         <EntityType Name="tblNCB">
           <Key>
@@ -8438,6 +8310,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
             <PropertyRef Name="VerticalName" />
             <PropertyRef Name="PolicyStatus" />
             <PropertyRef Name="PolicyStatusId" />
+            <PropertyRef Name="PolicyTypeId" />
           </Key>
           <Property Name="PolicyId" Type="Int32" Nullable="false" />
           <Property Name="ControlNo" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
@@ -8471,6 +8344,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="VerticalSegmentId" Type="Int16" />
           <Property Name="MakeYear" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="MakeYearId" Type="Int16" />
+          <Property Name="PolicyTypeId" Type="Int16" Nullable="false" />
         </EntityType>
         <EntityType Name="ViewAllDatatypeInOne">
           <Key>
@@ -10167,6 +10041,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <EntitySetMapping Name="tblMotorPolicyData">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblMotorPolicyData">
               <MappingFragment StoreEntitySet="tblMotorPolicyData">
+                <ScalarProperty Name="VehicleSegment" ColumnName="VehicleSegment" />
                 <ScalarProperty Name="NonCommissionComponentPremium" ColumnName="NonCommissionComponentPremium" />
                 <ScalarProperty Name="NetPremium" ColumnName="NetPremium" />
                 <ScalarProperty Name="BasicTpGstPercentage" ColumnName="BasicTpGstPercentage" />
@@ -11579,6 +11454,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <EntitySetMapping Name="View_SearchForm_Policies">
             <EntityTypeMapping TypeName="PolicyManagerModel.View_SearchForm_Policies">
               <MappingFragment StoreEntitySet="View_SearchForm_Policies">
+                <ScalarProperty Name="PolicyTypeId" ColumnName="PolicyTypeId" />
                 <ScalarProperty Name="MakeYearId" ColumnName="MakeYearId" />
                 <ScalarProperty Name="MakeYear" ColumnName="MakeYear" />
                 <ScalarProperty Name="VerticalSegmentId" ColumnName="VerticalSegmentId" />

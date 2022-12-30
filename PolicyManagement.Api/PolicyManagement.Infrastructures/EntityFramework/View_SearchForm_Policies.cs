@@ -82,6 +82,8 @@ public partial class View_SearchForm_Policies
 
     public Nullable<short> MakeYearId { get; set; }
 
+    public short PolicyTypeId { get; set; }
+
 }
 
 }

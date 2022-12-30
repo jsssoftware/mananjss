@@ -366,6 +366,8 @@ public partial class tblMotorPolicyData
 
     public Nullable<int> NonCommissionComponentPremium { get; set; }
 
+    public Nullable<int> VehicleSegment { get; set; }
+
 }
 
 }

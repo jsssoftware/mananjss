@@ -143,7 +143,8 @@ namespace PolicyManagement.Services.Motor
                     BasicTpGstPercentage= model.Premium.BasicTpGstPercentage,
                     NetPremium = model.Premium.NetPremium,
                     //  AddOnSelected = !string.IsNullOrEmpty(model.AddOnSelected) ? model.AddOnSelected : null,
-                    RenewalPOSId = (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4) ? model.PolicySource.Pos : 0
+                    RenewalPOSId = (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4) ? model.PolicySource.Pos : 0,
+                    VehicleSegment = model.Vehicle.VehicleSegment
                 };
 
                 if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
@@ -448,7 +449,9 @@ namespace PolicyManagement.Services.Motor
                                                           Seating = s.T5.T3.T1.SeatingCapacity ?? 0,
                                                           Usage = s.T5.T3.T1.VehicleUsageId ?? 0,
                                                           Varient = s.T5.T3.T1.VariantId,
-                                                          VehicleSegment = s.T5.T3.T1.VehicleSegmentId ?? 0
+                                                          VehicleSegment = s.T5.T3.T1.VehicleSegment ?? 0,
+                                                          IsSpecialRegistrationNumber = s.T5.T3.T1.SpecialRegistrationNo ?? false,
+
                                                       },
                                                       InsuranceBranch = s.T5.T3.T1.InsuranceBranchId ?? 0,
                                                       ControlNumber = s.T5.T3.T1.ControlNo,
@@ -715,6 +718,7 @@ namespace PolicyManagement.Services.Motor
             motorPolicyData.InsuranceBranchId = model.InsuranceBranch;
             motorPolicyData.BasicTpGstPercentage = model.Premium.BasicTpGstPercentage;
             motorPolicyData.NetPremium = model.Premium.NetPremium;
+            motorPolicyData.VehicleSegment = model.Vehicle.VehicleSegment;
 
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;

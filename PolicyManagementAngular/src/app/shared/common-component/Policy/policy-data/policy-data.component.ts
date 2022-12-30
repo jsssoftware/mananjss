@@ -242,7 +242,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     makeYear: new FormControl(''),
     dateOfRegistration: new FormControl(''),
     usage: new FormControl(''),
-    isSpecialRegistrationNumber: new FormControl(false)
+    isSpecialRegistrationNumber: new FormControl()
   });
   //#endregion
 
@@ -506,6 +506,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   ngAfterViewInit(): void {
+    if(this._customerId){
+      this.getCustomerShortDetailById(this._customerId);
+
+    }
     this.getPolicyTypes();
     this.getVehicleClasses();
     this.getPackageTypes();
@@ -539,13 +543,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.getProduct();
     this.getPlanType();
     this.getPortability();
-    debugger
     switch (this._policyTypeId) {
       
       case "1":
         break
       case "8":
-        this.getCustomerShortDetailById(this._customerId);
         break;
       case "2":
       case "3":
@@ -553,13 +555,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       case "5":
       case "6":
       case "7":
-        this.getPolicyClaims();
-        this.getPolicyVouchers();
-        this.getPolicyInspections();
-        this.getPolicyDocuments();
+      
         break;
     }
-
+    this.getPolicyClaims();
+    this.getPolicyVouchers();
+    this.getPolicyInspections();
+    this.getPolicyDocuments();
     if(this._policyId!=0){
       this.getMotorPolicyById(this._policyId);
     }
@@ -1139,7 +1141,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
            text: response.Message,
          }).then((result) => {
            if (result.isConfirmed) {
-             this.createPolicyAfterWarning(response);
+            this.redirectRoute();
            };
          })
        }
@@ -1169,7 +1171,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
                cancelButtonText: 'Cancel'
              }).then((result) => {
                if (result.isConfirmed) {
-                 this.createPolicyAfterWarning(response);
+                 //this.createPolicyAfterWarning(response);
+                 this.redirectRoute();
+
                }
              })
            }
@@ -1384,7 +1388,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.commonService.getVehicleDetails(value.Value).subscribe((response: IVehicleDto) => {
         this.commonService.getModels(response.ManufacturerId).subscribe((modelResponse: IDropDownDto<number>[]) => {
           this._models = modelResponse;
-          let vehicleClassId = this._policyTypeId === "2" ? this._policyData?.PolicyTerm.VehicleClass : this.policyTermForm.value.vehicleClass;
+          let vehicleClassId =  this.policyTermForm.value.vehicleClass;
           this.commonService.getVarients(response.ManufacturerId, response.ModelId, vehicleClassId).subscribe((varientResponse: IVarientDto[]) => {
             this._varients = varientResponse;
             let varient: IVarientDto = varientResponse.filter(f => f.VarientId == response.VarientId)[0];
@@ -1570,7 +1574,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       VerticalSegmentId: this._verticalDetail.VerticalSegmentId
     }
 
-    if (response.Response.Condition === 1) {
+    if (response.Response?.Condition === 1) {
       model.Condition1 = true;
     }
     else {
@@ -1730,8 +1734,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   addDocument(): void {
-    debugger
-
     let reader = new FileReader();
     reader.onload = () => {
       const uniqueId = uuidv4();
@@ -2076,7 +2078,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
       this.commonService.getVehicles(response.PolicyTerm.VehicleClass).subscribe((responseVehicle: IDropDownDto<number>[]) => {
         this._vehicles = responseVehicle;
-
         this.getSetCompleteVehicleDetails(this._vehicles.filter(f => f.Value == response.Vehicle.Varient)[0]);
 
         this.vehicleForm.patchValue({
@@ -2089,8 +2090,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
           makeYear: response.Vehicle.MakeYear,
           dateOfRegistration: this.commonService.getDateFromIDateDto(response.Vehicle.RegistrationDateDto as IDateDto),
           usage: response.Vehicle.Usage,
+          IsSpecialRegistrationNumber :  response.Vehicle.IsSpecialRegistrationNumber
         });
       });
+      this.vehicleForm.patchValue({isSpecialRegistrationNumber :response.Vehicle.IsSpecialRegistrationNumber})
+
     });
 
     if (response.AddOnRider){
@@ -2153,7 +2157,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   enableAddButton() {
-    debugger
     this._enableAddButton = false;
   }
 
@@ -2764,6 +2767,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         let addOnValue =  response?.AddOnRider?.AddOnValue[addonPlanOptionIdIndex].toString();
         f.AddonValue = addOnValue;
         f.IsPlanAvailable = true;
+        this._addOnRiderArray.push(f.AddonPlanOptionName);
+
       }
     });
  }

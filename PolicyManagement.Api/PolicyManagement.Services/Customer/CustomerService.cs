@@ -147,7 +147,7 @@ namespace PolicyManagement.Services.Customer
             try
             {
                 var checkAadharExist = await _dataContext.tblCustomer.Select(s => new { s.AadhaarNo, s.CustomerName, s.CustomerCode,s.CustomerId}).AsNoTracking().FirstOrDefaultAsync(f => !string.IsNullOrEmpty(model.Aadhaar) && f.AadhaarNo == model.Aadhaar);
-                if (model.Id !=0 && checkAadharExist != null && checkAadharExist.CustomerId != model.Id)
+                if (model.Id ==0 && checkAadharExist != null && checkAadharExist.CustomerId != model.Id)
                     return new CommonDto<object>
                     {
                         Message = $"Aadhar Number {model.Aadhaar} is already exists with Customer {checkAadharExist.CustomerName} ({checkAadharExist.CustomerCode})"
@@ -155,15 +155,17 @@ namespace PolicyManagement.Services.Customer
 
 
                 var checkPanExist = await _dataContext.tblCustomer.Select(s => new { s.PAN, s.CustomerName, s.CustomerCode, s.CustomerId }).AsNoTracking().FirstOrDefaultAsync(f => !string.IsNullOrEmpty(model.Pan) && !string.IsNullOrEmpty(f.PAN) && f.PAN.ToLower() == model.Pan.ToLower());
-                if (model.Id != 0&& checkPanExist != null && checkPanExist.CustomerId != model.Id)
+                if (model.Id == 0 && checkPanExist != null && checkPanExist.CustomerId != model.Id)
                     return new CommonDto<object>
                     {
                         Message = $"PAN Number {model.Pan} is already exists with Customer {checkPanExist.CustomerName} ({checkPanExist.CustomerCode})"
                     };
+                if (model.Id == 0)
+                {
+                    CommonDto<object> validation = await ValidateCustomerCluster(model);
+                    if (!validation.IsSuccess) return validation;
+                }
 
-                CommonDto<object> validation = await ValidateCustomerCluster(model);
-
-                if (!validation.IsSuccess) return validation;
 
                 string customerCode = await _commonService.GenerateCustomerCode();
 

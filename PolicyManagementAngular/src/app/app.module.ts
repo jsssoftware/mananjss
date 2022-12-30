@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component'; 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MaterialModule } from './shared/common-module/material-module';
 import { Services } from './app-services/register.service';
 import { LoginComponent } from './shared/common-component/login/login.component';
@@ -19,6 +19,7 @@ import { SubSystemModule } from './app-modules/sub-system/subsystem.module';
 import { MasterModule } from './app-modules/master/master.module';
 import { SystemInitialModule } from './app-modules/dashboard/systeminitial.module';
 import { PolicyManagementModule } from './app-modules/policy-management/policymanagement.module'; 
+import { LoaderInterceptor } from './shared/common-component/loader/LoaderInterceptor';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,13 @@ import { PolicyManagementModule } from './app-modules/policy-management/policyma
     MasterModule,
     MaterialFileInputModule
   ],
-  providers: [CommonFunction, Services, AuthGuard, { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService],
+  providers: [CommonFunction, Services, AuthGuard, { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
+    {  
+      provide: HTTP_INTERCEPTORS,  
+      useClass: LoaderInterceptor,  
+      multi: true  
+    }  
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

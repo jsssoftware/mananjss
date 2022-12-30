@@ -26,5 +26,6 @@ namespace PolicyManagement.Models.Motor
         public DateDto RegistrationDateDto { get; set; }
         public short Usage { get; set; }
         public bool IsSpecialRegistrationNumber { get; set; }
+
     }
 }
