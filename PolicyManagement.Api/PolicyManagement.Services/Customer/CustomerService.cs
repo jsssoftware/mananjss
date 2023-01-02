@@ -126,7 +126,8 @@ namespace PolicyManagement.Services.Customer
                     Message = "Record not found"
                 };
 
-            return CreateCustomerData(customer);
+            var customerData = CreateCustomerData(customer);
+            return customerData;
         }
 
         public async Task<CommonDto<AddUpdateCustomerModel>> FindCustomerById(int customerId)
@@ -139,7 +140,8 @@ namespace PolicyManagement.Services.Customer
                     Message = "Record not found"
                 };
 
-            return CreateCustomerData(customer);
+            var customerData = CreateCustomerData(customer);
+            return customerData;
         }
 
         public async Task<CommonDto<object>> AddCustomer(AddUpdateCustomerModel model)
