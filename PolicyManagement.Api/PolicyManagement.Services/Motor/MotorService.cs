@@ -197,6 +197,14 @@ namespace PolicyManagement.Services.Motor
                 if (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4)
                 {
                     tblMotorPolicyData data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => model.PreviousPolicyId.HasValue && f.PolicyId == model.PreviousPolicyId.Value);
+                    if(data == null)
+                    {
+                        return new CommonDto<object>
+                        {
+                            IsSuccess = false,
+                            Message = "Previous Policy Number not found"
+                        };
+                    }
                     data.RenewalDone = true;
                     data.RenewalPolicyId = motorPolicyData.PolicyId;
 

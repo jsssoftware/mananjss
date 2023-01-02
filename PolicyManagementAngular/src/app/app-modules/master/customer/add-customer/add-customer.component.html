@@ -133,9 +133,10 @@
         </div>
         <div class="col-lg-2">
           <mat-form-field appearance="fill">
+            <mat-label>City 1 <span style="color:red">*</span></mat-label>
 
             <input type="text" placeholder="city1" aria-label="city1" matInput formControlName="city1"
-            [matAutocomplete]="autocity1">
+            [matAutocomplete]="autocity1" [errorStateMatcher]="matcher">
 
             <mat-autocomplete autoActiveFirstOption #autocity1="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngFor="let city of _filteredCity1Options" [value]="city">
@@ -273,7 +274,7 @@
               Mobile 1 <strong>required</strong>
             </mat-error>
             <mat-error
-              *ngIf="addCustomerForm.controls.mobile1.errors && (addCustomerForm.controls.mobile1.errors.minlength || addCustomerForm.controls.mobile1.errors.pattern)">
+              *ngIf="addCustomerForm.controls.mobile1.errors && (addCustomerForm.controls.mobile1.errors.minlength || addCustomerForm.controls.mobile1.errors.maxlength)">
               Mobile 1 is <strong>invalid</strong>
             </mat-error>
           </mat-form-field>
@@ -281,10 +282,10 @@
         <div class="col-lg-3">
           <mat-form-field>
             <mat-label>Mobile 2</mat-label>
-            <input type="number" matInput formControlName="mobile2" [errorStateMatcher]="matcher" placeholder="Mobile 2"
+            <input type="text" matInput formControlName="mobile2" [errorStateMatcher]="matcher" placeholder="Mobile 2"
               minlength="10" maxlength="10" (change)="mobileOrPhoneComparision($event)"  (keypress)="keyPress($event)">
             <mat-error
-              *ngIf="addCustomerForm.controls.mobile2.errors && (addCustomerForm.controls.mobile2.errors.minlength || addCustomerForm.controls.mobile2.errors.pattern)">
+              *ngIf="addCustomerForm.controls.mobile2.errors && (addCustomerForm.controls.mobile2.errors.minlength || addCustomerForm.controls.mobile2.errors.maxlength)">
               Mobile 2 is <strong>invalid</strong>
             </mat-error>
           </mat-form-field>
@@ -292,10 +293,10 @@
         <div class="col-lg-3">
           <mat-form-field>
             <mat-label>Phone 1</mat-label>
-            <input type="number" matInput formControlName="phone1" [errorStateMatcher]="matcher" placeholder="Phone 1"
+            <input type="text" matInput formControlName="phone1" [errorStateMatcher]="matcher" placeholder="Phone 1"
               minlength="10" maxlength="13" (change)="mobileOrPhoneComparision($event)"  (keypress)="keyPress($event)">
             <mat-error
-              *ngIf="addCustomerForm.controls.phone1.errors && (addCustomerForm.controls.phone1.errors.minlength || addCustomerForm.controls.phone1.errors.pattern)">
+              *ngIf="addCustomerForm.controls.phone1.errors && (addCustomerForm.controls.phone1.errors.minlength || addCustomerForm.controls.phone1.errors.maxlength)">
               Phone 1 is <strong>invalid</strong>
             </mat-error>
           </mat-form-field>
@@ -303,10 +304,10 @@
         <div class="col-lg-3">
           <mat-form-field>
             <mat-label>Phone 2</mat-label>
-            <input type="number" matInput formControlName="phone2" [errorStateMatcher]="matcher" placeholder="Phone 2"
+            <input type="text" matInput formControlName="phone2" [errorStateMatcher]="matcher" placeholder="Phone 2"
               minlength="10" maxlength="13" (change)="mobileOrPhoneComparision($event)">
             <mat-error
-              *ngIf="addCustomerForm.controls.phone2.errors && (addCustomerForm.controls.phone2.errors.minlength || addCustomerForm.controls.phone2.errors.pattern)">
+              *ngIf="addCustomerForm.controls.phone2.errors && (addCustomerForm.controls.phone2.errors.minlength || addCustomerForm.controls.phone2.errors.maxlength)">
               Phone 2 is <strong>invalid</strong>
             </mat-error>
           </mat-form-field>

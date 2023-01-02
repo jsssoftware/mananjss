@@ -84,8 +84,8 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
     gstin3: new FormControl('', [Validators.pattern('^([0][1-9]|[1-2][0-9]|[3][0-7])([a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}[1-9a-zA-Z]{1}[zZ]{1}[0-9a-zA-Z]{1})+$')]),
     mobile1: new FormControl('', [Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),
     mobile2: new FormControl('', [Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),
-    phone1: new FormControl('', [Validators.pattern('^[0-9]+$')]),
-    phone2: new FormControl('', [Validators.pattern('^[0-9]+$')]),
+    phone1: new FormControl('', [Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(13)]),
+    phone2: new FormControl('', [Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(13)]),
     email1: new FormControl('', [Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]), //pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
     email2: new FormControl('', [Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]),
     referBy: new FormControl(''),

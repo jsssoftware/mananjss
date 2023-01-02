@@ -718,6 +718,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       if(this._type == 8){
         this.policyTermForm.patchValue({ policyType: 3 });
       }
+      if(this._type == 3){
+        this.policyTermForm.patchValue({ policyType: 4 });
+      }
       this.getPolicyTerms()
     });
   }
