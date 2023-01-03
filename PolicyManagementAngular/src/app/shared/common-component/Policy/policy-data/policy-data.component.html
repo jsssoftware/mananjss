@@ -412,7 +412,7 @@
               <div class="col-lg-4">
                 <mat-form-field appearance="fill">
                   <mat-label>Number of Year</mat-label>
-                  <mat-select formControlName="tpNumberOfYear" required [disabled]="MenuVertical=='Motor'">
+                  <mat-select formControlName="tpNumberOfYear" required >
                     <mat-option>Select</mat-option>
                     <mat-option *ngFor="let numberofyear of _numberOfYears" [value]="numberofyear.Value">
                       {{numberofyear.Name}}</mat-option>
@@ -423,8 +423,8 @@
               <div class="col-lg-4">
                 <mat-form-field appearance="fill">
                   <mat-label>{{(MenuVertical=='Motor')?'Expiry Date' : 'Risk End Date'}}</mat-label>
-                  <input matInput [matDatepicker]="ExpiryDate" formControlName="tpExpiryDate" [readonly]="MenuVertical=='Motor'" />
-                  <mat-datepicker-toggle matSuffix [for]="ExpiryDate" [disabled]="MenuVertical=='Motor'"></mat-datepicker-toggle>
+                  <input matInput [matDatepicker]="ExpiryDate" formControlName="tpExpiryDate"  />
+                  <mat-datepicker-toggle matSuffix [for]="ExpiryDate" ></mat-datepicker-toggle>
                   <mat-datepicker #ExpiryDate></mat-datepicker>
                 </mat-form-field>
               </div>
@@ -453,7 +453,7 @@
                     <mat-autocomplete 
                          autoActiveFirstOption 
                          #autoInsuranceCompanyOd="matAutocomplete"
-                        [displayWith]="getInsuranceCompanyOd.bind(this)" >
+                        [displayWith]="getInsuranceCompanyOd.bind(this)" (optionSelected)='getInsuranceCompanyBranches()' >
                       <mat-option *ngFor="let insuranceCompany of _filteredInsuranceCompaniesOdOptions"
                                   [value]="insuranceCompany.Value">
                               {{insuranceCompany.Name}}
@@ -483,7 +483,7 @@
                     <mat-label>OD Start Date</mat-label>
                     <input matInput [matDatepicker]="ODStartDate" formControlName="odStartDate"
                       (dateChange)="setExpiryDate('od')" [readonly]="_isDisableOdPolicyDetails">
-                    <mat-datepicker-toggle matSuffix [for]="ODStartDate" [disabled]="_isDisableOdPolicyDetails">
+                    <mat-datepicker-toggle matSuffix [for]="ODStartDate" >
                     </mat-datepicker-toggle>
                     <mat-datepicker #ODStartDate></mat-datepicker>
                   </mat-form-field>
@@ -491,7 +491,7 @@
                 <div class="col-lg-4">
                   <mat-form-field appearance="fill">
                     <mat-label>Number of Year</mat-label>
-                    <mat-select formControlName="odNumberOfYear" required [disabled]="true">
+                    <mat-select formControlName="odNumberOfYear" required >
                       <mat-option>Select</mat-option>
                       <mat-option *ngFor="let numberofyear of _numberOfYears" [value]="numberofyear.Value">
                         {{numberofyear.Name}}</mat-option>
@@ -503,8 +503,8 @@
                 <div class="col-lg-4">
                   <mat-form-field appearance="fill">
                     <mat-label>{{(MenuVertical=='Motor')?'Expiry Date' : 'End Date'}}</mat-label>
-                    <input matInput [matDatepicker]="ExpiryDate2" formControlName="odExpiryDate" [readonly]="true">
-                    <mat-datepicker-toggle matSuffix [for]="ExpiryDate2" [disabled]="true"></mat-datepicker-toggle>
+                    <input matInput [matDatepicker]="ExpiryDate2" formControlName="odExpiryDate">
+                    <mat-datepicker-toggle matSuffix [for]="ExpiryDate2" ></mat-datepicker-toggle>
                     <mat-datepicker #ExpiryDate2></mat-datepicker>
                   </mat-form-field>
                 </div>

@@ -176,7 +176,7 @@ namespace PolicyManagement.Services.Common
                 })
                 .OrderBy(o => o.Name)
                 .ToListAsync();
-            else if (type == 8) //Rollover
+            else if (type == 8 || type ==3 ) //Rollover
                 return await _dataContext.tblPolicyType.Where(w => w.PolicyTypeId == 3 && w.IsActive).Select(s => new DropDownDto<int>
                 {
                     Name = s.PolicyType,
@@ -980,7 +980,7 @@ namespace PolicyManagement.Services.Common
                     break;
                 case PolicyManagementType.Renew:
                     {
-                        const string whereQuery = "where RenewalDone = 0 and PolicyStatusId = 1 ";
+                        const string whereQuery = "where RenewalDone = 0 and PolicyStatusId = 1 and IsVerified = 1";
                         query.Append(whereQuery);
                     }
                     break;

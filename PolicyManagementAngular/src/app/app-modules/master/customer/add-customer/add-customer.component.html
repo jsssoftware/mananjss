@@ -305,7 +305,7 @@
           <mat-form-field>
             <mat-label>Phone 2</mat-label>
             <input type="text" matInput formControlName="phone2" [errorStateMatcher]="matcher" placeholder="Phone 2"
-              minlength="10" maxlength="13" (change)="mobileOrPhoneComparision($event)">
+              minlength="10" maxlength="13" (change)="mobileOrPhoneComparision($event)" (keypress)="keyPress($event)">
             <mat-error
               *ngIf="addCustomerForm.controls.phone2.errors && (addCustomerForm.controls.phone2.errors.minlength || addCustomerForm.controls.phone2.errors.maxlength)">
               Phone 2 is <strong>invalid</strong>

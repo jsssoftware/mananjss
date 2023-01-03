@@ -179,7 +179,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   //#region Policy Term Form
   policyTermForm = new FormGroup({
     policyType: new FormControl('', [Validators.required]),
-    vehicleClass: new FormControl('', [Validators.required]),
+    vehicleClass: new FormControl([Validators.required]),
     packageType: new FormControl('', [Validators.required]),
     policyTerm: new FormControl('', [Validators.required]),
     acknowledgementSlipNumber: new FormControl(''),
@@ -273,7 +273,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     commissionPaidOn: new FormControl(''),
     commissionablePremium: new FormControl(''),
     basicTPgstPercent: new FormControl('', [Validators.required]),
-    netpremium : new FormControl(''),
+    netpremium : new FormControl(0),
   });
   //#endregion
 
@@ -1958,7 +1958,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         acknowledgementSlipNumber: response.PolicyTerm.AcknowledgementSlipNumber,
         acknowledgementSlipIssueDate: this.commonService.getDateFromIDateDto(response.PolicyTerm.AcknowledgementSlipIssueDateDto as IDateDto)
       });
-
       this.policyForm.patchValue({
         tpInsuranceCompany: response.TpPolicy.InsuranceCompany,
         coverNoteNumber: response.CoverNoteNumber,
@@ -1975,7 +1974,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         odPolicyNumber: response.OdPolicy.PolicyNumber,
         odStartDate: this.commonService.getDateFromIDateDto(response.OdPolicy.StartDateDto as IDateDto),
         odNumberOfYear: response.OdPolicy.NumberOfYear,
-        odExpiryDate: this.commonService.getDateFromIDateDto(response.OdPolicy.ExpiryDateDto as IDateDto)
+        odExpiryDate: this.commonService.getDateFromIDateDto(response.OdPolicy.ExpiryDateDto as IDateDto),
+      
       });
 
       this.commonService.getAddOnRiders(response.TpPolicy.InsuranceCompany, Vertical.Motor).subscribe((response: IDropDownDto<number>[]) => {
@@ -2023,7 +2023,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.businessDoneBy();
     }
 
-    if (this._policyTypeId === "2") {
+    if (this._policyTypeId === "2" || this._policyTypeId == "3") {
       this._previousControlNumber = response.ControlNumber;
       this._controlNumber = "";
       this._renewalCounter = response.RenewalCounter + 1;
@@ -2038,12 +2038,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
       this.policyForm.get("isBlockAgent")?.disable();
       this.policyForm.get("isChangeAgent")?.disable();
-
-      this.policyTermForm.patchValue({
-        vehicleClass: response.PolicyTerm.VehicleClass,
-      });
-
-      this.policyTermForm.get("vehicleClass")?.disable();
     }
 
     this.setCustomerDetail(<ICustomerShortDetailDto>{
@@ -2079,10 +2073,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         policyTerm: policyTerm
       });
 
+     
       this.commonService.getVehicles(response.PolicyTerm.VehicleClass).subscribe((responseVehicle: IDropDownDto<number>[]) => {
         this._vehicles = responseVehicle;
         this.getSetCompleteVehicleDetails(this._vehicles.filter(f => f.Value == response.Vehicle.Varient)[0]);
-
         this.vehicleForm.patchValue({
           registrationNumber: response.Vehicle.RegistrationNumber,
           engineNumber: response.Vehicle.EngineNumber,
@@ -2100,7 +2094,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
     });
 
-    if (response.AddOnRider){
       this._addOnRiderModel.AddOnRiderId = response?.AddOnRider?.AddOnRiderId;
       this.commonService.getAddOnPlanOptions(this._addOnRiderModel.AddOnRiderId, Vertical.Motor,0).subscribe((addOnResponse: IAddOnPlanOptionDto[]) => {
         addOnResponse.forEach((value, index) => {
@@ -2112,7 +2105,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         this._addOnPlanOptions = addOnResponse;
         this.UpdateAddonPlanValue(response)
       });
-    }
+    
 
     if(this._type !== PolicyType.SameCompanyRetention){
       for (var i = 0; i < response.PaymentData.length; i++) {
@@ -2143,13 +2136,17 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
             bank3: response.PaymentData[i].Bank
           });
         }
-      }
+      }      
 
        //Calling insurance company branch api location
       this.getInsuranceCompanyBranches();
       this.policyForm.patchValue({
         insuranceBranch: response.InsuranceBranch,
+        previousCNPolicyNumber : response.PreviousPolicy.PreviousPolicyNumber,  
+        lastYearInsuranceCompany: response.PreviousPolicy.LastYearInsuranceCompany,
+        lastPolicyExpiryDate: this.commonService.getDateFromIDateDto(response.PreviousPolicy.LastPolicyExpiryDateDto as IDateDto),
       });
+      console.log(this.policyForm)
     }
    
     this.setvalues();  
@@ -2657,7 +2654,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   getInsuranceCompanyLastName(value: number): string { 
-    return value ? this._lastInsuranceCompanies.filter(f => f.Value == value)[0].Name : '';
+    return value ? this._lastInsuranceCompanies.filter(f => f.Value == value)[0]?.Name : '';
   }
 
   getInsuranceCompanyOd(value: number): string { 

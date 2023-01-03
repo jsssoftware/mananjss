@@ -19,6 +19,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 
 namespace PolicyManagement.Services.Motor
@@ -35,284 +36,293 @@ namespace PolicyManagement.Services.Motor
         public async Task<CommonDto<object>> CreateMotorPolicy(MotorPolicyFormDataModel model, BaseModel baseModel)
         {
             short DefaultRToZoneId = 1;
-            try
+            using (var dbContextTransaction = _dataContext.Database.BeginTransaction())
             {
-                CommonDto<object> dataValidation = await ValidateData(model);
-                if (!dataValidation.IsSuccess) return dataValidation;
-
-                string controlNumber = await _commonService.GenerateControlNumber(model.BranchId, model.VerticalCode);
-                if (string.IsNullOrEmpty(controlNumber))
-                    return new CommonDto<object>
-                    {
-                        Message = "System Generate Invalid Control Number"
-                    };
-
-                #region Insert Policy Data
-                tblMotorPolicyData motorPolicyData = new tblMotorPolicyData
+                try
                 {
-                    PolicyId = model.PolicyId,
-                    NameInPolicy = model.Customer.NameInPolicy,
-                    AddressInPolicy = model.Customer.AddressInPolicy,
-                    CustomerType = model.Customer.CustomerType,
-                    PAN = model.Customer.Pan,
-                    GSTIN = model.Customer.Gstin,
-                    CustomerId = model.Customer.CustomerId,
-                    PolicyTypeId = model.PolicyTerm.PolicyType,
-                    VehicleClassId = model.PolicyTerm.VehicleClass,
-                    PolicyPackageTypeId = model.PolicyTerm.PackageTypeId,
-                    PolicyPackageType = model.PolicyTerm.PackageType,
-                    PolicyTermId = model.PolicyTerm.PolicyTerm,
-                    AkgSlipNo = model.PolicyTerm.AcknowledgementSlipNumber,
-                    InsuranceCompanyId = model.TpPolicy.InsuranceCompany,
-                    PolicyNo = model.TpPolicy.PolicyNumber,
-                    NoofYearId = model.TpPolicy.NumberOfYear,
-                    InsuranceCompanyODId = model.OdPolicy.InsuranceCompany,
-                    PolicyNoOD = model.OdPolicy.PolicyNumber,
-                    NoofYearODId = model.OdPolicy.NumberOfYear,
-                    PreviousInsuranceCompanyId = model.PreviousPolicy.LastYearInsuranceCompany,
-                    PreviousPolicyNo = model.PreviousPolicy.PreviousPolicyNumber,
-                    NomineeName = model.Nomination.Name,
-                    NomineeRelationShipId = model.Nomination.Relation,
-                    NomineeAge = model.Nomination.Age,
-                    NomineeGuardian = model.Nomination.GuardianName,
-                    ControlNo = controlNumber,
-                    ManufacturerId = model.Vehicle.Manufacturer,
-                    ModelId = model.Vehicle.Model,
-                    VariantId = model.Vehicle.Varient,
-                    FuelType = model.Vehicle.FuelType,
-                    CubicCapacity = model.Vehicle.Cc,
-                    SeatingCapacity = model.Vehicle.Seating,
-                    GVW = model.Vehicle.Gvw,
-                    KW = model.Vehicle.Kw,
-                    Exshowroom = model.Vehicle.ExShowRoomValue,
-                    RegistrationNo = model.Vehicle.RegistrationNumber,
-                    EngineNo = model.Vehicle.EngineNumber,
-                    ChassisNo = model.Vehicle.ChassisNumber,
-                    RTOZoneId = (model.Vehicle.RtoZone==0)? DefaultRToZoneId : model.Vehicle.RtoZone,
-                    MakeYearId = model.Vehicle.MakeYear,
-                    VehicleUsageId = model.Vehicle.Usage,
-                    SpecialRegistrationNo = model.Vehicle.IsSpecialRegistrationNumber,
-                    TeleCallerId = model.PolicySource.TeleCaller,
-                    FOSId = model.PolicySource.Fos,
-                    POSId = model.PolicySource.Pos,
-                    ReferenceId = model.PolicySource.Reference,
-                    BusinessDoneBy = model.PolicySource.BusinessDoneBy,
-                    POSManageBy = model.PolicySource.PosManagedBy,
-                    PolicyRemarks = model.PolicySource.PolicyRemarks,
-                    VehicleIDV = model.Premium.VehicleIdv,
-                    ElectricAssessoriesIDV = model.Premium.ElectricAccessoriesIdv,
-                    NonElectricAssessoriesIDV = model.Premium.NonElectricAccessoriesIdv,
-                    CNGIDV = model.Premium.CngLpgIdv,
-                    TotalIDV = model.Premium.TotalIdv,
-                    OD = model.Premium.Od,
-                    AddonOD = model.Premium.AddOnRiderOd,
-                    EndorseOD = model.Premium.EndorseOd,
-                    TotalOD = model.Premium.TotalOd,
-                    TPPremium = model.Premium.Tp,
-                    PassengerCover = model.Premium.PassengerCover,
-                    EndorseTP = model.Premium.EndorseTp,
-                    TotalTP = model.Premium.TotalTp,
-                    GSTRate = model.Premium.GstPercentage,
-                    TotalGST = Convert.ToInt32(model.Premium.GstValue),
-                    GrossPremium = Convert.ToInt32(model.Premium.GrossPremium),
-                    EndorseGrossPremium = model.Premium.EndorseGrossPremium,
-                    TotalGrossPremium = model.Premium.TotalGrossPremium,
-                    SpecialDiscount = model.Premium.SpecialDiscount,
-                    Loading = model.Premium.Loading,
-                    NCBId = model.Premium.Ncb,
-                    CommissionPayTypeId = model.Premium.CommissionPaidOn,
-                    CommissionablePremium = Convert.ToInt32(model.Premium.CommissionablePremium),
-                    NonCommissionComponentPremium= Convert.ToInt32(model.Premium.NonCommissionComponentPremium),
-                    CoverNoteNo = model.CoverNoteNumber,
-                    BranchId = byte.Parse(model.BranchId),
-                    KMCovered = model.NumberOfKiloMeterCovered,
-                    ExtendedKMCovered = model.ExtendedKiloMeterCovered,
-                    FinancerId = model.FinanceBy,
-                    VerticalCode = model.VerticalCode,
-                    AddonRiderId = model.AddOnRider.AddOnRiderId,
-                    CreatedBy = baseModel.LoginUserId,
-                    CreatedTime = DateTime.Now,
-                    PolicyStatusId = 1, // Active
-                    AgentChange = model.IsChangeAgent,
-                    BlockAgentReassignment = model.IsBlockAgent,
-                    VerticalId = model.VerticalId,
-                    VerticalSegmentId = model.VerticalSegmentId,
-                    LoyaltyCounter = model.RenewalCounter,
-                    IsActive = true,
-                    InsuranceBranchId = model.InsuranceBranch,
-                    BasicTpGstPercentage= model.Premium.BasicTpGstPercentage,
-                    NetPremium = model.Premium.NetPremium,
-                    //  AddOnSelected = !string.IsNullOrEmpty(model.AddOnSelected) ? model.AddOnSelected : null,
-                    RenewalPOSId = (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4) ? model.PolicySource.Pos : 0,
-                    VehicleSegment = model.Vehicle.VehicleSegment
-                };
+                    CommonDto<object> dataValidation = await ValidateData(model);
+                    if (!dataValidation.IsSuccess) return dataValidation;
 
-                if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
-                    motorPolicyData.AkgSlipIssueDate = null;
-                else
-                    motorPolicyData.AkgSlipIssueDate = DateTime.ParseExact(model.PolicyTerm.AcknowledgementSlipIssueDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
-                if (string.IsNullOrEmpty(model.CoverNoteIssueDateString))
-                    motorPolicyData.CoverNoteDate = null;
-                else
-                    motorPolicyData.CoverNoteDate = DateTime.ParseExact(model.CoverNoteIssueDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
-                if (string.IsNullOrEmpty(model.Vehicle.RegistrationDateString))
-                    motorPolicyData.RegistrationDate = null;
-                else
-                    motorPolicyData.RegistrationDate = DateTime.ParseExact(model.Vehicle.RegistrationDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
-                if (string.IsNullOrEmpty(model.OdPolicy.ExpiryDateString))
-                    motorPolicyData.PolicyEndDateOD = null;
-                else
-                    motorPolicyData.PolicyEndDateOD = DateTime.ParseExact(model.OdPolicy.ExpiryDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
-                if (string.IsNullOrEmpty(model.PreviousPolicy.LastPolicyExpiryDateString))
-                    motorPolicyData.PreviousPolicyEndDate = null;
-                else
-                    motorPolicyData.PreviousPolicyEndDate = DateTime.ParseExact(model.PreviousPolicy.LastPolicyExpiryDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
-                if (string.IsNullOrEmpty(model.OdPolicy.StartDateString))
-                    motorPolicyData.PolicyStartDateOD = null;
-                else
-                    motorPolicyData.PolicyStartDateOD = DateTime.ParseExact(model.OdPolicy.StartDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
-                if (string.IsNullOrEmpty(model.TpPolicy.ExpiryDateString))
-                    motorPolicyData.PolicyEndDate = null;
-                else
-                    motorPolicyData.PolicyEndDate = DateTime.ParseExact(model.TpPolicy.ExpiryDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
-                if (string.IsNullOrEmpty(model.TpPolicy.StartDateString))
-                    motorPolicyData.PolicyStartDate = null;
-                else
-                    motorPolicyData.PolicyStartDate = DateTime.ParseExact(model.TpPolicy.StartDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
-                motorPolicyData.Flag1 = IsFlag1True(model);
-                motorPolicyData.Flag2 = IsFlag2True(model);
-
-                _dataContext.tblMotorPolicyData.AddOrUpdate(motorPolicyData);
-                await _dataContext.SaveChangesAsync();
-
-                // Renewal Case
-                if (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4)
-                {
-                    tblMotorPolicyData data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => model.PreviousPolicyId.HasValue && f.PolicyId == model.PreviousPolicyId.Value);
-                    if(data == null)
-                    {
+                    string controlNumber = await _commonService.GenerateControlNumber(model.BranchId, model.VerticalCode);
+                    if (string.IsNullOrEmpty(controlNumber))
                         return new CommonDto<object>
                         {
-                            IsSuccess = false,
-                            Message = "Previous Policy Number not found"
+                            Message = "System Generate Invalid Control Number"
                         };
-                    }
-                    data.RenewalDone = true;
-                    data.RenewalPolicyId = motorPolicyData.PolicyId;
 
-                    await _dataContext.SaveChangesAsync();
-                }
 
-                #endregion
-
-                #region Insert Payment Data
-                if (model.PaymentData.Any())
-                {
-                    List<tblPolicyPaymentData> payments = new List<tblPolicyPaymentData>();
-                    model.PaymentData.ForEach(f => payments.Add(new tblPolicyPaymentData
+                    #region Insert Policy Data
+                    tblMotorPolicyData motorPolicyData = new tblMotorPolicyData
                     {
-                        BankId = f.Bank,
-                        BranchId = short.Parse(model.BranchId),
-                        ChequeDate = DateTime.ParseExact(f.DatedString, "MM/dd/yyyy", CultureInfo.InvariantCulture),
-                        ChequeNo = f.InstrumentNumber,
-                        CreatedBy = 1, //later change by token
+                        PolicyId = model.PolicyId,
+                        NameInPolicy = model.Customer.NameInPolicy,
+                        AddressInPolicy = model.Customer.AddressInPolicy,
+                        CustomerType = model.Customer.CustomerType,
+                        PAN = model.Customer.Pan,
+                        GSTIN = model.Customer.Gstin,
+                        CustomerId = model.Customer.CustomerId,
+                        PolicyTypeId = model.PolicyTerm.PolicyType,
+                        VehicleClassId = model.PolicyTerm.VehicleClass,
+                        PolicyPackageTypeId = model.PolicyTerm.PackageTypeId,
+                        PolicyPackageType = model.PolicyTerm.PackageType,
+                        PolicyTermId = model.PolicyTerm.PolicyTerm,
+                        AkgSlipNo = model.PolicyTerm.AcknowledgementSlipNumber,
+                        InsuranceCompanyId = model.TpPolicy.InsuranceCompany,
+                        PolicyNo = model.TpPolicy.PolicyNumber,
+                        NoofYearId = model.TpPolicy.NumberOfYear,
+                        InsuranceCompanyODId = model.OdPolicy.InsuranceCompany,
+                        PolicyNoOD = model.OdPolicy.PolicyNumber,
+                        NoofYearODId = model.OdPolicy.NumberOfYear,
+                        PreviousInsuranceCompanyId = model.PreviousPolicy.LastYearInsuranceCompany,
+                        PreviousPolicyNo = model.PreviousPolicy.PreviousPolicyNumber,
+                        NomineeName = model.Nomination.Name,
+                        NomineeRelationShipId = model.Nomination.Relation,
+                        NomineeAge = model.Nomination.Age,
+                        NomineeGuardian = model.Nomination.GuardianName,
+                        ControlNo = controlNumber,
+                        ManufacturerId = model.Vehicle.Manufacturer,
+                        ModelId = model.Vehicle.Model,
+                        VariantId = model.Vehicle.Varient,
+                        FuelType = model.Vehicle.FuelType,
+                        CubicCapacity = model.Vehicle.Cc,
+                        SeatingCapacity = model.Vehicle.Seating,
+                        GVW = model.Vehicle.Gvw,
+                        KW = model.Vehicle.Kw,
+                        Exshowroom = model.Vehicle.ExShowRoomValue,
+                        RegistrationNo = model.Vehicle.RegistrationNumber,
+                        EngineNo = model.Vehicle.EngineNumber,
+                        ChassisNo = model.Vehicle.ChassisNumber,
+                        RTOZoneId = (model.Vehicle.RtoZone == 0) ? DefaultRToZoneId : model.Vehicle.RtoZone,
+                        MakeYearId = model.Vehicle.MakeYear,
+                        VehicleUsageId = model.Vehicle.Usage,
+                        SpecialRegistrationNo = model.Vehicle.IsSpecialRegistrationNumber,
+                        TeleCallerId = model.PolicySource.TeleCaller,
+                        FOSId = model.PolicySource.Fos,
+                        POSId = model.PolicySource.Pos,
+                        ReferenceId = model.PolicySource.Reference,
+                        BusinessDoneBy = model.PolicySource.BusinessDoneBy,
+                        POSManageBy = model.PolicySource.PosManagedBy,
+                        PolicyRemarks = model.PolicySource.PolicyRemarks,
+                        VehicleIDV = model.Premium.VehicleIdv,
+                        ElectricAssessoriesIDV = model.Premium.ElectricAccessoriesIdv,
+                        NonElectricAssessoriesIDV = model.Premium.NonElectricAccessoriesIdv,
+                        CNGIDV = model.Premium.CngLpgIdv,
+                        TotalIDV = model.Premium.TotalIdv,
+                        OD = model.Premium.Od,
+                        AddonOD = model.Premium.AddOnRiderOd,
+                        EndorseOD = model.Premium.EndorseOd,
+                        TotalOD = model.Premium.TotalOd,
+                        TPPremium = model.Premium.Tp,
+                        PassengerCover = model.Premium.PassengerCover,
+                        EndorseTP = model.Premium.EndorseTp,
+                        TotalTP = model.Premium.TotalTp,
+                        GSTRate = model.Premium.GstPercentage,
+                        TotalGST = Convert.ToInt32(model.Premium.GstValue),
+                        GrossPremium = Convert.ToInt32(model.Premium.GrossPremium),
+                        EndorseGrossPremium = model.Premium.EndorseGrossPremium,
+                        TotalGrossPremium = model.Premium.TotalGrossPremium,
+                        SpecialDiscount = model.Premium.SpecialDiscount,
+                        Loading = model.Premium.Loading,
+                        NCBId = model.Premium.Ncb,
+                        CommissionPayTypeId = model.Premium.CommissionPaidOn,
+                        CommissionablePremium = Convert.ToInt32(model.Premium.CommissionablePremium),
+                        NonCommissionComponentPremium = Convert.ToInt32(model.Premium.NonCommissionComponentPremium),
+                        CoverNoteNo = model.CoverNoteNumber,
+                        BranchId = byte.Parse(model.BranchId),
+                        KMCovered = model.NumberOfKiloMeterCovered,
+                        ExtendedKMCovered = model.ExtendedKiloMeterCovered,
+                        FinancerId = model.FinanceBy,
+                        VerticalCode = model.VerticalCode,
+                        AddonRiderId = model.AddOnRider.AddOnRiderId,
+                        CreatedBy = baseModel.LoginUserId,
                         CreatedTime = DateTime.Now,
-                        PaymentAmount = f.Amount,
-                        PaymentModeId = f.Mode,
-                        PolicyId = motorPolicyData.PolicyId
-                    }));
+                        PolicyStatusId = 1, // Active
+                        AgentChange = model.IsChangeAgent,
+                        BlockAgentReassignment = model.IsBlockAgent,
+                        VerticalId = model.VerticalId,
+                        VerticalSegmentId = model.VerticalSegmentId,
+                        LoyaltyCounter = model.RenewalCounter,
+                        IsActive = true,
+                        InsuranceBranchId = model.InsuranceBranch,
+                        BasicTpGstPercentage = model.Premium.BasicTpGstPercentage,
+                        NetPremium = model.Premium.NetPremium,
+                        //  AddOnSelected = !string.IsNullOrEmpty(model.AddOnSelected) ? model.AddOnSelected : null,
+                        RenewalPOSId = (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4) ? model.PolicySource.Pos : 0,
+                        VehicleSegment = model.Vehicle.VehicleSegment
+                    };
 
-                    _dataContext.tblPolicyPaymentData.AddRange(payments);
+                    if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
+                        motorPolicyData.AkgSlipIssueDate = null;
+                    else
+                        motorPolicyData.AkgSlipIssueDate = DateTime.ParseExact(model.PolicyTerm.AcknowledgementSlipIssueDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+                    if (string.IsNullOrEmpty(model.CoverNoteIssueDateString))
+                        motorPolicyData.CoverNoteDate = null;
+                    else
+                        motorPolicyData.CoverNoteDate = DateTime.ParseExact(model.CoverNoteIssueDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+                    if (string.IsNullOrEmpty(model.Vehicle.RegistrationDateString))
+                        motorPolicyData.RegistrationDate = null;
+                    else
+                        motorPolicyData.RegistrationDate = DateTime.ParseExact(model.Vehicle.RegistrationDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+                    if (string.IsNullOrEmpty(model.OdPolicy.ExpiryDateString))
+                        motorPolicyData.PolicyEndDateOD = null;
+                    else
+                        motorPolicyData.PolicyEndDateOD = DateTime.ParseExact(model.OdPolicy.ExpiryDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+                    if (string.IsNullOrEmpty(model.PreviousPolicy.LastPolicyExpiryDateString))
+                        motorPolicyData.PreviousPolicyEndDate = null;
+                    else
+                        motorPolicyData.PreviousPolicyEndDate = DateTime.ParseExact(model.PreviousPolicy.LastPolicyExpiryDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+                    if (string.IsNullOrEmpty(model.OdPolicy.StartDateString))
+                        motorPolicyData.PolicyStartDateOD = null;
+                    else
+                        motorPolicyData.PolicyStartDateOD = DateTime.ParseExact(model.OdPolicy.StartDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+                    if (string.IsNullOrEmpty(model.TpPolicy.ExpiryDateString))
+                        motorPolicyData.PolicyEndDate = null;
+                    else
+                        motorPolicyData.PolicyEndDate = DateTime.ParseExact(model.TpPolicy.ExpiryDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+                    if (string.IsNullOrEmpty(model.TpPolicy.StartDateString))
+                        motorPolicyData.PolicyStartDate = null;
+                    else
+                        motorPolicyData.PolicyStartDate = DateTime.ParseExact(model.TpPolicy.StartDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+                    motorPolicyData.Flag1 = IsFlag1True(model);
+                    motorPolicyData.Flag2 = IsFlag2True(model);
+
+                    _dataContext.tblMotorPolicyData.AddOrUpdate(motorPolicyData);
                     await _dataContext.SaveChangesAsync();
-                }
-                #endregion
 
-                #region Insert Document Data
-                if (model.Document.Any())
-                {
-                    string documentDirectory = ConfigurationManager.AppSettings[AppConstant.DocumentFolder];
-                    if (!Directory.Exists(documentDirectory)) Directory.CreateDirectory(documentDirectory);
-
-                    List<tblUploadedDocuments> documents = new List<tblUploadedDocuments>();
-
-                    model.Document.ForEach(f =>
+                    // Renewal Case
+                    if (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4)
                     {
-                        if (f.DocumentBase64.Contains(","))
-                            f.DocumentBase64 = f.DocumentBase64.Substring(f.DocumentBase64.IndexOf(",") + 1);
-
-                        byte[] bytes = Convert.FromBase64String(f.DocumentBase64);
-                        string fileName = $"{Guid.NewGuid()}.{f.FileName.Split('.').LastOrDefault()}";
-
-                        using (FileStream fileStream = new FileStream($"{documentDirectory}/{f.FileName}", FileMode.OpenOrCreate))
+                        tblMotorPolicyData data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => model.PreviousPolicyId.HasValue && f.PolicyId == model.PreviousPolicyId.Value);
+                        if (data == null)
                         {
-                            fileStream.Write(bytes, 0, bytes.Length);
-                            fileStream.Close();
+                            return new CommonDto<object>
+                            {
+                                IsSuccess = false,
+                                Message = "Previous Policy Number not found"
+                            };
+                        }
+                        data.RenewalDone = true;
+                        data.RenewalPolicyId = motorPolicyData.PolicyId;
+
+                        await _dataContext.SaveChangesAsync();
+                    }
+
+                    #endregion
+
+                    #region Insert Payment Data
+                    if (model.PaymentData.Any())
+                    {
+                        List<tblPolicyPaymentData> payments = new List<tblPolicyPaymentData>();
+                        model.PaymentData.ForEach(f => payments.Add(new tblPolicyPaymentData
+                        {
+                            BankId = f.Bank,
+                            BranchId = short.Parse(model.BranchId),
+                            ChequeDate = !string.IsNullOrEmpty(f.DatedString) ? DateTime.ParseExact(f.DatedString, "MM/dd/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null,
+                            CreatedBy = 1, //later change by token
+                            CreatedTime = DateTime.Now,
+                            PaymentAmount = f.Amount,
+                            PaymentModeId = f.Mode,
+                            PolicyId = motorPolicyData.PolicyId
+                        }));
+
+                        _dataContext.tblPolicyPaymentData.AddRange(payments);
+                        await _dataContext.SaveChangesAsync();
+                    }
+                    #endregion
+
+                    #region Insert Document Data
+                    if (model.Document.Any())
+                    {
+                        string documentDirectory = ConfigurationManager.AppSettings[AppConstant.DocumentFolder];
+                        if (!Directory.Exists(documentDirectory)) Directory.CreateDirectory(documentDirectory);
+
+                        List<tblUploadedDocuments> documents = new List<tblUploadedDocuments>();
+
+                        model.Document.ForEach(f =>
+                        {
+                            if (f.DocumentBase64.Contains(","))
+                                f.DocumentBase64 = f.DocumentBase64.Substring(f.DocumentBase64.IndexOf(",") + 1);
+
+                            byte[] bytes = Convert.FromBase64String(f.DocumentBase64);
+                            string fileName = $"{Guid.NewGuid()}.{f.FileName.Split('.').LastOrDefault()}";
+
+                            using (FileStream fileStream = new FileStream($"{documentDirectory}/{f.FileName}", FileMode.OpenOrCreate))
+                            {
+                                fileStream.Write(bytes, 0, bytes.Length);
+                                fileStream.Close();
+                            }
+
+                            documents.Add(new tblUploadedDocuments
+                            {
+                                CreatedBy = baseModel.LoginUserId,
+                                CreatedTime = DateTime.Now,
+                                CustomerId = model.Customer.CustomerId,
+                                Directory = documentDirectory,
+                                DocId = f.DocumentTypeId,
+                                FileName = fileName,
+                                OriginalFileName = f.FileName,
+                                PolicyId = motorPolicyData.PolicyId,
+                                Remarks = f.Remarks
+                            });
+                        });
+
+                        _dataContext.tblUploadedDocuments.AddRange(documents);
+                        await _dataContext.SaveChangesAsync();
+                    }
+                    #endregion
+
+                    #region Insert Add-On Rider Option Data
+                    if (model.AddOnRider.AddOnRiderOptionId.Any())
+                    {
+                        var addOnValue = model.AddOnRider.AddOnValue;
+                        var addPlanOptionId = model.AddOnRider.AddOnRiderOptionId;
+                        var length = model.AddOnRider.AddOnRiderOptionId.Count();
+                        List<tblPolicyAddonOptionDetails> addOnOptionDetails = new List<tblPolicyAddonOptionDetails>();
+
+                        for (int i = 0; i < length; i++)
+                        {
+                            addOnOptionDetails.Add(new tblPolicyAddonOptionDetails
+                            {
+                                AddonPlanOptionId = addPlanOptionId[i],
+                                AddonValue = addOnValue[i],
+                                PolicyId = motorPolicyData.PolicyId,
+                            });
+
                         }
 
-                        documents.Add(new tblUploadedDocuments
-                        {
-                            CreatedBy = baseModel.LoginUserId,
-                            CreatedTime = DateTime.Now,
-                            CustomerId = model.Customer.CustomerId,
-                            Directory = documentDirectory,
-                            DocId = f.DocumentTypeId,
-                            FileName = fileName,
-                            OriginalFileName = f.FileName,
-                            PolicyId = motorPolicyData.PolicyId,
-                            Remarks = f.Remarks
-                        });
-                    });
 
-                    _dataContext.tblUploadedDocuments.AddRange(documents);
-                    await _dataContext.SaveChangesAsync();
-                }
-                #endregion
-
-                #region Insert Add-On Rider Option Data
-                if (model.AddOnRider.AddOnRiderId > 0 && model.AddOnRider.AddOnRiderOptionId.Any())
-                {
-                    var addOnValue = model.AddOnRider.AddOnValue;
-                    var addPlanOptionId = model.AddOnRider.AddOnRiderOptionId;
-                    var length = model.AddOnRider.AddOnRiderOptionId.Count();
-                    List<tblPolicyAddonOptionDetails> addOnOptionDetails = new List<tblPolicyAddonOptionDetails>();
-
-                    for (int i = 0; i < length; i++)
-                    {
-                        addOnOptionDetails.Add(new tblPolicyAddonOptionDetails
-                        {
-                            AddonPlanOptionId = addPlanOptionId[i],
-                            AddonValue= addOnValue[i],
-                            PolicyId = motorPolicyData.PolicyId,
-                        });
-
+                        _dataContext.tblPolicyAddonOptionDetails.AddRange(addOnOptionDetails);
+                        await _dataContext.SaveChangesAsync();
                     }
-                   
+                    #endregion
 
-                    _dataContext.tblPolicyAddonOptionDetails.AddRange(addOnOptionDetails);
-                    await _dataContext.SaveChangesAsync();
+                    dbContextTransaction.Commit();
+
+
+                    return new CommonDto<object>
+                    {
+                        IsSuccess = true,
+                        Message = $"Policy is created successfully with Control Number {motorPolicyData.ControlNo}"
+                    };
                 }
-                #endregion
 
-                return new CommonDto<object>
+                catch (Exception ex)
                 {
-                    IsSuccess = true,
-                    Message = $"Policy is created successfully with Control Number {motorPolicyData.ControlNo}"
-                };
-            }
-            catch (Exception ex)
-            {
-                return new CommonDto<object>
-                {
-                    Message = ex.Message
-                };
+                    dbContextTransaction.Rollback();
+                    return new CommonDto<object>
+                    {
+                        Message = ex.Message
+                    };
+
+                }
             }
         }
 
@@ -791,7 +801,7 @@ namespace PolicyManagement.Services.Motor
                 {
                     BankId = f.Bank,
                     BranchId = short.Parse(model.BranchId),
-                    ChequeDate = DateTime.ParseExact(f.DatedString, "MM/dd/yyyy", CultureInfo.InvariantCulture),
+                    ChequeDate= !string.IsNullOrEmpty(f.DatedString) ? DateTime.ParseExact(f.DatedString, "MM/dd/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null,
                     ChequeNo = f.InstrumentNumber,
                     CreatedBy = 1, //later change by token
                     CreatedTime = DateTime.Now,
@@ -855,7 +865,7 @@ namespace PolicyManagement.Services.Motor
             #endregion
 
             #region Update Add-On Rider Option Data
-            if (model.AddOnRider.AddOnRiderId > 0 && model.AddOnRider.AddOnRiderOptionId.Any())
+            if ( model.AddOnRider.AddOnRiderOptionId.Any())
             {
 
                 List<tblPolicyAddonOptionDetails> previousAddOnRiderOption = await _dataContext.tblPolicyAddonOptionDetails.Where(w => w.PolicyId == policyId).ToListAsync();
