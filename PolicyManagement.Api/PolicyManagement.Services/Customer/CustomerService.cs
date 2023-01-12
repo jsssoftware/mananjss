@@ -853,5 +853,31 @@ namespace PolicyManagement.Services.Customer
                                                                                                                Value = s.CustomerId
                                                                                                            })
                                                                                                            .ToListAsync();
+
+        public async Task<DataTableDto<List<CustomerDto>>> FindCustomrByClusterCode(int? clusterId)
+        {
+
+
+            List<CustomerDto> customers = await _dataContext.tblCustomer.GroupJoin(_dataContext.tblCluster, T1 => T1.ClusterId, T2 => T2.ClusterId, (T1, T2) => new { T1, T2 })
+                                                    .SelectMany(s => s.T2.DefaultIfEmpty(), (customer, cluster) => new { customer.T1, T2 = cluster })
+                                                    .Where(w => w.T1.ClusterId == clusterId)
+                                                    .OrderBy(o => o.T1.CustomerName)
+                                                    .Select(s => new CustomerDto
+                                                    {
+                                                        Address = s.T1.DefaultAddress == 1 ? s.T1.CustomerAddress1 : s.T1.DefaultAddress == 2 ? s.T1.CustomerAddress2 : s.T1.CustomerAddress3,
+                                                        ClusterName = s.T2.ClusterName,
+                                                        Code = s.T1.CustomerCode,
+                                                        Id = s.T1.CustomerId,
+                                                        Mobile = s.T1.DefaultContactNo == 1 ? s.T1.CustomerMobile1 : s.T1.DefaultContactNo == 2 ? s.T1.CustomerMobile2 : s.T1.DefaultContactNo == 3 ? s.T1.CustomerPhone1 : s.T1.CustomerPhone2,
+                                                        Name = s.T1.CustomerName,
+                                                        PinCode = s.T1.DefaultAddress == 1 ? s.T1.CustomerPinCode1 : s.T1.DefaultAddress == 2 ? s.T1.CustomerPinCode2 : s.T1.CustomerPinCode3,
+                                                    })
+                                                   .ToListAsync();
+
+            return new DataTableDto<List<CustomerDto>>
+            {
+                Data = customers
+            };
+        }
     }
 }

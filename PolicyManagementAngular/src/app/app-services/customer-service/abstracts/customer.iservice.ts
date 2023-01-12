@@ -20,4 +20,6 @@ export abstract class ICustomerService {
     abstract getCustomerShortDetailById(customerId: number): Observable<ICustomerShortDetailDto>;
     abstract getAllTitlesWithoutMS(): Observable<IDropDownDto<number>[]>;
     abstract getAllClusters(): Observable<IDropDownDto<number>[]>;
+    abstract getCustomerDataByClusterId(clusterId: number): Observable<ICustomerShortDetailDto>;
+
 }

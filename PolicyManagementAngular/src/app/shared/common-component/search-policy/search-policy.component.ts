@@ -120,7 +120,7 @@ export class SearchPolicyComponent implements OnInit {
   public _models: IDropDownDto<number>[] = [];
   public _posDatas: IDropDownDto<number>[] = [];
   private _branchId: any;
-  public _policyTypeId: any;
+  public _policyType: any;
   public _verticals: any;
   public _products: any;
   public _verticalTypeId: any;
@@ -150,16 +150,9 @@ export class SearchPolicyComponent implements OnInit {
     this.getInsuranceCompanies();
     this.getManufacturers();
     this.getPos(parseInt(this._branchId));
-    this._policyTypeId = this.route.snapshot.paramMap.get('policyType');
+    this._policyType = this.route.snapshot.paramMap.get('policyType');
     this._verticalTypeId = this.route.snapshot.paramMap.get('verticalType'); 
-     this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyTypeId));
-    switch (this._policyTypeId) {
-      case "3":
-      case "4":
-      case "5": 
-        this._showAll = true;
-        break;  
-    } 
+     this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType));
     // #region set automoplete 
     this.searchPolicyForm.get("insuranceCompany")?.valueChanges.subscribe(input => {
       if (input == null || input === undefined || input === '')
@@ -218,9 +211,9 @@ export class SearchPolicyComponent implements OnInit {
 
   routeToMotorPolicy(policyId: number,policyTypeId:number) {
     if(this._verticalTypeId==Vertical.Motor)
-      this.router.navigate(["/pms/motor", { policyId, policyTypeId: policyTypeId }]);
+      this.router.navigate(["/pms/motor", { policyId, policyTypeId: policyTypeId,policyType :this._policyType }]);
     if(this._verticalTypeId==Vertical.Health)
-      this.router.navigate(["/pms/health", { policyId, policyTypeId: policyTypeId }]);
+      this.router.navigate(["/pms/health", { policyId, policyTypeId: policyTypeId,policyType :this._policyType }]);
   }
 
   searchPolicy(): void {
@@ -255,7 +248,7 @@ export class SearchPolicyComponent implements OnInit {
       MobileNumber: this.searchPolicyForm.value.mobileNumber,
       Product: this.searchPolicyForm.value.product,
       Vertical: this.searchPolicyForm.value.vertical,
-      PolicyManagementType: (parseInt)(this._policyTypeId),  // need to do dynamic based on id or type of module 
+      PolicyManagementType: (parseInt)(this._policyType),  // need to do dynamic based on id or type of module 
       IsForDownload:false,
       IsForShowAll:false
       // PageNumber: this.searchPolicyForm.value.mobileNumber

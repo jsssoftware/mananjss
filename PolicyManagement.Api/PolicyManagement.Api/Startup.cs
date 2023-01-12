@@ -5,8 +5,10 @@ using PolicyManagement.Api;
 using PolicyManagement.Api.Provider;
 using PolicyManagement.Api.Swagger;
 using Swashbuckle.Application;
+using Swashbuckle.Swagger;
 using System;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -27,6 +29,7 @@ namespace PolicyManagement.Api
             {
                 x.SingleApiVersion("v1", "Policy Management Api");
                 x.DocumentFilter<OAuthTokenOperation>();
+                x.OperationFilter<AddAuthorizationHeaderParameterOperationFilter>();
             }).EnableSwaggerUi();
 
             UnityConfig.RegisterComponents(config);
@@ -43,5 +46,26 @@ namespace PolicyManagement.Api
             });
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
         }
+
+
+        public class AddAuthorizationHeaderParameterOperationFilter : IOperationFilter
+        {
+            public void Apply(Operation operation, SchemaRegistry schemaRegistry, ApiDescription apiDescription)
+            {
+                if (operation.parameters != null)
+                {
+                    operation.parameters.Add(new Parameter
+                    {
+                        name = "Authorization",
+                        @in = "header",
+                        description = "access token",
+                        required = false,
+                        type = "string"
+                    });
+                }
+            }
+        }
     }
+
+    
 }

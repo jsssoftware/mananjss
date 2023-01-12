@@ -3,7 +3,7 @@ import { AfterViewInit, Component, OnInit, Output, EventEmitter, Input } from '@
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { ErrorStateMatcher } from '@angular/material/core';
-import {  MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { ICommonDto } from 'src/app/app-entites/dtos/common/common-dto';
 import { IDateDto } from 'src/app/app-entites/dtos/common/date-dto';
 import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
@@ -16,7 +16,7 @@ import { IDocumentModel } from 'src/app/app-entites/models/common/document-model
 import { IMotorPolicyFormDataModel } from 'src/app/app-entites/models/motor/motor-policy-form-data-model';
 import { ICustomerService } from 'src/app/app-services/customer-service/abstracts/customer.iservice';
 import { IPaymentFormDataModel } from 'src/app/app-entites/models/motor/payment-form-data-model';
-import { PolicyType, SearchPolicyType, Vertical } from 'src/app/shared/utilities/enums/enum';
+import { PolicyType, SearchPolicyType, Vertical,PackageType } from 'src/app/shared/utilities/enums/enum';
 import { IPolicyTermDto } from '../../../../app-entites/dtos/motor/policy-term-dto';
 import { ICommonService } from '../../../../app-services/common-service/abstracts/common.iservice';
 import { IMotorService } from '../../../../app-services/motor-service/abstracts/motor.iservice';
@@ -106,9 +106,8 @@ const ELEMENT_DATA_InspectionDetail: PeriodicElementForInspectionDetail[] = [
   styleUrls: ['./policy-data.component.css']
 })
 export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMatcher {
-  @Input('MenuVertical') public MenuVertical:string='';
+  @Input('MenuVertical') public MenuVertical: string = '';
   @Output() tableNameToDialogBox = new EventEmitter<string>();
-
   displayedColumnsDocumentTable: string[] = ["Sno", "DocumentTypeName", "FileName", "Remarks", "DocumentTypeId"];
   displayedColumns: string[] = [
     'endorsementReason',
@@ -135,6 +134,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _claims: IPreviousClaimDto[] = [];
   public _vouchers: IPolicyVoucherDto[] = [];
   public _inspections: IPolicyInspectionDto[] = [];
+
   test: string = "testing";
   panelOpenState = false;
   _totalVoucherAmount: number = 0;
@@ -142,7 +142,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   _disableFields: boolean = false;
   _addOnRiderArray: string[] = [];
   _commissionPaidOnId: number = 0;
-  _isViewPolicyActive:boolean= false;
+  _isViewPolicyActive: boolean = false;
   _displayedColumnsVouchers: string[] = ['voucherNumber', 'voucherAmount', 'voucherType', 'voucherDateString', 'voucherStatus', 'voucherRemark', 'action'];
 
   _displayedColumnsInspections: string[] = [
@@ -171,7 +171,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     gstin: new FormControl(''),
     gender: new FormControl(''),
     dateOfBirth: new FormControl(''),
-    passportNumber: new FormControl(''), 
+    passportNumber: new FormControl(''),
     customerId: new FormControl(0)
   });
   //#endregion
@@ -215,8 +215,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     // inspectionTime: new FormControl(''),
     // inspectionRemarks: new FormControl('')
     portability: new FormControl('', [Validators.required]),
-    continutyStartDate : new FormControl(''),
-    previousPolicyPlan : new FormControl(''),
+    continutyStartDate: new FormControl(''),
+    previousPolicyPlan: new FormControl(''),
     previousPolicySumInsured: new FormControl('', [Validators.pattern('^[0-9]+$')]),
   });
   //#endregion
@@ -273,7 +273,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     commissionPaidOn: new FormControl(''),
     commissionablePremium: new FormControl(''),
     basicTPgstPercent: new FormControl('', [Validators.required]),
-    netpremium : new FormControl(0),
+    netpremium: new FormControl(0),
   });
   //#endregion
 
@@ -310,22 +310,22 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   //#endregion
   private ChequeValidators = [
     Validators.pattern('^[a-zA-Z0-9]+$'),
-];
+  ];
   //#region Payment Form
   paymentForm = new FormGroup({
     mode1: new FormControl('', [Validators.required]),
     amount1: new FormControl('', [Validators.required]),
-    instrumentNumber1: new FormControl({value:'',disabled:false}, this.ChequeValidators),
+    instrumentNumber1: new FormControl({ value: '', disabled: false }, this.ChequeValidators),
     dated1: new FormControl(''),
     bank1: new FormControl(''),
     mode2: new FormControl(''),
     amount2: new FormControl(''),
-    instrumentNumber2: new FormControl({value:'',disabled:false}, [Validators.pattern('^[a-zA-Z0-9]+$')]),
+    instrumentNumber2: new FormControl({ value: '', disabled: false }, [Validators.pattern('^[a-zA-Z0-9]+$')]),
     dated2: new FormControl(''),
     bank2: new FormControl(''),
     mode3: new FormControl(''),
     amount3: new FormControl(''),
-    instrumentNumber3: new FormControl({value:'',disabled:false}, [Validators.pattern('^[a-zA-Z0-9]+$')]),
+    instrumentNumber3: new FormControl({ value: '', disabled: false }, [Validators.pattern('^[a-zA-Z0-9]+$')]),
     dated3: new FormControl(''),
     bank3: new FormControl(''),
   });
@@ -360,10 +360,16 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   productPlanForm = new FormGroup({
     product: new FormControl(''),
     plan: new FormControl(''),
-    planTypes: new FormControl('') 
-  }); 
+    planTypes: new FormControl('')
+  });
   // product plan form
-
+  //#region 
+  insurancePersonForm = new FormGroup({
+    nameInsuredPerson: new FormControl(''),
+    plan: new FormControl(''),
+    planTypes: new FormControl('')
+  });
+  //endregion
   //#region Variables
   matcher = new ErrorStateMatcher();
   public _banks: any;
@@ -405,6 +411,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   public _customerId: any;
   public _policyTypeId: any;
+  public _policyType: any;
   public _policyId: any;
   public _uploadDocuments: IDocumentModel[] = [];
   public _filteredOptions: IDropDownDto<number>[] = [];
@@ -420,9 +427,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   public _isDisableOdPolicyDetails: boolean = false;
   public _policyData?: IMotorPolicyFormDataModel;
-  public _verticalName: string="";
-  public _policyStatus: string="";
-  public _policyStatusColor: string="";
+  public _verticalName: string = "";
+  public _policyStatus: string = "";
+  public _policyStatusColor: string = "";
   public _posManagedBy?: IDropDownDto<number>;
   public _verticalDetail: any;
   public _policyDocuments: IPolicyDocumentDto[] = [];
@@ -430,17 +437,19 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _filteredInsuranceCompaniesLastOptions: IDropDownDto<number>[] = [];
   public _filteredInsuranceCompaniesOdOptions: IDropDownDto<number>[] = [];
 
-  public _filteredPosOptions: IDropDownDto<number>[] = []; 
+  public _filteredPosOptions: IDropDownDto<number>[] = [];
   public _filteredManufacturerOptions: IDropDownDto<number>[] = [];
 
 
   public _products: IDropDownDto<number>[] = [];
   public _plans: IDropDownDto<number>[] = [];
   public _planTypes: IDropDownDto<number>[] = [];
-  public _selectedProductId:number= 0;
+  public _selectedProductId: number = 0;
   public _portability: IDropDownDto<number>[] = [];
+  public get SearchPolicyType(): typeof SearchPolicyType {
+    return SearchPolicyType;
+  }
 
-  
   //#endregion
 
   constructor(
@@ -457,8 +466,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this._addOnRiderModel = {
       AddOnRiderId: 0,
       AddOnRiderOptionId: [],
-      AddOnValue:[]
-    };    
+      AddOnValue: []
+    };
   }
 
   ngOnInit(): void {
@@ -470,100 +479,87 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     })
 
     this._customerId = this.route.snapshot.paramMap.get('customerId');
-    this._policyTypeId = this.route.snapshot.paramMap.get('policyTypeId');
+    this._policyTypeId =Number(this.route.snapshot.paramMap.get('policyTypeId'));//is the id when customer saved
     this._policyId = Number(this.route?.snapshot?.paramMap.get('policyId') || 0);
-    switch (this._policyTypeId) {
-      case "1":
-        this._type = 1;
+    this._policyType = Number(this.route?.snapshot?.paramMap.get('policyType') ||0);
+    switch (this._policyTypeId ) {
+      case 1:
+        this._type = SearchPolicyType.Motor_New;
         this._isDisableBlockAgentCheckbox = this._isDisableChangeAgentCheckbox = true;
         break;
-      case "2":
-        this._type = 2;
+      case 2:
+        this._type = SearchPolicyType.Motor_Renew;
         break;
-      case "3":
-        this._type = 3;
-        break;
-      case "4":
+      case 3:
+          this._type = SearchPolicyType.Motor_rollover;
+          break;
+      case 4:
         this._type = 4;
         break;
-      case "5":
+      case 5:
         this._type = 5;
         break;
-      case "6":
+      case 6:
         this._type = 6;
         break;
-      case "7":
+      case 7:
         this._type = 7;
-        this._isViewPolicyActive  = true;
+        this._isViewPolicyActive = true;
         break;
-      case "8":
-        this._type = 8;
+      case 8:
+        this._type = SearchPolicyType.Motor_rollover;
         break;
+    }
+
+    if(this._policyType == 2){
+      this._type = SearchPolicyType.Motor_Renew;
     }
 
     this.policyForm.get("numberOfKiloMeterCovered")?.disable();
     this.policyForm.get("extendedKiloMeterCovered")?.disable();
   }
 
-  ngAfterViewInit(): void {
-    if(this._customerId){
-      this.getCustomerShortDetailById(this._customerId);
+  async ngAfterViewInit(): Promise<void> {
+    if (this._customerId) {
+      await this.getCustomerShortDetailById(this._customerId);
 
     }
-    this.getPolicyTypes();
-    this.getVehicleClasses();
-    this.getPackageTypes();
-    this.getInsuranceCompanies();
-    this.getNumberOfYears();
-    this.getFinancers();
-    this.getInspectionCompanies();
-    if(this._policyId == 0){
-    this.getAddOnRiders();
-    }
-    this.getManufacturers();
-    this.getMakeYears();
-    this.getRtoZones();
+    await this.getVehicleClasses();
+    await this.getPackageTypes();
+    await this.getPolicyTypes();
+    await this.getInsuranceCompanies();
+    await this.getNumberOfYears();
+    await this.getFinancers();
+    await this.getInspectionCompanies();
+    await this.getManufacturers();
+    await this.getMakeYears();
+    await this.getRtoZones();
+    await this.getDocumentTypes();
+    await this.getPaymentModes();
+    await this.getRelations();
+    await this.getTeleCallers(this._branchId);
+    await this.getReferences(this._branchId);
+    await this.getFosNames(this._branchId);
+    await this.getPos(this._branchId);
+    await this.getBanks();
+    await this.getUsages();
+    await this.getCommissionPaidOn();
+    await this.getNcbs();
+    await this.getVerticalDetail();
+    await this.getProduct();
+    await this.getPlanType();
+    await this.getPortability();
+    await this.getPolicyClaims();
+    await this.getPolicyVouchers();
+    await this.getPolicyInspections();
+    await this.getPolicyDocuments();
     //Not calling on edit
-    if(this._policyId == 0){
-      this.getAddOnPlanOptions(-1);
-
+    if (this._policyId == 0) {
+      await this.getAddOnRiders();
+      await this.getAddOnPlanOptions(-1);
     }
-    this.getDocumentTypes();
-    this.getPaymentModes();
-    this.getRelations();
-    this.getTeleCallers(this._branchId);
-    this.getReferences(this._branchId);
-    this.getFosNames(this._branchId);
-    this.getPos(this._branchId);
-    this.getBanks();
-    this.getUsages();
-    this.getCommissionPaidOn();
-    this.getNcbs();
-    this.getVerticalDetail();
-    this.getProduct();
-    this.getPlanType();
-    this.getPortability();
-    switch (this._policyTypeId) {
-      
-      case "1":
-        break
-      case "8":
-        break;
-      case "2":
-      case "3":
-      case "4":
-      case "5":
-      case "6":
-      case "7":
-      
-        break;
-    }
-    this.getPolicyClaims();
-    this.getPolicyVouchers();
-    this.getPolicyInspections();
-    this.getPolicyDocuments();
-    if(this._policyId!=0){
-      this.getMotorPolicyById(this._policyId);
+    if (this._policyId != 0) {
+      await this.getMotorPolicyById(this._policyId);
     }
 
     this.policyForm.get("tpInsuranceCompany")?.valueChanges.subscribe(input => {
@@ -615,71 +611,71 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       else
         this.filterdManufacturerData(input.Name);
     });
-     const CHEQUE ="1";
-     const AGENTCHEQUE ="3"
-     const CASH ="2"
+    const CHEQUE = "1";
+    const AGENTCHEQUE = "3"
+    const CASH = "2"
     this.paymentForm.get('mode1')?.valueChanges
-    .subscribe(value => {
-      this.paymentForm.get('instrumentNumber1')?.enable({onlySelf: true});
-      this.paymentForm.get('bank1')?.enable({onlySelf: true});
+      .subscribe(value => {
+        this.paymentForm.get('instrumentNumber1')?.enable({ onlySelf: true });
+        this.paymentForm.get('bank1')?.enable({ onlySelf: true });
 
-      if(value == CASH ) {
-        this.paymentForm.get('instrumentNumber1')?.disable({onlySelf: true});
-        this.paymentForm.get('bank1')?.disable({onlySelf: true});
-      }
-        
-      if(value == CHEQUE || value == AGENTCHEQUE) {
-        this.paymentForm.get('instrumentNumber1')?.setValidators(this.ChequeValidators.concat(Validators.maxLength(6)))
-      } else {
-        this.paymentForm.get('instrumentNumber1')?.setValidators(this.ChequeValidators);
-      }
-       
+        if (value == CASH) {
+          this.paymentForm.get('instrumentNumber1')?.disable({ onlySelf: true });
+          this.paymentForm.get('bank1')?.disable({ onlySelf: true });
+        }
+
+        if (value == CHEQUE || value == AGENTCHEQUE) {
+          this.paymentForm.get('instrumentNumber1')?.setValidators(this.ChequeValidators.concat(Validators.maxLength(6)))
+        } else {
+          this.paymentForm.get('instrumentNumber1')?.setValidators(this.ChequeValidators);
+        }
+
         this.paymentForm.get('instrumentNumber1')?.updateValueAndValidity();
         this.paymentForm.get('bank1')?.updateValueAndValidity();
-    });
-   
+      });
+
     this.paymentForm.get('mode2')?.valueChanges
-    .subscribe(value => {
-      this.paymentForm.get('instrumentNumber2')?.enable();
-      this.paymentForm.get('bank2')?.enable();
-      if(value == CASH ) {
-        this.paymentForm.get('instrumentNumber2')?.disable({onlySelf: true});
-        this.paymentForm.get('bank2')?.disable({onlySelf: true});
-      }
-      if(value == CHEQUE || value == AGENTCHEQUE) {
-        this.paymentForm.get('instrumentNumber2')?.setValidators(this.ChequeValidators.concat(Validators.maxLength(6)))
-      } else {
-        this.paymentForm.get('instrumentNumber2')?.setValidators(this.ChequeValidators);
-      }
+      .subscribe(value => {
+        this.paymentForm.get('instrumentNumber2')?.enable();
+        this.paymentForm.get('bank2')?.enable();
+        if (value == CASH) {
+          this.paymentForm.get('instrumentNumber2')?.disable({ onlySelf: true });
+          this.paymentForm.get('bank2')?.disable({ onlySelf: true });
+        }
+        if (value == CHEQUE || value == AGENTCHEQUE) {
+          this.paymentForm.get('instrumentNumber2')?.setValidators(this.ChequeValidators.concat(Validators.maxLength(6)))
+        } else {
+          this.paymentForm.get('instrumentNumber2')?.setValidators(this.ChequeValidators);
+        }
         this.paymentForm.get('instrumentNumber2')?.updateValueAndValidity();
         this.paymentForm.get('bank2')?.updateValueAndValidity();
 
-    });
-   
+      });
+
     this.paymentForm.get('mode3')?.valueChanges
-    .subscribe(value => {
-      this.paymentForm.get('instrumentNumber3')?.enable();
-      this.paymentForm.get('bank3')?.enable();
-      if(value == CASH ) {
-        this.paymentForm.get('instrumentNumber3')?.disable({onlySelf: true});
-        this.paymentForm.get('bank3')?.disable({onlySelf: true});
-      }
-      if(value == CHEQUE || value == AGENTCHEQUE) {
-        this.paymentForm.get('instrumentNumber3')?.setValidators(this.ChequeValidators.concat(Validators.maxLength(6)))
-      } else {
-        this.paymentForm.get('instrumentNumber3')?.setValidators(this.ChequeValidators);
-      }
+      .subscribe(value => {
+        this.paymentForm.get('instrumentNumber3')?.enable();
+        this.paymentForm.get('bank3')?.enable();
+        if (value == CASH) {
+          this.paymentForm.get('instrumentNumber3')?.disable({ onlySelf: true });
+          this.paymentForm.get('bank3')?.disable({ onlySelf: true });
+        }
+        if (value == CHEQUE || value == AGENTCHEQUE) {
+          this.paymentForm.get('instrumentNumber3')?.setValidators(this.ChequeValidators.concat(Validators.maxLength(6)))
+        } else {
+          this.paymentForm.get('instrumentNumber3')?.setValidators(this.ChequeValidators);
+        }
         this.paymentForm.get('instrumentNumber3')?.updateValueAndValidity();
         this.paymentForm.get('bank3')?.updateValueAndValidity();
 
-    });
-   
+      });
+
   }
 
-  
 
-  setvalues(){
-     
+
+  setvalues() {
+
     this._verticalName = this._policyData != undefined ? this._policyData.Vertical : "MOTOR";
     this._policyStatus = this._policyData != undefined ? this._policyData.PolicyStatus : "Active";
     this._policyStatusColor = this._policyData != undefined ? this._policyData.PolicyStatusColor : '#fdcb6e'
@@ -708,20 +704,18 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   getPolicyTypes(): any {
-     
-    this.commonService.getPolicyTypes(this._type).subscribe((response: any) => { 
-    
+    this.commonService.getPolicyTypes(this._type).subscribe((response: any) => {
       this._policyTypes = response;
-      if(this._type == 1){
-        this.policyTermForm.patchValue({ policyType: 1 });
+      if (this._type == SearchPolicyType.Motor_New) {
+        this.policyTermForm.patchValue({ policyType: PolicyType.New });
       }
-      if(this._type == 8){
-        this.policyTermForm.patchValue({ policyType: 3 });
+      if (this._type ==  SearchPolicyType.Motor_rollover) {
+        this.policyTermForm.patchValue({ policyType: PolicyType.Rollover });
       }
-      if(this._type == 3){
-        this.policyTermForm.patchValue({ policyType: 4 });
+      if (this._type == SearchPolicyType.Motor_Renew) {
+        this.policyTermForm.patchValue({ policyType: PolicyType.Renewal });
       }
-      this.getPolicyTerms()
+    //  this.getPolicyTerms()
     });
   }
 
@@ -738,6 +732,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   getPolicyTerms(): void {
+    this.policyForm.reset();
     this.policyTermForm.patchValue({ policyTerm: undefined });
     let model = this.getPolicyFormData();
     this.setPreviousInsuranceCompany();
@@ -748,21 +743,23 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       model.VehicleClassId == "" ||
       model.PackageTypeId == "") return;
 
-    if (model.PackageTypeId === 1) {
-      this._isAddOnRiderEnable = false;
+   
+    if (model.PackageTypeId === PackageType.COMPREHENSIVE|| model.PackageTypeId === PackageType.USAGE_BASE) {
+      this._isDisableOdPolicyDetails = true;
+      this._isOdPolicyEnable = true;
+      this._isAddOnRiderEnable = true;
     }
-    else {
+    else if (model.PackageTypeId === PackageType.TP_ONLY) {
+      this._isDisableOdPolicyDetails = false;
+      this._isOdPolicyEnable = false;
+      this._isAddOnRiderEnable = false;
+    }else if(model.PackageTypeId === PackageType.OD_ONLY){
+      this._isDisableOdPolicyDetails = false;
+      this._isOdPolicyEnable = true;
       this._isAddOnRiderEnable = true;
     }
 
-    if (model.PackageTypeId === 3 || model.PackageTypeId === 4) {
-      this._isDisableOdPolicyDetails = true;
-    }
-    else {
-      this._isDisableOdPolicyDetails = false;
-    }
-
-    if (model.PackageTypeId === 4) {
+    if (model.PackageTypeId ===PackageType.USAGE_BASE) {
       this.policyForm.get("numberOfKiloMeterCovered")?.enable();
       this.policyForm.get("extendedKiloMeterCovered")?.enable();
     }
@@ -771,16 +768,16 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.policyForm.get("extendedKiloMeterCovered")?.disable();
     }
 
-
-    this.setDataForSameCompanyRetentionPolicyTypeTp();
-    this.setDataForSameCompanyRetentionPolicyTypeOd();
-    this.setDataForSameCompanyRetentionPolicyTypeComprehensiveOrUsageBased();
-    this.setDataForOtherCompanyRetentionPolicyTypeTp();
-    this.setDataForOtherCompanyRetentionPolicyTypeOd();
-
     this.commonService.getPolicyTerms(model.PolicyTypeId, model.VehicleClassId, model.PackageTypeId).subscribe((response: IPolicyTermDto[]) => {
       this._policyTerms = response;
     });
+/*     this.setDataForSameCompanyRetentionPolicyTypeTp();
+    this.setDataForSameCompanyRetentionPolicyTypeOd();
+    this.setDataForSameCompanyRetentionPolicyTypeComprehensiveOrUsageBased();
+    this.setDataForOtherCompanyRetentionPolicyTypeTp();
+    this.setDataForOtherCompanyRetentionPolicyTypeOd(); */
+    this.setOdPolicyDetail()
+   
     this.getVehicles();
   }
 
@@ -811,15 +808,16 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   getInsuranceCompanyBranches(): void {
     let insuranceCompanyId: number = 0;
     this.setOdPolicyDetail();
+  
 
     if (this._isOdPolicyEnable) {
       if (this.policyForm.value.odInsuranceCompany == undefined || this.policyForm.value.odInsuranceCompany == "") return;
-      insuranceCompanyId = this.policyForm.value.odInsuranceCompany;
+      insuranceCompanyId = this.PolicyForm.odInsuranceCompany;
     }
     else
-      insuranceCompanyId = this.policyForm.value.tpInsuranceCompany;
+      insuranceCompanyId = this.PolicyForm.tpInsuranceCompany;
 
-    let branchId: number = this.policyForm.value.isAll ? -1 : this._branchId;
+    let branchId: number = this.PolicyForm.isAll ? -1 : this._branchId;
 
     this.commonService.getInsuranceCompanyBranches(Vertical.Motor, insuranceCompanyId, branchId).subscribe((response: IDropDownDto<number>[]) => {
       this._insuranceCompanyBranches = response;
@@ -828,11 +826,12 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     //Call Add-On Rider
     this.getAddOnRiders();
     this.setPreviousInsuranceCompany();
-    this.refreshLastInsuranceCompanies();
   }
 
+  
+
   getVehicles(): void {
-    let vehicleClassId = this._policyTypeId === "2" ? this._policyData?.PolicyTerm.VehicleClass : this.policyTermForm.value.vehicleClass;
+    let vehicleClassId =  this.policyTermForm.value.vehicleClass;
     this.commonService.getVehicles(vehicleClassId).subscribe((response: IDropDownDto<number>[]) => {
       this._vehicles = response;
     });
@@ -846,7 +845,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   getModels(): any {
     let manufacturerId = this.vehicleForm.value.manufacturer;
-    console.log(manufacturerId,"manufacturerId");
+    console.log(manufacturerId, "manufacturerId");
     this.commonService.getModels(manufacturerId).subscribe((response: IDropDownDto<number>[]) => {
       this._models = response;
     });
@@ -900,16 +899,20 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   getAddOnRiders(): void {
-    let tpInsuranceCompany = this.policyForm.value.tpInsuranceCompany;
-    if (tpInsuranceCompany == undefined || tpInsuranceCompany == "") return;
+    let insuranceCompanyId:number =0
+    if(this.PolicyForm.PackageTypeId == PackageType.TP_ONLY){
+      insuranceCompanyId = this.PolicyForm.tpInsuranceCompany
+    }else{
+      insuranceCompanyId = this.PolicyForm.odInsuranceCompany
+    }
 
-    this.commonService.getAddOnRiders(tpInsuranceCompany, Vertical.Motor).subscribe((response: IDropDownDto<number>[]) => {
+    this.commonService.getAddOnRiders(insuranceCompanyId, Vertical.Motor).subscribe((response: IDropDownDto<number>[]) => {
       this._addOnRiders = response;
     });
   }
 
   getAddOnPlanOptions(addOnRiderId: number): void {
-    this.commonService.getAddOnPlanOptions(addOnRiderId, Vertical.Motor,0).subscribe((response: IAddOnPlanOptionDto[]) => {
+    this.commonService.getAddOnPlanOptions(addOnRiderId, Vertical.Motor, 0).subscribe((response: IAddOnPlanOptionDto[]) => {
       response.forEach((value, index) => {
         value.IsDisabled = value.IsPlanAvailable;
         if (value.IsPlanAvailable) {
@@ -967,260 +970,258 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     }
   }
 
-  
+
   createPolicy(): any {
     let menu = this.MenuVertical;
     console.log(this.PolicyTermForm)
-   let model: IMotorPolicyFormDataModel = {
-     PolicyId:this._policyId,
-     BranchId: this._branchId, 
-     VerticalCode: this._verticalDetail.VerticalCode,
-     CoverNoteIssueDateString: this.commonService.getDateInString(this.PolicyForm.coverNoteIssueDate),
-     CoverNoteIssueDateDto: null,
-     CoverNoteNumber: this.PolicyForm.coverNoteNumber,
-     Customer: {
-       CustomerId: this.CustomerForm.customerId,
-       AddressInPolicy: this.CustomerForm.addressInPolicy,
-       Cluster: this.CustomerForm.cluster,
-       ClusterCode: this.CustomerForm.clusterCode,
-       ContactNumber: this.CustomerForm.contactNumber,
-       ContactPerson: this.CustomerForm.contactPerson,
-       CustomerCode: this.CustomerForm.customerCode,
-       CustomerType: this.CustomerForm.customerType,
-       Email: this.CustomerForm.email,
-       Gstin: this.CustomerForm.gstin,
-       Gender: this.CustomerForm.gender,
-       DateOfBirth: this.CustomerForm.dateOfBirth,
-       PassportNumber: this.CustomerForm.passportNumber, 
-       NameInPolicy: this.CustomerForm.nameInPolicy,
-       Pan: this.CustomerForm.pan
-     },
-     ExtendedKiloMeterCovered: this.PolicyForm.extendedKiloMeterCovered,
-     NumberOfKiloMeterCovered: this.PolicyForm.numberOfKiloMeterCovered,
-     TpPolicy: {
-       ExpiryDateString: this.commonService.getDateInString(this.PolicyForm.tpExpiryDate),
-       ExpiryDateDto: null,
-       InsuranceCompany: this.PolicyForm.tpInsuranceCompany,
-       NumberOfYear: this.PolicyForm.tpNumberOfYear,
-       PolicyNumber: this.PolicyForm.policyNumber,
-       StartDateString: this.commonService.getDateInString(this.PolicyForm.tpStartDate),
-       StartDateDto: null
-     },
-     OdPolicy: {
-       StartDateString: this.commonService.getDateInString(this.PolicyForm.odStartDate),
-       StartDateDto: null,
-       ExpiryDateString: this.commonService.getDateInString(this.PolicyForm.odExpiryDate),
-       ExpiryDateDto: null,
-       InsuranceCompany: this.PolicyForm.odInsuranceCompany,
-       NumberOfYear: this.PolicyForm.odNumberOfYear,
-       PolicyNumber: this.PolicyForm.odPolicyNumber
-     },
-     InsuranceBranch: this.PolicyForm.insuranceBranch,
-     FinanceBy: this.PolicyForm.financeBy,
-     PreviousPolicy: {
-       LastPolicyExpiryDateString: this.commonService.getDateInString(this.PolicyForm.lastPolicyExpiryDate),
-       LastPolicyExpiryDateDto: null,
-       LastYearInsuranceCompany: this.PolicyForm.lastYearInsuranceCompany,
-       PreviousPolicyNumber: this.PolicyForm.previousCnPolicyNumber
-     },
-     InspectionData: {
-       InspectionCompany: this.PolicyForm.inspectionCompany,
-       InspectionDateString: this.commonService.getDateInString(this.PolicyForm.inspectionDate),
-       InspectionDateDto: null,
-       InspectionNumber: this.PolicyForm.inspectionNumber,
-       InspectionRemarks: this.PolicyForm.inspectionRemarks,
-       InspectionTime: this.commonService.getDateInString(this.PolicyForm.inspectionTime)
-     },
-     Nomination: {
-       Age: this.NominationForm.age,
-       Name: this.NominationForm.nominationName,
-       Relation: this.NominationForm.relation,
-       GuardianName: this.NominationForm.guardianName
-     },
-     PolicySource: {
-       BusinessDoneBy: this.PolicySourceForm.businessDoneBy,
-       Fos: this.PolicySourceForm.fosName,
-       Pos: this.PolicySourceForm.posName,
-       PolicyRemarks: this.PolicySourceForm.policyRemarks,
-       PosManagedBy: this._posManagedBy != undefined ? this._posManagedBy.Value : 0,
-       Reference: this.PolicySourceForm.reference,
-       TeleCaller: this.PolicySourceForm.teleCaller
-     },
-     PaymentData: this.getPaymentFormData(),
-     PolicyTerm: {
-       AcknowledgementSlipIssueDateString: this.commonService.getDateInString(this.PolicyTermForm.acknowledgementSlipIssueDate),
-       AcknowledgementSlipIssueDateDto: null,
-       AcknowledgementSlipNumber: this.PolicyTermForm.acknowledgementSlipNumber,
-       PackageTypeId:  (this.MenuVertical=='Motor')? this.PolicyTermForm.packageType:0,  
-       PolicyTerm: (this.MenuVertical=='Motor')? this.PolicyTermForm.policyTerm?.Id:0,
-       PolicyType: this.PolicyTermForm.policyType,
-       VehicleClass: this.PolicyTermForm.vehicleClass,
-       PackageType:  (this.MenuVertical=='Motor')? this._packageTypes.filter(f => f.Value == this.PolicyTermForm.packageType)[0]?.Name:'',
-     },
-     Premium: {
-       AddOnRiderOd: this.PremiumForm.addOnRiderOd,
-       CngLpgIdv: this.PremiumForm.cngLpgIdv,
-       CommissionPaidOn: this.PremiumForm.commissionPaidOn,
-       CommissionablePremium: this.PremiumForm.commissionablePremium,
-       ElectricAccessoriesIdv: this.PremiumForm.electricAccessoriesIdv,
-       EndorseGrossPremium: this.PremiumForm.endorseGrossPremium,
-       EndorseOd: this.PremiumForm.endorseOd,
-       EndorseTp: this.PremiumForm.endorseTp,
-       GrossPremium: this.PremiumForm.grossPremium,
-       GstPercentage: this.PremiumForm.gst,
-       GstValue: this.PremiumForm.gstValue,
-       Loading: this.PremiumForm.loading,
-       Ncb: this.PremiumForm.ncb,
-       NonCommissionComponentPremium: this.PremiumForm.nonCommissionComponentPremium,
-       NonElectricAccessoriesIdv: this.PremiumForm.nonElectricAccessoriesIdv,
-       Od: this.PremiumForm.od,
-       PassengerCover: this.PremiumForm.passengerCover,
-       SpecialDiscount: this.PremiumForm.specialDiscount,
-       TotalGrossPremium: this.PremiumForm.totalGrossPremium,
-       TotalIdv: this.PremiumForm.totalIdv,
-       TotalOd: this.PremiumForm.totalOd,
-       TotalTp: this.PremiumForm.totalTp,
-       Tp: this.PremiumForm.tp,
-       VehicleIdv: this.PremiumForm.vehicleIdv,
-       BasicTpGstPercentage:this.PremiumForm.basicTPgstPercent,
-       NetPremium: this.PremiumForm.netpremium
-     },
-     Vehicle: {
-       Cc: this.VehicleForm.cc,
-       ChassisNumber: this.VehicleForm.chassisNumber,
-       EngineNumber: this.VehicleForm.engineNumber,
-       ExShowRoomValue: this.VehicleForm.exShowRoomValue,
-       FuelType: this.VehicleForm.fuelType,
-       Gvw: this.VehicleForm.gvw,
-       Kw: this.VehicleForm.kw,
-       MakeYear: this.VehicleForm.makeYear,
-       Manufacturer: this.VehicleForm.manufacturer,
-       Model: this.VehicleForm.model,
-       RegistrationDateString: this.commonService.getDateInString(this.VehicleForm.dateOfRegistration),
-       RegistrationDateDto: null,
-       RegistrationNumber: this.VehicleForm.registrationNumber,
-       RiskZone: this.VehicleForm.riskZone,
-       RtoZone: this.VehicleForm.rtoZone.Value,
-       Seating: this.VehicleForm.seating,
-       Usage: this.VehicleForm.usage,
-       Varient: this.VehicleForm.varient.VarientId,
-       VehicleSegment: this.VehicleForm.vehicleSegment,
-       IsSpecialRegistrationNumber: this.VehicleForm.isSpecialRegistrationNumber
-     },
-     Document: this._uploadDocuments,
-     AddOnRider: this.getAddOnRiderFormData(),
-     ControlNumber: "", // not save in api
-     CommissionStatus: "",
-     PolicyCancelReason: "",
-     PolicyStatus: "",
-     PreviousControlNumber: "",
-     ReconStatus: "",
-     Vertical: this._verticalDetail.VerticalName,
-     RenewalCounter: this._renewalCounter,
-     PolicyStatusId: 0,
-     CommissionStatusColor: "",
-     DataEntryStatus: "",
-     DataEntryStatusColor: "",
-     PolicyCancelReasonColor: "",
-     PolicyStatusColor: "",
-     ReconStatusColor: "",
-     Condition1: false,
-     Condition2: false,
-     IsBlockAgent: this.PolicyForm.isBlockAgent,
-     IsChangeAgent: this.PolicyForm.isChangeAgent,
-     AddOnSelected: this._addOnRiderArray.join(', '),
-     VerticalId: this._verticalDetail.VerticalId,
-     VerticalSegmentId: this._verticalDetail.VerticalSegmentId
-   }
+    let model: IMotorPolicyFormDataModel = {
+      PolicyId: this._policyId,
+      BranchId: this._branchId,
+      VerticalCode: this._verticalDetail.VerticalCode,
+      CoverNoteIssueDateString: this.commonService.getDateInString(this.PolicyForm.coverNoteIssueDate),
+      CoverNoteIssueDateDto: null,
+      CoverNoteNumber: this.PolicyForm.coverNoteNumber,
+      Customer: {
+        CustomerId: this.CustomerForm.customerId,
+        AddressInPolicy: this.CustomerForm.addressInPolicy,
+        Cluster: this.CustomerForm.cluster,
+        ClusterCode: this.CustomerForm.clusterCode,
+        ContactNumber: this.CustomerForm.contactNumber,
+        ContactPerson: this.CustomerForm.contactPerson,
+        CustomerCode: this.CustomerForm.customerCode,
+        CustomerType: this.CustomerForm.customerType,
+        Email: this.CustomerForm.email,
+        Gstin: this.CustomerForm.gstin,
+        Gender: this.CustomerForm.gender,
+        DateOfBirth: this.CustomerForm.dateOfBirth,
+        PassportNumber: this.CustomerForm.passportNumber,
+        NameInPolicy: this.CustomerForm.nameInPolicy,
+        Pan: this.CustomerForm.pan
+      },
+      ExtendedKiloMeterCovered: this.PolicyForm.extendedKiloMeterCovered,
+      NumberOfKiloMeterCovered: this.PolicyForm.numberOfKiloMeterCovered,
+      TpPolicy: {
+        ExpiryDateString: this.commonService.getDateInString(this.PolicyForm.tpExpiryDate),
+        ExpiryDateDto: null,
+        InsuranceCompany: this.PolicyForm.tpInsuranceCompany,
+        NumberOfYear: this.PolicyForm.tpNumberOfYear,
+        PolicyNumber: this.PolicyForm.policyNumber,
+        StartDateString: this.commonService.getDateInString(this.PolicyForm.tpStartDate),
+        StartDateDto: null
+      },
+      OdPolicy: {
+        StartDateString: this.commonService.getDateInString(this.PolicyForm.odStartDate),
+        StartDateDto: null,
+        ExpiryDateString: this.commonService.getDateInString(this.PolicyForm.odExpiryDate),
+        ExpiryDateDto: null,
+        InsuranceCompany: this.PolicyForm.odInsuranceCompany,
+        NumberOfYear: this.PolicyForm.odNumberOfYear,
+        PolicyNumber: this.PolicyForm.odPolicyNumber
+      },
+      InsuranceBranch: this.PolicyForm.insuranceBranch,
+      FinanceBy: this.PolicyForm.financeBy,
+      PreviousPolicy: {
+        LastPolicyExpiryDateString: this.commonService.getDateInString(this.PolicyForm.lastPolicyExpiryDate),
+        LastPolicyExpiryDateDto: null,
+        LastYearInsuranceCompany: this.PolicyForm.lastYearInsuranceCompany,
+        PreviousPolicyNumber: this.PolicyForm.previousCnPolicyNumber
+      },
+      InspectionData: {
+        InspectionCompany: this.PolicyForm.inspectionCompany,
+        InspectionDateString: this.commonService.getDateInString(this.PolicyForm.inspectionDate),
+        InspectionDateDto: null,
+        InspectionNumber: this.PolicyForm.inspectionNumber,
+        InspectionRemarks: this.PolicyForm.inspectionRemarks,
+        InspectionTime: this.commonService.getDateInString(this.PolicyForm.inspectionTime)
+      },
+      Nomination: {
+        Age: this.NominationForm.age,
+        Name: this.NominationForm.nominationName,
+        Relation: this.NominationForm.relation,
+        GuardianName: this.NominationForm.guardianName
+      },
+      PolicySource: {
+        BusinessDoneBy: this.PolicySourceForm.businessDoneBy,
+        Fos: this.PolicySourceForm.fosName,
+        Pos: this.PolicySourceForm.posName,
+        PolicyRemarks: this.PolicySourceForm.policyRemarks,
+        PosManagedBy: this._posManagedBy != undefined ? this._posManagedBy.Value : 0,
+        Reference: this.PolicySourceForm.reference,
+        TeleCaller: this.PolicySourceForm.teleCaller
+      },
+      PaymentData: this.getPaymentFormData(),
+      PolicyTerm: {
+        AcknowledgementSlipIssueDateString: this.commonService.getDateInString(this.PolicyTermForm.acknowledgementSlipIssueDate),
+        AcknowledgementSlipIssueDateDto: null,
+        AcknowledgementSlipNumber: this.PolicyTermForm.acknowledgementSlipNumber,
+        PackageTypeId: (this.MenuVertical == 'Motor') ? this.PolicyTermForm.packageType : 0,
+        PolicyTerm: (this.MenuVertical == 'Motor') ? this.PolicyTermForm.policyTerm?.Id : 0,
+        PolicyType: this.PolicyTermForm.policyType,
+        VehicleClass: this.PolicyTermForm.vehicleClass,
+        PackageType: (this.MenuVertical == 'Motor') ? this._packageTypes.filter(f => f.Value == this.PolicyTermForm.packageType)[0]?.Name : '',
+      },
+      Premium: {
+        AddOnRiderOd: this.PremiumForm.addOnRiderOd,
+        CngLpgIdv: this.PremiumForm.cngLpgIdv,
+        CommissionPaidOn: this.PremiumForm.commissionPaidOn,
+        CommissionablePremium: this.PremiumForm.commissionablePremium,
+        ElectricAccessoriesIdv: this.PremiumForm.electricAccessoriesIdv,
+        EndorseGrossPremium: this.PremiumForm.endorseGrossPremium,
+        EndorseOd: this.PremiumForm.endorseOd,
+        EndorseTp: this.PremiumForm.endorseTp,
+        GrossPremium: this.PremiumForm.grossPremium,
+        GstPercentage: this.PremiumForm.gst,
+        GstValue: this.PremiumForm.gstValue,
+        Loading: this.PremiumForm.loading,
+        Ncb: this.PremiumForm.ncb,
+        NonCommissionComponentPremium: this.PremiumForm.nonCommissionComponentPremium,
+        NonElectricAccessoriesIdv: this.PremiumForm.nonElectricAccessoriesIdv,
+        Od: this.PremiumForm.od,
+        PassengerCover: this.PremiumForm.passengerCover,
+        SpecialDiscount: this.PremiumForm.specialDiscount,
+        TotalGrossPremium: this.PremiumForm.totalGrossPremium,
+        TotalIdv: this.PremiumForm.totalIdv,
+        TotalOd: this.PremiumForm.totalOd,
+        TotalTp: this.PremiumForm.totalTp,
+        Tp: this.PremiumForm.tp,
+        VehicleIdv: this.PremiumForm.vehicleIdv,
+        BasicTpGstPercentage: this.PremiumForm.basicTPgstPercent,
+        NetPremium: this.PremiumForm.netpremium
+      },
+      Vehicle: {
+        Cc: this.VehicleForm.cc,
+        ChassisNumber: this.VehicleForm.chassisNumber,
+        EngineNumber: this.VehicleForm.engineNumber,
+        ExShowRoomValue: this.VehicleForm.exShowRoomValue,
+        FuelType: this.VehicleForm.fuelType,
+        Gvw: this.VehicleForm.gvw,
+        Kw: this.VehicleForm.kw,
+        MakeYear: this.VehicleForm.makeYear,
+        Manufacturer: this.VehicleForm.manufacturer,
+        Model: this.VehicleForm.model,
+        RegistrationDateString: this.commonService.getDateInString(this.VehicleForm.dateOfRegistration),
+        RegistrationDateDto: null,
+        RegistrationNumber: this.VehicleForm.registrationNumber,
+        RiskZone: this.VehicleForm.riskZone,
+        RtoZone: this.VehicleForm.rtoZone.Value,
+        Seating: this.VehicleForm.seating,
+        Usage: this.VehicleForm.usage,
+        Varient: this.VehicleForm.varient.VarientId,
+        VehicleSegment: this.VehicleForm.vehicleSegment,
+        IsSpecialRegistrationNumber: this.VehicleForm.isSpecialRegistrationNumber
+      },
+      Document: this._uploadDocuments,
+      AddOnRider: this.getAddOnRiderFormData(),
+      ControlNumber: "", // not save in api
+      CommissionStatus: "",
+      PolicyCancelReason: "",
+      PolicyStatus: "",
+      PreviousControlNumber: "",
+      ReconStatus: "",
+      Vertical: this._verticalDetail.VerticalName,
+      RenewalCounter: this._renewalCounter,
+      PolicyStatusId: 0,
+      CommissionStatusColor: "",
+      DataEntryStatus: "",
+      DataEntryStatusColor: "",
+      PolicyCancelReasonColor: "",
+      PolicyStatusColor: "",
+      ReconStatusColor: "",
+      Condition1: false,
+      Condition2: false,
+      IsBlockAgent: this.PolicyForm.isBlockAgent,
+      IsChangeAgent: this.PolicyForm.isChangeAgent,
+      AddOnSelected: this._addOnRiderArray.join(', '),
+      VerticalId: this._verticalDetail.VerticalId,
+      VerticalSegmentId: this._verticalDetail.VerticalSegmentId
+    }
 
-    if(this._policyId==0)
-    { 
-     console.log(model,'model')
-     this.motorService.createPolicy(model).subscribe((response: ICommonDto<any>) => {
-       if (response.IsSuccess) {
-         Swal.fire({
-           icon: 'success',
-           title: 'Done',
-           text: response.Message,
-         }).then((result) => {
-           if (result.isConfirmed) {
-            this.redirectRoute();
-           };
-         })
-       }
-       else {
-         if (response.Response == null) {
-           Swal.fire({
-             icon: 'error',
-             title: 'Sorry',
-             text: response.Message,
-           });
-         }
-         else {
-           if (response.Response.IsError) {
-             Swal.fire({
-               icon: 'error',
-               title: 'Sorry',
-               text: response.Message,
-             });
-           }
-           else {
-             Swal.fire({
-               title: 'Warning',
-               text: response.Message,
-               icon: 'warning',
-               showCancelButton: true,
-               confirmButtonText: 'Yes, Save it!',
-               cancelButtonText: 'Cancel'
-             }).then((result) => {
-               if (result.isConfirmed) {
-                 //this.createPolicyAfterWarning(response);
-                 this.redirectRoute();
-
-               }
-             })
-           }
-         }
-       }
-     });
-   }
-   else
-   {
-     this.motorService.updatePolicy(this._policyId,model).subscribe((response: ICommonDto<any>) => {
-
-       if (response.IsSuccess) {
-         Swal.fire({
-           icon: 'success',
-           title: 'Done',
-           text: response.Message,
-         }).then((result) => {
-          if (result.isConfirmed) {
-            this.redirectRoute();
+    if (this._policyId == 0) {
+      console.log(model, 'model')
+      this.motorService.createPolicy(model).subscribe((response: ICommonDto<any>) => {
+        if (response.IsSuccess) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Done',
+            text: response.Message,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.redirectRoute();
+            };
+          })
+        }
+        else {
+          if (response.Response == null) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Sorry',
+              text: response.Message,
+            });
           }
-        });
-       }
-       else {
-         if (response.Response == null) {
-           Swal.fire({
-             icon: 'error',
-             title: 'Sorry',
-             text: response.Message,
-           });
-         }
-         else {
-           if (response.Response.IsError) {
-             Swal.fire({
-               icon: 'error',
-               title: 'Sorry',
-               text: response.Message,
-             });
-           } 
-         }
-       }
-     });
+          else {
+            if (response.Response.IsError) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Sorry',
+                text: response.Message,
+              });
+            }
+            else {
+              Swal.fire({
+                title: 'Warning',
+                text: response.Message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Save it!',
+                cancelButtonText: 'Cancel'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  //this.createPolicyAfterWarning(response);
+                  this.redirectRoute();
 
-   }
- }
+                }
+              })
+            }
+          }
+        }
+      });
+    }
+    else {
+      this.motorService.updatePolicy(this._policyId, model).subscribe((response: ICommonDto<any>) => {
+
+        if (response.IsSuccess) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Done',
+            text: response.Message,
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.redirectRoute();
+            }
+          });
+        }
+        else {
+          if (response.Response == null) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Sorry',
+              text: response.Message,
+            });
+          }
+          else {
+            if (response.Response.IsError) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Sorry',
+                text: response.Message,
+              });
+            }
+          }
+        }
+      });
+
+    }
+  }
 
   private getPolicyFormData(): any {
     return {
@@ -1231,24 +1232,24 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     };
   }
 
-  setPolicyDetails(policyTerm: IPolicyTermDto): void {
-
+  setPolicyTermDetails(policyTerm: IPolicyTermDto): void {
+    debugger
     if (policyTerm === undefined || policyTerm == null) return;
 
     let tpYear = this._numberOfYears.filter(f => f.Year == policyTerm.TpYear)[0];
     let odYear = this._numberOfYears.filter(f => f.Year == policyTerm.OdYear)[0];
 
     this.policyForm.patchValue({
-      tpNumberOfYear: tpYear.Value,
-      odNumberOfYear: odYear.Value,
+      tpNumberOfYear: tpYear?.Value,
+      odNumberOfYear: odYear?.Value,
       tpStartDate: moment(new Date(2021, 3, 1)),
       odStartDate: moment(new Date(2021, 3, 1)),
-      continutyStartDate : moment(new Date(2021, 3, 1))
+      continutyStartDate: moment(new Date(2021, 3, 1))
     });
 
     if (policyTerm.OdYear > 0) {
       this._isOdPolicyEnable = true;
-      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.odStartDate), odYear.Year).subscribe((response: IDateDto) => {
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.odStartDate), this.PolicyForm.odNumberOfYear).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
           odExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
         });
@@ -1257,21 +1258,23 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     else {
       this._isOdPolicyEnable = false;
     }
-
-    this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), tpYear.Year).subscribe((response: IDateDto) => {
-      this.policyForm.patchValue({
-        tpExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
+    if(tpYear?.Year){
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), this.PolicyForm.tpNumberOfYear).subscribe((response: IDateDto) => {
+        this.policyForm.patchValue({
+          tpExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
+        });
       });
-    });
+    }
 
     this.setDataForSameCompanyRetentionPolicyTypeTp();
     this.setDataForSameCompanyRetentionPolicyTypeOd();
     this.setDataForSameCompanyRetentionPolicyTypeComprehensiveOrUsageBased();
     this.setDataForOtherCompanyRetentionPolicyTypeTp();
     this.setDataForOtherCompanyRetentionPolicyTypeOd();
+    this.getInsuranceCompanyBranches();
   }
 
-  
+
 
   setExpiryDate(policy: string) {
     let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
@@ -1284,7 +1287,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       || policyTerm == null) return;
 
     this.setOdPolicyDetail();
-
     if (policy === "tp") {
 
       if (this.policyTermForm.value.policyType === PolicyType.SameCompanyRetention || this.policyTermForm.value.policyType === PolicyType.OtherCompanyRetention) {
@@ -1317,14 +1319,14 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
           return;
         }
       }
-      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), policyTerm.TpYear).subscribe((response: IDateDto) => {
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), this.policyForm.value.tpNumberOfYear).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
           tpExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
         });
       });
     }
 
-    if (policy === "od" || this._isDisableOdPolicyDetails) {
+    if (policy === "od" ) {
 
       if (this.policyTermForm.value.policyType === PolicyType.SameCompanyRetention || this.policyTermForm.value.policyType === PolicyType.OtherCompanyRetention) {
         let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.OdPolicy.ExpiryDateDto as IDateDto) as Date;
@@ -1342,7 +1344,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
           return;
         }
 
-        if (startDate != null && !this.isDateValid(moment(startDate), this.policyForm.value.odStartDate)) {
+        if (startDate != null && !this.isDateValid(moment(startDate), this.policyForm.value.odNumberOfYear)) {
           this.policyForm.patchValue({
             odStartDate: undefined
           });
@@ -1355,7 +1357,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         }
       }
 
-      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.odStartDate), policyTerm.OdYear).subscribe((response: IDateDto) => {
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.odStartDate), this.policyForm.value.odNumberOfYear).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
           odExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
         });
@@ -1384,14 +1386,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     });
   }
 
-  getSetCompleteVehicleDetails(value: IDropDownDto<number>) { 
-    if(value!=undefined)
-    {
+  getSetCompleteVehicleDetails(value: IDropDownDto<number>) {
+    if (value != undefined) {
       this.vehicleForm.patchValue({ vehicle: value.Name });
       this.commonService.getVehicleDetails(value.Value).subscribe((response: IVehicleDto) => {
         this.commonService.getModels(response.ManufacturerId).subscribe((modelResponse: IDropDownDto<number>[]) => {
           this._models = modelResponse;
-          let vehicleClassId =  this.policyTermForm.value.vehicleClass;
+          let vehicleClassId = this.policyTermForm.value.vehicleClass;
           this.commonService.getVarients(response.ManufacturerId, response.ModelId, vehicleClassId).subscribe((varientResponse: IVarientDto[]) => {
             this._varients = varientResponse;
             let varient: IVarientDto = varientResponse.filter(f => f.VarientId == response.VarientId)[0];
@@ -1408,15 +1409,15 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
             });
           });
         });
-      }); 
-    } 
+      });
+    }
   }
 
 
   createPolicyAfterWarning(response: ICommonDto<any>) {
 
     let model: IMotorPolicyFormDataModel = {
-      PolicyId:this._policyId,
+      PolicyId: this._policyId,
       BranchId: this._branchId,
       VerticalCode: this._verticalDetail.VerticalCode,
       CoverNoteIssueDateString: this.commonService.getDateInString(this.PolicyForm.coverNoteIssueDate),
@@ -1435,7 +1436,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         Gstin: this.CustomerForm.gstin,
         Gender: this.CustomerForm.gender,
         DateOfBirth: this.CustomerForm.dateOfBirth,
-        PassportNumber: this.CustomerForm.passportNumber, 
+        PassportNumber: this.CustomerForm.passportNumber,
         NameInPolicy: this.CustomerForm.nameInPolicy,
         Pan: this.CustomerForm.pan
       },
@@ -1526,7 +1527,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         TotalTp: this.PremiumForm.totalTp,
         Tp: this.PremiumForm.tp,
         VehicleIdv: this.PremiumForm.vehicleIdv,
-        BasicTpGstPercentage:this.PremiumForm.basicTPgstPercent,
+        BasicTpGstPercentage: this.PremiumForm.basicTPgstPercent,
         NetPremium: this.PremiumForm.netpremium
       },
       Vehicle: {
@@ -1886,22 +1887,22 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     let gstValue: any = this.premiumForm.controls.gstValue.value;
     let gst: any = this.premiumForm.controls.gst.value;
     let basicTPgstPercent: any = this.premiumForm.controls.basicTPgstPercent.value;
-    let endroseTp :any =  this.premiumForm.controls.endorseTp.value;
-    let endorseOd :any =  this.premiumForm.controls.endorseOd.value;
+    let endroseTp: any = this.premiumForm.controls.endorseTp.value;
+    let endorseOd: any = this.premiumForm.controls.endorseOd.value;
 
-    let sum = parseInt(od == "" ? 0 : od) + parseInt(addOnRiderOd == "" ? 0 : addOnRiderOd) + 
-      parseInt(endorseOd == "" ? 0 : endorseOd)+
+    let sum = parseInt(od == "" ? 0 : od) + parseInt(addOnRiderOd == "" ? 0 : addOnRiderOd) +
+      parseInt(endorseOd == "" ? 0 : endorseOd) +
       + parseInt(endroseTp == "" ? 0 : endroseTp) + parseInt(passengerCover == "" ? 0 : passengerCover)
       + parseInt(nonCommissionComponentPremium == "" ? 0 : nonCommissionComponentPremium);
 
-    let sum2 =    parseInt(basictp == "" ? 0 : basictp) 
+    let sum2 = parseInt(basictp == "" ? 0 : basictp)
     let sum2gst = (basicTPgstPercent / 100) * sum2;
     gstValue = ((gst / 100) * sum);
     let gstFinalValue = gstValue + sum2gst
     this.premiumForm.patchValue({ gstValue: gstFinalValue.toFixed(2) });
     this.calculateNetPremium();
     // Calculating gross premium after updating net
-    let netpremium: any = this.premiumForm.controls.netpremium.value;
+    let netpremium: any = this.premiumForm.controls.netpremium.value || 0;
     let grossPremiumAmt = parseInt(gstFinalValue == "" ? 0 : gstFinalValue) + parseInt(netpremium);
     this.premiumForm.patchValue({ grossPremium: grossPremiumAmt.toFixed(2) });
     this.calculateTotalGrossPremium();
@@ -1929,27 +1930,45 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       gstin: response.Gstin,
       gender: response.Gender,
       dateOfBirth: response.DateOfBirth,
-      passportNumber: response.PassportNumber, 
+      passportNumber: response.PassportNumber,
       customerId: response.CustomerId
     });
   }
 
   getMotorPolicyById(policyId: number) {
     this.motorService.getMotorPolicyById(policyId).subscribe((response: IMotorPolicyFormDataModel) => {
-       
+
       this._policyData = response;
       this.setMotorPolicyData(response);
     });
   }
 
+
   setMotorPolicyData(response: IMotorPolicyFormDataModel): void {
 
-    if (this._type == 6)
-      this._policyTypes = (<IDropDownDto<number>[]>this._policyTypes).filter(f => f.Value == response.PolicyTerm.PolicyType);
+    // if (this._type == 6)
+    //    this._policyTypes = (<IDropDownDto<number>[]>this._policyTypes).filter(f => f.Value == response.PolicyTerm.PolicyType);
+    this.setCompanyInsuranceBranch(response)
+    this.setCustomerDetail(<ICustomerShortDetailDto>{
+      AddressInPolicy: response.Customer.AddressInPolicy,
+      Cluster: response.Customer.Cluster,
+      ClusterCode: response.Customer.ClusterCode,
+      ContactNumber: response.Customer.ContactNumber,
+      ContactPerson: response.Customer.ContactPerson,
+      CustomerCode: response.Customer.CustomerCode,
+      CustomerId: response.Customer.CustomerId,
+      CustomerType: response.Customer.CustomerType,
+      Email: response.Customer.Email,
+      Gstin: response.Customer.Gstin,
+      Gender: response.Customer.Gender,
+      DateOfBirth: response.Customer.DateOfBirth,
+      PassportNumber: response.Customer.PassportNumber,
+      NameInPolicy: response.Customer.NameInPolicy,
+      Pan: response.Customer.Pan,
+    });
 
-    if (this._policyTypeId !== "2") {
-      this._controlNumber = response.ControlNumber;
-
+    if (this._type == SearchPolicyType.Motor_New || this._type == SearchPolicyType.Motor_rollover) {
+      this._controlNumber = response.ControlNumber
       this.policyTermForm.patchValue({
         policyType: response.PolicyTerm.PolicyType,
         vehicleClass: response.PolicyTerm.VehicleClass,
@@ -1958,6 +1977,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         acknowledgementSlipNumber: response.PolicyTerm.AcknowledgementSlipNumber,
         acknowledgementSlipIssueDate: this.commonService.getDateFromIDateDto(response.PolicyTerm.AcknowledgementSlipIssueDateDto as IDateDto)
       });
+
       this.policyForm.patchValue({
         tpInsuranceCompany: response.TpPolicy.InsuranceCompany,
         coverNoteNumber: response.CoverNoteNumber,
@@ -1966,7 +1986,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         tpStartDate: this.commonService.getDateFromIDateDto(response.TpPolicy.StartDateDto as IDateDto),
         tpNumberOfYear: response.TpPolicy.NumberOfYear,
         tpExpiryDate: this.commonService.getDateFromIDateDto(response.TpPolicy.ExpiryDateDto as IDateDto),
-        insuranceBranch: response.InsuranceBranch,
+//        insuranceBranch: response.InsuranceBranch,
         numberOfKiloMeterCovered: response.NumberOfKiloMeterCovered,
         extendedKiloMeterCovered: response.ExtendedKiloMeterCovered,
         financeBy: response.FinanceBy,
@@ -1975,13 +1995,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         odStartDate: this.commonService.getDateFromIDateDto(response.OdPolicy.StartDateDto as IDateDto),
         odNumberOfYear: response.OdPolicy.NumberOfYear,
         odExpiryDate: this.commonService.getDateFromIDateDto(response.OdPolicy.ExpiryDateDto as IDateDto),
-      
       });
-
-      this.commonService.getAddOnRiders(response.TpPolicy.InsuranceCompany, Vertical.Motor).subscribe((response: IDropDownDto<number>[]) => {
-        this._addOnRiders = response;
-      });
-
       this.premiumForm.patchValue({
         vehicleIdv: response.Premium.VehicleIdv,
         electricAccessoriesIdv: response.Premium.ElectricAccessoriesIdv,
@@ -2007,8 +2021,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         ncb: response.Premium.Ncb,
         commissionPaidOn: response.Premium.CommissionPaidOn,
         commissionablePremium: response.Premium.CommissionablePremium,
-        basicTPgstPercent:response.Premium.BasicTpGstPercentage,
-        netpremium:response.Premium.NetPremium
+        basicTPgstPercent: response.Premium.BasicTpGstPercentage,
+        netpremium: response.Premium.NetPremium
       });
 
       this.policySourceForm.patchValue({
@@ -2021,81 +2035,18 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         policyRemarks: response.PolicySource.PolicyRemarks
       });
       this.businessDoneBy();
-    }
 
-    if (this._policyTypeId === "2" || this._policyTypeId == "3") {
-      this._previousControlNumber = response.ControlNumber;
-      this._controlNumber = "";
-      this._renewalCounter = response.RenewalCounter + 1;
-      this.policyForm.patchValue({
-        lastYearInsuranceCompany: this.policyTermForm.value.packageType === 1 ? response.TpPolicy.InsuranceCompany : response.OdPolicy.InsuranceCompany,
-        previousCnPolicyNumber: this.policyTermForm.value.packageType === 1 ? response.TpPolicy.PolicyNumber : response.OdPolicy.PolicyNumber,
-        lastPolicyExpiryDate: this.policyTermForm.value.packageType === 1 ? this.commonService.getDateFromIDateDto(response.TpPolicy.ExpiryDateDto as IDateDto)
-          : this.commonService.getDateFromIDateDto(response.OdPolicy.ExpiryDateDto as IDateDto),
-        isBlockAgent: false,
-        isChangeAgent: false,
-      });
-
-      this.policyForm.get("isBlockAgent")?.disable();
-      this.policyForm.get("isChangeAgent")?.disable();
-    }
-
-    this.setCustomerDetail(<ICustomerShortDetailDto>{
-      AddressInPolicy: response.Customer.AddressInPolicy,
-      Cluster: response.Customer.Cluster,
-      ClusterCode: response.Customer.ClusterCode,
-      ContactNumber: response.Customer.ContactNumber,
-      ContactPerson: response.Customer.ContactPerson,
-      CustomerCode: response.Customer.CustomerCode,
-      CustomerId: response.Customer.CustomerId,
-      CustomerType: response.Customer.CustomerType,
-      Email: response.Customer.Email,
-      Gstin: response.Customer.Gstin,
-      Gender: response.Customer.Gender,
-      DateOfBirth: response.Customer.DateOfBirth,
-      PassportNumber: response.Customer.PassportNumber,
-
-      NameInPolicy: response.Customer.NameInPolicy,
-      Pan: response.Customer.Pan,
-    });
-
-    this.nominationForm.patchValue({
-      nominationName: response.Nomination.Name,
-      relation: response.Nomination.Relation,
-      age: response.Nomination.Age,
-      guardianName: response.Nomination.GuardianName
-    });
-
-    this.commonService.getPolicyTerms(response.PolicyTerm.PolicyType, response.PolicyTerm.VehicleClass, response.PolicyTerm.PackageTypeId).subscribe((responsePolicyTerms: IPolicyTermDto[]) => {
-      this._policyTerms = responsePolicyTerms;
-      let policyTerm = responsePolicyTerms.filter(f => f.Id == response.PolicyTerm.PolicyTerm)[0]
-      this.policyTermForm.patchValue({
-        policyTerm: policyTerm
-      });
-
-     
-      this.commonService.getVehicles(response.PolicyTerm.VehicleClass).subscribe((responseVehicle: IDropDownDto<number>[]) => {
-        this._vehicles = responseVehicle;
-        this.getSetCompleteVehicleDetails(this._vehicles.filter(f => f.Value == response.Vehicle.Varient)[0]);
-        this.vehicleForm.patchValue({
-          registrationNumber: response.Vehicle.RegistrationNumber,
-          engineNumber: response.Vehicle.EngineNumber,
-          chassisNumber: response.Vehicle.ChassisNumber,
-          vehicleSegment: response.Vehicle.VehicleSegment,
-          rtoZone: this._rtoZones.filter(f => f.Value == response.Vehicle.RtoZone)[0],
-          riskZone: response.Vehicle.RiskZone,
-          makeYear: response.Vehicle.MakeYear,
-          dateOfRegistration: this.commonService.getDateFromIDateDto(response.Vehicle.RegistrationDateDto as IDateDto),
-          usage: response.Vehicle.Usage,
-          IsSpecialRegistrationNumber :  response.Vehicle.IsSpecialRegistrationNumber
+      this.commonService.getPolicyTerms(response.PolicyTerm.PolicyType, response.PolicyTerm.VehicleClass, response.PolicyTerm.PackageTypeId).subscribe((responsePolicyTerms: IPolicyTermDto[]) => {
+        this._policyTerms = responsePolicyTerms;
+        let policyTerm = responsePolicyTerms.filter(f => f.Id == response.PolicyTerm.PolicyTerm)[0]
+        this.policyTermForm.patchValue({
+          policyTerm: policyTerm
         });
       });
-      this.vehicleForm.patchValue({isSpecialRegistrationNumber :response.Vehicle.IsSpecialRegistrationNumber})
 
-    });
-
+       //Updating add on rider value
       this._addOnRiderModel.AddOnRiderId = response?.AddOnRider?.AddOnRiderId;
-      this.commonService.getAddOnPlanOptions(this._addOnRiderModel.AddOnRiderId, Vertical.Motor,0).subscribe((addOnResponse: IAddOnPlanOptionDto[]) => {
+      this.commonService.getAddOnPlanOptions(this._addOnRiderModel.AddOnRiderId, Vertical.Motor, 0).subscribe((addOnResponse: IAddOnPlanOptionDto[]) => {
         addOnResponse.forEach((value, index) => {
           value.IsDisabled = value.IsPlanAvailable;
           if (value.IsPlanAvailable) {
@@ -2105,9 +2056,53 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         this._addOnPlanOptions = addOnResponse;
         this.UpdateAddonPlanValue(response)
       });
-    
+    }
+    //For previous value
+    if (this._type == SearchPolicyType.Motor_rollover || this._type == SearchPolicyType.Motor_Renew) {
+      this.policyForm.patchValue({
+        lastYearInsuranceCompany: this.policyTermForm.value.packageType == PackageType.TP_ONLY ? response.TpPolicy.InsuranceCompany : response.OdPolicy.InsuranceCompany,
+        previousCnPolicyNumber: this.policyTermForm.value.packageType == PackageType.TP_ONLY ? response.TpPolicy.PolicyNumber : response.OdPolicy.PolicyNumber,
+        lastPolicyExpiryDate: this.policyTermForm.value.packageType == PackageType.TP_ONLY ? this.commonService.getDateFromIDateDto(response.TpPolicy?.ExpiryDateDto as IDateDto)
+          : this.commonService.getDateFromIDateDto(response.OdPolicy.ExpiryDateDto as IDateDto),
+        isBlockAgent: false,
+        isChangeAgent: false,
+      });
+    }
 
-    if(this._type !== PolicyType.SameCompanyRetention){
+    if (this._type == SearchPolicyType.Motor_Renew) {
+      this._previousControlNumber = response.ControlNumber;
+      this._controlNumber = '';
+      this._renewalCounter = response.RenewalCounter + 1;
+      this.policyTermForm.patchValue({
+        vehicleClass: response.PolicyTerm.VehicleClass,
+      });
+    }
+
+    this.nominationForm.patchValue({
+      nominationName: response.Nomination.Name,
+      relation: response.Nomination.Relation,
+      age: response.Nomination.Age,
+      guardianName: response.Nomination.GuardianName
+    });
+
+    this.commonService.getVehicles(response.PolicyTerm.VehicleClass).subscribe((responseVehicle: IDropDownDto<number>[]) => {
+      this._vehicles = responseVehicle;
+      this.getSetCompleteVehicleDetails(this._vehicles.filter(f => f.Value == response.Vehicle.Varient)[0]);
+      this.vehicleForm.patchValue({
+        registrationNumber: response.Vehicle.RegistrationNumber,
+        engineNumber: response.Vehicle.EngineNumber,
+        chassisNumber: response.Vehicle.ChassisNumber,
+        vehicleSegment: response.Vehicle.VehicleSegment,
+        rtoZone: this._rtoZones.filter(f => f.Value == response.Vehicle.RtoZone)[0],
+        riskZone: response.Vehicle.RiskZone,
+        makeYear: response.Vehicle.MakeYear,
+        dateOfRegistration: this.commonService.getDateFromIDateDto(response.Vehicle.RegistrationDateDto as IDateDto),
+        usage: response.Vehicle.Usage,
+        IsSpecialRegistrationNumber: response.Vehicle.IsSpecialRegistrationNumber
+      });
+    });
+
+    if (this._type !== PolicyType.SameCompanyRetention) {
       for (var i = 0; i < response.PaymentData.length; i++) {
         if (i == 0) {
           this.paymentForm.patchValue({
@@ -2136,20 +2131,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
             bank3: response.PaymentData[i].Bank
           });
         }
-      }      
+      }
 
-       //Calling insurance company branch api location
-      this.getInsuranceCompanyBranches();
-      this.policyForm.patchValue({
-        insuranceBranch: response.InsuranceBranch,
-        previousCNPolicyNumber : response.PreviousPolicy.PreviousPolicyNumber,  
-        lastYearInsuranceCompany: response.PreviousPolicy.LastYearInsuranceCompany,
-        lastPolicyExpiryDate: this.commonService.getDateFromIDateDto(response.PreviousPolicy.LastPolicyExpiryDateDto as IDateDto),
-      });
-      console.log(this.policyForm)
     }
-   
-    this.setvalues();  
+      //Calling insurance company branch api location
+    
+    this.setPolicyDetails()
+    this.setvalues();
   }
 
   getTotalCost() {
@@ -2165,7 +2153,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   searchCustomer() {
-    this.router.navigate(["/master/customer/"+SearchPolicyType.Motor_New+"/"+Vertical.Motor+""]);
+    this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_New + "/" + Vertical.Motor + ""]);
     // this.router.navigate(["/master/customer", 1]);
   }
 
@@ -2173,8 +2161,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
     let fosNameId: any = this.policySourceForm.controls.fosName.value;
     let posNameId: any = this.policySourceForm.controls.posName.value;
-     
-     
+
+
 
     if (fosNameId > 0 && posNameId > 0) {
       this.policySourceForm.patchValue({
@@ -2248,9 +2236,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   setPreviousInsuranceCompany() {
-    if (this.policyTermForm.value.policyType === PolicyType.Rollover && !this._disableFields && (this.policyForm.value.isChangeAgent || this.policyForm.value.isBlockAgent)) {
+    if (this.policyTermForm.value.policyType == PolicyType.Rollover || this.policyTermForm.value.policyType == PolicyType.Renewal) {
       this._lastInsuranceCompanies = this._insuranceCompanies;
-      if (this.policyTermForm.value.packageType === 1) {
+      if (this.policyTermForm.value.packageType == PackageType.TP_ONLY) {
         this.policyForm.patchValue({
           lastYearInsuranceCompany: this.policyForm.value.tpInsuranceCompany
         });
@@ -2263,9 +2251,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     }
     else {
       this.refreshLastInsuranceCompanies();
-      this.policyForm.patchValue({
+    /*   this.policyForm.patchValue({
         lastYearInsuranceCompany: undefined
-      });
+      }); */
     }
 
     if (this._policyTypeId === "2") {
@@ -2294,7 +2282,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   setDataForSameCompanyRetentionPolicyTypeTp() {
-    if (this.policyTermForm.value.policyType === PolicyType.SameCompanyRetention && this.policyTermForm.value.packageType === 1) {
+    if (this.policyTermForm.value.policyType === PolicyType.SameCompanyRetention && this.policyTermForm.value.packageType === PackageType.TP_ONLY) {
 
       let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto) as Date;
 
@@ -2310,12 +2298,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
       this.policyForm.patchValue({
         tpInsuranceCompany: this._policyData?.TpPolicy.InsuranceCompany,
-        tpStartDate: moment(startDate)
+        tpStartDate: moment(startDate),
+        insuranceCompanyBranches: this._policyData?.TpPolicy
       });
 
       this.policyForm.get("tpInsuranceCompany")?.disable();
 
-      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), policyTerm.TpYear).subscribe((response: IDateDto) => {
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), policyTerm?.TpYear).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
           tpExpiryDate: new Date(`${response.Year}-${response.Month}-${response.Day}`)
         });
@@ -2327,24 +2316,23 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   setDataForSameCompanyRetentionPolicyTypeOd() {
-    if (this.policyTermForm.value.policyType === PolicyType.SameCompanyRetention && this.policyTermForm.value.packageType === 2) {
+    if (this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention && this.policyTermForm.value.packageType == PackageType.OD_ONLY) {
       let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
 
-      if (policyTerm === undefined || policyTerm == null) return;
-
+    // if (policyTerm === undefined || policyTerm == null) return;
       this.policyForm.patchValue({
-        tpInsuranceCompany: this._policyData?.TpPolicy.InsuranceCompany,
-        policyNumber: this._policyData?.TpPolicy.PolicyNumber,
-        tpStartDate: this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.StartDateDto as IDateDto),
-        tpNumberOfYear: this._policyData?.TpPolicy.NumberOfYear,
-        tpExpiryDate: this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto)
+        tpInsuranceCompany: this.PolicyForm?.TpPolicy.InsuranceCompany,
+        policyNumber: this.PolicyForm?.TpPolicy.PolicyNumber,
+        tpStartDate: this.commonService.getDateFromIDateDto(this.PolicyForm?.TpPolicy.StartDateDto as IDateDto),
+        tpNumberOfYear: this.PolicyForm?.TpPolicy.NumberOfYear,
+        tpExpiryDate: this.commonService.getDateFromIDateDto(this.PolicyForm?.TpPolicy.ExpiryDateDto as IDateDto)
       });
-
+      console.log(this.policyForm)
       this.policyForm.get("tpInsuranceCompany")?.disable();
       this.policyForm.get("policyNumber")?.disable();
       this.policyForm.get("tpStartDate")?.disable();
 
-      let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.OdPolicy.ExpiryDateDto as IDateDto) as Date;
+      let startDate: Date = this.commonService.getDateFromIDateDto(this.PolicyForm?.OdPolicy.ExpiryDateDto as IDateDto) as Date;
 
       try {
         startDate = new Date(startDate.setDate(startDate.getDate() + 1));
@@ -2353,7 +2341,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       }
 
       this.policyForm.patchValue({
-        odInsuranceCompany: this._policyData?.OdPolicy.InsuranceCompany,
+        odInsuranceCompany: this.PolicyForm?.OdPolicy.InsuranceCompany,
         odStartDate: moment(startDate)
       });
 
@@ -2385,16 +2373,17 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
       let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
 
-      if (policyTerm === undefined || policyTerm == null) return;
+     // if (policyTerm === undefined || policyTerm == null) return;
 
       this.policyForm.patchValue({
         tpInsuranceCompany: this._policyData?.TpPolicy.InsuranceCompany,
-        tpStartDate: moment(startDate)
+        tpStartDate: moment(startDate),
+        insuranceBranch : this._policyData?.InsuranceBranch
       });
-
+      
       this.policyForm.get("tpInsuranceCompany")?.disable();
 
-      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), policyTerm.TpYear).subscribe((response: IDateDto) => {
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), policyTerm?.TpYear).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
           tpExpiryDate: new Date(`${response.Year}-${response.Month}-${response.Day}`)
         });
@@ -2418,7 +2407,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       }
       let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
 
-      if (policyTerm === undefined || policyTerm == null) return;
+     // if (policyTerm === undefined || policyTerm == null) return;
 
       this.policyForm.patchValue({
         tpInsuranceCompany: this._policyData?.TpPolicy.InsuranceCompany,
@@ -2426,7 +2415,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         tpStartDate: moment(startDate)
       });
 
-      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), policyTerm.TpYear).subscribe((response: IDateDto) => {
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), policyTerm?.TpYear).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
           tpExpiryDate: new Date(`${response.Year}-${response.Month}-${response.Day}`)
         });
@@ -2442,7 +2431,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
       let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
 
-      if (policyTerm === undefined || policyTerm == null) return;
+      //if (policyTerm === undefined || policyTerm == null) return;
 
       this.policyForm.patchValue({
         tpInsuranceCompany: this._policyData?.TpPolicy.InsuranceCompany,
@@ -2503,7 +2492,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         tpStartDate: moment(startDate)
       });
 
-      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), policyTerm.TpYear).subscribe((response: IDateDto) => {
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), policyTerm?.TpYear).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
           tpExpiryDate: new Date(`${response.Year}-${response.Month}-${response.Day}`)
         });
@@ -2522,7 +2511,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   setOdPolicyDetail() {
-    if (this._isDisableOdPolicyDetails) {
+    if(this.PolicyTermForm.packageType ==  PackageType.COMPREHENSIVE){
       this.policyForm.patchValue({
         odInsuranceCompany: this.policyForm.value.tpInsuranceCompany,
         odPolicyNumber: this.policyForm.value.policyNumber,
@@ -2617,7 +2606,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     if (this.policyTermForm.value.policyType == undefined ||
       this.policyTermForm.value.packageType == undefined) return;
 
-    if (this.policyTermForm.value.policyType == PolicyType.Rollover && this.policyTermForm.value.packageType == 1) {
+    if (this.policyTermForm.value.policyType == PolicyType.Rollover && this.policyTermForm.value.packageType == PolicyType.New) {
       this._lastInsuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this.policyForm.value.tpInsuranceCompany);
     } else {
       this._lastInsuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this.policyForm.value.odInsuranceCompany);
@@ -2653,19 +2642,19 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     return value ? this._insuranceCompanies.filter(f => f.Value == value)[0].Name : '';
   }
 
-  getInsuranceCompanyLastName(value: number): string { 
+  getInsuranceCompanyLastName(value: number): string {
     return value ? this._lastInsuranceCompanies.filter(f => f.Value == value)[0]?.Name : '';
   }
 
-  getInsuranceCompanyOd(value: number): string { 
+  getInsuranceCompanyOd(value: number): string {
     return value ? this._odInsuranceCompanies.filter(f => f.Value == value)[0].Name : '';
   }
 
-  getManufacturerForBind(value: number): string { 
+  getManufacturerForBind(value: number): string {
     return value ? this._manufacturers.filter(f => f.Value == value)[0].Name : '';
   }
 
-  getPosForBind(value: number): string { 
+  getPosForBind(value: number): string {
     return value ? this._posDatas.filter(f => f.Value == value)[0].Name : '';
   }
 
@@ -2710,79 +2699,134 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     });
   }
 
-  getProduct(){
+  getProduct() {
     this.commonService.getProduct().subscribe((response: any) => {
       this._products = response;
     });
   }
 
-  getPlan(){
+  getPlan() {
     this._selectedProductId = this.productPlanForm.value.product;
     this.commonService.getPlan(this._selectedProductId).subscribe((response: any) => {
       this._plans = response;
     });
   }
 
-  getPlanType(){
+  getPlanType() {
     this.commonService.getPlanType().subscribe((response: any) => {
       this._planTypes = response;
     });
   }
 
-  getPortability(){
+  getPortability() {
     this.commonService.getPortability().subscribe((response: any) => {
       this._portability = response;
     });
   }
 
-  calculateChanges()
-  {
+  calculateChanges() {
 
   }
 
-  calculateNetPremium(){ 
-    let sm= parseInt(this.premiumForm.controls.nonCommissionComponentPremium.value) +  parseInt(this.premiumForm.controls.totalTp.value)  +  parseInt(this.premiumForm.controls.totalOd.value);
+  calculateNetPremium() {
+    let sm = parseInt(this.premiumForm.controls.nonCommissionComponentPremium.value) + parseInt(this.premiumForm.controls.totalTp.value) + parseInt(this.premiumForm.controls.totalOd.value);
     this.premiumForm.patchValue({ netpremium: sm });
-   
+
   }
 
-  verticalData:any;
+  verticalData: any;
   routeWithEnum(enumName: string) {
 
-    if(this.MenuVertical=='Motor')
-    {
+    if (this.MenuVertical == 'Motor') {
       this.verticalData = Vertical.Motor;
     }
-    else if(this.MenuVertical=='Health')
-    {
-      this.verticalData = Vertical.Health; 
+    else if (this.MenuVertical == 'Health') {
+      this.verticalData = Vertical.Health;
     }
   }
 
 
- UpdateAddonPlanValue(response:any){
+  UpdateAddonPlanValue(response: any) {
     this._addOnPlanOptions.forEach(f => {
-      let addonPlanOptionIdIndex =  response?.AddOnRider?.AddOnRiderOptionId.findIndex((x: number)=>x == f.AddonPlanOptionId);
-      if(addonPlanOptionIdIndex >=0){
-        let addOnValue =  response?.AddOnRider?.AddOnValue[addonPlanOptionIdIndex].toString();
+      let addonPlanOptionIdIndex = response?.AddOnRider?.AddOnRiderOptionId.findIndex((x: number) => x == f.AddonPlanOptionId);
+      if (addonPlanOptionIdIndex >= 0) {
+        let addOnValue = response?.AddOnRider?.AddOnValue[addonPlanOptionIdIndex].toString();
         f.AddonValue = addOnValue;
         f.IsPlanAvailable = true;
         this._addOnRiderArray.push(f.AddonPlanOptionName);
 
       }
     });
- }
+  }
 
- redirectRoute(){
-    if(this.MenuVertical=='Motor')
-    {
+  redirectRoute() {
+    if (this.MenuVertical == 'Motor') {
       this.router.navigate(["../pms/motor/motor-policy-management"]);
     }
-    else if(this.MenuVertical=='Health')
-    {
-      this.verticalData = Vertical.Health; 
+    else if (this.MenuVertical == 'Health') {
+      this.verticalData = Vertical.Health;
     }
- }
+  }
+
+  getCustomerDataByClusterId(clusterId: number) {
+    this.customerService.getCustomerDataByClusterId(clusterId).subscribe((response: ICustomerShortDetailDto) => {
+      this.setCustomerDetail(response);
+    });
+  }
+
+  
+  setPolicyDetails(): void {
+    let model = this.getPolicyFormData();
+    if (model.PackageTypeId === PackageType.COMPREHENSIVE|| model.PackageTypeId === PackageType.USAGE_BASE) {
+      this._isDisableOdPolicyDetails = true;
+      this._isOdPolicyEnable = true;
+      this._isAddOnRiderEnable = true;
+    }
+    else if (model.PackageTypeId === PackageType.TP_ONLY) {
+      this._isDisableOdPolicyDetails = false;
+      this._isOdPolicyEnable = false;
+      this._isAddOnRiderEnable = false;
+    }else if(model.PackageTypeId === PackageType.OD_ONLY){
+      this._isDisableOdPolicyDetails = false;
+      this._isOdPolicyEnable = true;
+      this._isAddOnRiderEnable = true;
+    }
+
+    if (model.PackageTypeId ===PackageType.USAGE_BASE) {
+      this.policyForm.get("numberOfKiloMeterCovered")?.enable();
+      this.policyForm.get("extendedKiloMeterCovered")?.enable();
+    }
+    else {
+      this.policyForm.get("numberOfKiloMeterCovered")?.disable();
+      this.policyForm.get("extendedKiloMeterCovered")?.disable();
+    }
+
+
+    this.setDataForSameCompanyRetentionPolicyTypeTp();
+    this.setDataForSameCompanyRetentionPolicyTypeOd();
+    this.setDataForSameCompanyRetentionPolicyTypeComprehensiveOrUsageBased();
+    this.setDataForOtherCompanyRetentionPolicyTypeTp();
+    this.setDataForOtherCompanyRetentionPolicyTypeOd();
+    this.setOdPolicyDetail()
+    this.setPreviousInsuranceCompany();
+  }
+
+  setCompanyInsuranceBranch(response:any){
+    let insuranceCompanyId:number =0
+    let insuranceBranch = response.InsuranceBranch;
+    if(response.PolicyTerm.PackageTypeId == PackageType.TP_ONLY){
+      insuranceCompanyId = response.TpPolicy.InsuranceCompany
+    }else{
+      insuranceCompanyId = response.OdPolicy.InsuranceCompany
+    }
+    this.commonService.getInsuranceCompanyBranches(Vertical.Motor, insuranceCompanyId, insuranceBranch).subscribe((data: IDropDownDto<number>[]) => {
+      this._insuranceCompanyBranches = data;
+      this.policyForm.patchValue({
+        insuranceBranch: response.InsuranceBranch,
+      });
+
+    });
+  }
 
 }
 

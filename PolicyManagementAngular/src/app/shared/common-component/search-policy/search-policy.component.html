@@ -267,7 +267,7 @@
         <div [ngClass]="_showAll ? 'col-sm-4' : 'col-sm-5'"></div>
 
         <div class="col-sm-1" style="padding:0;">
-          <div *ngIf="_length > 0 && _policyTypeId!=6 && _policyTypeId!=7 ">
+          <div *ngIf="_length > 0 && _policyType!=6 && _policyType!=7 ">
             <button mat-raised-button color="primary" (click)="exportAsExcelFile()">
               <mat-icon>download</mat-icon>Download
               <!-- <i class="far fa-file-excel"></i> -->

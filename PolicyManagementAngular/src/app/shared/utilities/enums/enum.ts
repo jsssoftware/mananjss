@@ -49,3 +49,10 @@ export enum SearchPolicyTypeName{
     Motor_View='View Policy Data',
     Motor_rollover='Rollover Policy'
 }
+
+export enum PackageType{
+    TP_ONLY=1,
+    OD_ONLY,
+    COMPREHENSIVE,
+    USAGE_BASE
+}

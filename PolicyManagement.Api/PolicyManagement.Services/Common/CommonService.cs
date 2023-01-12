@@ -661,14 +661,18 @@ namespace PolicyManagement.Services.Common
 
         public DateDto CalculateDate(string dateString, int year)
         {
-            DateTime date = DateTime.ParseExact(dateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-            date = date.AddYears(year);
-            date = date.AddDays(-1);
+            DateTime? date = null;
+            if (!string.IsNullOrEmpty(dateString)){
+                date =  DateTime.ParseExact(dateString, "MM/dd/yyyy", CultureInfo.InvariantCulture) ;
+                date = date.Value.AddYears(year);
+                date = date.Value.AddDays(-1);
+            }
+          
             return new DateDto
             {
-                Day = date.Day,
-                Month = date.Month,
-                Year = date.Year
+                Day = date.HasValue ? date.Value.Day : 0,
+                Month = date.HasValue ? date.Value.Month : 0,
+                Year = date.HasValue ? date.Value.Year:0
             };
         }
 
