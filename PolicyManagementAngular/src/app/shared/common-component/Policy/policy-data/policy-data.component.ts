@@ -559,7 +559,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     await this.getPolicyDocuments();
     //Not calling on edit
     if (this._policyId == 0) {
-      await this.getAddOnRiders();
+//      await this.getAddOnRiders();
       await this.getAddOnPlanOptions(-1);
     }
     if (this._policyId != 0) {
@@ -784,7 +784,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
    
   }
   setPolicySourceRenewal(){
-    debugger
+    
     if (this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention ) {
       if(this.policyTermForm.value.packageType == PackageType.OD_ONLY){
         this.setDataForSameCompanyRetentionPolicyTypeOd();
@@ -838,19 +838,21 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
     if (this._isOdPolicyEnable) {
       if (this.policyForm.value.odInsuranceCompany == undefined || this.policyForm.value.odInsuranceCompany == "") return;
-      insuranceCompanyId = this.PolicyForm.odInsuranceCompany;
+      insuranceCompanyId = this.policyForm.value.odInsuranceCompany;
     }
     else
-      insuranceCompanyId = this.PolicyForm.tpInsuranceCompany;
+      insuranceCompanyId = this.policyForm.value.tpInsuranceCompany;
 
     let branchId: number = this.PolicyForm.isAll ? -1 : this._branchId;
 
     this.commonService.getInsuranceCompanyBranches(Vertical.Motor, insuranceCompanyId, branchId).subscribe((response: IDropDownDto<number>[]) => {
       this._insuranceCompanyBranches = response;
     });
-
+    
     //Call Add-On Rider
-    this.getAddOnRiders();
+    if(insuranceCompanyId &&insuranceCompanyId!=0 && this.policyForm.value.PackageTypeId !== PackageType.TP_ONLY) {
+      this.getAddOnRiders();
+    }
     this.setPreviousInsuranceCompany();
   }
 
@@ -926,7 +928,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   getAddOnRiders(): void {
     let insuranceCompanyId:number =0
-    if(this.PolicyForm.PackageTypeId == PackageType.TP_ONLY){
+    
+    if(this.policyForm.value.PackageTypeId == PackageType.TP_ONLY){
       insuranceCompanyId = this.PolicyForm.tpInsuranceCompany
     }else{
       insuranceCompanyId = this.PolicyForm.odInsuranceCompany
@@ -1260,7 +1263,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   setPolicyTermDetails(policyTerm: IPolicyTermDto): void {
-    debugger
+    
     if (policyTerm === undefined || policyTerm == null) return;
 
     let tpYear = this._numberOfYears.filter(f => f.Year == policyTerm.TpYear)[0];
@@ -2386,7 +2389,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   async setDataForSameCompanyRetentionPolicyTypeComprehensiveOrUsageBased() {
-    debugger
+    
     if (this.policyTermForm.value.policyType === PolicyType.SameCompanyRetention && (this.policyTermForm.value.packageType === 3 || this.policyTermForm.value.packageType === 4)) {
       let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto) as Date;
 
@@ -2536,7 +2539,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   setOdPolicyDetail() {
-    debugger
+    
     if(this.policyTermForm.value.packageType ==  PackageType.COMPREHENSIVE){
       this.policyForm.patchValue({
         odInsuranceCompany: this.policyForm.value.tpInsuranceCompany,
