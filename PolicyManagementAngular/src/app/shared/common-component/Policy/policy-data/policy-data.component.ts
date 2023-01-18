@@ -739,7 +739,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.policyForm.reset();
     this.policyTermForm.patchValue({ policyTerm: undefined });
     let model = this.getPolicyFormData();
-    this.setPreviousInsuranceCompany();
     if (model.PolicyTypeId == undefined ||
       model.VehicleClassId == undefined ||
       model.PackageTypeId == undefined ||
@@ -853,7 +852,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     if(insuranceCompanyId &&insuranceCompanyId!=0 && this.policyForm.value.PackageTypeId !== PackageType.TP_ONLY) {
       this.getAddOnRiders();
     }
-    this.setPreviousInsuranceCompany();
+    if(this._policyId == 0){
+      this.setPreviousInsuranceCompany();
+
+    }
   }
 
   
@@ -2837,7 +2839,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.setDataForOtherCompanyRetentionPolicyTypeTp();
     this.setDataForOtherCompanyRetentionPolicyTypeOd();
     this.setOdPolicyDetail()
-    this.setPreviousInsuranceCompany();
   }
 
   setCompanyInsuranceBranch(response:any){
