@@ -735,7 +735,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     });
   }
 
-  getPolicyTerms(): void {
+  async getPolicyTerms(): Promise<void> {
     this.policyForm.reset();
     this.policyTermForm.patchValue({ policyTerm: undefined });
     let model = this.getPolicyFormData();
@@ -776,34 +776,37 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     });
 
     if(this._type == SearchPolicyType.Motor_Renew){
-      this.setPolicySourceRenewal()
+     await this.setPolicySourceRenewal()
+     await this.setPreviousInsuranceCompany()
+     this.removePrevTpOdInsurance()
     }
     this.setOdPolicyDetail()
     this.getVehicles();
    
   }
-  setPolicySourceRenewal(){
+  async setPolicySourceRenewal(){
     
     if (this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention ) {
       if(this.policyTermForm.value.packageType == PackageType.OD_ONLY){
-        this.setDataForSameCompanyRetentionPolicyTypeOd();
+       await this.setDataForSameCompanyRetentionPolicyTypeOd();
       }
       if(this.policyTermForm.value.packageType == PackageType.TP_ONLY){
         this.setDataForSameCompanyRetentionPolicyTypeTp();
       }
       if(this.policyTermForm.value.packageType == PackageType.COMPREHENSIVE || this.policyTermForm.value.packageType == PackageType.USAGE_BASE){
-        this.setDataForSameCompanyRetentionPolicyTypeComprehensiveOrUsageBased();
+      await  this.setDataForSameCompanyRetentionPolicyTypeComprehensiveOrUsageBased();
       }
     }
 
     if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention ) {
       if(this.policyTermForm.value.packageType == PackageType.TP_ONLY){
-      this.setDataForOtherCompanyRetentionPolicyTypeTp();
+      await  this.setDataForOtherCompanyRetentionPolicyTypeTp();
       }
       if(this.policyTermForm.value.packageType == PackageType.OD_ONLY){
-      this.setDataForOtherCompanyRetentionPolicyTypeOd();
+      await this.setDataForOtherCompanyRetentionPolicyTypeOd();
       }
     }
+    console.log("over")
   }
 
   getInsuranceCompanies(): any {
@@ -847,11 +850,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.commonService.getInsuranceCompanyBranches(Vertical.Motor, insuranceCompanyId, branchId).subscribe((response: IDropDownDto<number>[]) => {
       this._insuranceCompanyBranches = response;
     });
-    
-    //Call Add-On Rider
-    if(insuranceCompanyId &&insuranceCompanyId!=0 && this.policyForm.value.PackageTypeId !== PackageType.TP_ONLY) {
-      this.getAddOnRiders();
-    }
+    this.getAddOnRiders();
     if(this._policyId == 0){
       this.setPreviousInsuranceCompany();
 
@@ -1264,24 +1263,23 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     };
   }
 
-  setPolicyTermDetails(policyTerm: IPolicyTermDto): void {
+  async setPolicyTermDetails(policyTerm: IPolicyTermDto): Promise<void> {
     
     if (policyTerm === undefined || policyTerm == null) return;
-
     let tpYear = this._numberOfYears.filter(f => f.Year == policyTerm.TpYear)[0];
     let odYear = this._numberOfYears.filter(f => f.Year == policyTerm.OdYear)[0];
 
     this.policyForm.patchValue({
       tpNumberOfYear: tpYear?.Value,
       odNumberOfYear: odYear?.Value,
-      tpStartDate: moment(new Date(2021, 3, 1)),
-      odStartDate: moment(new Date(2021, 3, 1)),
+      tpStartDate: moment(new Date(2022, 3, 1)),
+      odStartDate: moment(new Date(2022, 3, 1)),
       continutyStartDate: moment(new Date(2021, 3, 1))
     });
 
     if (policyTerm.OdYear > 0) {
       this._isOdPolicyEnable = true;
-      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.odStartDate), this.PolicyForm.odNumberOfYear).subscribe((response: IDateDto) => {
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.odStartDate),  odYear?.Year).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
           odExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
         });
@@ -1291,28 +1289,31 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this._isOdPolicyEnable = false;
     }
     if(tpYear?.Year){
-      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), this.PolicyForm.tpNumberOfYear).subscribe((response: IDateDto) => {
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), tpYear?.Year).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
           tpExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
         });
       });
     }
-    this.setPolicySourceRenewal()
-    this.getInsuranceCompanyBranches();
+
+   await this.setPolicySourceRenewal()
+    this.setPreviousInsuranceCompany()
+    //this.getInsuranceCompanyBranches();
   }
 
 
 
   setExpiryDate(policy: string) {
     let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
-
+  
     if (this.policyForm.value.tpNumberOfYear == undefined
       || this.policyForm.value.tpNumberOfYear === ""
       || this.policyForm.value.odNumberOfYear == undefined
       || this.policyForm.value.odNumberOfYear === ""
       || policyTerm === undefined
       || policyTerm == null) return;
-
+      let tpYear = this._numberOfYears.filter(f => f.Value == this.policyForm.value.tpNumberOfYear)[0];
+      let odYear = this._numberOfYears.filter(f => f.Value == this.policyForm.value.odNumberOfYear)[0];
     this.setOdPolicyDetail();
     if (policy === "tp") {
 
@@ -1346,7 +1347,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
           return;
         }
       }
-      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), this.policyForm.value.tpNumberOfYear).subscribe((response: IDateDto) => {
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate),tpYear?.Year).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
           tpExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
         });
@@ -1371,7 +1372,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
           return;
         }
 
-        if (startDate != null && !this.isDateValid(moment(startDate), this.policyForm.value.odNumberOfYear)) {
+        if (startDate != null && !this.isDateValid(moment(startDate), this.policyForm.value.odStartDate)) {
           this.policyForm.patchValue({
             odStartDate: undefined
           });
@@ -1384,7 +1385,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         }
       }
 
-      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.odStartDate), this.policyForm.value.odNumberOfYear).subscribe((response: IDateDto) => {
+      this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.odStartDate), odYear?.Year).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
           odExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
         });
@@ -1964,14 +1965,14 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   getMotorPolicyById(policyId: number) {
     this.motorService.getMotorPolicyById(policyId).subscribe((response: IMotorPolicyFormDataModel) => {
-
+      
       this._policyData = response;
       this.setMotorPolicyData(response);
     });
   }
 
 
-  setMotorPolicyData(response: IMotorPolicyFormDataModel): void {
+  async setMotorPolicyData(response: IMotorPolicyFormDataModel): Promise<void> {
 
     // if (this._type == 6)
     //    this._policyTypes = (<IDropDownDto<number>[]>this._policyTypes).filter(f => f.Value == response.PolicyTerm.PolicyType);
@@ -2087,10 +2088,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     //For previous value
     if (this._type == SearchPolicyType.Motor_rollover || this._type == SearchPolicyType.Motor_Renew) {
       this.policyForm.patchValue({
-        lastYearInsuranceCompany: this.policyTermForm.value.packageType == PackageType.TP_ONLY ? response.TpPolicy.InsuranceCompany : response.OdPolicy.InsuranceCompany,
-        previousCnPolicyNumber: this.policyTermForm.value.packageType == PackageType.TP_ONLY ? response.TpPolicy.PolicyNumber : response.OdPolicy.PolicyNumber,
-        lastPolicyExpiryDate: this.policyTermForm.value.packageType == PackageType.TP_ONLY ? this.commonService.getDateFromIDateDto(response.TpPolicy?.ExpiryDateDto as IDateDto)
-          : this.commonService.getDateFromIDateDto(response.OdPolicy.ExpiryDateDto as IDateDto),
+        lastYearInsuranceCompany:  response.PreviousPolicy.LastYearInsuranceCompany,
+        previousCnPolicyNumber: response.TpPolicy.PolicyNumber ,
+        lastPolicyExpiryDate:  this.commonService.getDateFromIDateDto(response.TpPolicy?.ExpiryDateDto as IDateDto),
         isBlockAgent: false,
         isChangeAgent: false,
       });
@@ -2103,7 +2103,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.policyTermForm.patchValue({
         vehicleClass: response.PolicyTerm.VehicleClass,
       });
-      
+
+      this.policyForm.get("lastYearInsuranceCompany")?.disable();
+      this.policyForm.get("previousCnPolicyNumber")?.disable();
+      this.policyForm.get("lastPolicyExpiryDate")?.disable();
     }
 
     this.nominationForm.patchValue({
@@ -2165,7 +2168,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       //Calling insurance company branch api location
     
     this.setPolicyDetails()
-    this.setvalues();
+    this.getAddOnRiders()
+    //this.setvalues();
   }
 
   getTotalCost() {
@@ -2263,28 +2267,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.setPreviousInsuranceCompany();
   }
 
-  setPreviousInsuranceCompany() {
-    if (this.policyTermForm.value.policyType == PolicyType.Rollover || this.policyTermForm.value.policyType == PolicyType.Renewal) {
-      this._lastInsuranceCompanies = this._insuranceCompanies;
-      if (this.policyTermForm.value.packageType == PackageType.TP_ONLY) {
-        this.policyForm.patchValue({
-          lastYearInsuranceCompany: this.policyForm.value.tpInsuranceCompany
-        });
-      }
-      else {
-        this.policyForm.patchValue({
-          lastYearInsuranceCompany: this.policyForm.value.odInsuranceCompany
-        });
-      }
-    }
-    else {
-      this.refreshLastInsuranceCompanies();
-    /*   this.policyForm.patchValue({
-        lastYearInsuranceCompany: undefined
-      }); */
-    }
-
-    if (this._policyTypeId === "2") {
+  setPreviousInsuranceCompany() {    
+      if ( this._type == SearchPolicyType.Motor_Renew ) {
       let insuranceCompany = this.policyTermForm.value.packageType === 1 ? this._policyData?.TpPolicy.InsuranceCompany : this._policyData?.OdPolicy.InsuranceCompany;
       let policyNumber = this.policyTermForm.value.packageType === 1 ? this._policyData?.TpPolicy.PolicyNumber : this._policyData?.OdPolicy.PolicyNumber;
       let policyExpiryDate = this.policyTermForm.value.packageType === 1 ? this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto)
@@ -2296,6 +2280,14 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         lastPolicyExpiryDate: policyExpiryDate
       });
     }
+    else {
+      this.refreshLastInsuranceCompanies();
+    /*   this.policyForm.patchValue({
+        lastYearInsuranceCompany: undefined
+      }); */
+    }
+
+   
   }
 
   resetPreviousInsuranceCompany() {
@@ -2323,14 +2315,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
 
       if (policyTerm === undefined || policyTerm == null) return;
-
+      
       this.policyForm.patchValue({
         tpInsuranceCompany: this._policyData?.TpPolicy.InsuranceCompany,
         tpStartDate: moment(startDate),
         insuranceCompanyBranches: this._policyData?.TpPolicy
       });
 
-      this.policyForm.get("tpInsuranceCompany")?.disable();
       this.isTpInsuranceDisable = true;
       this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), policyTerm?.TpYear).subscribe((response: IDateDto) => {
         this.policyForm.patchValue({
@@ -2427,7 +2418,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   setDataForOtherCompanyRetentionPolicyTypeTp() {
     if (this.policyTermForm.value.policyType === PolicyType.OtherCompanyRetention && this.policyTermForm.value.packageType === 1) {
-      this._tpInsuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this._policyData?.TpPolicy.InsuranceCompany);
 
       let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto) as Date;
       try {
@@ -2440,7 +2430,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
      // if (policyTerm === undefined || policyTerm == null) return;
 
       this.policyForm.patchValue({
-        tpInsuranceCompany: this._policyData?.TpPolicy.InsuranceCompany,
         policyNumber: undefined,
         tpStartDate: moment(startDate)
       });
@@ -2839,6 +2828,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.setDataForOtherCompanyRetentionPolicyTypeTp();
     this.setDataForOtherCompanyRetentionPolicyTypeOd();
     this.setOdPolicyDetail()
+    this.removePrevTpOdInsurance()
   }
 
   setCompanyInsuranceBranch(response:any){
@@ -2856,6 +2846,14 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       });
 
     });
+  }
+
+  removePrevTpOdInsurance(){
+    if (this.policyTermForm.value.policyType === PolicyType.OtherCompanyRetention && (this.policyTermForm.value.packageType === 3 || this.policyTermForm.value.packageType === 4)) {
+    this._insuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this._policyData?.TpPolicy.InsuranceCompany);
+    } else  if (this.policyTermForm.value.policyType === PolicyType.OtherCompanyRetention && this.policyTermForm.value.packageType === 1) {
+      this._insuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this._policyData?.TpPolicy.InsuranceCompany);
+    }
   }
 
 }
