@@ -66,8 +66,13 @@ namespace PolicyManagement.Models.Motor
         public bool IsChangeAgent { get; set; }
         public string AddOnSelected { get; set; }
         public bool? IsVerified { get; set; }
+        public string CreatedBy { get; set; }
+        public string VerifiedBy { get; set; }
+        public DateTime? CreatedTime { get; set; }
+        public DateTime? VerifiedTime { get; set; }
+        public string ModifiedBy { get; set; }
+        public DateTime? ModifiedTime { get; set; }
 
-        
 
     }
 }

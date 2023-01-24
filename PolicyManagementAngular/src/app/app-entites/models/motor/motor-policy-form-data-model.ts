@@ -59,4 +59,11 @@ export interface IMotorPolicyFormDataModel {
     IsChangeAgent: boolean;
     AddOnSelected: string;
     IsVerified:boolean;
+    VerifiedBy?: string;
+    VerifiedTime?: string;
+    ModifiedBy?: string;
+    ModifiedTime?: string;
+    CreatedBy?: string;
+    CreatedTime?: string;
+    PreviousPolicyId:number
 }

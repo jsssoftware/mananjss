@@ -343,6 +343,12 @@ namespace PolicyManagement.Services.Motor
                                                       {
                                                           AddOnRiderId = s.T5.T3.T1.AddonRiderId
                                                       },
+                                                      CreatedBy = _dataContext.tblTeamMember.Where(x => x.TeamMemberId == s.T5.T3.T1.CreatedBy).Select(x => x.TeamMemberName).FirstOrDefault(),
+                                                      VerifiedBy = _dataContext.tblTeamMember.Where(x => x.TeamMemberId == s.T5.T3.T1.VerifiedBy).Select(x => x.TeamMemberName).FirstOrDefault(),
+                                                      CreatedTime = s.T5.T3.T1.CreatedTime,
+                                                      VerifiedTime = s.T5.T3.T1.VerifiedTime,
+                                                      ModifiedBy = _dataContext.tblTeamMember.Where(x => x.TeamMemberId == s.T5.T3.T1.CreatedBy).Select(x => x.TeamMemberName).FirstOrDefault(),
+                                                      ModifiedTime = s.T5.T3.T1.ModifiedTime,
                                                       Customer = new CustomerFormDataModel
                                                       {
                                                           AddressInPolicy = s.T5.T3.T1.AddressInPolicy,
@@ -406,7 +412,7 @@ namespace PolicyManagement.Services.Motor
                                                       },
                                                       Premium = new PremiumFormDataModel
                                                       {
-                                                          AddOnRiderOd = s.T5.T3.T1.AddonOD??0,
+                                                          AddOnRiderOd = s.T5.T3.T1.AddonOD ?? 0,
                                                           CngLpgIdv = s.T5.T3.T1.CNGIDV ?? 0,
                                                           CommissionablePremium = s.T5.T3.T1.CommissionablePremium ?? 0,
                                                           CommissionPaidOn = s.T5.T3.T1.CommissionPayTypeId ?? 0,
@@ -430,7 +436,7 @@ namespace PolicyManagement.Services.Motor
                                                           TotalTp = s.T5.T3.T1.TotalTP ?? 0,
                                                           Tp = s.T5.T3.T1.TPPremium ?? 0,
                                                           VehicleIdv = s.T5.T3.T1.VehicleIDV ?? 0,
-                                                          BasicTpGstPercentage = s.T5.T3.T1.BasicTpGstPercentage?? 0,
+                                                          BasicTpGstPercentage = s.T5.T3.T1.BasicTpGstPercentage ?? 0,
                                                           NetPremium = s.T5.T3.T1.NetPremium ?? 0
                                                       },
                                                       PreviousPolicy = new PreviousPolicyFormDataModel
@@ -498,12 +504,12 @@ namespace PolicyManagement.Services.Motor
                 var data = await _dataContext.tblPolicyPaymentData.Where(w => w.PolicyId == policyId).ToListAsync();
 
                 if (data != null && data.Count > 0)
-                { 
+                {
                     var dataPaymentFormDataModel = data.Select(s => new PaymentFormDataModel
                     {
                         Amount = s.PaymentAmount,
                         Bank = s.BankId ?? 0,
-                        Dated = s.ChequeDate,  
+                        Dated = s.ChequeDate,
                         InstrumentNumber = s.ChequeNo,
                         Mode = s.PaymentModeId
                     }).ToList();
@@ -511,12 +517,12 @@ namespace PolicyManagement.Services.Motor
                     motorPolicy.PaymentData = new List<PaymentFormDataModel>();
                     motorPolicy.PaymentData = dataPaymentFormDataModel;
                 }
-                    
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message.ToString());
-                
+
             }
 
             try
@@ -536,7 +542,7 @@ namespace PolicyManagement.Services.Motor
                     }).ToList();
 
                 }
-                    
+
             }
             catch (Exception ex)
             {
@@ -628,7 +634,7 @@ namespace PolicyManagement.Services.Motor
                                                                      && !string.IsNullOrEmpty(f.EngineNo)
                                                                      && f.EngineNo.Length >= 5
                                                                      && f.EngineNo.ToLower().Substring(f.EngineNo.Length - 5).Equals(model.Vehicle.EngineNumber.ToLower().Substring(model.Vehicle.EngineNumber.Length - 5))
-                                                                     && !f.ControlNo.Equals(model.ControlNumber)  
+                                                                     && !f.ControlNo.Equals(model.ControlNumber)
                                                                      && f.PolicyStatusId == 1;
 
             try
@@ -781,7 +787,7 @@ namespace PolicyManagement.Services.Motor
             try
             {
                 await _dataContext.SaveChangesAsync();
-            }catch(Exception ex)
+            } catch (Exception ex)
             {
                 Console.WriteLine(ex.Message.ToString());
 
@@ -801,7 +807,7 @@ namespace PolicyManagement.Services.Motor
                 {
                     BankId = f.Bank,
                     BranchId = short.Parse(model.BranchId),
-                    ChequeDate= !string.IsNullOrEmpty(f.DatedString) ? DateTime.ParseExact(f.DatedString, "MM/dd/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null,
+                    ChequeDate = !string.IsNullOrEmpty(f.DatedString) ? DateTime.ParseExact(f.DatedString, "MM/dd/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null,
                     ChequeNo = f.InstrumentNumber,
                     CreatedBy = 1, //later change by token
                     CreatedTime = DateTime.Now,
@@ -865,7 +871,7 @@ namespace PolicyManagement.Services.Motor
             #endregion
 
             #region Update Add-On Rider Option Data
-            if ( model.AddOnRider.AddOnRiderOptionId.Any())
+            if (model.AddOnRider.AddOnRiderOptionId.Any())
             {
 
                 List<tblPolicyAddonOptionDetails> previousAddOnRiderOption = await _dataContext.tblPolicyAddonOptionDetails.Where(w => w.PolicyId == policyId).ToListAsync();
@@ -1017,5 +1023,6 @@ namespace PolicyManagement.Services.Motor
                 IsSuccess = true
             };
         }
+    
     }
 }
