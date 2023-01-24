@@ -35,6 +35,7 @@ import { DialogBoxComponent } from '../dialog-box/dialog-box.component';
 import { InspectionDetailComponent } from '../detail/inspection-detail/inspection-detail.component';
 import { VoucherDetailComponent } from '../detail/voucher-detail/voucher-detail.component';
 import { ViewClaimsComponent } from 'src/app/app-modules/sub-system/claims/view-claims/view-claims.component';
+import { MotorService } from 'src/app/app-services/motor-service/motor.service';
 
 export interface PeriodicElement {
   endorsementReason: string;
@@ -418,6 +419,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _tableName: string = "";
   public _dataSourceUploadDocuments: MatTableDataSource<IPolicyDocumentDto> = new MatTableDataSource<IPolicyDocumentDto>();
   public _controlNumber: string = "";
+  public _headerTitle: string = "";
   public _previousControlNumber: string = "";
   public _renewalCounter: number = 0;
   public isTpInsuranceDisable: boolean = false;
@@ -428,7 +430,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   public _isDisableOdPolicyDetails: boolean = false;
   public _policyData?: IMotorPolicyFormDataModel;
-  public _verticalName: string = "";
+  public _verticalName: any = "";
   public _policyStatus: string = "";
   public _policyStatusColor: string = "";
   public _posManagedBy?: IDropDownDto<number>;
@@ -463,7 +465,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public mainmotorService : MotorService
   ) {
     this._type = 1;
     this._branchId = sessionStorage.getItem("branchId");
@@ -481,7 +484,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       else
         this.filterData(input.Name);
     })
-
+    this._verticalName =  this.mainmotorService.vertical$.getValue();
+    this._headerTitle =  this.mainmotorService._headerTitle$.getValue();
     this._customerId = this.route.snapshot.paramMap.get('customerId');
     this._policyTypeId =Number(this.route.snapshot.paramMap.get('policyTypeId'));//is the id when customer saved
     this._policyId = Number(this.route?.snapshot?.paramMap.get('policyId') || 0);
@@ -501,14 +505,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         this._type = 4;
         break;
       case 5:
-        this._type = 5;
+        this._type = SearchPolicyType.Motor_Verify;
         break;
       case 6:
         this._type = 6;
         break;
       case 7:
         this._type = 7;
-        this._isViewPolicyActive = true;
         break;
       case 8:
         this._type = SearchPolicyType.Motor_rollover;
@@ -517,6 +520,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
     if(this._policyType == 2){
       this._type = SearchPolicyType.Motor_Renew;
+    }
+
+    if(this._policyType == SearchPolicyType.Motor_View){
+      this._isViewPolicyActive = true
     }
 
     this.policyForm.get("numberOfKiloMeterCovered")?.disable();
@@ -1003,7 +1010,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   createPolicy(): any {
     let menu = this.MenuVertical;
-    console.log(this.PolicyTermForm)
+    let IsVerified = false
+    if(this._policyType == SearchPolicyType.Motor_Verify){
+      IsVerified = true 
+    }
+    
     let model: IMotorPolicyFormDataModel = {
       PolicyId: this._policyId,
       BranchId: this._branchId,
@@ -1163,7 +1174,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       IsChangeAgent: this.PolicyForm.isChangeAgent,
       AddOnSelected: this._addOnRiderArray.join(', '),
       VerticalId: this._verticalDetail.VerticalId,
-      VerticalSegmentId: this._verticalDetail.VerticalSegmentId
+      VerticalSegmentId: this._verticalDetail.VerticalSegmentId,
+      IsVerified:IsVerified
     }
 
     if (this._policyId == 0 || this._type == SearchPolicyType.Motor_Renew) {
@@ -1443,7 +1455,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
 
   createPolicyAfterWarning(response: ICommonDto<any>) {
-
+    let IsVerified = false
+    if(this._policyType == SearchPolicyType.Motor_Verify){
+      IsVerified = true 
+    }
+    
     let model: IMotorPolicyFormDataModel = {
       PolicyId: this._policyId,
       BranchId: this._branchId,
@@ -1603,7 +1619,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       IsChangeAgent: this.PolicyForm.isChangeAgent,
       AddOnSelected: this._addOnRiderArray.join(', '),
       VerticalId: this._verticalDetail.VerticalId,
-      VerticalSegmentId: this._verticalDetail.VerticalSegmentId
+      VerticalSegmentId: this._verticalDetail.VerticalSegmentId,
+      IsVerified:IsVerified
     }
 
     if (response.Response?.Condition === 1) {
@@ -2169,7 +2186,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     
     this.setPolicyDetails()
     this.getAddOnRiders()
-    //this.setvalues();
+    this.setvalues();
   }
 
   getTotalCost() {
@@ -2855,6 +2872,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this._insuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this._policyData?.TpPolicy.InsuranceCompany);
     }
   }
+  
 
+ 
 }
 

@@ -7,6 +7,7 @@ import { debounceTime } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
 import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
 import { CommonFunction } from 'src/app/shared/utilities/helpers/common-function';
+import { MotorService } from 'src/app/app-services/motor-service/motor.service';
 
 @Component({
   selector: 'app-customer',
@@ -29,13 +30,15 @@ export class CustomerComponent implements OnInit {
     private customerService: ICustomerService,
     private router: Router,
     private route: ActivatedRoute,
-    private _commonFunction:CommonFunction
+    private _commonFunction:CommonFunction,
+    private _motorService:MotorService
   ) {
   }
 
   ngOnInit(): void {
     this._policyTypeId = this.route.snapshot.paramMap.get('policyType');
     this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyTypeId)); 
+    this._motorService._headerTitle$.next(this._headerTitle);
   }
 
   pageChanged(event: PageEvent): void {

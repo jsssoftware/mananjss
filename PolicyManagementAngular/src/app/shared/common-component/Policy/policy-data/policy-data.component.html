@@ -5,6 +5,7 @@
         style="background-image: url('../../../../assets/images/motor.png');"></div> <!-- to do dynamic -->
        <mat-card-title >{{MenuVertical}} Policy</mat-card-title>  <!-- to do dynamic -->
       <mat-card-subtitle>Insurance</mat-card-subtitle>
+      <mat-card-subtitle>{{_headerTitle}}</mat-card-subtitle>
     </mat-card-header>
     <hr class="hrClass" />
     <mat-card-content>
@@ -2046,14 +2047,14 @@
       <hr />
       <div class="row">
         <div class="col-lg-4"></div>
-        <div class="col-lg-2">
+        <div class="col-lg-2" *ngIf="_policyType != SearchPolicyType.Motor_Verify">
           <button type="reset" class="btn-block" mat-raised-button color="accent" (click)="resetForm()" *ngIf=!_isViewPolicyActive>
             <mat-icon style="font-size: 22px;">refresh</mat-icon> Reset
           </button>
         </div>
         <div class="col-lg-2">
           <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createPolicy()" *ngIf="!_isViewPolicyActive">
-            <mat-icon style="font-size: 22px;">save</mat-icon> Save
+            <mat-icon style="font-size: 22px;">save</mat-icon> {{ _policyType != SearchPolicyType.Motor_Verify? 'Save' : 'Verify' }}
           </button>
           <button type="button" class="btn-block" mat-raised-button color="primary" [routerLink]="['/pms/motor/motor-policy-management']" *ngIf=_isViewPolicyActive>
             <mat-icon style="font-size: 22px;">save</mat-icon> Back

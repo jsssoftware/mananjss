@@ -737,7 +737,7 @@ namespace PolicyManagement.Services.Motor
             motorPolicyData.BasicTpGstPercentage = model.Premium.BasicTpGstPercentage;
             motorPolicyData.NetPremium = model.Premium.NetPremium;
             motorPolicyData.VehicleSegment = model.Vehicle.VehicleSegment;
-
+            motorPolicyData.IsVerified = model.IsVerified;
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;
             else

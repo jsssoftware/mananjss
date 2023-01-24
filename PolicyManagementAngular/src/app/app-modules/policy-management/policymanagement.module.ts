@@ -14,7 +14,8 @@ import { MotorPolicyManagementComponent } from './motor/motor-policy-management/
 import { HealthPolicyComponent } from './health/health-policy/health-policy.component';
 import { HealthPolicyManagementComponent } from './health/health-policy-management/health-policy-management.component';
 import { MotorPolicyComponent } from './motor/motor-policy/motor-policy.component';
-   
+import { MotorService } from 'src/app/app-services/motor-service/motor.service';
+
 @NgModule({
   declarations: [  
     InspectionDetailComponent, // in popup used
@@ -37,7 +38,9 @@ import { MotorPolicyComponent } from './motor/motor-policy/motor-policy.componen
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialFileInputModule
-  ]
+    MaterialFileInputModule,
+    
+  ],
+  providers:[MotorService]
 })
 export class PolicyManagementModule { }

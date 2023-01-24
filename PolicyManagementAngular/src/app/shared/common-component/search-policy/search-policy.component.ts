@@ -18,6 +18,7 @@ import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 import { Console } from 'console';
 import {CommonFunction} from 'src/app/shared/utilities/helpers/common-function';
+import { MotorService } from 'src/app/app-services/motor-service/motor.service';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
@@ -138,7 +139,8 @@ export class SearchPolicyComponent implements OnInit {
     private motorService: IMotorService,
     private router: Router,
     private route: ActivatedRoute,
-    private _commonFunction:CommonFunction
+    private _commonFunction:CommonFunction,
+    private _motorService:MotorService,
   ) {
     this._branchId = sessionStorage.getItem("branchId");   
     this.searchPolicyForm.patchValue({
@@ -210,10 +212,15 @@ export class SearchPolicyComponent implements OnInit {
   }
 
   routeToMotorPolicy(policyId: number,policyTypeId:number) {
-    if(this._verticalTypeId==Vertical.Motor)
+    if(this._verticalTypeId==Vertical.Motor){
+      this._motorService.vertical$.next("MOTOR");
       this.router.navigate(["/pms/motor", { policyId, policyTypeId: policyTypeId,policyType :this._policyType }]);
-    if(this._verticalTypeId==Vertical.Health)
+      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
+      this._motorService._headerTitle$.next(this._headerTitle);
+    }else if(this._verticalTypeId==Vertical.Health){
       this.router.navigate(["/pms/health", { policyId, policyTypeId: policyTypeId,policyType :this._policyType }]);
+      this._motorService.vertical$.next("HEALTH");
+    }
   }
 
   searchPolicy(): void {
