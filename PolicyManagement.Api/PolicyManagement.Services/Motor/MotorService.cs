@@ -9,6 +9,7 @@ using PolicyManagement.Services.Base;
 using PolicyManagement.Services.Common.Interface;
 using PolicyManagement.Services.Motor.Interface;
 using PolicyManagement.Utilities.Constants;
+using PolicyManagement.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -362,7 +363,10 @@ namespace PolicyManagement.Services.Motor
                                                           Email = string.IsNullOrEmpty(s.T5.T3.T2.CustomerEmail1) ? s.T5.T3.T2.CustomerEmail2 : s.T5.T3.T2.CustomerEmail1,
                                                           Gstin = !string.IsNullOrEmpty(s.T5.T3.T2.GSTIN1) ? s.T5.T3.T2.GSTIN1 : !string.IsNullOrEmpty(s.T5.T3.T2.GSTIN2) ? s.T5.T3.T2.GSTIN2 : s.T5.T3.T2.GSTIN3,
                                                           NameInPolicy = s.T5.T3.T1.NameInPolicy,
-                                                          Pan = s.T5.T3.T2.PAN
+                                                          Pan = s.T5.T3.T2.PAN,
+                                                          Gender =  _dataContext.tblGender.Where(x => x.GenderId == s.T5.T3.T2.GenderId).Select(x => x.Gender).FirstOrDefault() ,
+                                                          DateOfBirth =  s.T5.T3.T2.CustomerDOB ,
+                                                          PassportNumber = s.T5.T3.T2.PassportNo
                                                       },
                                                       ExtendedKiloMeterCovered = s.T5.T3.T1.ExtendedKMCovered ?? 0,
                                                       FinanceBy = s.T5.T3.T1.FinancerId ?? 0,

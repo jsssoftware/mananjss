@@ -88,4 +88,12 @@
         FollowUp = 1,
         Closed
     }
+
+    public enum PolicyType
+    {
+        New = 1,
+        Same_Company_Retention,
+        Rollover,
+        Other_Company_Retention
+    }
 }

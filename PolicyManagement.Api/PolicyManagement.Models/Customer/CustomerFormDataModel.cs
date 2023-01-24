@@ -1,4 +1,6 @@
-﻿namespace PolicyManagement.Models.Customer
+﻿using System;
+
+namespace PolicyManagement.Models.Customer
 {
     public class CustomerFormDataModel
     {
@@ -14,5 +16,9 @@
         public string Pan { get; set; }
         public string Gstin { get; set; }
         public int CustomerId { get; set; }
+        public string Gender { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string PassportNumber { get; set; }
+
     }
 }

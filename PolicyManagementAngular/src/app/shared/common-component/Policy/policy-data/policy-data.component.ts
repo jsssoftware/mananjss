@@ -1783,7 +1783,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       Email: response.Customer.Email,
       Gstin: response.Customer.Gstin,
       Gender: response.Customer.Gender,
-      DateOfBirth: response.Customer.DateOfBirth,
+      DateOfBirth: response.Customer.DateOfBirth ?  moment(response.Customer.DateOfBirth).format('DD/MM/yyyy'):null,
       PassportNumber: response.Customer.PassportNumber,
       NameInPolicy: response.Customer.NameInPolicy,
       Pan: response.Customer.Pan,
