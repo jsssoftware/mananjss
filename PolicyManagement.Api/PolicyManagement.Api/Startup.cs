@@ -45,6 +45,7 @@ namespace PolicyManagement.Api
                 AllowInsecureHttp = true
             });
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+
         }
 
 

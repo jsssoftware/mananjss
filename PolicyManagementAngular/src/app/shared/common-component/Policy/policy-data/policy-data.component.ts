@@ -1867,6 +1867,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       });
 
       //Updating add on rider value
+      if(response?.AddOnRider?.AddOnRiderId) await this.getAddOnRiders()
       this._addOnRiderModel.AddOnRiderId = response?.AddOnRider?.AddOnRiderId;
       this.commonService.getAddOnPlanOptions(this._addOnRiderModel.AddOnRiderId, Vertical.Motor, 0).subscribe((addOnResponse: IAddOnPlanOptionDto[]) => {
         addOnResponse.forEach((value, index) => {
@@ -1897,6 +1898,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.policyTermForm.patchValue({
         vehicleClass: response.PolicyTerm.VehicleClass,
       });
+      if(response.Premium.Ncb <= 50){
+        this.premiumForm.patchValue({
+          ncb: response.Premium.Ncb,
+        })
+      }
 
       this.policyForm.get("lastYearInsuranceCompany")?.disable();
       this.policyForm.get("previousCnPolicyNumber")?.disable();
@@ -2237,6 +2243,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       } catch (error) {
         startDate = new Date();
       }
+      debugger
       let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
 
       if (policyTerm === undefined || policyTerm == null) return;

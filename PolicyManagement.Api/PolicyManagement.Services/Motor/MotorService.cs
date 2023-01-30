@@ -348,7 +348,7 @@ namespace PolicyManagement.Services.Motor
                                                       VerifiedBy = _dataContext.tblTeamMember.Where(x => x.TeamMemberId == s.T5.T3.T1.VerifiedBy).Select(x => x.TeamMemberName).FirstOrDefault(),
                                                       CreatedTime = s.T5.T3.T1.CreatedTime,
                                                       VerifiedTime = s.T5.T3.T1.VerifiedTime,
-                                                      ModifiedBy = _dataContext.tblTeamMember.Where(x => x.TeamMemberId == s.T5.T3.T1.CreatedBy).Select(x => x.TeamMemberName).FirstOrDefault(),
+                                                      ModifiedBy = _dataContext.tblTeamMember.Where(x => x.TeamMemberId == s.T5.T3.T1.ModifiedBy).Select(x => x.TeamMemberName).FirstOrDefault(),
                                                       ModifiedTime = s.T5.T3.T1.ModifiedTime,
                                                       Customer = new CustomerFormDataModel
                                                       {
