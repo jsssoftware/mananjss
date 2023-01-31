@@ -66,3 +66,5 @@ Thumbs.db
 PolicyManagement.Api/packages
 PolicyManagement.Api/packages/
 PolicyManagement.Api/packages/
+/publish/
+PolicyManagement.Api/PolicyManagement.Utilities/bin/
