@@ -47,6 +47,11 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
+              "assets": [
+                "src/favicon.ico",
+                "src/assets",
+                "src/web.config"
+              ],
               "budgets": [
                 {
                   "type": "initial",

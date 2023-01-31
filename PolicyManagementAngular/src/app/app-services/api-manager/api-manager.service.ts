@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { IApiManagerService } from './abstracts/api-manager-iservice';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
 
 @Injectable()
 export class ApiManagerService extends IApiManagerService {
@@ -10,7 +12,7 @@ export class ApiManagerService extends IApiManagerService {
   constructor(private http: HttpClient) {
     super();
     //this._baseUrl = 'https://localhost:44382/';
-    this._baseUrl = '';
+    this._baseUrl = environment.API_URL;
   }
 
   getRequest = <T>(url: string): Observable<any> => this.http.get<T>(`${this._baseUrl}${url}`);

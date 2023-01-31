@@ -848,10 +848,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
     if (this._isOdPolicyEnable) {
       if (this.policyForm.value.odInsuranceCompany == undefined || this.policyForm.value.odInsuranceCompany == "") return;
-      insuranceCompanyId = this.policyForm.value.odInsuranceCompany;
+      insuranceCompanyId = this.policyForm.controls['odInsuranceCompany'].value;
     }
     else
-      insuranceCompanyId = this.policyForm.value.tpInsuranceCompany;
+      insuranceCompanyId =this.policyForm.controls['tpInsuranceCompany'].value;
 
     let branchId: number = this.PolicyForm.isAll ? -1 : this._branchId;
 
@@ -1602,7 +1602,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   get PolicyForm() {
-    return this.policyForm.value;
+    return this.policyForm.getRawValue();
   }
 
   get PolicyTermForm() {
@@ -1789,13 +1789,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       Pan: response.Customer.Pan,
     });
 
-    if (this._type == SearchPolicyType.Motor_New || this._type == SearchPolicyType.Motor_rollover) {
+    if (this._type == SearchPolicyType.Motor_New || this._type == SearchPolicyType.Motor_rollover || this._type == SearchPolicyType.Motor_Renew) {
       this._controlNumber = response.ControlNumber
       this.policyTermForm.patchValue({
         policyType: response.PolicyTerm.PolicyType,
         vehicleClass: response.PolicyTerm.VehicleClass,
         packageType: response.PolicyTerm.PackageTypeId,
-        policyTerm: response.PolicyTerm.PolicyTerm,
+        policyTerm: response.PolicyTerm,
         acknowledgementSlipNumber: response.PolicyTerm.AcknowledgementSlipNumber,
         acknowledgementSlipIssueDate: this.commonService.getDateFromIDateDto(response.PolicyTerm.AcknowledgementSlipIssueDateDto as IDateDto)
       });
@@ -1803,7 +1803,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.policyForm.patchValue({
         tpInsuranceCompany: response.TpPolicy.InsuranceCompany,
         coverNoteNumber: response.CoverNoteNumber,
-        coverNoteIssueDate: this.commonService.getDateFromIDateDto(response.CoverNoteIssueDateDto as IDateDto),
+        coverNoteIssueDate: response.CoverNoteIssueDateDto ? this.commonService.getDateFromIDateDto(response.CoverNoteIssueDateDto as IDateDto):"",
         policyNumber: response.TpPolicy.PolicyNumber,
         tpStartDate: this.commonService.getDateFromIDateDto(response.TpPolicy.StartDateDto as IDateDto),
         tpNumberOfYear: response.TpPolicy.NumberOfYear,
@@ -1860,6 +1860,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
       this.commonService.getPolicyTerms(response.PolicyTerm.PolicyType, response.PolicyTerm.VehicleClass, response.PolicyTerm.PackageTypeId).subscribe((responsePolicyTerms: IPolicyTermDto[]) => {
         this._policyTerms = responsePolicyTerms;
+        debugger
         let policyTerm = responsePolicyTerms.filter(f => f.Id == response.PolicyTerm.PolicyTerm)[0]
         this.policyTermForm.patchValue({
           policyTerm: policyTerm
@@ -1966,8 +1967,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
     }
     //Calling insurance company branch api location
-
-    this.setPolicyDetails()
+    setTimeout(()=>{                           // <<<---using ()=> syntax
+      this.setPolicyDetails()
+    }, 3000);
     this.setvalues();
   }
 
@@ -2102,7 +2104,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   setDataForSameCompanyRetentionPolicyTypeTp() {
     if (this.policyTermForm.value.policyType === PolicyType.SameCompanyRetention && this.policyTermForm.value.packageType === PackageType.TP_ONLY) {
-
+      debugger
       let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto) as Date;
 
       try {
@@ -2181,8 +2183,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   async setDataForSameCompanyRetentionPolicyTypeComprehensiveOrUsageBased() {
-
-    if (this.policyTermForm.value.policyType === PolicyType.SameCompanyRetention && (this.policyTermForm.value.packageType === 3 || this.policyTermForm.value.packageType === 4)) {
+    debugger
+    if (this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention && (this.policyTermForm.value.packageType == 3 || this.policyTermForm.value.packageType === 4)) {
       let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto) as Date;
 
       try {
@@ -2640,12 +2642,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.policyForm.get("extendedKiloMeterCovered")?.disable();
     }
 
-
-    this.setDataForSameCompanyRetentionPolicyTypeTp();
-    this.setDataForSameCompanyRetentionPolicyTypeOd();
-    this.setDataForSameCompanyRetentionPolicyTypeComprehensiveOrUsageBased();
-    this.setDataForOtherCompanyRetentionPolicyTypeTp();
-    this.setDataForOtherCompanyRetentionPolicyTypeOd();
+    this.setPolicySourceRenewal()
     this.setOdPolicyDetail()
     this.removePrevTpOdInsurance()
   }
