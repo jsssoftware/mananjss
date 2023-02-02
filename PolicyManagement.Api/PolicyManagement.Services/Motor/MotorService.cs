@@ -149,7 +149,8 @@ namespace PolicyManagement.Services.Motor
                         NetPremium = model.Premium.NetPremium,
                         //  AddOnSelected = !string.IsNullOrEmpty(model.AddOnSelected) ? model.AddOnSelected : null,
                         RenewalPOSId = (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4) ? model.PolicySource.Pos : 0,
-                        VehicleSegment = model.Vehicle.VehicleSegment
+                        VehicleSegment = model.Vehicle.VehicleSegment,
+                        Flag1 = true
                     };
 
                     if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
