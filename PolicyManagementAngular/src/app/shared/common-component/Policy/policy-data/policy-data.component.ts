@@ -428,7 +428,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   public _isDisableBlockAgentCheckbox: boolean = false;
   public _isDisableChangeAgentCheckbox: boolean = false;
-
+  public _isPremiumDetailsDisabled: boolean = false;
   public _isDisableOdPolicyDetails: boolean = false;
   public _policyData?: IMotorPolicyFormDataModel;
   public _verticalName: any = "";
@@ -746,6 +746,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   async getPolicyTerms(): Promise<void> {
     this.policyForm.reset();
+    this._isPremiumDetailsDisabled =false
     this.policyTermForm.patchValue({ policyTerm: undefined });
     let model = this.getPolicyFormData();
     if (model.PolicyTypeId == undefined ||
@@ -765,6 +766,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = false;
       this._isAddOnRiderEnable = false;
+      this._isPremiumDetailsDisabled =true
     } else if (model.PackageTypeId === PackageType.OD_ONLY) {
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = true;
@@ -1312,7 +1314,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     }
 
     await this.setPolicySourceRenewal()
-    this.setPreviousInsuranceCompany()
+    this.setPreviousInsuranceCompany();
+    
     //this.getInsuranceCompanyBranches();
   }
 
@@ -1657,8 +1660,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   calculateTotalOd() {
     let od: any = this.premiumForm.controls.od.value;
-    let addOnRiderOd: any = this.premiumForm.controls.addOnRiderOd.value;
-    let endorseOd: any = this.premiumForm.controls.endorseOd.value;
+    let addOnRiderOd: any = this.premiumForm.controls.addOnRiderOd.value || 0;
+    let endorseOd: any = this.premiumForm.controls.endorseOd.value || 0;
 
     let sum = parseInt(od == "" ? 0 : od) + parseInt(addOnRiderOd == "" ? 0 : addOnRiderOd)
       + parseInt(endorseOd == "" ? 0 : endorseOd);
@@ -1688,7 +1691,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     let grossPremium: any = this.premiumForm.controls.grossPremium.value;
     let endorseGrossPremium: any = this.premiumForm.controls.endorseGrossPremium.value;
 
-    let sum = parseInt(grossPremium == "" ? 0 : grossPremium) + parseInt(endorseGrossPremium == "" ? 0 : endorseGrossPremium);
+    let sum = Math.round(grossPremium == "" ? 0 : grossPremium) + Math.round(endorseGrossPremium == "" ? 0 : endorseGrossPremium);
     this.premiumForm.patchValue({ totalGrossPremium: sum });
   }
 
@@ -1721,13 +1724,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     let sum2 = parseInt(basictp == "" ? 0 : basictp)
     let sum2gst = (basicTPgstPercent / 100) * sum2;
     gstValue = ((gst / 100) * sum);
-    let gstFinalValue = gstValue + sum2gst
-    this.premiumForm.patchValue({ gstValue: gstFinalValue.toFixed(2) });
+    let gstFinalValue = Math.round(gstValue + sum2gst)
+    this.premiumForm.patchValue({ gstValue: gstFinalValue });
     this.calculateNetPremium();
     // Calculating gross premium after updating net
     let netpremium: any = this.premiumForm.controls.netpremium.value || 0;
-    let grossPremiumAmt = parseInt(gstFinalValue == "" ? 0 : gstFinalValue) + parseInt(netpremium);
-    this.premiumForm.patchValue({ grossPremium: grossPremiumAmt.toFixed(2) });
+    let grossPremiumAmt = Math.round( gstFinalValue) + Math.round(netpremium);
+    this.premiumForm.patchValue({ grossPremium: grossPremiumAmt });
     this.calculateTotalGrossPremium();
 
   }
@@ -2445,7 +2448,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   refreshLastInsuranceCompanies() {
     if (this.policyTermForm.value.policyType == undefined ||
       this.policyTermForm.value.packageType == undefined) return;
-
+    if(this.policyForm.value.isBlockAgent || this.policyForm.value.changeAgent){
+      this._lastInsuranceCompanies = this._insuranceCompanies
+      return
+    }  
     if (this.policyTermForm.value.policyType == PolicyType.Rollover && this.policyTermForm.value.packageType == PolicyType.New) {
       this._lastInsuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this.policyForm.value.tpInsuranceCompany);
     } else {
@@ -2569,7 +2575,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   calculateNetPremium() {
-    let sm = parseInt(this.premiumForm.controls.nonCommissionComponentPremium.value) + parseInt(this.premiumForm.controls.totalTp.value) + parseInt(this.premiumForm.controls.totalOd.value);
+    let sm = Math.round(this.premiumForm.controls.nonCommissionComponentPremium.value ||0) + Math.round(this.premiumForm.controls.totalTp.value || 0) + Math.round(this.premiumForm.controls.totalOd.value || 0);
     this.premiumForm.patchValue({ netpremium: sm });
 
   }
@@ -2617,6 +2623,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   setPolicyDetails(): void {
     let model = this.getPolicyFormData();
+    this._isPremiumDetailsDisabled = false
     if (model.PackageTypeId === PackageType.COMPREHENSIVE || model.PackageTypeId === PackageType.USAGE_BASE) {
       this._isDisableOdPolicyDetails = true;
       this._isOdPolicyEnable = true;
@@ -2626,6 +2633,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = false;
       this._isAddOnRiderEnable = false;
+      this._isPremiumDetailsDisabled = true
     } else if (model.PackageTypeId === PackageType.OD_ONLY) {
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = true;
@@ -2670,6 +2678,19 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     } else if (this.policyTermForm.value.policyType === PolicyType.OtherCompanyRetention && this.policyTermForm.value.packageType === 1) {
       this._insuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this._policyData?.TpPolicy.InsuranceCompany);
     }
+  }
+
+  genericClearValidator = (args: string[]) => {
+    args.forEach(element => {
+      this.policyForm.controls[element].clearValidators();
+      this.policyForm.patchValue({ [element]: "" });
+    });
+  }
+
+  genericSetValidator = (args: string[]) => {
+    args.forEach(element => {
+      this.policyForm.controls[element].setValidators([Validators.required]);
+    });
   }
 
 

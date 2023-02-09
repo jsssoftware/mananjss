@@ -10,7 +10,8 @@ import { IMotorService } from "./abstracts/motor.iservice";
 export class MotorService extends IMotorService {
     vertical$ = new BehaviorSubject<string>("");
     _headerTitle$ = new BehaviorSubject<string>("");
-    
+    _verticalId$ = new BehaviorSubject<string | null>("");
+
     constructor(private apiManagerService: IApiManagerService) { 
         super(); 
     }

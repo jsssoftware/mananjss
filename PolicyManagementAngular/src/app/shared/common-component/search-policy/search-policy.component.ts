@@ -153,6 +153,9 @@ export class SearchPolicyComponent implements OnInit {
     this.getManufacturers();
     this.getPos(parseInt(this._branchId));
     this._policyType = this.route.snapshot.paramMap.get('policyType');
+    if(this._policyType == SearchPolicyType.Motor_Incomplete){
+      this._showAll = true
+    }
     this._verticalTypeId = this.route.snapshot.paramMap.get('verticalType'); 
      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType));
     // #region set automoplete 

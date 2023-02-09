@@ -8,6 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
 import { CommonFunction } from 'src/app/shared/utilities/helpers/common-function';
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
+import { SearchPolicyType } from 'src/app/shared/utilities/enums/enum';
 
 @Component({
   selector: 'app-customer',
@@ -63,7 +64,13 @@ export class CustomerComponent implements OnInit {
   }
 
   addCustomer(): void {
-    this.router.navigate(["/master/add-customer", this._input]);
+    const data ={
+      name:this._input,
+      policyTypeId:this._policyTypeId
+    }
+    let VType  = this.route.snapshot.paramMap.get('verticalType');
+    this._motorService._verticalId$.next(VType);
+    this.router.navigate(["/master/add-customer", data]);
   }
 
   editCustomer(customerId: any): void {
@@ -73,9 +80,12 @@ export class CustomerComponent implements OnInit {
 
   routeToMotorPolicy(customerId: number) {
     let VType  = this.route.snapshot.paramMap.get('verticalType');
+    this._motorService._verticalId$.next(VType);
     if(VType=='1')
       this.router.navigate(["/pms/motor", { customerId, policyTypeId: this._policyTypeId }]);
     if(VType=='2')
       this.router.navigate(["/pms/health", { customerId, policyTypeId: this._policyTypeId }]);
   }
+
+ 
 }

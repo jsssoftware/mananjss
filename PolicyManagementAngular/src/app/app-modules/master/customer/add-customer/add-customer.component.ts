@@ -9,8 +9,9 @@ import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
 import { IAddUpdateCustomerModel } from 'src/app/app-entites/models/customer/add-update-customer-model';
 import { ICommonService } from 'src/app/app-services/common-service/abstracts/common.iservice';
 import { ICustomerService } from 'src/app/app-services/customer-service/abstracts/customer.iservice';
-import { Vertical } from 'src/app/shared/utilities/enums/enum';
+import { SearchPolicyType, Vertical } from 'src/app/shared/utilities/enums/enum';
 import Swal from 'sweetalert2';
+import { MotorService } from 'src/app/app-services/motor-service/motor.service';
 
 
 @Component({
@@ -52,6 +53,8 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   public defaultVertical = 0;
   public _customerId:any =0;
   public _cityName:string="";
+  private _policyTypeId: any;
+
   //#endregion
 
   //#region Search Customer Form
@@ -120,7 +123,8 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
     private commonService: ICommonService,
     private customerService: ICustomerService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private _motorService :MotorService
   ) {
     this._customerTypes = [
       {
@@ -137,7 +141,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       this._customerId = parseInt(customerId);
     }
     this._customerName = this.route.snapshot.paramMap.get('name') as string;
-
+    this._policyTypeId = this.route.snapshot.paramMap.get('policyTypeId') as string
     this._branchId = parseInt(sessionStorage.getItem("branchId") as string);
   }
 
@@ -357,7 +361,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
           text: response.Message
         }).then((result) => {
           if (result.isConfirmed) {
-            this.router.navigate(['./master/customer']);
+            this.routeToredirect()
           }
         });
       }
@@ -561,7 +565,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   referByValidation(event: number) {
 
     if (event == 1) {
-      this.genericClearValidator(['teamMember', 'reference']);
+      this.genericClearValidator(['teamMember', 'reference', 'mobile1']);
       this.genericSetValidator(['pos']);
 
     }
@@ -711,5 +715,14 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       console.log( response," response");
       this._clusters = response;
     })
+  }
+
+  routeToredirect(){
+    let verticalData = this._motorService._verticalId$.getValue();
+    if(this._policyTypeId == SearchPolicyType.Motor_New){
+      this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_New + "/" +verticalData + ""]);
+    }else if(this._policyTypeId == SearchPolicyType.Motor_rollover){
+      this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_rollover + "/" +verticalData + ""]);
+    }
   }
 }

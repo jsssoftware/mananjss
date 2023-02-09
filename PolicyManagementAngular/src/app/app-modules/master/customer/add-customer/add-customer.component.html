@@ -9,7 +9,7 @@
         <div class="col-lg-4">
           <mat-form-field>
             <mat-label>Customer Code</mat-label>
-            <input type="text" matInput formControlName="customerCode" placeholder="Customer Code">
+            <input type="text" matInput formControlName="customerCode" placeholder="Customer Code" class="uppercase">
           </mat-form-field>
         </div>
         <div class="col-lg-2">
@@ -42,7 +42,7 @@
           <mat-form-field>
             <mat-label>Customer Name <span style="color:red">*</span></mat-label>
             <input type="text" matInput formControlName="customerName" [errorStateMatcher]="matcher"
-              placeholder="Customer Name" style="line-height: 32px;" minlength="4">
+              placeholder="Customer Name" style="line-height: 32px;" minlength="4" class="uppercase">
             <mat-error
               *ngIf="addCustomerForm.controls.customerName.errors && addCustomerForm.controls.customerName.errors.required">
               Customer Name <strong>required</strong>
@@ -84,7 +84,7 @@
           <mat-form-field>
             <mat-label>Customer Contact <span *ngIf="_customerContactAsterisk"  style="color:red">*</span></mat-label>
             <input type="text" matInput formControlName="customerContact" [errorStateMatcher]="matcher"
-              placeholder="Customer Contact" style="line-height: 32px;">
+              placeholder="Customer Contact" style="line-height: 32px;" class="uppercase">
             <mat-error *ngIf="addCustomerForm.controls.customerContact">
               Customer Contact is <strong>required</strong>
             </mat-error>
@@ -125,7 +125,7 @@
           <mat-form-field>
             <mat-label>Address 1 <span style="color:red">*</span></mat-label>
             <input type="text" matInput formControlName="address1" [errorStateMatcher]="matcher" placeholder="Address 1"
-              style="line-height: 32px;">
+              style="line-height: 32px;" class="uppercase">
             <mat-error *ngIf="addCustomerForm.controls.address1">
               Address 1 <strong>required</strong>
             </mat-error>
@@ -136,7 +136,7 @@
             <mat-label>City 1 <span style="color:red">*</span></mat-label>
 
             <input type="text" placeholder="city1" aria-label="city1" matInput formControlName="city1"
-            [matAutocomplete]="autocity1" [errorStateMatcher]="matcher">
+            [matAutocomplete]="autocity1" [errorStateMatcher]="matcher" class="uppercase">
 
             <mat-autocomplete autoActiveFirstOption #autocity1="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngFor="let city of _filteredCity1Options" [value]="city">
@@ -167,7 +167,7 @@
             <mat-label>GSTIN 1</mat-label>
             <input type="text" #gstin1 matInput formControlName="gstin1" [errorStateMatcher]="matcher"
               placeholder="GSTIN 1" style="line-height: 32px;" (change)="getPanFromGstNumber()" maxlength="15"
-              (input)="gstin1.value = gstin1.value.toUpperCase()" (change)="validateMultipleGstin()">
+              (input)="gstin1.value = gstin1.value.toUpperCase()" (change)="validateMultipleGstin()" class="uppercase">
             <mat-error *ngIf="addCustomerForm.controls.gstin1.errors && addCustomerForm.controls.gstin1.errors.pattern">
               GSTIN 1 is <strong>invalid</strong>
             </mat-error>
@@ -180,13 +180,13 @@
           <mat-form-field>
             <mat-label>Address 2</mat-label>
             <input type="text" matInput formControlName="address2" [errorStateMatcher]="matcher" placeholder="Address 2"
-              style="line-height: 32px;">
+              style="line-height: 32px;" class="uppercase">
           </mat-form-field>
         </div>
         <div class="col-lg-2">
           <mat-form-field appearance="fill">
             <input type="text" placeholder="city2" aria-label="city2" matInput formControlName="city2"
-            [matAutocomplete]="autocity2"> 
+            [matAutocomplete]="autocity2" class="uppercase"> 
             <mat-autocomplete autoActiveFirstOption #autocity2="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngFor="let city of _filteredCity2Options" [value]="city">
                   {{city.Name}}
@@ -210,7 +210,7 @@
             <mat-label>GSTIN 2</mat-label>
             <input type="text" #gstin2 matInput formControlName="gstin2" [errorStateMatcher]="matcher"
               placeholder="GSTIN 2" style="line-height: 32px;" maxlength="15"
-              (input)="gstin2.value = gstin2.value.toUpperCase()" (change)="validateMultipleGstin()">
+              (input)="gstin2.value = gstin2.value.toUpperCase()" (change)="validateMultipleGstin()" class="uppercase">
             <mat-error *ngIf="addCustomerForm.controls.gstin2.errors && addCustomerForm.controls.gstin2.errors.pattern">
               GSTIN 2 is <strong>invalid</strong>
             </mat-error>
@@ -223,14 +223,14 @@
           <mat-form-field>
             <mat-label>Address 3</mat-label>
             <input type="text" matInput formControlName="address3" [errorStateMatcher]="matcher" placeholder="Address 3"
-              style="line-height: 32px;">
+              style="line-height: 32px;" class="uppercase">
           </mat-form-field>
         </div>
         <div class="col-lg-2">
           <mat-form-field appearance="fill">
             
             <input type="text" placeholder="city3" aria-label="city3" matInput formControlName="city3"
-            [matAutocomplete]="autocity3"> 
+            [matAutocomplete]="autocity3" class="uppercase"> 
             <mat-autocomplete autoActiveFirstOption #autocity3="matAutocomplete" [displayWith]="displayFn">
               <mat-option *ngFor="let city of _filteredCity3Options" [value]="city">
                   {{city.Name}}
@@ -255,7 +255,7 @@
             <mat-label>GSTIN 3</mat-label>
             <input type="text" #gstin3 matInput formControlName="gstin3" [errorStateMatcher]="matcher"
               placeholder="GSTIN 3" style="line-height: 32px;" maxlength="15"
-              (input)="gstin3.value = gstin3.value.toUpperCase()" (change)="validateMultipleGstin()">
+              (input)="gstin3.value = gstin3.value.toUpperCase()" (change)="validateMultipleGstin()" class="uppercase">
             <mat-error *ngIf="addCustomerForm.controls.gstin3.errors && addCustomerForm.controls.gstin3.errors.pattern">
               GSTIN 3 is <strong>invalid</strong>
             </mat-error>
@@ -266,9 +266,9 @@
       <div class="row">
         <div class="col-lg-3">
           <mat-form-field>
-            <mat-label>Mobile 1 <span style="color:red">*</span></mat-label>
+            <mat-label>Mobile 1 <span style="color:red"  *ngIf="addCustomerForm.controls.referBy.value !== 1">*</span></mat-label>
             <input type="text" matInput formControlName="mobile1" [errorStateMatcher]="matcher" placeholder="Mobile 1"
-              minlength="10" maxlength="10" (change)="mobileOrPhoneComparision($event)" (keypress)="keyPress($event)" >
+              minlength="10" maxlength="10" (change)="mobileOrPhoneComparision($event)" (keypress)="keyPress($event)"  >
             <mat-error
               *ngIf="addCustomerForm.controls.mobile1.errors && addCustomerForm.controls.mobile1.errors.required">
               Mobile 1 <strong>required</strong>
@@ -483,7 +483,7 @@
           <mat-form-field>
             <mat-label>Passport Number</mat-label>
             <input type="text" matInput formControlName="passportNumber" placeholder="Passport Number"
-              style="line-height: 32px;">
+              style="line-height: 32px;" class="uppercase">
           </mat-form-field>
         </div>
         <div class="col-lg-3">
@@ -501,7 +501,7 @@
           <mat-form-field>
             <mat-label>PAN</mat-label>
             <input type="text" matInput formControlName="pan" placeholder="PAN" style="line-height: 32px;"
-              maxlength="10">
+              maxlength="10" class="uppercase">
             <mat-error *ngIf="addCustomerForm.controls.pan.errors && addCustomerForm.controls.pan.errors.pattern">
               PAN is <strong>invalid</strong>
             </mat-error>
@@ -527,7 +527,7 @@
           <mat-form-field>
             <mat-label>Aadhaar</mat-label>
             <input type="text" matInput formControlName="aadhaar"  placeholder="Aadhaar"
-              style="line-height: 32px;"  (keypress)="keyPress($event)" maxlength="12">
+              style="line-height: 32px;"  (keypress)="keyPress($event)" maxlength="12" class="uppercase">
             <mat-error
               *ngIf="addCustomerForm.controls.aadhaar.errors && (addCustomerForm.controls.aadhaar.errors.minlength || addCustomerForm.controls.aadhaar.errors.pattern || addCustomerForm.controls.aadhaar.errors.maxlength )">
               Aadhaar is <strong>invalid</strong>
@@ -551,7 +551,7 @@
           <mat-form-field>
             <mat-label>Number of Dependents</mat-label>
             <input type="text" matInput formControlName="numberOfDependent" placeholder="Number of Dependents"
-              style="line-height: 30px;">
+              style="line-height: 30px;" class="uppercase">
           </mat-form-field>
         </div>
         <div class="col-lg-3">

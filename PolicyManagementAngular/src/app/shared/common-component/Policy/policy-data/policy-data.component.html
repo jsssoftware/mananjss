@@ -117,7 +117,7 @@
                 <mat-form-field >
                   <mat-label>Name in Policy <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="nameInPolicy" [errorStateMatcher]="matcher"
-                    placeholder="Name in Policy">
+                    placeholder="Name in Policy" class="uppercase"  [readonly]="true">
                   <mat-error *ngIf="customerForm.controls.nameInPolicy">
                     Name in Policy is <strong>required</strong>
                   </mat-error>
@@ -127,7 +127,7 @@
                 <mat-form-field>
                   <mat-label>Proposer Name <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="nameInPolicy" [errorStateMatcher]="matcher"
-                    placeholder="Proposer Name">
+                    placeholder="Proposer Name"  class="uppercase">
                   <mat-error *ngIf="customerForm.controls.nameInPolicy">
                     Proposer Name is <strong>required</strong>
                   </mat-error>
@@ -136,7 +136,7 @@
               <div class="col-lg-8">
                 <mat-form-field>
                   <mat-label>Address in Policy</mat-label>
-                  <input matInput formControlName="addressInPolicy" placeholder="Address in Policy" />
+                  <input matInput formControlName="addressInPolicy" placeholder="Address in Policy"  class="uppercase"/>
                 </mat-form-field>
               </div>
             </div>
@@ -323,7 +323,7 @@
                 <mat-form-field>
                   <mat-label>{{(MenuVertical=='Motor')? 'Cover Note Number' : 'Proposal Number'}} </mat-label>
                   <input type="text" matInput formControlName="coverNoteNumber" 
-                    [ngStyle]="{'line-height':'30px'}">
+                    [ngStyle]="{'line-height':'30px'}" class="uppercase">
                 </mat-form-field>
               </div>
               <div class="col-lg-6">
@@ -385,7 +385,7 @@
                 <mat-form-field>
                   <mat-label>Policy Number <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="policyNumber" [errorStateMatcher]="matcher"
-                    placeholder="Policy Number" maxlength="30" (change)="setOdPolicyDetail()">
+                    placeholder="Policy Number" maxlength="30" (change)="setOdPolicyDetail()" >
                   <mat-error *ngIf="policyForm.controls.policyNumber">
                     Policy Number is <strong>required</strong>
                   </mat-error>
@@ -539,8 +539,8 @@
               <div class="col-lg-6">
                 <mat-form-field>
                   <mat-label>Number of KiloMeter Covered</mat-label>
-                  <input type="text" matInput formControlName="numberOfKiloMeterCovered"
-                    placeholder="Please Enter Number of KiloMeter Covered">
+                  <input type="number" matInput formControlName="numberOfKiloMeterCovered"
+                    placeholder="Please Enter Number of KiloMeter Covered" class="uppercase">
                 </mat-form-field>
               </div>
               <div class="col-lg-6">
@@ -618,7 +618,7 @@
                     <mat-label> {{(MenuVertical=='Motor')?'Previous CN / Policy Number' : 'Previous Policy Number'}}  <span style="color:red">*</span></mat-label>
                     <input type="text" matInput formControlName="previousCnPolicyNumber" [errorStateMatcher]="matcher"
                       [placeholder]="(MenuVertical=='Motor')?'Previous CN / Policy Number' : 'Previous Policy Number'" style="line-height: 30px;" [readonly]="_disableFields">
-                    <mat-error *ngIf="policyForm.controls.previousCNPolicyNumber">
+                    <mat-error *ngIf="policyForm.controls.previousCNPolicyNumber" >
                       {{(MenuVertical=='Motor')?'Previous CN / Policy Number ' : 'Previous Policy Number '}} <strong>is required</strong> 
                     </mat-error>
                   </mat-form-field>
@@ -638,7 +638,7 @@
                 <div class="col-lg-6">
                   <mat-form-field>
                     <mat-label> Previous Policy Plan <span style="color:red">*</span></mat-label>
-                    <input type="text" matInput formControlName="previousPolicyPlan"  placeholder="Previous Policy Plan" style="line-height: 30px;"> 
+                    <input type="text" matInput formControlName="previousPolicyPlan"  placeholder="Previous Policy Plan" style="line-height: 30px;" class="uppercase"> 
                   </mat-form-field>
                 </div>
                 <div class="col-lg-6">
@@ -957,7 +957,7 @@
                 </div>
                 <ng-template #elseBlockNoInspections>
                   <div class="alert alert-danger" role="alert">
-                    There is no any inspections.
+                   No Inspection
                   </div>
                 </ng-template>
               </section>
@@ -1069,7 +1069,7 @@
               </div>
               <div class="col-lg-2">
                 <mat-form-field>
-                  <mat-label>{{(MenuVertical=='Motor')?'Other TP (PC + OC + LL)' : 'Passenger Cover'}}</mat-label>
+                  <mat-label>{{(MenuVertical=='Motor')?'Other TP (PC + ODC & PD)' : 'Passenger Cover'}}</mat-label>
                   <input type="text" matInput formControlName="passengerCover" placeholder="Passenger Cover"
                     (change)="calculateTotalTp()">
                 </mat-form-field>
@@ -1143,7 +1143,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-lg-4">
+              <div class="col-lg-4" [ngClass]="{disabledDiv: _isPremiumDetailsDisabled}">
                 <mat-form-field>
                   <mat-label>Special Discount % <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="specialDiscount" [errorStateMatcher]="matcher"
@@ -1153,14 +1153,14 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-              <div class="col-lg-4">
+              <div class="col-lg-4"  [ngClass]="{disabledDiv: _isPremiumDetailsDisabled}">
                 <mat-form-field>
                   <mat-label>Loading %</mat-label>
                   <input type="text" matInput formControlName="loading" placeholder="Loading %"
                     style="line-height: 28px;">
                 </mat-form-field>
               </div>
-              <div class="col-lg-4">
+              <div class="col-lg-4"  [ngClass]="{disabledDiv: _isPremiumDetailsDisabled}">
                 <mat-form-field appearance="fill">
                   <mat-label>NCB %</mat-label>
                   <mat-select formControlName="ncb" required>
@@ -1674,7 +1674,7 @@
           </div>
           <ng-template #elseBlockNoVouchers>
             <div class="alert alert-danger" role="alert">
-              There is no any vouchers.
+              No Voucher.
             </div>
           </ng-template>
           <div class="row" *ngIf="_vouchers.length > 0">
@@ -1801,7 +1801,7 @@
           </div>
           <ng-template #elseBlockNoClaims>
             <div class="alert alert-danger" role="alert">
-              There is no any claims.
+              No Claim
             </div>
           </ng-template>
   
