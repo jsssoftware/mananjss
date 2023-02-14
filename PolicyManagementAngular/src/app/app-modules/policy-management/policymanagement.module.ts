@@ -24,12 +24,10 @@ import { MotorService } from 'src/app/app-services/motor-service/motor.service';
     DialogBoxComponent,
     PolicyDataComponent,
     PolicyManagementComponent,
-    
     MotorPolicyComponent,
     MotorPolicyManagementComponent,
     HealthPolicyComponent,
     HealthPolicyManagementComponent,
-
   ],
   imports: [
     CommonModule,

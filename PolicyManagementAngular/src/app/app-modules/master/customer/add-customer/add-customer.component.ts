@@ -33,9 +33,9 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   public _designations: IDropDownDto<number>[] = [];
   public _cities: IDropDownDto<number>[] = [];
   public _customerTypes: IDropDownDto<number>[] = [];
-  public _selectedPolicyAddress: number = 0;
-  public _selectedMobileCommunication: number = 0;
-  public _selectedWhatsAppCommunication: number = 0;
+  public _selectedPolicyAddress: number =1;
+  public _selectedMobileCommunication: number = 1;
+  public _selectedWhatsAppCommunication: number = 1;
   public _customerName: string = "";
   public _pushingArray: any = [];
   public _posDatas: IDropDownDto<number>[] = [];

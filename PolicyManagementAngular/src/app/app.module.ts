@@ -20,6 +20,7 @@ import { MasterModule } from './app-modules/master/master.module';
 import { SystemInitialModule } from './app-modules/dashboard/systeminitial.module';
 import { PolicyManagementModule } from './app-modules/policy-management/policymanagement.module'; 
 import { LoaderInterceptor } from './shared/common-component/loader/LoaderInterceptor';
+import { TwoDigitDecimaNumberDirective } from './shared/utilities/directive/twodecimal.directive';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { LoaderInterceptor } from './shared/common-component/loader/LoaderInterc
     LoginComponent,  
     HeaderComponent,
     TopMenuComponent,
-    MenuItemComponent
+    MenuItemComponent,
+    TwoDigitDecimaNumberDirective
   ],
   imports: [
     BrowserModule,
@@ -51,6 +53,8 @@ import { LoaderInterceptor } from './shared/common-component/loader/LoaderInterc
       multi: true  
     }  
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  exports: [TwoDigitDecimaNumberDirective]
+
 })
 export class AppModule { }

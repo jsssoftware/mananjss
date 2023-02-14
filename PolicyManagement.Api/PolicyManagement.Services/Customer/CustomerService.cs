@@ -234,7 +234,7 @@ namespace PolicyManagement.Services.Customer
                     ReferenceId = model.Reference,
                     TeamMemberId = model.TeamMember,
                     TerritoryId = model.CompanyTerritory,
-                    DefaultAddress = model.SelectedPolicyAddress,
+                    DefaultAddress = model.SelectedPolicyAddress ,
                     DefaultContactNo = model.SelectedMobileCommunication,
                     DefaultWhatsAppNo = model.SelectedWhatsAppCommunication,
                     IsCompany = model.CustomerType == 1 , // 1 for Company

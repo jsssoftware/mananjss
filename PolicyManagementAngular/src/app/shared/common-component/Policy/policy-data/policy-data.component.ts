@@ -36,6 +36,7 @@ import { InspectionDetailComponent } from '../detail/inspection-detail/inspectio
 import { VoucherDetailComponent } from '../detail/voucher-detail/voucher-detail.component';
 import { ViewClaimsComponent } from 'src/app/app-modules/sub-system/claims/view-claims/view-claims.component';
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
+import { TwoDigitDecimaNumberDirective } from 'src/app/shared/utilities/directive/twodecimal.directive';
 
 export interface PeriodicElement {
   endorsementReason: string;
@@ -104,7 +105,8 @@ const ELEMENT_DATA_InspectionDetail: PeriodicElementForInspectionDetail[] = [
 @Component({
   selector: 'app-policy-data',
   templateUrl: './policy-data.component.html',
-  styleUrls: ['./policy-data.component.css']
+  styleUrls: ['./policy-data.component.css'],
+
 })
 export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMatcher {
   @Input('MenuVertical') public MenuVertical: string = '';
@@ -428,7 +430,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   public _isDisableBlockAgentCheckbox: boolean = false;
   public _isDisableChangeAgentCheckbox: boolean = false;
-  public _isPremiumDetailsDisabled: boolean = false;
+  public _isTpPremiumDetailsDisabled: boolean = false;
+  public _isOdPremiumDetailsDisabled: boolean = false;
   public _isDisableOdPolicyDetails: boolean = false;
   public _policyData?: IMotorPolicyFormDataModel;
   public _verticalName: any = "";
@@ -746,7 +749,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   async getPolicyTerms(): Promise<void> {
     this.policyForm.reset();
-    this._isPremiumDetailsDisabled =false
+    this._isTpPremiumDetailsDisabled =false;
+    this._isOdPremiumDetailsDisabled = false;
     this.policyTermForm.patchValue({ policyTerm: undefined });
     let model = this.getPolicyFormData();
     if (model.PolicyTypeId == undefined ||
@@ -766,11 +770,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = false;
       this._isAddOnRiderEnable = false;
-      this._isPremiumDetailsDisabled =true
+      this._isTpPremiumDetailsDisabled =true
     } else if (model.PackageTypeId === PackageType.OD_ONLY) {
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = true;
       this._isAddOnRiderEnable = true;
+      this._isOdPremiumDetailsDisabled =true
+
     }
 
     if (model.PackageTypeId === PackageType.USAGE_BASE) {
@@ -1663,8 +1669,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     let addOnRiderOd: any = this.premiumForm.controls.addOnRiderOd.value || 0;
     let endorseOd: any = this.premiumForm.controls.endorseOd.value || 0;
 
-    let sum = parseInt(od == "" ? 0 : od) + parseInt(addOnRiderOd == "" ? 0 : addOnRiderOd)
-      + parseInt(endorseOd == "" ? 0 : endorseOd);
+    let sum = Math.round(parseFloat(od == "" ? 0 : od) + parseFloat(addOnRiderOd == "" ? 0 : addOnRiderOd)
+      + parseFloat(endorseOd == "" ? 0 : endorseOd));
     this.premiumForm.patchValue({ totalOd: sum });
 
     this.calculateGrossPremium();
@@ -1677,8 +1683,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     let passengerCover: any = this.premiumForm.controls.passengerCover.value;
     let endorseTp: any = this.premiumForm.controls.endorseTp.value;
 
-    let sum = parseInt(tp == "" ? 0 : tp) + parseInt(passengerCover == "" ? 0 : passengerCover)
-      + parseInt(endorseTp == "" ? 0 : endorseTp);
+    let sum = Math.round(parseFloat(tp == "" ? 0 : tp) + parseFloat(passengerCover == "" ? 0 : passengerCover)
+      + parseFloat(endorseTp == "" ? 0 : endorseTp));
     this.premiumForm.patchValue({ totalTp: sum });
 
     this.calculateGrossPremium();
@@ -2623,7 +2629,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   setPolicyDetails(): void {
     let model = this.getPolicyFormData();
-    this._isPremiumDetailsDisabled = false
+    this._isTpPremiumDetailsDisabled = false
     if (model.PackageTypeId === PackageType.COMPREHENSIVE || model.PackageTypeId === PackageType.USAGE_BASE) {
       this._isDisableOdPolicyDetails = true;
       this._isOdPolicyEnable = true;
@@ -2633,7 +2639,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = false;
       this._isAddOnRiderEnable = false;
-      this._isPremiumDetailsDisabled = true
+      this._isTpPremiumDetailsDisabled = true
     } else if (model.PackageTypeId === PackageType.OD_ONLY) {
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = true;
