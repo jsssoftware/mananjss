@@ -40,6 +40,8 @@ export class CustomerComponent implements OnInit {
     this._policyTypeId = this.route.snapshot.paramMap.get('policyType');
     this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyTypeId)); 
     this._motorService._headerTitle$.next(this._headerTitle);
+    let VType  = this.route.snapshot.paramMap.get('verticalType');
+    this._motorService._verticalId$.next(VType);
   }
 
   pageChanged(event: PageEvent): void {
@@ -74,7 +76,11 @@ export class CustomerComponent implements OnInit {
   }
 
   editCustomer(customerId: any): void {
-    this.router.navigate(["/master/edit-customer", customerId]);
+    const data ={
+      customerId:customerId,
+      policyTypeId:this._policyTypeId
+    }
+    this.router.navigate(["/master/edit-customer", data]);
   }
 
 

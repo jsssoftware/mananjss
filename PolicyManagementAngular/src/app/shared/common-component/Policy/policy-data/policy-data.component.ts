@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { AfterViewInit, Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, ValidationErrors, Validators } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatTableDataSource } from '@angular/material/table';
@@ -2039,9 +2039,12 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   disableFields(event: any) {
     if (event.checked) {
       this._disableFields = true;
+      this.genericClearValidator(["lastYearInsuranceCompany","previousCnPolicyNumber","lastPolicyExpiryDate"],this.policyForm)
     }
     else {
       this._disableFields = false;
+      this.genericSetValidator(["lastYearInsuranceCompany","previousCnPolicyNumber","lastPolicyExpiryDate"],this.policyForm)
+
     }
     this.setPreviousInsuranceCompany();
   }
@@ -2085,9 +2088,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         this.policyForm.patchValue({ isBlockAgent: false });
         break;
     }
-    if(this.policyForm.value.isBlockAgent || this.policyForm.value.changeAgent){
-      this._lastInsuranceCompanies = this._savedinsuranceCompanies
-    }  
+    debugger
+    
     this.setPreviousInsuranceCompany();
   }
 
@@ -2421,10 +2423,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     let tp: any = this.premiumForm.controls.tp.value;
     let passengerCover: any = this.premiumForm.controls.passengerCover.value;
 
-    let sum = parseInt(od == "" ? 0 : od) + parseInt(addOnRiderOd == "" ? 0 : addOnRiderOd)
-      + parseInt(tp == "" ? 0 : tp) + parseInt(passengerCover == "" ? 0 : passengerCover);
+    let sum = Math.round(parseFloat(od == "" ? 0 : od) + parseFloat(addOnRiderOd == "" ? 0 : addOnRiderOd)
+      + parseFloat(tp == "" ? 0 : tp) + parseFloat(passengerCover == "" ? 0 : passengerCover));
 
-    this.premiumForm.patchValue({ commissionablePremium: sum.toFixed(2) });
+    this.premiumForm.patchValue({ commissionablePremium: sum});
   }
 
   calculateCommissionablePremiumNoCommission() {
@@ -2469,8 +2471,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   refreshLastInsuranceCompanies() {
     if (this.policyTermForm.value.policyType == undefined ||
       this.policyTermForm.value.packageType == undefined) return;
-      debugger
-   
+    if(this.policyForm.value.isBlockAgent || this.policyForm.value.isChangeAgent){
+        this._lastInsuranceCompanies = this._savedinsuranceCompanies ;return
+    }  
     if (this.policyTermForm.value.policyType == PolicyType.Rollover && this.policyTermForm.value.packageType == PolicyType.New) {
       this._lastInsuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this.policyForm.value.tpInsuranceCompany);
     } else {
@@ -2699,17 +2702,20 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     }
   }
 
-  genericClearValidator = (args: string[]) => {
+  genericClearValidator = (args: string[],form:FormGroup) => {
     args.forEach(element => {
-      this.policyForm.controls[element].clearValidators();
-      this.policyForm.patchValue({ [element]: "" });
+      form.controls[element].clearValidators();
+      form.patchValue({ [element]: "" });
     });
+    form.updateValueAndValidity();
   }
 
-  genericSetValidator = (args: string[]) => {
+  genericSetValidator = (args: string[],form:FormGroup) => {
     args.forEach(element => {
-      this.policyForm.controls[element].setValidators([Validators.required]);
+      form.controls[element].setValidators([Validators.required]);
     });
+    form.updateValueAndValidity();
+
   }
 
   deletefiles(index:any){
@@ -2720,6 +2726,68 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   downloadFile(element: any) {
     var blob = new Blob(element.FileData, { type: element.FileData[0].type });
     saveAs(blob, element.FileName);
+  }
+
+  getFormValidationErrors() {
+    //Policy Form
+    Object.keys(this.policyForm.controls).forEach(key => {
+      const controlErrors: ValidationErrors = this.policyForm.get(key).errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+         console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+        });
+      }
+    });
+
+    Object.keys(this.customerForm.controls).forEach(key => {
+      const controlErrors: ValidationErrors = this.customerForm.get(key).errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+         console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+        });
+      }
+    });
+    Object.keys(this.premiumForm.controls).forEach(key => {
+      const controlErrors: ValidationErrors = this.premiumForm.get(key).errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+         console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+        });
+      }
+    });
+
+    Object.keys(this.policyTermForm.controls).forEach(key => {
+      const controlErrors: ValidationErrors = this.policyTermForm.get(key).errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+         console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+        });
+      }
+    });
+    Object.keys(this.vehicleForm.controls).forEach(key => {
+      const controlErrors: ValidationErrors = this.vehicleForm.get(key).errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+         console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+        });
+      }
+    });
+    Object.keys(this.addOnRiderForm.controls).forEach(key => {
+      const controlErrors: ValidationErrors = this.addOnRiderForm.get(key).errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+         console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+        });
+      }
+    });
+    Object.keys(this.paymentForm.controls).forEach(key => {
+      const controlErrors: ValidationErrors = this.paymentForm.get(key).errors;
+      if (controlErrors != null) {
+        Object.keys(controlErrors).forEach(keyError => {
+         console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+        });
+      }
+    });
   }
 
 

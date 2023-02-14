@@ -355,11 +355,13 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
     console.log(model);
 
     this.customerService.addCustomer(model).subscribe((response: ICommonDto<any>) => {
+      debugger
       if (response.IsSuccess) {
         Swal.fire({
           icon: 'success',
           text: response.Message
         }).then((result) => {
+          debugger
           if (result.isConfirmed) {
             this.routeToredirect()
           }
@@ -718,11 +720,15 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   }
 
   routeToredirect(){
-    let verticalData = this._motorService._verticalId$.getValue();
-    if(this._policyTypeId == SearchPolicyType.Motor_New){
-      this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_New + "/" +verticalData + ""]);
-    }else if(this._policyTypeId == SearchPolicyType.Motor_rollover){
-      this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_rollover + "/" +verticalData + ""]);
+    let verticalData = Number(this._motorService._verticalId$.getValue());
+    if(verticalData){
+      if(this._policyTypeId == SearchPolicyType.Motor_New){
+        this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_New + "/" +verticalData + ""]);
+      }else if(this._policyTypeId == SearchPolicyType.Motor_rollover){
+        this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_rollover + "/" +verticalData + ""]);
+      }
+    }else{
+      this.router.navigate(["/master/customer/"]);
     }
   }
 }

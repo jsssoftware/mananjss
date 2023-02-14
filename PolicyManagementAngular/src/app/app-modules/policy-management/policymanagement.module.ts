@@ -16,12 +16,13 @@ import { HealthPolicyManagementComponent } from './health/health-policy-manageme
 import { MotorPolicyComponent } from './motor/motor-policy/motor-policy.component';
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
+import { TwoDigitDecimaNumberDirective } from 'src/app/shared/utilities/directive/twodecimal.directive';
+import { NumbersOnlyDirective } from 'src/app/shared/utilities/directive/numberonly.directive';
 
 @NgModule({
   declarations: [  
     InspectionDetailComponent, // in popup used
     VoucherDetailComponent, // in popup used
-
     DialogBoxComponent,
     PolicyDataComponent,
     PolicyManagementComponent,
@@ -29,6 +30,8 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     MotorPolicyManagementComponent,
     HealthPolicyComponent,
     HealthPolicyManagementComponent,
+    TwoDigitDecimaNumberDirective,
+    NumbersOnlyDirective
   ],
   imports: [
     CommonModule,
@@ -38,7 +41,8 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
     FormsModule,
     ReactiveFormsModule,
     MaterialFileInputModule,
-    NgxDocViewerModule
+    NgxDocViewerModule,
+    
     
   ],
   providers:[MotorService]
