@@ -27,6 +27,7 @@
     "animate.css": "^4.1.1",
     "file-saver": "^2.0.5",
     "moment": "^2.29.1",
+    "ngx-doc-viewer": "^2.1.4",
     "ngx-material-file-input": "~3.0.0",
     "rxjs": "~6.6.0",
     "sweetalert2": "^11.0.16",

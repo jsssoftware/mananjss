@@ -19,7 +19,7 @@ import { SubSystemModule } from './app-modules/sub-system/subsystem.module';
 import { MasterModule } from './app-modules/master/master.module';
 import { SystemInitialModule } from './app-modules/dashboard/systeminitial.module';
 import { PolicyManagementModule } from './app-modules/policy-management/policymanagement.module'; 
-import { LoaderInterceptor } from './shared/common-component/loader/LoaderInterceptor';
+import { LoaderInterceptor } from './shared/common-component/loader/loaderInterceptor';
 import { TwoDigitDecimaNumberDirective } from './shared/utilities/directive/twodecimal.directive';
 
 @NgModule({
@@ -44,7 +44,7 @@ import { TwoDigitDecimaNumberDirective } from './shared/utilities/directive/twod
     PolicyManagementModule,
     SubSystemModule,
     MasterModule,
-    MaterialFileInputModule
+    MaterialFileInputModule,
   ],
   providers: [CommonFunction, Services, AuthGuard, { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
     {  

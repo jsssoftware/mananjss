@@ -37,6 +37,8 @@ import { VoucherDetailComponent } from '../detail/voucher-detail/voucher-detail.
 import { ViewClaimsComponent } from 'src/app/app-modules/sub-system/claims/view-claims/view-claims.component';
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
 import { TwoDigitDecimaNumberDirective } from 'src/app/shared/utilities/directive/twodecimal.directive';
+import { Observable, ReplaySubject } from 'rxjs';
+import { saveAs } from 'file-saver';
 
 export interface PeriodicElement {
   endorsementReason: string;
@@ -568,7 +570,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     await this.getPolicyClaims();
     await this.getPolicyVouchers();
     await this.getPolicyInspections();
-    await this.getPolicyDocuments();
     //Not calling on edit
     if (this._policyId == 0) {
       //      await this.getAddOnRiders();
@@ -1568,7 +1569,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         break;
     }
   }
-
+  base64Output :any;
   addDocument(): void {
     let reader = new FileReader();
     reader.onload = () => {
@@ -1589,14 +1590,23 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         UniqueId: document.UniqueId,
         DocumentTypeName: this.uploadDocumentForm.value.documentType?.Name,
         FileName: document.FileName,
-        Remarks: document.Remarks
+        Remarks: document.Remarks,
+        FileData:this.uploadDocumentForm.value.browse._files
       });
       this._dataSourceUploadDocuments = new MatTableDataSource<IPolicyDocumentDto>(this._policyDocuments.reverse());
     }
-
     reader.readAsDataURL(this.uploadDocumentForm.value.browse._files[0]);
+        // Create a Blog object for selected file & define MIME type
+    var blob = new Blob(this.uploadDocumentForm.value.browse._files, { type: this.uploadDocumentForm.value.browse._files[0].type });
+
+    // Create Blog URL 
+    this.base64Output = window.URL.createObjectURL(blob);
+
   }
 
+  viewer :any= 'google';  
+  selectedType = 'docx';   
+  DemoDoc="http://www.africau.edu/images/default/sample.pdf"
   getAddOnRiderFormData(): IAddOnRiderModel {
     this._addOnPlanOptions.forEach(f => {
       if (f.IsPlanAvailable) {
@@ -1772,6 +1782,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
       this._policyData = response;
       this.setMotorPolicyData(response);
+      this.getPolicyDocuments();
+
     });
   }
 
@@ -2073,6 +2085,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         this.policyForm.patchValue({ isBlockAgent: false });
         break;
     }
+    if(this.policyForm.value.isBlockAgent || this.policyForm.value.changeAgent){
+      this._lastInsuranceCompanies = this._savedinsuranceCompanies
+    }  
     this.setPreviousInsuranceCompany();
   }
 
@@ -2454,10 +2469,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   refreshLastInsuranceCompanies() {
     if (this.policyTermForm.value.policyType == undefined ||
       this.policyTermForm.value.packageType == undefined) return;
-    if(this.policyForm.value.isBlockAgent || this.policyForm.value.changeAgent){
-      this._lastInsuranceCompanies = this._insuranceCompanies
-      return
-    }  
+      debugger
+   
     if (this.policyTermForm.value.policyType == PolicyType.Rollover && this.policyTermForm.value.packageType == PolicyType.New) {
       this._lastInsuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this.policyForm.value.tpInsuranceCompany);
     } else {
@@ -2699,6 +2712,15 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     });
   }
 
+  deletefiles(index:any){
+    this._dataSourceUploadDocuments.data.splice(index, 1);
+    this._dataSourceUploadDocuments._updateChangeSubscription(); // <-- Refresh the datasource
+  }
+
+  downloadFile(element: any) {
+    var blob = new Blob(element.FileData, { type: element.FileData[0].type });
+    saveAs(blob, element.FileName);
+  }
 
 
 }

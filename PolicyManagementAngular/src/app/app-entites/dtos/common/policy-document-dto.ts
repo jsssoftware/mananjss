@@ -4,4 +4,5 @@ export interface IPolicyDocumentDto {
     FileName: string;
     Remarks: string;
     UniqueId: string;
+    FileData?:any;
 }

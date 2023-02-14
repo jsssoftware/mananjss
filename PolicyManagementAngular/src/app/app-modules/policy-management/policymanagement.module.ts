@@ -15,6 +15,7 @@ import { HealthPolicyComponent } from './health/health-policy/health-policy.comp
 import { HealthPolicyManagementComponent } from './health/health-policy-management/health-policy-management.component';
 import { MotorPolicyComponent } from './motor/motor-policy/motor-policy.component';
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
+import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 @NgModule({
   declarations: [  
@@ -37,6 +38,7 @@ import { MotorService } from 'src/app/app-services/motor-service/motor.service';
     FormsModule,
     ReactiveFormsModule,
     MaterialFileInputModule,
+    NgxDocViewerModule
     
   ],
   providers:[MotorService]
