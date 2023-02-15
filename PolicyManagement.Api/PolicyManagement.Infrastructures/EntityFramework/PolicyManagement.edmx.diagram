@@ -61,7 +61,6 @@
         <EntityTypeShape EntityType="PolicyManagerModel.tblMenuItem" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblModel" Width="1.5" PointX="8" PointY="1" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblMonthCycle" Width="1.5" PointX="24.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.tblMotorPolicyData" Width="1.5" PointX="15.75" PointY="24.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblNCB" Width="1.5" PointX="24.75" PointY="4.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblNoofMember" Width="1.5" PointX="24.75" PointY="8.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblNoofYear" Width="1.5" PointX="24.75" PointY="12.75" />

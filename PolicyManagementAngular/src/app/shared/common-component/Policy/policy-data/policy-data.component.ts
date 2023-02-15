@@ -1471,11 +1471,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     //later change with dynamic form builder approach
 
     let payments: IPaymentFormDataModel[] = [];
-
+    debugger
     let payment1: IPaymentFormDataModel = {
       Amount: this.PaymentForm.amount1,
       Bank: this.PaymentForm.bank1,
-      DatedString: this.commonService.getDateInString(this.PaymentForm.dated1),
+      DatedString: this.PaymentForm.dated1 ? this.commonService.getDateInString(this.PaymentForm.dated1): null,
       InstrumentNumber: this.PaymentForm.instrumentNumber1,
       Mode: this.PaymentForm.mode1,
       DatedDto: null
@@ -1484,7 +1484,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     let payment2: IPaymentFormDataModel = {
       Amount: this.PaymentForm.amount2,
       Bank: this.PaymentForm.bank2,
-      DatedString: this.commonService.getDateInString(this.PaymentForm.dated2),
+      DatedString:this.PaymentForm.dated2? this.commonService.getDateInString(this.PaymentForm.dated2):null,
       InstrumentNumber: this.PaymentForm.instrumentNumber2,
       Mode: this.PaymentForm.mode2,
       DatedDto: null
@@ -1493,7 +1493,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     let payment3: IPaymentFormDataModel = {
       Amount: this.PaymentForm.amount3,
       Bank: this.PaymentForm.bank3,
-      DatedString: this.commonService.getDateInString(this.PaymentForm.dated3),
+      DatedString: this.PaymentForm.dated3?this.commonService.getDateInString(this.PaymentForm.dated3):null,
       InstrumentNumber: this.PaymentForm.instrumentNumber3,
       Mode: this.PaymentForm.mode3,
       DatedDto: null
@@ -1961,7 +1961,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
             mode1: response.PaymentData[i].Mode,
             amount1: response.PaymentData[i].Amount,
             instrumentNumber1: response.PaymentData[i].InstrumentNumber,
-            dated1: moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)),
+            dated1: response.PaymentData[i].DatedDto ? moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)):null,
             bank1: response.PaymentData[i].Bank
           });
         }
@@ -1970,7 +1970,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
             mode2: response.PaymentData[i].Mode,
             amount2: response.PaymentData[i].Amount,
             instrumentNumber2: response.PaymentData[i].InstrumentNumber,
-            dated2: moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)),
+            dated2:  response.PaymentData[i].DatedDto ?moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)):null,
             bank2: response.PaymentData[i].Bank
           });
         }
@@ -1979,7 +1979,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
             mode3: response.PaymentData[i].Mode,
             amount3: response.PaymentData[i].Amount,
             instrumentNumber3: response.PaymentData[i].InstrumentNumber,
-            dated3: moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)),
+            dated3: response.PaymentData[i].DatedDto ? moment(this.commonService.getDateFromIDateDto(response.PaymentData[i].DatedDto as IDateDto)):null,
             bank3: response.PaymentData[i].Bank
           });
         }

@@ -147,8 +147,6 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<tblMonthCycle> tblMonthCycle { get; set; }
 
-    public virtual DbSet<tblMotorPolicyData> tblMotorPolicyData { get; set; }
-
     public virtual DbSet<tblNCB> tblNCB { get; set; }
 
     public virtual DbSet<tblNoofMember> tblNoofMember { get; set; }
@@ -196,6 +194,7 @@ public partial class DataContext : DbContext
     public virtual DbSet<tblReference> tblReference { get; set; }
 
     public virtual DbSet<tblReferenceLead> tblReferenceLead { get; set; }
+    public virtual DbSet<tblMotorPolicyData> tblMotorPolicyData { get; set; }
 
     public virtual DbSet<tblReferType> tblReferType { get; set; }
 
@@ -296,6 +295,8 @@ public partial class DataContext : DbContext
     public virtual DbSet<viewRenewPerformance> viewRenewPerformance { get; set; }
 
     public virtual DbSet<viewRenewPerformanceNonMotor> viewRenewPerformanceNonMotor { get; set; }
+
+    public virtual DbSet<tblMotorPolicyData> tblMotorPolicyDatas { get; set; }
 
 
     public virtual int GetOtherHelathPolicy(Nullable<int> policyId, Nullable<int> customerID)

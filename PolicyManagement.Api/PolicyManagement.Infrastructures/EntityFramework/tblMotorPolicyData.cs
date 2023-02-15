@@ -15,7 +15,7 @@ namespace PolicyManagement.Infrastructures.EntityFramework
 using System;
     using System.Collections.Generic;
     
-public partial class tblMotorPolicyData
+public  class tblMotorPolicyData
 {
 
     public int PolicyId { get; set; }
@@ -114,6 +114,10 @@ public partial class tblMotorPolicyData
 
     public Nullable<System.DateTime> PreviousPolicyEndDate { get; set; }
 
+    public string PreviousPolicyPlan { get; set; }
+
+    public Nullable<int> PreviousSumInsured { get; set; }
+
     public string NomineeName { get; set; }
 
     public short NomineeRelationShipId { get; set; }
@@ -170,25 +174,25 @@ public partial class tblMotorPolicyData
 
     public Nullable<int> TotalIDV { get; set; }
 
-    public Nullable<int> OD { get; set; }
+    public Nullable<decimal> OD { get; set; }
 
-    public Nullable<int> AddonOD { get; set; }
+    public Nullable<decimal> AddonOD { get; set; }
 
-    public Nullable<int> EndorseOD { get; set; }
+    public Nullable<decimal> EndorseOD { get; set; }
 
     public Nullable<int> TotalOD { get; set; }
 
-    public Nullable<int> TPPremium { get; set; }
+    public Nullable<decimal> TPPremium { get; set; }
 
-    public Nullable<int> PassengerCover { get; set; }
+    public Nullable<decimal> PassengerCover { get; set; }
 
-    public Nullable<int> EndorseTP { get; set; }
+    public Nullable<decimal> EndorseTP { get; set; }
 
     public Nullable<int> TotalTP { get; set; }
 
-    public Nullable<int> GrossPremium { get; set; }
+    public Nullable<decimal> GrossPremium { get; set; }
 
-    public Nullable<int> EndorseGrossPremium { get; set; }
+    public Nullable<decimal> EndorseGrossPremium { get; set; }
 
     public Nullable<decimal> GSTRate { get; set; }
 
@@ -198,7 +202,7 @@ public partial class tblMotorPolicyData
 
     public Nullable<short> CommissionPayTypeId { get; set; }
 
-    public Nullable<int> CommissionablePremium { get; set; }
+    public Nullable<decimal> CommissionablePremium { get; set; }
 
     public short NCBId { get; set; }
 
@@ -207,6 +211,8 @@ public partial class tblMotorPolicyData
     public Nullable<decimal> Loading { get; set; }
 
     public short AddonRiderId { get; set; }
+
+    public string AddOnSelected { get; set; }
 
     public short TeleCallerId { get; set; }
 
@@ -352,19 +358,13 @@ public partial class tblMotorPolicyData
 
     public Nullable<int> FlagPreRenewCall { get; set; }
 
-    public string AddOnSelected { get; set; }
-
-    public string PreviousPolicyPlan { get; set; }
-
-    public Nullable<int> PreviousSumInsured { get; set; }
-
     public Nullable<int> InsuranceBranchId { get; set; }
 
-    public Nullable<int> BasicTpGstPercentage { get; set; }
+    public Nullable<decimal> BasicTpGstPercentage { get; set; }
 
     public Nullable<int> NetPremium { get; set; }
 
-    public Nullable<int> NonCommissionComponentPremium { get; set; }
+    public Nullable<decimal> NonCommissionComponentPremium { get; set; }
 
     public Nullable<int> VehicleSegment { get; set; }
 

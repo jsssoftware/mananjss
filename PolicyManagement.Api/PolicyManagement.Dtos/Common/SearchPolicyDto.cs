@@ -16,7 +16,7 @@ namespace PolicyManagement.Dtos.Common
         public int POSId { get; set; }
         public string NameInPolicy { get; set; }
         public string RegistrationNo { get; set; }
-        public int? GrossPremium { get; set; }
+        public decimal? GrossPremium { get; set; }
         public bool IsActive { get; set; }
         public bool Flag1 { get; set; }
         public bool Flag2 { get; set; }
@@ -50,7 +50,7 @@ namespace PolicyManagement.Dtos.Common
         public string ControlNo { get; set; } 
         public string NameInPolicy { get; set; }
         public string RegistrationNo { get; set; }
-        public int? GrossPremium { get; set; } 
+        public decimal? GrossPremium { get; set; } 
         public string PolicyType { get; set; }
         public string VerticalName { get; set; }
         public string ProductName { get; set; }
@@ -74,7 +74,7 @@ namespace PolicyManagement.Dtos.Common
         public string ControlNo { get; set; }
         public string NameInPolicy { get; set; }
         public string RegistrationNo { get; set; }
-        public int? GrossPremium { get; set; }
+        public decimal? GrossPremium { get; set; }
         public string PolicyType { get; set; }
         public string VerticalName { get; set; }
         public string ProductName { get; set; }
