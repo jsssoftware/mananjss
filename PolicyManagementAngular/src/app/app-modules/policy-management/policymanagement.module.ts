@@ -18,6 +18,7 @@ import { MotorService } from 'src/app/app-services/motor-service/motor.service';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { TwoDigitDecimaNumberDirective } from 'src/app/shared/utilities/directive/twodecimal.directive';
 import { NumbersOnlyDirective } from 'src/app/shared/utilities/directive/numberonly.directive';
+import { PrintErrorComponent } from 'src/app/shared/common-component/print-error/print-error.component';
 
 @NgModule({
   declarations: [  
@@ -31,7 +32,8 @@ import { NumbersOnlyDirective } from 'src/app/shared/utilities/directive/numbero
     HealthPolicyComponent,
     HealthPolicyManagementComponent,
     TwoDigitDecimaNumberDirective,
-    NumbersOnlyDirective
+    NumbersOnlyDirective,
+      PrintErrorComponent
   ],
   imports: [
     CommonModule,
@@ -42,6 +44,8 @@ import { NumbersOnlyDirective } from 'src/app/shared/utilities/directive/numbero
     ReactiveFormsModule,
     MaterialFileInputModule,
     NgxDocViewerModule,
+    
+
     
     
   ],

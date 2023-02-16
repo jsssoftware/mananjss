@@ -93,8 +93,12 @@
               </button>
             </div>
           </div>
-          
+          <div class="row" *ngIf="_showErrors">
+           
+
+            </div>
         </mat-card-content>
+        
       </mat-card>
   
       <mat-accordion>
@@ -1251,7 +1255,7 @@
                   <input type="text" matInput name="txtAddOn{{i}}" placeholder="AddonValue" [(ngModel)]="option.AddonValue" style="width: 40%;
                   float: left;
                   line-height: 25px; border-bottom: 1px solid;  margin-right: 10px;"/> 
-                <mat-checkbox color="primary" [(ngModel)]="option.IsPlanAvailable" name="{{i}}"
+                <mat-checkbox color="primary"    name="{{i}}"
                   (change)="getCheckboxValue(i, option.IsPlanAvailable, option.AddonPlanOptionName)"
                   [disabled]="option.IsDisabled">
                   {{option.AddonPlanOptionName}}

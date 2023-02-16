@@ -1,0 +1,13 @@
+
+
+<small class="error-block" *ngFor="let formControlItem of errorMsgList; let last=last;">
+    <br>
+    <span>{{formControlItem.key}}</span>
+<!--     <span *ngIf="formControlItem.value.invalid && (formControlItem.value.dirty || formControlItem.value.touched)" class="text-danger">
+ -->    <span *ngIf="formControlItem.value.invalid" class="text-danger">    
+        <span *ngIf="formControlItem.value.errors.required"> :This field is required</span>
+        <span *ngIf="formControlItem.value.errors.minlength"> :This field is too short</span>
+        <span *ngIf="formControlItem.value.errors.maxlength"> :This field is too long</span>
+        <span *ngIf="formControlItem.value.errors.pattern">: Invalid value for this field</span>
+    </span>
+</small>  

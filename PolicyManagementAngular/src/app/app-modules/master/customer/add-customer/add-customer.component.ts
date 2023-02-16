@@ -105,9 +105,9 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
     lineOfBusiness: new FormControl(''),
     industry: new FormControl(''),
     designation: new FormControl(''),
-    selectedPolicyAddress: new FormControl(),
-    selectedMobileCommunication: new FormControl(),
-    selectedWhatsAppCommunication: new FormControl(),
+    selectedPolicyAddress: new FormControl(1),
+    selectedMobileCommunication: new FormControl(1),
+    selectedWhatsAppCommunication: new FormControl(1),
     dateOfBirth: new FormControl(''),
     dateOfAnniversary: new FormControl(''),
     communicationOptOut1: new FormControl(false),
@@ -355,13 +355,11 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
     console.log(model);
 
     this.customerService.addCustomer(model).subscribe((response: ICommonDto<any>) => {
-      debugger
       if (response.IsSuccess) {
         Swal.fire({
           icon: 'success',
           text: response.Message
         }).then((result) => {
-          debugger
           if (result.isConfirmed) {
             this.routeToredirect()
           }
@@ -460,6 +458,11 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   }
 
   setCustomerData(data: IAddUpdateCustomerModel): void {
+    this.addCustomerForm.patchValue({ selectedPolicyAddress: 1 });
+
+    this._selectedPolicyAddress = data.SelectedPolicyAddress;
+    this._selectedMobileCommunication = data.SelectedMobileCommunication;
+    this._selectedWhatsAppCommunication = data.SelectedWhatsAppCommunication;
     this.addCustomerForm.patchValue({
       customerNameSalutation: data.CustomerNameSalutation,
       customerName: data.CustomerName,
@@ -499,7 +502,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       lineOfBusiness: data.LineOfBusiness,
       industry: data.Industry,
       designation: data.Designation,
-      selectedPolicyAddress: data.SelectedPolicyAddress,
+      selectedPolicyAddress: data.SelectedPolicyAddress ,
       selectedMobileCommunication: data.SelectedMobileCommunication,
       selectedWhatsAppCommunication: data.SelectedWhatsAppCommunication,
       dateOfBirth: data.DateOfBirth != null ? new Date(data.DateOfBirth): null,
@@ -512,10 +515,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       passportNumber: data.PassportNumber,
       isPos: data.IsPos,
       isTeamMember: data.IsTeamMember
-    })
-    this._selectedPolicyAddress = data.SelectedPolicyAddress;
-    this._selectedMobileCommunication = data.SelectedMobileCommunication;
-    this._selectedWhatsAppCommunication = data.SelectedWhatsAppCommunication;
+    })   
   }
 
   cancelCustomer(): void {

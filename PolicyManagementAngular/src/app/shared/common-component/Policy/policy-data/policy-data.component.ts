@@ -219,7 +219,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     // inspectionDate: new FormControl(''),
     // inspectionTime: new FormControl(''),
     // inspectionRemarks: new FormControl('')
-    portability: new FormControl('', [Validators.required]),
+    portability: new FormControl(''),
     continutyStartDate: new FormControl(''),
     previousPolicyPlan: new FormControl(''),
     previousPolicySumInsured: new FormControl('', [Validators.pattern('^[0-9]+$')]),
@@ -435,6 +435,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _isTpPremiumDetailsDisabled: boolean = false;
   public _isOdPremiumDetailsDisabled: boolean = false;
   public _isDisableOdPolicyDetails: boolean = false;
+  public _showErrors: boolean = false;
   public _policyData?: IMotorPolicyFormDataModel;
   public _verticalName: any = "";
   public _policyStatus: string = "";
@@ -535,6 +536,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
     this.policyForm.get("numberOfKiloMeterCovered")?.disable();
     this.policyForm.get("extendedKiloMeterCovered")?.disable();
+    this.policyForm.valueChanges.subscribe(change=>{ 
+      console.log(this.policyForm) 
+      this.policyForm = this.policyForm
+    })
+
   }
 
   async ngAfterViewInit(): Promise<void> {
@@ -1471,7 +1477,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     //later change with dynamic form builder approach
 
     let payments: IPaymentFormDataModel[] = [];
-    debugger
     let payment1: IPaymentFormDataModel = {
       Amount: this.PaymentForm.amount1,
       Bank: this.PaymentForm.bank1,
@@ -1986,9 +1991,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       }
 
     }
+    this.validationPolicyData()
     //Calling insurance company branch api location
-    setTimeout(()=>{                           // <<<---using ()=> syntax
+    setTimeout(()=>{                          
       this.setPolicyDetails()
+      this._showErrors = true
     }, 3000);
     this.setvalues();
   }
@@ -2618,7 +2625,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this._addOnPlanOptions.forEach(f => {
       let addonPlanOptionIdIndex = response?.AddOnRider?.AddOnRiderOptionId.findIndex((x: number) => x == f.AddonPlanOptionId);
       if (addonPlanOptionIdIndex >= 0) {
-        let addOnValue = response?.AddOnRider?.AddOnValue[addonPlanOptionIdIndex].toString();
+        let addOnValue = response?.AddOnRider?.AddOnValue[addonPlanOptionIdIndex]?.toString();
         f.AddonValue = addOnValue;
         f.IsPlanAvailable = true;
         this._addOnRiderArray.push(f.AddonPlanOptionName);
@@ -2656,10 +2663,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this._isOdPolicyEnable = false;
       this._isAddOnRiderEnable = false;
       this._isTpPremiumDetailsDisabled = true
+      this.genericClearValidator(["odPolicyNumber"], this.policyForm)
     } else if (model.PackageTypeId === PackageType.OD_ONLY) {
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = true;
       this._isAddOnRiderEnable = true;
+      this.genericSetValidator(["odPolicyNumber"], this.policyForm)
+
     }
 
     if (model.PackageTypeId === PackageType.USAGE_BASE) {
@@ -2788,6 +2798,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         });
       }
     });
+  }
+
+  validationPolicyData(){
+    this.genericClearValidator(["lastYearInsuranceCompany","previousCnPolicyNumber"],this.policyForm)
+    if (this._type == SearchPolicyType.Motor_Renew  && this._policyType != SearchPolicyType.Motor_rollover) {
+      this.genericSetValidator(["lastYearInsuranceCompany","previousCnPolicyNumber"],this.policyForm)
+    }
   }
 
 
