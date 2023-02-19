@@ -94,7 +94,11 @@
             </div>
           </div>
           <div class="row" *ngIf="_showErrors">
-           
+            <div class="col-lg-2" *ngFor="let error of errorList; let last=last;" style="color:red;font-size:small">
+              <br />
+
+              {{error}}
+            </div>
 
             </div>
         </mat-card-content>
