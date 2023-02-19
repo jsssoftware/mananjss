@@ -2927,7 +2927,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   validatePolicySourceDetail(response:IMotorPolicyFormDataModel){
     if(!response.PolicySource.TeleCaller || !response.PolicySource.Fos || !response.PolicySource.Pos || !response.PolicySource.Reference){
-      this.errorList.push("Atleast one policy source should selected " + this.erorr)
+      this.errorList.push("Atleast one policy source should selected ")
 
     }
     
