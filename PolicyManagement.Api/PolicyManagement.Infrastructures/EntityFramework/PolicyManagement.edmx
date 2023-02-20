@@ -1079,24 +1079,24 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="NonElectricAssessoriesIDV" Type="int" />
           <Property Name="CNGIDV" Type="int" />
           <Property Name="TotalIDV" Type="int" />
-          <Property Name="OD" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="AddonOD" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="EndorseOD" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="OD" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="AddonOD" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="EndorseOD" Type="decimal" Precision="8" Scale="2" />
           <Property Name="TotalOD" Type="int" />
-          <Property Name="TPPremium" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="PassengerCover" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="EndorseTP" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="TPPremium" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="PassengerCover" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="EndorseTP" Type="decimal" Precision="8" Scale="2" />
           <Property Name="TotalTP" Type="int" />
-          <Property Name="GrossPremium" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="EndorseGrossPremium" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="GSTRate" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="GrossPremium" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="EndorseGrossPremium" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="GSTRate" Type="decimal" Precision="8" Scale="2" />
           <Property Name="TotalGST" Type="int" />
           <Property Name="TotalGrossPremium" Type="int" />
           <Property Name="CommissionPayTypeId" Type="smallint" />
-          <Property Name="CommissionablePremium" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="CommissionablePremium" Type="decimal" Precision="8" Scale="2" />
           <Property Name="NCBId" Type="smallint" Nullable="false" />
-          <Property Name="SpecialDiscount" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="Loading" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="SpecialDiscount" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="Loading" Type="decimal" Precision="8" Scale="2" />
           <Property Name="AddonRiderId" Type="smallint" Nullable="false" />
           <Property Name="AddOnSelected" Type="nvarchar" MaxLength="100" />
           <Property Name="TeleCallerId" Type="smallint" Nullable="false" />
@@ -1125,12 +1125,12 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedTime" Type="smalldatetime" />
           <Property Name="IRDACommMonthCycleId" Type="smallint" />
           <Property Name="IRDACommissionReceived" Type="smallint" />
-          <Property Name="ExpectIRDACommPersent" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="ExpectIRDACommPersent" Type="decimal" Precision="8" Scale="2" />
           <Property Name="ReceiveIRDACommAmt" Type="int" />
-          <Property Name="ReceiveIRDACommPersent" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="ExpectORCCommPersent" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="ReceiveIRDACommPersent" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="ExpectORCCommPersent" Type="decimal" Precision="8" Scale="2" />
           <Property Name="ReceiveORCCommAmt" Type="int" />
-          <Property Name="ReceiveORCCommPersent" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="ReceiveORCCommPersent" Type="decimal" Precision="8" Scale="2" />
           <Property Name="POSCommMonthCycleId" Type="smallint" />
           <Property Name="POSCommissionReceived" Type="smallint" />
           <Property Name="ReferenceNo" Type="nvarchar" MaxLength="30" />
@@ -1138,10 +1138,10 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="NoChild" Type="int" />
           <Property Name="CBStartDate" Type="date" />
           <Property Name="PortabilityId" Type="smallint" />
-          <Property Name="FamilyDiscount" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="LongTermDiscount" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="SectionDiscount" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="AdditionalDiscount" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="FamilyDiscount" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="LongTermDiscount" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="SectionDiscount" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="AdditionalDiscount" Type="decimal" Precision="8" Scale="2" />
           <Property Name="AddonRiderPremium" Type="int" />
           <Property Name="NoofDaysHospitalCash" Type="int" />
           <Property Name="CoverageId" Type="int" />
@@ -1162,8 +1162,8 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="TransitToDomestic" Type="nvarchar" MaxLength="50" />
           <Property Name="TransitFromOverseas" Type="nvarchar" MaxLength="50" />
           <Property Name="TransitToOverseas" Type="nvarchar" MaxLength="50" />
-          <Property Name="MarineRate" Type="decimal" Precision="6" Scale="3" />
-          <Property Name="MiscRate" Type="decimal" Precision="6" Scale="3" />
+          <Property Name="MarineRate" Type="decimal" Precision="8" Scale="2" />
+          <Property Name="MiscRate" Type="decimal" Precision="8" Scale="2" />
           <Property Name="MiscInfo1" Type="nvarchar" MaxLength="50" />
           <Property Name="MiscInfo2" Type="nvarchar" MaxLength="50" />
           <Property Name="MiscInfo3" Type="nvarchar" MaxLength="50" />
@@ -1172,10 +1172,11 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="FlagMidCall" Type="int" />
           <Property Name="FlagPreRenewCall" Type="int" />
           <Property Name="InsuranceBranchId" Type="int" />
-          <Property Name="BasicTpGstPercentage" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="BasicTpGstPercentage" Type="decimal" Precision="8" Scale="2" />
           <Property Name="NetPremium" Type="int" />
-          <Property Name="NonCommissionComponentPremium" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="NonCommissionComponentPremium" Type="decimal" Precision="8" Scale="2" />
           <Property Name="VehicleSegment" Type="int" />
+          <Property Name="IsPreviousPolicyApplicable" Type="bit" />
         </EntityType>
         <EntityType Name="tblNCB">
           <Key>
@@ -8905,24 +8906,24 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="NonElectricAssessoriesIDV" Type="Int32" />
           <Property Name="CNGIDV" Type="Int32" />
           <Property Name="TotalIDV" Type="Int32" />
-          <Property Name="OD" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="AddonOD" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="EndorseOD" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="OD" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="AddonOD" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="EndorseOD" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="TotalOD" Type="Int32" />
-          <Property Name="TPPremium" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="PassengerCover" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="EndorseTP" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="TPPremium" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="PassengerCover" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="EndorseTP" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="TotalTP" Type="Int32" />
-          <Property Name="GrossPremium" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="EndorseGrossPremium" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="GSTRate" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="GrossPremium" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="EndorseGrossPremium" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="GSTRate" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="TotalGST" Type="Int32" />
           <Property Name="TotalGrossPremium" Type="Int32" />
           <Property Name="CommissionPayTypeId" Type="Int16" />
-          <Property Name="CommissionablePremium" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="CommissionablePremium" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="NCBId" Type="Int16" Nullable="false" />
-          <Property Name="SpecialDiscount" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="Loading" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="SpecialDiscount" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="Loading" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="AddonRiderId" Type="Int16" Nullable="false" />
           <Property Name="AddOnSelected" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="TeleCallerId" Type="Int16" Nullable="false" />
@@ -8951,12 +8952,12 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
           <Property Name="IRDACommMonthCycleId" Type="Int16" />
           <Property Name="IRDACommissionReceived" Type="Int16" />
-          <Property Name="ExpectIRDACommPersent" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="ExpectIRDACommPersent" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="ReceiveIRDACommAmt" Type="Int32" />
-          <Property Name="ReceiveIRDACommPersent" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="ExpectORCCommPersent" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="ReceiveIRDACommPersent" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="ExpectORCCommPersent" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="ReceiveORCCommAmt" Type="Int32" />
-          <Property Name="ReceiveORCCommPersent" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="ReceiveORCCommPersent" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="POSCommMonthCycleId" Type="Int16" />
           <Property Name="POSCommissionReceived" Type="Int16" />
           <Property Name="ReferenceNo" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
@@ -8964,10 +8965,10 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="NoChild" Type="Int32" />
           <Property Name="CBStartDate" Type="DateTime" Precision="0" />
           <Property Name="PortabilityId" Type="Int16" />
-          <Property Name="FamilyDiscount" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="LongTermDiscount" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="SectionDiscount" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="AdditionalDiscount" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="FamilyDiscount" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="LongTermDiscount" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="SectionDiscount" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="AdditionalDiscount" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="AddonRiderPremium" Type="Int32" />
           <Property Name="NoofDaysHospitalCash" Type="Int32" />
           <Property Name="CoverageId" Type="Int32" />
@@ -8988,8 +8989,8 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="TransitToDomestic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TransitFromOverseas" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TransitToOverseas" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MarineRate" Type="Decimal" Precision="6" Scale="3" />
-          <Property Name="MiscRate" Type="Decimal" Precision="6" Scale="3" />
+          <Property Name="MarineRate" Type="Decimal" Precision="8" Scale="2" />
+          <Property Name="MiscRate" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="MiscInfo1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="MiscInfo2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="MiscInfo3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -8998,10 +8999,11 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="FlagMidCall" Type="Int32" />
           <Property Name="FlagPreRenewCall" Type="Int32" />
           <Property Name="InsuranceBranchId" Type="Int32" />
-          <Property Name="BasicTpGstPercentage" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="BasicTpGstPercentage" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="NetPremium" Type="Int32" />
-          <Property Name="NonCommissionComponentPremium" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="NonCommissionComponentPremium" Type="Decimal" Precision="8" Scale="2" />
           <Property Name="VehicleSegment" Type="Int32" />
+          <Property Name="IsPreviousPolicyApplicable" Type="Boolean" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -11897,6 +11899,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <EntitySetMapping Name="tblMotorPolicyDatas">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblMotorPolicyData">
               <MappingFragment StoreEntitySet="tblMotorPolicyData">
+                <ScalarProperty Name="IsPreviousPolicyApplicable" ColumnName="IsPreviousPolicyApplicable" />
                 <ScalarProperty Name="VehicleSegment" ColumnName="VehicleSegment" />
                 <ScalarProperty Name="NonCommissionComponentPremium" ColumnName="NonCommissionComponentPremium" />
                 <ScalarProperty Name="NetPremium" ColumnName="NetPremium" />

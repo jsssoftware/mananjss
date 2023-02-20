@@ -150,7 +150,8 @@ namespace PolicyManagement.Services.Motor
                         //  AddOnSelected = !string.IsNullOrEmpty(model.AddOnSelected) ? model.AddOnSelected : null,
                         RenewalPOSId = (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4) ? model.PolicySource.Pos : 0,
                         VehicleSegment = model.Vehicle.VehicleSegment,
-                        Flag1 = true
+                        Flag1 = true,
+                        IsPreviousPolicyApplicable = model.IsPreviousPolicyApplicable,
                     };
 
                     if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
@@ -495,12 +496,14 @@ namespace PolicyManagement.Services.Motor
                                                       PolicyStatusColor = s.T5.T3.T1.PolicyStatusId == 2 ? HtmlColor.LightRed : HtmlColor.LightYellow,
                                                       PolicyCancelReasonColor = s.T5.T3.T1.PolicyStatusId == 2 ? HtmlColor.LightPink : HtmlColor.White,
                                                       IsReconDone = s.T5.T3.T1.IRDACommissionReceived,
+                                                      IsPreviousPolicyApplicable = s.T5.T3.T1.IsPreviousPolicyApplicable,
                                                       IsCommissionReceived = s.T5.T3.T1.POSCommissionReceived,
                                                       IRDACommMonthCycleId = s.T5.T3.T1.IRDACommMonthCycleId,
                                                       POSCommMonthCycleId = s.T5.T3.T1.POSCommMonthCycleId,
                                                       CommissionStatusColor = HtmlColor.White,
                                                       ReconStatusColor = HtmlColor.White,
                                                       AddOnSelected = s.T5.T3.T1.AddOnSelected,
+
                                                   })
                                                   .FirstOrDefaultAsync();
 
@@ -950,7 +953,7 @@ namespace PolicyManagement.Services.Motor
                 };
 
             // Condition 1
-            if (!model.Condition1 && (model.PolicyTerm.PolicyType == 1 || model.PolicyTerm.PolicyType == 3))
+            if (!model.Condition1 && (model.PolicyTerm.PolicyType == 1 || model.PolicyTerm.PolicyType == 3) && model.Vehicle.MakeYear !=0 && model.Vehicle.Model!=0)
             {
                 var data = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
                                                                  .FirstOrDefaultAsync(f => f.T1.MakeYearId == model.Vehicle.MakeYear

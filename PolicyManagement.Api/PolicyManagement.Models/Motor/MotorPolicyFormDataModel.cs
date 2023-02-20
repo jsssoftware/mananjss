@@ -72,6 +72,8 @@ namespace PolicyManagement.Models.Motor
         public DateTime? VerifiedTime { get; set; }
         public string ModifiedBy { get; set; }
         public DateTime? ModifiedTime { get; set; }
+        public bool? IsPreviousPolicyApplicable { get; set; }
+
 
 
     }

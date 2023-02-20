@@ -589,7 +589,7 @@
                   <h4>Previous Policy Details</h4>
                 </div>
                 <div class="col-lg-4">
-                  <mat-checkbox color="primary" style="margin-top: 15px;" (change)="disableFields($event)">
+                  <mat-checkbox color="primary" style="margin-top: 15px;" (change)="prvePolicydisableFields($event)" formControlName="isPreviousPolicyApplicable">
                     Previous policy not applicable</mat-checkbox>
                 </div>
               </div>
@@ -1260,8 +1260,8 @@
                   float: left;
                   line-height: 25px; border-bottom: 1px solid;  margin-right: 10px;"/> 
                 <mat-checkbox color="primary"    name="{{i}}"
-                  (change)="getCheckboxValue(i, option.IsPlanAvailable, option.AddonPlanOptionName)"
-                  [disabled]="option.IsDisabled">
+                  (change)="getCheckboxValue(i, option.IsPlanAvailable, option.AddonPlanOptionName,$event)"
+                  [disabled]="option.IsDisabled" [(ngModel)] = "option.IsPlanAvailable">
                   {{option.AddonPlanOptionName}}
                 </mat-checkbox>
                 <p>{{option.AddonPlanOptionDescripation}}</p>
@@ -1488,7 +1488,7 @@
                 <mat-form-field>
                   <mat-label>Amount <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="amount1" [errorStateMatcher]="matcher" placeholder="Amount"
-                    style="line-height: 30px;" />
+                    style="line-height: 30px;" appTwoDigitDecimaNumber/>
                   <mat-error *ngIf="paymentForm.controls.amount1">
                     Amount is <strong>required</strong>
                   </mat-error>
@@ -1541,7 +1541,7 @@
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="text" matInput formControlName="amount2" placeholder="Amount" style="line-height: 30px;" />
+                  <input type="number" matInput formControlName="amount2" placeholder="Amount" style="line-height: 30px;" />
                 </mat-form-field>
               </div>
               <div class="col-lg-2">

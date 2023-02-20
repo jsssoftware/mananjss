@@ -15,7 +15,7 @@ namespace PolicyManagement.Infrastructures.EntityFramework
 using System;
     using System.Collections.Generic;
     
-public  class tblMotorPolicyData
+public partial class tblMotorPolicyData
 {
 
     public int PolicyId { get; set; }
@@ -367,6 +367,8 @@ public  class tblMotorPolicyData
     public Nullable<decimal> NonCommissionComponentPremium { get; set; }
 
     public Nullable<int> VehicleSegment { get; set; }
+
+    public Nullable<bool> IsPreviousPolicyApplicable { get; set; }
 
 }
 
