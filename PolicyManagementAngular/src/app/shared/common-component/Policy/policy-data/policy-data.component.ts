@@ -40,6 +40,10 @@ import { TwoDigitDecimaNumberDirective } from 'src/app/shared/utilities/directiv
 import { Observable, ReplaySubject } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { MatCheckboxChange } from '@angular/material/checkbox';
+import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { MatDialogRef} from '@angular/material/dialog';
+import { PreviewDialogComponent } from 'src/app/shared/utilities/dialog/preview-dialog/preview-dialog.component';
+import { CommonFunction } from 'src/app/shared/utilities/helpers/common-function';
 
 export interface PeriodicElement {
   endorsementReason: string;
@@ -458,6 +462,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _planTypes: IDropDownDto<number>[] = [];
   public _selectedProductId: number = 0;
   public _portability: IDropDownDto<number>[] = [];
+  public maxValueAllowedNumber :number = 99999999.99
+  public maxValueAllowedPercentage :number =999.99
   public get SearchPolicyType(): typeof SearchPolicyType {
     return SearchPolicyType;
   }
@@ -475,7 +481,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     private formBuilder: FormBuilder,
     private router: Router,
     public dialog: MatDialog,
-    public mainmotorService: MotorService
+    public mainmotorService: MotorService,
+    public _sanitizer: DomSanitizer,
+    public _commonFunction :CommonFunction
   ) {
     this._type = 1;
     this._branchId = sessionStorage.getItem("branchId");
@@ -1613,6 +1621,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   }
 
+  createTemporaryUrl(){
+    // Create a Blog object for selected file & define MIME type
+    var blob = new Blob(this.uploadDocumentForm.value.browse._files, { type: this.uploadDocumentForm.value.browse._files[0].type });
+    this.base64Output = window.URL.createObjectURL(blob);
+
+  }
+
   viewer: any = 'google';
   selectedType = 'docx';
   DemoDoc = "http://www.africau.edu/images/default/sample.pdf"
@@ -1671,10 +1686,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   calculateTotalIdv() {
-    let vehicleIdv: any = this.premiumForm.controls.vehicleIdv.value;
-    let electricAccessoriesIdv: any = this.premiumForm.controls.electricAccessoriesIdv.value;
-    let nonElectricAccessoriesIdv: any = this.premiumForm.controls.nonElectricAccessoriesIdv.value;
-    let cngLpgIdv: any = this.premiumForm.controls.cngLpgIdv.value;
+    let vehicleIdv: any = this.premiumForm.controls.vehicleIdv.value || 0;
+    let electricAccessoriesIdv: any = this.premiumForm.controls.electricAccessoriesIdv.value || 0;
+    let nonElectricAccessoriesIdv: any = this.premiumForm.controls.nonElectricAccessoriesIdv.value || 0;
+    let cngLpgIdv: any = this.premiumForm.controls.cngLpgIdv.value ||0;
 
     let sum = parseInt(vehicleIdv == "" ? 0 : vehicleIdv) + parseInt(electricAccessoriesIdv == "" ? 0 : electricAccessoriesIdv)
       + parseInt(nonElectricAccessoriesIdv == "" ? 0 : nonElectricAccessoriesIdv) + parseInt(cngLpgIdv == "" ? 0 : cngLpgIdv);
@@ -1698,9 +1713,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   calculateTotalTp() {
-    let tp: any = this.premiumForm.controls.tp.value;
-    let passengerCover: any = this.premiumForm.controls.passengerCover.value;
-    let endorseTp: any = this.premiumForm.controls.endorseTp.value;
+    let tp: any = this.premiumForm.controls.tp.value || 0;
+    let passengerCover: any = this.premiumForm.controls.passengerCover.value || 0;
+    let endorseTp: any = this.premiumForm.controls.endorseTp.value||0;
 
     let sum = Math.round(parseFloat(tp == "" ? 0 : tp) + parseFloat(passengerCover == "" ? 0 : passengerCover)
       + parseFloat(endorseTp == "" ? 0 : endorseTp));
@@ -1713,8 +1728,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   calculateTotalGrossPremium() {
-    let grossPremium: any = this.premiumForm.controls.grossPremium.value;
-    let endorseGrossPremium: any = this.premiumForm.controls.endorseGrossPremium.value;
+    let grossPremium: any = this.premiumForm.controls.grossPremium.value || 0;
+    let endorseGrossPremium: any = this.premiumForm.controls.endorseGrossPremium.value ||0;
 
     let sum = Math.round(grossPremium == "" ? 0 : grossPremium) + Math.round(endorseGrossPremium == "" ? 0 : endorseGrossPremium);
     this.premiumForm.patchValue({ totalGrossPremium: sum });
@@ -1904,9 +1919,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.commonService.getAddOnPlanOptions(this._addOnRiderModel.AddOnRiderId, Vertical.Motor, 0).subscribe((addOnResponse: IAddOnPlanOptionDto[]) => {
         addOnResponse.forEach((value, index) => {
           value.IsDisabled = value.IsPlanAvailable;
-          if (value.IsPlanAvailable) {
+          /* if (value.IsPlanAvailable) {
             this._addOnRiderArray.push(value.AddonPlanOptionName);
-          }
+          } */
         });
         this._addOnPlanOptions = addOnResponse;
         this.UpdateAddonPlanValue(response)
@@ -2013,6 +2028,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   enableAddButton() {
     this._enableAddButton = false;
+    this.createTemporaryUrl();
   }
 
   reset() {
@@ -2938,9 +2954,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   validatePolicySourceDetail(response:IMotorPolicyFormDataModel){
-    if(!response.PolicySource.TeleCaller || !response.PolicySource.Fos || !response.PolicySource.Pos || !response.PolicySource.Reference){
+    if(response.PolicySource.TeleCaller ==0 && response.PolicySource.Fos ==0 && response.PolicySource.Pos  ==0 && response.PolicySource.Reference ==0){
       this.errorList.push("Atleast one policy source should selected ")
-
     }
     
   }
@@ -2992,6 +3007,26 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     }
   }
 
+  openPreviewDialog() {
+    var blob = new Blob(this.uploadDocumentForm.value.browse._files, { type: this.uploadDocumentForm.value.browse._files[0].type });
+    this.base64Output = window.URL.createObjectURL(blob);
+    const dialogRef = this.dialog.open(PreviewDialogComponent, {
+      data: {
+        url: this.base64Output,
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`); // Pizza!
+    });
+  }
+
+
+  public keyUpMaxValue(event:any,maxValue:number) {
+    let number =  Number(event.target.value).toFixed(2);   
+    if (Number(number) > maxValue) {
+      event.target.value = maxValue
+  }
+}
 
 
 }

@@ -752,6 +752,7 @@ namespace PolicyManagement.Services.Motor
             motorPolicyData.NetPremium = model.Premium.NetPremium;
             motorPolicyData.VehicleSegment = model.Vehicle.VehicleSegment;
             motorPolicyData.IsVerified = model.IsVerified;
+            motorPolicyData.IsPreviousPolicyApplicable = model.IsPreviousPolicyApplicable;
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;
             else
@@ -946,14 +947,14 @@ namespace PolicyManagement.Services.Motor
         private async Task<CommonDto<object>> ValidateData(MotorPolicyFormDataModel model)
         {
             //Check Amount
-            if (model.PaymentData.Sum(s => s.Amount) < model.Premium.TotalGrossPremium)
+            if (model.Premium != null && model.PaymentData.Sum(s => s.Amount) < model.Premium.TotalGrossPremium && model.PaymentData != null && model.PaymentData.Count>0)
                 return new CommonDto<object>
                 {
                     Message = "Amount should be greater than or equal to Total Gross Premium"
                 };
 
             // Condition 1
-            if (!model.Condition1 && (model.PolicyTerm.PolicyType == 1 || model.PolicyTerm.PolicyType == 3) && model.Vehicle.MakeYear !=0 && model.Vehicle.Model!=0)
+            if (model.PolicyTerm != null && !model.Condition1 && (model.PolicyTerm.PolicyType == 1 || model.PolicyTerm.PolicyType == 3) && model.Vehicle.MakeYear !=0 && model.Vehicle.Model!=0)
             {
                 var data = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
                                                                  .FirstOrDefaultAsync(f => f.T1.MakeYearId == model.Vehicle.MakeYear
@@ -976,7 +977,7 @@ namespace PolicyManagement.Services.Motor
             }
 
             // Condition 2
-            if (!model.Condition2 && model.PolicyTerm.PolicyType > 1)
+            if (model.PolicyTerm != null && !model.Condition2 && model.PolicyTerm.PolicyType > 1)
             {
                 var data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => !string.IsNullOrEmpty(model.Vehicle.RegistrationNumber)
                                                                                         && !string.IsNullOrEmpty(f.RegistrationNo)

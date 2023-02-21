@@ -19,6 +19,8 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { TwoDigitDecimaNumberDirective } from 'src/app/shared/utilities/directive/twodecimal.directive';
 import { NumbersOnlyDirective } from 'src/app/shared/utilities/directive/numberonly.directive';
 import { PrintErrorComponent } from 'src/app/shared/common-component/print-error/print-error.component';
+import { PreviewDialogComponent } from 'src/app/shared/utilities/dialog/preview-dialog/preview-dialog.component';
+import { DisableControlDirective } from 'src/app/shared/utilities/directive/disabledcontrol.directive';
 
 @NgModule({
   declarations: [  
@@ -33,7 +35,9 @@ import { PrintErrorComponent } from 'src/app/shared/common-component/print-error
     HealthPolicyManagementComponent,
     TwoDigitDecimaNumberDirective,
     NumbersOnlyDirective,
-      PrintErrorComponent
+      PrintErrorComponent,
+      PreviewDialogComponent,
+      DisableControlDirective
   ],
   imports: [
     CommonModule,

@@ -34,4 +34,15 @@ export class CommonFunction {
           }
           return _headerTitle; 
     }
+
+    public keyUpMaxValue(event:any,maxValue:number) {
+      var specialKeys: Array<string> = ['Backspace', 'Tab', 'End', 'Home', '-', 'ArrowLeft', 'ArrowRight', 'Del', 'Delete','.'];
+      if (specialKeys.indexOf(event.key) !== -1) {
+        return;
+      }
+      debugger
+      if (parseFloat(event.target.value) > maxValue) {
+        event.preventDefault();
+    }
+    }
 }

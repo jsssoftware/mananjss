@@ -9,7 +9,7 @@ export class TwoDigitDecimaNumberDirective {
   // Allow key codes for special events. Reflect :
   // Backspace, tab, end, home
   private specialKeys: Array<string> = ['Backspace', 'Tab', 'End', 'Home', '-', 'ArrowLeft', 'ArrowRight', 'Del', 'Delete'];
-
+  private maxNumberAllowed = 999999999.99
   constructor(private el: ElementRef) {
   }
   @HostListener('keydown', ['$event'])
@@ -21,7 +21,8 @@ export class TwoDigitDecimaNumberDirective {
     let current: string = this.el.nativeElement.value;
     const position = this.el.nativeElement.selectionStart;
     const next: string = [current.slice(0, position), event.key == 'Decimal' ? '.' : event.key, current.slice(position)].join('');
-    if (next && !String(next).match(this.regex)) {
+    const maxNumber = Number(next) > this.maxNumberAllowed
+    if ((next && !String(next).match(this.regex)) || maxNumber) {
       event.preventDefault();
     }
   }

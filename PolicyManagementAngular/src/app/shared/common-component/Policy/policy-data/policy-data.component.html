@@ -990,7 +990,8 @@
                 <mat-form-field>
                   <mat-label>Vehicle IDV <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="vehicleIdv" [errorStateMatcher]="matcher"
-                    (change)="calculateTotalIdv()" placeholder="Please Enter Vehicle IDV" numbersOnlyWithOutDecimal>
+                    (change)="calculateTotalIdv()" placeholder="Please Enter Vehicle IDV" numbersOnlyWithOutDecimal  [disableControl]="_isTpPremiumDetailsDisabled"
+                    maxlength="9" keyUpMaxValue >
                   <mat-error *ngIf="premiumForm.controls.vehicleIdv">
                     Vehicle IDV is <strong>required</strong>
                   </mat-error>
@@ -1000,21 +1001,21 @@
                 <mat-form-field>
                   <mat-label>Electric Accessories IDV</mat-label>
                   <input type="text" matInput formControlName="electricAccessoriesIdv" (change)="calculateTotalIdv()"
-                    placeholder="Electric Accessories IDV" numbersOnlyWithOutDecimal>
+                    placeholder="Electric Accessories IDV" numbersOnlyWithOutDecimal [disableControl]="_isTpPremiumDetailsDisabled"  maxlength="9">
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>Non-Electric Accessories IDV</mat-label>
                   <input type="text" matInput formControlName="nonElectricAccessoriesIdv" (change)="calculateTotalIdv()"
-                    placeholder="Non-Electric Accessories IDV" numbersOnlyWithOutDecimal>
+                    placeholder="Non-Electric Accessories IDV" numbersOnlyWithOutDecimal [disableControl]="_isTpPremiumDetailsDisabled"  maxlength="9">
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>CNG / LPG IDV</mat-label>
                   <input type="text" matInput formControlName="cngLpgIdv" placeholder="CNG / LPG IDV"
-                    (change)="calculateTotalIdv()" numbersOnlyWithOutDecimal>
+                    (change)="calculateTotalIdv()" numbersOnlyWithOutDecimal [disableControl]="_isTpPremiumDetailsDisabled"  maxlength="9">
                 </mat-form-field>
               </div>
               <div class="col-lg-3">
@@ -1029,7 +1030,8 @@
                 <mat-form-field>
                   <mat-label>OD <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="od" [errorStateMatcher]="matcher" placeholder="OD"
-                    (change)="calculateTotalOd()" appTwoDigitDecimaNumber>
+                    (change)="calculateTotalOd()" appTwoDigitDecimaNumber [disableControl]="_isTpPremiumDetailsDisabled" 
+                     >
                   <mat-error *ngIf="premiumForm.controls.od">
                     OD is <strong>required</strong>
                   </mat-error>
@@ -1039,7 +1041,7 @@
                 <mat-form-field>
                   <mat-label>Add-On Rider OD</mat-label>
                   <input type="text" matInput formControlName="addOnRiderOd" placeholder="Add-On Rider OD"
-                    (change)="calculateTotalOd()" appTwoDigitDecimaNumber>
+                    (change)="calculateTotalOd()" appTwoDigitDecimaNumber [disableControl]="_isTpPremiumDetailsDisabled">
                 </mat-form-field>
               </div>
               <div class="col-lg-3">
@@ -1058,9 +1060,9 @@
             <div class="row" [ngClass]="{disabledDiv: _isOdPremiumDetailsDisabled}">
               <div class="col-lg-2">
                 <mat-form-field>
-                  <mat-label>{{(MenuVertical=='Motor')?'Basic TP' : 'TP'}} <span style="color:red">*</span></mat-label>
+                  <mat-label>{{(MenuVertical=='Motor')?'Basic TP' : 'TP'}}<span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="tp" [errorStateMatcher]="matcher" placeholder="TP"
-                    (change)="calculateTotalTp()" appTwoDigitDecimaNumber>
+                    (change)="calculateTotalTp()" appTwoDigitDecimaNumber [disableControl]="_isOdPremiumDetailsDisabled"> 
                   <mat-error *ngIf="premiumForm.controls.tp">
                     {{(MenuVertical=='Motor')?'Basic TP' : 'TP'}} is <strong>required</strong>
                   </mat-error>
@@ -1070,7 +1072,7 @@
                 <mat-form-field>
                   <mat-label>Basic TP GST % <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="basicTPgstPercent" [errorStateMatcher]="matcher" placeholder="Basic TP GST %"
-                    (change)="calculateTotalTp()" appTwoDigitDecimaNumber>
+                    (change)="calculateTotalTp()" appTwoDigitDecimaNumber  [disableControl]="_isOdPremiumDetailsDisabled" (input)="keyUpMaxValue($event,maxValueAllowedPercentage)">
                   <mat-error *ngIf="premiumForm.controls.basicTPgstPercent">
                     Basic TP GST % is <strong>required</strong>
                   </mat-error>
@@ -1080,7 +1082,7 @@
                 <mat-form-field>
                   <mat-label>{{(MenuVertical=='Motor')?'Other TP (PC + ODC & PD)' : 'Passenger Cover'}}</mat-label>
                   <input type="text" matInput formControlName="passengerCover" placeholder="Passenger Cover"
-                    (change)="calculateTotalTp()" appTwoDigitDecimaNumber>
+                    (change)="calculateTotalTp()" appTwoDigitDecimaNumber  [disableControl]="_isOdPremiumDetailsDisabled">
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
@@ -1114,8 +1116,8 @@
               <div class="col-lg-3">
                 <mat-form-field>
                   <mat-label>GST % <span style="color:red">*</span></mat-label>
-                  <input type="text" matInput formControlName="gst" [errorStateMatcher]="matcher" placeholder="GST %"
-                    (change)="calculateGrossPremium()">
+                  <input type="number" matInput formControlName="gst" [errorStateMatcher]="matcher" placeholder="GST %"
+                    (change)="calculateGrossPremium()"  (input)="keyUpMaxValue($event,maxValueAllowedPercentage)">
                   <mat-error *ngIf="premiumForm.controls.gst">
                     GST % is <strong>required</strong>
                   </mat-error>
@@ -1156,7 +1158,7 @@
                 <mat-form-field>
                   <mat-label>Special Discount % <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="specialDiscount" [errorStateMatcher]="matcher"
-                    placeholder="Special Discount %" style="line-height: 28px;" appTwoDigitDecimaNumber>
+                    placeholder="Special Discount %" style="line-height: 28px;" appTwoDigitDecimaNumber (input)="keyUpMaxValue($event,maxValueAllowedPercentage)">
                   <mat-error *ngIf="premiumForm.controls.specialDiscount">
                     Special Discount % is <strong>required</strong>
                   </mat-error>
@@ -1166,7 +1168,7 @@
                 <mat-form-field>
                   <mat-label>Loading %</mat-label>
                   <input type="text" matInput formControlName="loading" placeholder="Loading %"
-                    style="line-height: 28px;" appTwoDigitDecimaNumber>
+                    style="line-height: 28px;" appTwoDigitDecimaNumber (input)="keyUpMaxValue($event,maxValueAllowedPercentage)">
                 </mat-form-field>
               </div>
               <div class="col-lg-4"  [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
@@ -1268,7 +1270,7 @@
                 <hr>
               </div>
               <div>
-                <p>{{_addOnRiderArray.join(', ')}}</p>
+                <p>{{_addOnRiderArray.join(', ') | uppercase}}</p>
               </div>
             </div>
           </form>
@@ -1854,10 +1856,11 @@
               </div>
               <div class="col-lg-2">
                 <button class="btn-block" mat-raised-button style="background-color: #28a745;" color="primary"
-                  (click)="enableAddButton()">
+                  (click)="openPreviewDialog()">
                   <mat-icon style="font-size: 20px;">remove_red_eye</mat-icon> Preview
                 </button>
               </div>
+             
             </div>
             <hr style="margin-top: 0px;" />
             <div class="row">
@@ -1931,6 +1934,7 @@
                   <tr mat-header-row *matHeaderRowDef="displayedColumnsDocumentTable"></tr>
                   <tr mat-row *matRowDef="let row; columns: displayedColumnsDocumentTable;"></tr>
                 </table>
+
               </div>
             </div>
           </section>
