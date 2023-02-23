@@ -1543,7 +1543,7 @@
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="number" matInput formControlName="amount2" placeholder="Amount" style="line-height: 30px;" />
+                  <input type="number" matInput formControlName="amount2" placeholder="Amount" style="line-height: 30px;" appTwoDigitDecimaNumber />
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
@@ -1593,14 +1593,14 @@
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="text" matInput formControlName="amount3" placeholder="Amount" style="line-height: 30px;" />
+                  <input type="text" matInput formControlName="amount3" placeholder="Amount" style="line-height: 30px;" appTwoDigitDecimaNumber/>
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>Instrument Number</mat-label>
                   <input type="text" matInput formControlName="instrumentNumber3" placeholder="Instrument Number"
-                    style="line-height: 30px;" maxlength="20" />
+                    style="line-height: 30px;" maxlength="20"  />
                   <mat-error
                     *ngIf="paymentForm.controls.instrumentNumber3.errors && paymentForm.controls.instrumentNumber3.errors.pattern">
                     Instrument Number is <strong>invalid</strong>
