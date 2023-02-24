@@ -10,12 +10,14 @@ import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 })
 export class PreviewDialogComponent implements OnInit {
   public _url : any;
+  public _type : any;
 
   constructor(private dialogRef: MatDialogRef<PreviewDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public _sanitizer: DomSanitizer
     ) { 
       this._url = data.url;
+      this._type = data.type;
 
   }
 

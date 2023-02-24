@@ -35,9 +35,9 @@ import { DisableControlDirective } from 'src/app/shared/utilities/directive/disa
     HealthPolicyManagementComponent,
     TwoDigitDecimaNumberDirective,
     NumbersOnlyDirective,
-      PrintErrorComponent,
-      PreviewDialogComponent,
-      DisableControlDirective
+    PrintErrorComponent,
+    PreviewDialogComponent,
+    DisableControlDirective
   ],
   imports: [
     CommonModule,

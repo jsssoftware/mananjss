@@ -1,9 +1,13 @@
 
 <h2 mat-dialog-title>Preview</h2>
 <mat-dialog-content class="mat-typography">
-    <img [src]="_sanitizer.bypassSecurityTrustUrl(_url)" > 
-
+      <ng-container *ngIf="_type == 'pdf'; else showimg" >
+        <img [src]="_sanitizer.bypassSecurityTrustUrl(_url)" > 
+      </ng-container>
+      <ng-template #showimg>
+        <iframe [src]="_sanitizer.bypassSecurityTrustResourceUrl(_url)"  width="100%" height="600"  ></iframe>
+     </ng-template>
 </mat-dialog-content>
 <mat-dialog-actions >
-  <button mat-button mat-dialog-close cdkFocusInitial>Close</button>
+  <button mat-button mat-dialog-close cdkFocusInitial type="button">Close</button>
 </mat-dialog-actions>

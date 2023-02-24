@@ -463,7 +463,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _selectedProductId: number = 0;
   public _portability: IDropDownDto<number>[] = [];
   public maxValueAllowedNumber :number = 99999999.99
-  public maxValueAllowedPercentage :number =999.99
+  public maxValueAllowedPercentage :number =999.99;
+  public listAccepts :string= 
+    ".png,.jpg,.jpeg,.pdf";
   public get SearchPolicyType(): typeof SearchPolicyType {
     return SearchPolicyType;
   }
@@ -1610,6 +1612,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         Remarks: document.Remarks,
         FileData: this.uploadDocumentForm.value.browse._files
       });
+      this.uploadDocumentForm.reset();
       this._dataSourceUploadDocuments = new MatTableDataSource<IPolicyDocumentDto>(this._policyDocuments.reverse());
     }
     reader.readAsDataURL(this.uploadDocumentForm.value.browse._files[0]);
@@ -3013,7 +3016,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     const dialogRef = this.dialog.open(PreviewDialogComponent, {
       data: {
         url: this.base64Output,
-      }
+        type : this.uploadDocumentForm.value.browse._files[0].type
+      },
+      height: '600px',
+      width: '600px',
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log(`Dialog result: ${result}`); // Pizza!

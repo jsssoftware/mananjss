@@ -43,6 +43,7 @@ import { LoaderInterceptor } from './shared/common-component/loader/loaderInterc
     SubSystemModule,
     MasterModule,
     MaterialFileInputModule,
+    
   ],
   providers: [CommonFunction, Services, AuthGuard, { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
     {  
