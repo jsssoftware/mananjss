@@ -22,12 +22,15 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+
 
 namespace PolicyManagement.Services.Motor
 {
     public class MotorService : BaseService, IMotorService
     {
         private readonly ICommonService _commonService;
+
         public MotorService(DataContext dataContext,
                             ICommonService commonService,
                             IMapper mapper) : base(dataContext, mapper)
@@ -194,7 +197,7 @@ namespace PolicyManagement.Services.Motor
                     else
                         motorPolicyData.PolicyStartDate = DateTime.ParseExact(model.TpPolicy.StartDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
 
-                    motorPolicyData.Flag1 = IsFlag1True(model);
+                    //motorPolicyData.Flag1 = IsFlag1True(model);
                     motorPolicyData.Flag2 = IsFlag2True(model);
 
                     _dataContext.tblMotorPolicyData.AddOrUpdate(motorPolicyData);
@@ -936,13 +939,94 @@ namespace PolicyManagement.Services.Motor
                                                                     && model.Premium.Ncb > 0
                                                                     && model.Premium.SpecialDiscount > 0M;
 
-        private bool IsFlag2True(MotorPolicyFormDataModel model) => (model.PolicySource.TeleCaller > 0
+        private bool IsFlag2True(MotorPolicyFormDataModel model)
+        {
+            if(ValidatePolicyTerm(model)  || ValidatePolicyDetail(model) || ValidatePremiumDetail(model) 
+                || ValidatePolicySourceDetail(model) || ValidatePaymentData(model)) { 
+                return true; 
+            } 
+            return false;
+        }
+        /*=> (model.PolicySource.TeleCaller > 0
                                                                     || model.PolicySource.Fos > 0
                                                                     || model.PolicySource.Pos > 0
                                                                     || model.PolicySource.Reference > 0
                                                                     || !string.IsNullOrEmpty(model.PolicySource.BusinessDoneBy))
                                                                     && model.PaymentData.Any(a => a.Amount > 0 && !string.IsNullOrEmpty(a.DatedString) && a.Mode > 0)
-                                                                    && model.PaymentData.Sum(s => s.Amount) >= model.Premium.GrossPremium;
+                                                                    && model.PaymentData.Sum(s => s.Amount) >= model.Premium.GrossPremium;*/
+
+        private bool ValidatePolicyTerm(MotorPolicyFormDataModel model)
+        {
+            if (model.PolicyTerm.VehicleClass == 0 || model.PolicyTerm.PackageTypeId == 0 || model.PolicyTerm.PolicyTerm == 0 || model.PolicyTerm.PolicyType == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidatePolicyDetail(MotorPolicyFormDataModel model)
+        {
+            if (model.PolicyTerm.PackageTypeId == (short)PackageType.TP_ONLY)
+            {
+                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || model.TpPolicy.ExpiryDate == null || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDate != null)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || model.TpPolicy.ExpiryDate == null || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDate != null
+                    || string.IsNullOrEmpty(model.OdPolicy.PolicyNumber) || model.OdPolicy.ExpiryDate != null || model.OdPolicy.NumberOfYear == 0 || model.OdPolicy.StartDate != null)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool ValidatePremiumDetail(MotorPolicyFormDataModel model)
+        {
+            if (model.Premium.CommissionPaidOn ==0)
+            {
+                return false;
+            }
+            if (model.PolicyTerm.PackageTypeId == (short)PackageType.TP_ONLY)
+            {
+                if (model.Premium.BasicTpGstPercentage  == 0 || model.Premium.Tp == 0)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (model.Premium.BasicTpGstPercentage == 0 || model.Premium.Tp == 0 || model.Premium.VehicleIdv == 0 || model.Premium.GstPercentage == 0 ||
+                    model.Premium.SpecialDiscount == 0 || model.Premium.Ncb == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool ValidatePolicySourceDetail(MotorPolicyFormDataModel model)
+        {
+            if (model.PolicySource.TeleCaller == 0 && model.PolicySource.Fos == 0 && model.PolicySource.Pos == 0 && model.PolicySource.Reference == 0 )
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidatePaymentData(MotorPolicyFormDataModel model)
+        {
+
+            if ( model.PaymentData.Count == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
 
         private async Task<CommonDto<object>> ValidateData(MotorPolicyFormDataModel model)
         {
@@ -977,11 +1061,13 @@ namespace PolicyManagement.Services.Motor
             }
 
             // Condition 2
-            if (model.PolicyTerm != null && !model.Condition2 && model.PolicyTerm.PolicyType > 1)
+            if (model.PolicyTerm != null && !model.Condition2 && model.PolicyTerm.PolicyType > 1 && model.Vehicle.IsSpecialRegistrationNumber)
             {
                 var data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => !string.IsNullOrEmpty(model.Vehicle.RegistrationNumber)
                                                                                         && !string.IsNullOrEmpty(f.RegistrationNo)
-                                                                                        && f.RegistrationNo.ToLower().Equals(model.Vehicle.RegistrationNumber.ToLower()));
+                                                                                        && f.RegistrationNo.ToLower().Equals(model.Vehicle.RegistrationNumber.ToLower())
+                                                                                        && f.RegistrationNo.ToLower() != "new"
+                                                                                    );
 
                 if (data != null)
                 {

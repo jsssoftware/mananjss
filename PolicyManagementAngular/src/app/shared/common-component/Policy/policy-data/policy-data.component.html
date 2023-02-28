@@ -1158,7 +1158,7 @@
                 <mat-form-field>
                   <mat-label>Special Discount % <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="specialDiscount" [errorStateMatcher]="matcher"
-                    placeholder="Special Discount %" style="line-height: 28px;" appTwoDigitDecimaNumber (input)="keyUpMaxValue($event,maxValueAllowedPercentage)">
+                    placeholder="Special Discount %" style="line-height: 28px;" appTwoDigitDecimaNumber (input)="keyUpMaxValue($event,maxValueAllowedPercentage)" [disableControl]="_isTpPremiumDetailsDisabled">
                   <mat-error *ngIf="premiumForm.controls.specialDiscount">
                     Special Discount % is <strong>required</strong>
                   </mat-error>
@@ -1168,13 +1168,13 @@
                 <mat-form-field>
                   <mat-label>Loading %</mat-label>
                   <input type="text" matInput formControlName="loading" placeholder="Loading %"
-                    style="line-height: 28px;" appTwoDigitDecimaNumber (input)="keyUpMaxValue($event,maxValueAllowedPercentage)">
+                    style="line-height: 28px;" appTwoDigitDecimaNumber (input)="keyUpMaxValue($event,maxValueAllowedPercentage)" [disableControl]="_isTpPremiumDetailsDisabled">
                 </mat-form-field>
               </div>
               <div class="col-lg-4"  [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
                 <mat-form-field appearance="fill">
                   <mat-label>NCB %</mat-label>
-                  <mat-select formControlName="ncb" required>
+                  <mat-select formControlName="ncb" required [disableControl]="_isTpPremiumDetailsDisabled">
                     <mat-option>Select</mat-option>
                     <mat-option *ngFor="let ncb of _ncbs" [value]="ncb.Value">{{ncb.Name}}</mat-option>
                   </mat-select>

@@ -96,4 +96,12 @@
         Rollover,
         Other_Company_Retention
     }
+
+    public enum PackageType
+    {
+        TP_ONLY = 1,
+        OD_ONLY,
+        COMPREHENSIVE,
+        USAGE_BASE
+    }
 }
