@@ -756,6 +756,8 @@ namespace PolicyManagement.Services.Motor
             motorPolicyData.VehicleSegment = model.Vehicle.VehicleSegment;
             motorPolicyData.IsVerified = model.IsVerified;
             motorPolicyData.IsPreviousPolicyApplicable = model.IsPreviousPolicyApplicable;
+            motorPolicyData.Flag2 = IsFlag2True(model);
+            motorPolicyData.Flag1 = true;
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;
             else
