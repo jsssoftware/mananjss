@@ -11,7 +11,6 @@ namespace PolicyManagement.Api.Controllers.Motor
     public class MotorController : ApiController
     {
         private readonly IMotorService _motorService;
-
         public MotorController(IMotorService motorService) => _motorService = motorService;
 
         [Route("")]

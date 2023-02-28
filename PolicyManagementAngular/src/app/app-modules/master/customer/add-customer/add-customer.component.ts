@@ -593,7 +593,6 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   genericClearValidator = (args: string[]) => {
     args.forEach(element => {
       this.addCustomerForm.controls[element].clearValidators();
-      this.addCustomerForm.patchValue({ [element]: "" });
     });
   }
 

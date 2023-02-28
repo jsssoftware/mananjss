@@ -1044,7 +1044,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     if (this._policyType == SearchPolicyType.Motor_Verify) {
       IsVerified = true
     }
-
+    this.validationPolicyData
     let model: IMotorPolicyFormDataModel = {
       PolicyId: this._policyId,
       BranchId: this._branchId,
@@ -1965,9 +1965,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       guardianName: response.Nomination.GuardianName
     });
 
-    this.commonService.getVehicles(response.PolicyTerm.VehicleClass).subscribe((responseVehicle: IDropDownDto<number>[]) => {
+    await this.commonService.getVehicles(response.PolicyTerm.VehicleClass).subscribe(async (responseVehicle: IDropDownDto<number>[]) => {
       this._vehicles = responseVehicle;
-      this.getSetCompleteVehicleDetails(this._vehicles.filter(f => f.Value == response.Vehicle.Varient)[0]);
+      await this.getSetCompleteVehicleDetails(this._vehicles.filter(f => f.Value == response.Vehicle.Varient)[0]);      
       this.vehicleForm.patchValue({
         registrationNumber: response.Vehicle.RegistrationNumber,
         engineNumber: response.Vehicle.EngineNumber,
@@ -1978,7 +1978,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         makeYear: response.Vehicle.MakeYear,
         dateOfRegistration: this.commonService.getDateFromIDateDto(response.Vehicle.RegistrationDateDto as IDateDto),
         usage: response.Vehicle.Usage,
-        IsSpecialRegistrationNumber: response.Vehicle.IsSpecialRegistrationNumber
+        isSpecialRegistrationNumber: response.Vehicle.IsSpecialRegistrationNumber
       });
     });
 
@@ -2956,20 +2956,20 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     }
   }
 
-  validatePolicySourceDetail(response:IMotorPolicyFormDataModel){
-    if(response.PolicySource.TeleCaller ==0 && response.PolicySource.Fos ==0 && response.PolicySource.Pos  ==0 && response.PolicySource.Reference ==0){
-      this.errorList.push("Atleast one policy source should selected ")
+    validatePolicySourceDetail(response:IMotorPolicyFormDataModel){
+      if(response.PolicySource.TeleCaller ==0 && response.PolicySource.Fos ==0 && response.PolicySource.Pos  ==0 && response.PolicySource.Reference ==0){
+        this.errorList.push("Atleast one policy source should selected ")
+      }
+      
     }
-    
-  }
 
-  validatePaymentData(response:IMotorPolicyFormDataModel){
-    
-    if(!response.PaymentData || response.PaymentData.length == 0){
-      this.errorList.push("Atleast one Payment mode should be selected")
+    validatePaymentData(response:IMotorPolicyFormDataModel){
+      
+      if(!response.PaymentData || response.PaymentData.length == 0){
+        this.errorList.push("Atleast one Payment mode should be selected")
 
+      }
     }
-  }
 
   validateVehicleDetail(response :IMotorPolicyFormDataModel){
     if(!response.Vehicle.Manufacturer || response.Vehicle.Manufacturer == 0){
@@ -2981,7 +2981,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     if(!response.Vehicle.Varient || response.Vehicle.Varient == 0){
       this.errorList.push("Vehicle Varient " + this.erorr)
     }
-    if(!response.Vehicle.RegistrationNumber ){
+    if(!response.Vehicle.RegistrationNumber && !response.Vehicle.IsSpecialRegistrationNumber){
       this.errorList.push("Vehicle Registration Number " + this.erorr)
     }
     if(!response.Vehicle.EngineNumber){
