@@ -1952,7 +1952,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
           ncb: response.Premium.Ncb,
         })
       }
-
+      this.policyForm.patchValue({
+        lastYearInsuranceCompany: response.PreviousPolicy.LastYearInsuranceCompany,
+        previousCnPolicyNumber: response.PreviousPolicy.PreviousPolicyNumber,
+        lastPolicyExpiryDate: this.commonService.getDateFromIDateDto(response.PreviousPolicy?.LastPolicyExpiryDateDto as IDateDto),
+        isBlockAgent: false,
+        isChangeAgent: false,
+      });
       this.policyForm.get("lastYearInsuranceCompany")?.disable();
       this.policyForm.get("previousCnPolicyNumber")?.disable();
       this.policyForm.get("lastPolicyExpiryDate")?.disable();
@@ -2014,7 +2020,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       }
 
     }
-    this.validationPolicyData(response)
+    if (this._type !== SearchPolicyType.Motor_Renew ) {
+        this.validationPolicyData(response)
+    }
     //Calling insurance company branch api location
     setTimeout(() => {
       this.setPolicyDetails()
@@ -2712,6 +2720,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.setPolicySourceRenewal()
       this.setOdPolicyDetail()
       this.removePrevTpOdInsurance()
+      this.setPreviousInsuranceCompany()
     }
   }
 
@@ -2902,7 +2911,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   validatePolicyType(response: IMotorPolicyFormDataModel){
-    if(this._type !==  SearchPolicyType.Motor_New &&  !response.IsPreviousPolicyApplicable){
+    if(this._type !==  SearchPolicyType.Motor_New &&  !response.IsPreviousPolicyApplicable && this._type !== SearchPolicyType.Motor_Renew){
        if(!response.PreviousPolicy.LastPolicyExpiryDateDto){
         this.errorList.push("Previous Policy Expiry Date" + this.erorr)
 

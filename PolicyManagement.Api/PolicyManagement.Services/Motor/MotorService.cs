@@ -943,8 +943,7 @@ namespace PolicyManagement.Services.Motor
 
         private bool IsFlag2True(MotorPolicyFormDataModel model)
         {
-            if(ValidatePolicyTerm(model)  || ValidatePolicyDetail(model) || ValidatePremiumDetail(model) 
-                || ValidatePolicySourceDetail(model) || ValidatePaymentData(model)) { 
+            if(ValidatePolicyTerm(model) && ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model)) { 
                 return true; 
             } 
             return false;
@@ -970,15 +969,15 @@ namespace PolicyManagement.Services.Motor
         {
             if (model.PolicyTerm.PackageTypeId == (short)PackageType.TP_ONLY)
             {
-                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || model.TpPolicy.ExpiryDate == null || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDate != null)
+                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || model.TpPolicy.ExpiryDateString == null || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null)
                 {
                     return false;
                 }
             }
             else
             {
-                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || model.TpPolicy.ExpiryDate == null || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDate != null
-                    || string.IsNullOrEmpty(model.OdPolicy.PolicyNumber) || model.OdPolicy.ExpiryDate != null || model.OdPolicy.NumberOfYear == 0 || model.OdPolicy.StartDate != null)
+                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || model.TpPolicy.ExpiryDateString == null || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null
+                    || string.IsNullOrEmpty(model.OdPolicy.PolicyNumber) || model.OdPolicy.ExpiryDateString == null || model.OdPolicy.NumberOfYear == 0 || model.OdPolicy.StartDateString == null)
                 {
                     return false;
                 }
