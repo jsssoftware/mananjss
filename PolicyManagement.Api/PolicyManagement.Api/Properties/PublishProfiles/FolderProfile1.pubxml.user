@@ -6,7 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>E:\GitHub\mananjss\PolicyManagement.Api\PolicyManagement.Api\bin\Release\Publish</_PublishTargetUrl>
+    <_PublishTargetUrl>E:\GitHub\mananjss\PolicyManagement.Api\PolicyManagement.Api\bin\Publish</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/AutoMapper.dll">
@@ -24,8 +24,29 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/Microsoft.AspNet.Identity.Owin.dll">
       <publishTime>12/15/2022 22:57:29</publishTime>
     </File>
+    <File Include="bin/Microsoft.Bcl.AsyncInterfaces.dll">
+      <publishTime>10/18/2022 16:19:40</publishTime>
+    </File>
     <File Include="bin/Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll">
       <publishTime>12/15/2022 22:57:30</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Extensions.DependencyInjection.Abstractions.dll">
+      <publishTime>10/18/2022 16:19:54</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Extensions.DependencyInjection.dll">
+      <publishTime>10/18/2022 16:29:14</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Extensions.Logging.Abstractions.dll">
+      <publishTime>10/18/2022 16:23:20</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Extensions.Logging.dll">
+      <publishTime>10/18/2022 16:29:24</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Extensions.Options.dll">
+      <publishTime>10/18/2022 16:29:20</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Extensions.Primitives.dll">
+      <publishTime>10/18/2022 16:19:38</publishTime>
     </File>
     <File Include="bin/Microsoft.IdentityModel.JsonWebTokens.dll">
       <publishTime>12/15/2022 22:57:30</publishTime>
@@ -76,46 +97,46 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/15/2022 22:57:30</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Api.dll">
-      <publishTime>02/22/2023 12:49:06</publishTime>
+      <publishTime>02/28/2023 17:28:07</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Api.pdb">
-      <publishTime>02/22/2023 12:49:06</publishTime>
+      <publishTime>02/28/2023 17:28:07</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Dtos.dll">
-      <publishTime>02/16/2023 17:43:34</publishTime>
+      <publishTime>02/28/2023 17:28:03</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Dtos.pdb">
-      <publishTime>02/16/2023 17:43:34</publishTime>
+      <publishTime>02/28/2023 17:28:03</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Infrastructures.dll">
-      <publishTime>02/22/2023 12:06:55</publishTime>
+      <publishTime>02/28/2023 17:28:04</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Infrastructures.dll.config">
       <publishTime>02/22/2023 12:03:21</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Infrastructures.pdb">
-      <publishTime>02/22/2023 12:06:55</publishTime>
+      <publishTime>02/28/2023 17:28:04</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Models.dll">
-      <publishTime>02/21/2023 11:18:25</publishTime>
+      <publishTime>02/28/2023 17:28:04</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Models.pdb">
-      <publishTime>02/21/2023 11:18:25</publishTime>
+      <publishTime>02/28/2023 17:28:04</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Services.dll">
-      <publishTime>02/22/2023 12:06:55</publishTime>
+      <publishTime>02/28/2023 17:28:06</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Services.dll.config">
-      <publishTime>01/02/2023 00:22:27</publishTime>
+      <publishTime>02/28/2023 17:19:30</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Services.pdb">
-      <publishTime>02/22/2023 12:06:55</publishTime>
+      <publishTime>02/28/2023 17:28:06</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Utilities.dll">
-      <publishTime>02/16/2023 17:43:34</publishTime>
+      <publishTime>02/28/2023 17:28:03</publishTime>
     </File>
     <File Include="bin/PolicyManagement.Utilities.pdb">
-      <publishTime>02/16/2023 17:43:34</publishTime>
+      <publishTime>02/28/2023 17:28:03</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe.config">
       <publishTime>12/15/2022 22:57:30</publishTime>
@@ -255,17 +276,35 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="bin/Swashbuckle.Core.dll">
       <publishTime>12/15/2022 22:57:30</publishTime>
     </File>
+    <File Include="bin/System.Buffers.dll">
+      <publishTime>02/19/2020 10:05:18</publishTime>
+    </File>
+    <File Include="bin/System.Diagnostics.DiagnosticSource.dll">
+      <publishTime>10/18/2022 16:19:22</publishTime>
+    </File>
     <File Include="bin/System.IdentityModel.Tokens.Jwt.dll">
       <publishTime>12/15/2022 22:57:30</publishTime>
     </File>
     <File Include="bin/System.IdentityModel.Tokens.Jwt.pdb">
       <publishTime>12/15/2022 22:57:30</publishTime>
     </File>
+    <File Include="bin/System.Memory.dll">
+      <publishTime>05/08/2022 03:31:02</publishTime>
+    </File>
     <File Include="bin/System.Net.Http.Formatting.dll">
       <publishTime>12/15/2022 22:57:29</publishTime>
     </File>
+    <File Include="bin/System.Numerics.Vectors.dll">
+      <publishTime>05/15/2018 13:29:44</publishTime>
+    </File>
     <File Include="bin/System.Runtime.CompilerServices.Unsafe.dll">
-      <publishTime>12/15/2022 22:57:30</publishTime>
+      <publishTime>10/22/2021 23:40:18</publishTime>
+    </File>
+    <File Include="bin/System.Threading.Tasks.Extensions.dll">
+      <publishTime>02/19/2020 10:05:18</publishTime>
+    </File>
+    <File Include="bin/System.ValueTuple.dll">
+      <publishTime>05/15/2018 13:29:52</publishTime>
     </File>
     <File Include="bin/System.Web.Cors.dll">
       <publishTime>12/15/2022 22:57:29</publishTime>
@@ -301,7 +340,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>12/15/2022 22:57:30</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>02/22/2023 12:49:07</publishTime>
+      <publishTime>02/28/2023 17:28:10</publishTime>
     </File>
   </ItemGroup>
 </Project>
