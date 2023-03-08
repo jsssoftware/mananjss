@@ -157,7 +157,13 @@ namespace PolicyManagement.Services.Motor
                         IsPreviousPolicyApplicable = model.IsPreviousPolicyApplicable,
                     };
 
-                    if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
+                    if (model.RenewalCounter > 0)
+                    {
+                        motorPolicyData.PolicyId = 0;
+                    }
+
+
+                        if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                         motorPolicyData.AkgSlipIssueDate = null;
                     else
                         motorPolicyData.AkgSlipIssueDate = DateTime.ParseExact(model.PolicyTerm.AcknowledgementSlipIssueDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
@@ -224,6 +230,14 @@ namespace PolicyManagement.Services.Motor
                     #endregion
 
                     #region Insert Payment Data
+                    if (model.PolicyId != 0) {
+                        List<tblPolicyPaymentData> previousPaymentDatas = await _dataContext.tblPolicyPaymentData.Where(w => w.PolicyId == model.PolicyId).ToListAsync();
+                        if (previousPaymentDatas.Any())
+                        {
+                            _dataContext.tblPolicyPaymentData.RemoveRange(previousPaymentDatas);
+                            await _dataContext.SaveChangesAsync();
+                        }
+                    }
                     if (model.PaymentData.Any())
                     {
                         List<tblPolicyPaymentData> payments = new List<tblPolicyPaymentData>();
@@ -369,8 +383,8 @@ namespace PolicyManagement.Services.Motor
                                                           Gstin = !string.IsNullOrEmpty(s.T5.T3.T2.GSTIN1) ? s.T5.T3.T2.GSTIN1 : !string.IsNullOrEmpty(s.T5.T3.T2.GSTIN2) ? s.T5.T3.T2.GSTIN2 : s.T5.T3.T2.GSTIN3,
                                                           NameInPolicy = s.T5.T3.T1.NameInPolicy,
                                                           Pan = s.T5.T3.T2.PAN,
-                                                          Gender =  _dataContext.tblGender.Where(x => x.GenderId == s.T5.T3.T2.GenderId).Select(x => x.Gender).FirstOrDefault() ,
-                                                          DateOfBirth =  s.T5.T3.T2.CustomerDOB ,
+                                                          Gender = _dataContext.tblGender.Where(x => x.GenderId == s.T5.T3.T2.GenderId).Select(x => x.Gender).FirstOrDefault(),
+                                                          DateOfBirth = s.T5.T3.T2.CustomerDOB,
                                                           PassportNumber = s.T5.T3.T2.PassportNo
                                                       },
                                                       ExtendedKiloMeterCovered = s.T5.T3.T1.ExtendedKMCovered ?? 0,
@@ -506,7 +520,9 @@ namespace PolicyManagement.Services.Motor
                                                       CommissionStatusColor = HtmlColor.White,
                                                       ReconStatusColor = HtmlColor.White,
                                                       AddOnSelected = s.T5.T3.T1.AddOnSelected,
-
+                                                      IsVerified = s.T5.T3.T1.IsVerified,
+                                                      Flag2 = s.T5.T3.T1.Flag2,
+                                                      Flag1 = s.T5.T3.T1.Flag1
                                                   })
                                                   .FirstOrDefaultAsync();
 
@@ -525,7 +541,6 @@ namespace PolicyManagement.Services.Motor
                         Mode = s.PaymentModeId
                     }).ToList();
 
-                    motorPolicy.PaymentData = new List<PaymentFormDataModel>();
                     motorPolicy.PaymentData = dataPaymentFormDataModel;
                 }
 
@@ -652,7 +667,7 @@ namespace PolicyManagement.Services.Motor
             {
                 tblMotorPolicyData data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(predicate);
 
-                if (data != null && data.PolicyId != model.PolicyId) return new CommonDto<object>
+                if (data != null && data.PolicyId != model.PolicyId && model.RenewalCounter ==0) return new CommonDto<object>
                 {
                     Message = $"Same Engine Number and Chassis Number Data already in database as Control Number {data.ControlNo}, Please check for duplicate data entry.",
                     Response = new
@@ -756,7 +771,7 @@ namespace PolicyManagement.Services.Motor
             motorPolicyData.VehicleSegment = model.Vehicle.VehicleSegment;
             motorPolicyData.IsVerified = model.IsVerified;
             motorPolicyData.IsPreviousPolicyApplicable = model.IsPreviousPolicyApplicable;
-            motorPolicyData.Flag2 = IsFlag2True(model);
+            motorPolicyData.Flag2 =  model.IsVerified  == false ? IsFlag2True(model) : true;
             motorPolicyData.Flag1 = true;
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;
@@ -943,7 +958,7 @@ namespace PolicyManagement.Services.Motor
 
         private bool IsFlag2True(MotorPolicyFormDataModel model)
         {
-            if(ValidatePolicyTerm(model) && ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model)) { 
+                if(ValidatePolicyTerm(model) && ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model)) { 
                 return true; 
             } 
             return false;
@@ -1039,7 +1054,7 @@ namespace PolicyManagement.Services.Motor
                 };
 
             // Condition 1
-            if (model.PolicyTerm != null && !model.Condition1 && (model.PolicyTerm.PolicyType == 1 || model.PolicyTerm.PolicyType == 3) && model.Vehicle.MakeYear !=0 && model.Vehicle.Model!=0)
+            if (model.PolicyTerm != null && !model.Condition1 && (model.PolicyTerm.PolicyType == 1 || model.PolicyTerm.PolicyType == 3) && model.Vehicle.MakeYear !=0 && model.Vehicle.Model!=0 &&  model.RenewalCounter == 0)
             {
                 var data = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
                                                                  .FirstOrDefaultAsync(f => f.T1.MakeYearId == model.Vehicle.MakeYear

@@ -1854,7 +1854,7 @@
                   <mat-icon matSuffix>folder</mat-icon>
                 </mat-form-field>
               </div>
-              <div class="col-lg-2">
+              <div class="col-lg-2"  *ngIf="_type != SearchPolicyType.Motor_Modify && !_isViewPolicyActive">
                 <button class="btn-block" mat-raised-button style="background-color: #28a745;" color="primary"
                   (click)="openPreviewDialog()">
                   <mat-icon style="font-size: 20px;">remove_red_eye</mat-icon> Preview

@@ -73,7 +73,8 @@ namespace PolicyManagement.Models.Motor
         public string ModifiedBy { get; set; }
         public DateTime? ModifiedTime { get; set; }
         public bool? IsPreviousPolicyApplicable { get; set; }
-        public bool? FLag2 { get; set; }
+        public bool? Flag2 { get; set; }
+        public bool? Flag1 { get; set; }
 
 
     }
