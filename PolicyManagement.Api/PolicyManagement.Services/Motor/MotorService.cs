@@ -250,6 +250,7 @@ namespace PolicyManagement.Services.Motor
                             CreatedTime = DateTime.Now,
                             PaymentAmount = f.Amount,
                             PaymentModeId = f.Mode,
+                            ChequeNo = f.InstrumentNumber,
                             PolicyId = motorPolicyData.PolicyId
                         }));
 
@@ -364,13 +365,13 @@ namespace PolicyManagement.Services.Motor
                                                           AddOnRiderId = s.T5.T3.T1.AddonRiderId
                                                       },
                                                       CreatedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user=> user.TeamMemberId, teammember=> teammember.TeamMemberId,
-                                                      (user, teammember)=>new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.CreatedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
-                                                      VerifiedBy = _dataContext.tblTeamMember.Join(_dataContext.tblUser, teammenber => teammenber.TeamMemberId, user => user.TeamMemberId,
-                                                      (teammenber, user) => new { teammenber, user }).Where(x => x.user.UserId == s.T5.T3.T1.VerifiedBy).Select(x => x.teammenber.TeamMemberName).FirstOrDefault(),
+                                                      (user, teammember)=>new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.CreatedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),                                                       
+                                                      VerifiedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user => user.TeamMemberId, teammember => teammember.TeamMemberId,
+                                                      (user, teammember) => new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.VerifiedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
                                                       CreatedTime = s.T5.T3.T1.CreatedTime,
                                                       VerifiedTime = s.T5.T3.T1.VerifiedTime,
-                                                      ModifiedBy =  _dataContext.tblTeamMember.Join(_dataContext.tblUser, teammenber => teammenber.TeamMemberId, user => user.TeamMemberId,
-                                                      (teammenber, user) => new { teammenber, user }).Where(x => x.user.UserId == s.T5.T3.T1.ModifiedBy).Select(x => x.teammenber.TeamMemberName).FirstOrDefault(),
+                                                      ModifiedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user => user.TeamMemberId, teammember => teammember.TeamMemberId,
+                                                      (user, teammember) => new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.ModifiedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
                                                       ModifiedTime = s.T5.T3.T1.ModifiedTime,
                                                       Customer = new CustomerFormDataModel
                                                       {
@@ -987,15 +988,16 @@ namespace PolicyManagement.Services.Motor
         {
             if (model.PolicyTerm.PackageTypeId == (short)PackageType.TP_ONLY)
             {
-                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || model.TpPolicy.ExpiryDateString == null || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null)
+                //22 IS ZERO YEAR IN TP
+                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || (model.TpPolicy.ExpiryDateString == null && model.TpPolicy.NumberOfYear != 22) || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null)
                 {
                     return false;
                 }
             }
             else
             {
-                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || model.TpPolicy.ExpiryDateString == null || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null
-                    || string.IsNullOrEmpty(model.OdPolicy.PolicyNumber) || model.OdPolicy.ExpiryDateString == null || model.OdPolicy.NumberOfYear == 0 || model.OdPolicy.StartDateString == null)
+                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || (model.TpPolicy.ExpiryDateString == null && model.TpPolicy.NumberOfYear != 22) || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null
+                    || string.IsNullOrEmpty(model.OdPolicy.PolicyNumber) || (model.OdPolicy.ExpiryDateString == null && model.OdPolicy.NumberOfYear != 22) || model.OdPolicy.NumberOfYear == 0 || model.OdPolicy.StartDateString == null)
                 {
                     return false;
                 }

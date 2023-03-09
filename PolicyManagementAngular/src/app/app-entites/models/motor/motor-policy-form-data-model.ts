@@ -66,5 +66,7 @@ export interface IMotorPolicyFormDataModel {
     ModifiedTime?: string;
     CreatedBy?: string;
     CreatedTime?: string;
-    PreviousPolicyId:number
+    PreviousPolicyId:number;
+    Flag1?:boolean
+    Flag2?:boolean
 }

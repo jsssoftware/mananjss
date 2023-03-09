@@ -56,3 +56,7 @@ export enum PackageType{
     COMPREHENSIVE,
     USAGE_BASE
 }
+
+export enum Common{
+    ZERO =22
+}
