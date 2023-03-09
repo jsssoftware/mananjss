@@ -825,6 +825,15 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this._insuranceCompanies = this._savedinsuranceCompanies
     if (this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
       if (this.policyTermForm.value.packageType == PackageType.OD_ONLY) {
+/*         setTimeout(() => {
+ this.policyForm.patchValue({
+          tpInsuranceCompany: "",
+          tpStartDate: "",
+          insuranceCompanyBranches: "",
+          tpNumberOfYear:"",
+          tpExpiryDate:""
+        });
+      },300) */
         await this.setDataForSameCompanyRetentionPolicyTypeOd();
       }
       if (this.policyTermForm.value.packageType == PackageType.TP_ONLY) {
@@ -2783,6 +2792,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   deletefiles(index: any) {
     this._dataSourceUploadDocuments.data.splice(index, 1);
     this._dataSourceUploadDocuments._updateChangeSubscription(); // <-- Refresh the datasource
+    this._uploadDocuments.splice(index,1)
+
   }
 
   downloadFile(element: any) {
@@ -2946,7 +2957,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     if(!response.Premium.CommissionPaidOn){
       this.errorList.push("Commision Paid on  % " + this.erorr)
     }
-    if (response.PolicyTerm.PackageTypeId === PackageType.TP_ONLY) {
+    if (response.PolicyTerm.PackageTypeId === PackageType.TP_ONLY  && !this._isTpPremiumDetailsDisabled) {
       if(!response.Premium.BasicTpGstPercentage || response.Premium.BasicTpGstPercentage == 0){
         this.errorList.push("Basic Tp Gst % " + this.erorr)
       }
@@ -2959,19 +2970,19 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         this.errorList.push("Basic Tp Gst % " + this.erorr)
       }
 
-      if(!response.Premium.Tp || response.Premium.Tp == 0){
+      if(!response.Premium.Tp || response.Premium.Tp == 0 && !this._isTpPremiumDetailsDisabled){
         this.errorList.push("Basic Tp " + this.erorr)
       }
-      if(!response.Premium.VehicleIdv || response.Premium.VehicleIdv == 0){
+      if(!response.Premium.VehicleIdv || response.Premium.VehicleIdv == 0 && !this._isTpPremiumDetailsDisabled){
         this.errorList.push("Vehicle IDV " + this.erorr)
       }
-      if(!response.Premium.Od|| response.Premium.Od == 0){
+      if((!response.Premium.Od|| response.Premium.Od == 0) && !this._isOdPremiumDetailsDisabled){
         this.errorList.push("OD " + this.erorr)
       }
-      if(!response.Premium.GstPercentage || response.Premium.GstPercentage == 0){
+      if((!response.Premium.GstPercentage || response.Premium.GstPercentage == 0 ) && !this._isOdPremiumDetailsDisabled){
         this.errorList.push("GST % " + this.erorr)
       }
-      if(!response.Premium.SpecialDiscount || response.Premium.SpecialDiscount == 0){
+      if((!response.Premium.SpecialDiscount || response.Premium.SpecialDiscount == 0 )){
         this.errorList.push("Special Discount " + this.erorr)
       }
       if(!response.Premium.Ncb || response.Premium.Ncb == 0){

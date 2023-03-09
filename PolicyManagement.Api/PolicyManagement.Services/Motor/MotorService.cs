@@ -347,7 +347,7 @@ namespace PolicyManagement.Services.Motor
         }
 
         public async Task<MotorPolicyFormDataModel> FindMotorPolicyByPolicyId(int policyId)
-        {
+        {    
             MotorPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
                                                   .Join(_dataContext.tblRTOZone, T3 => T3.T1.RTOZoneId, T4 => T4.RTOZoneId, (T3, T4) => new { T3, T4 })
                                                     .GroupJoin(_dataContext.tblCluster, T5 => T5.T3.T2.ClusterId, T6 => T6.ClusterId, (T5, T6) => new { T5, T6 })
@@ -363,11 +363,14 @@ namespace PolicyManagement.Services.Motor
                                                       {
                                                           AddOnRiderId = s.T5.T3.T1.AddonRiderId
                                                       },
-                                                      CreatedBy = _dataContext.tblTeamMember.Where(x => x.TeamMemberId == s.T5.T3.T1.CreatedBy).Select(x => x.TeamMemberName).FirstOrDefault(),
-                                                      VerifiedBy = _dataContext.tblTeamMember.Where(x => x.TeamMemberId == s.T5.T3.T1.VerifiedBy).Select(x => x.TeamMemberName).FirstOrDefault(),
+                                                      CreatedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user=> user.TeamMemberId, teammember=> teammember.TeamMemberId,
+                                                      (user, teammember)=>new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.CreatedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
+                                                      VerifiedBy = _dataContext.tblTeamMember.Join(_dataContext.tblUser, teammenber => teammenber.TeamMemberId, user => user.TeamMemberId,
+                                                      (teammenber, user) => new { teammenber, user }).Where(x => x.user.UserId == s.T5.T3.T1.VerifiedBy).Select(x => x.teammenber.TeamMemberName).FirstOrDefault(),
                                                       CreatedTime = s.T5.T3.T1.CreatedTime,
                                                       VerifiedTime = s.T5.T3.T1.VerifiedTime,
-                                                      ModifiedBy = _dataContext.tblTeamMember.Where(x => x.TeamMemberId == s.T5.T3.T1.ModifiedBy).Select(x => x.TeamMemberName).FirstOrDefault(),
+                                                      ModifiedBy =  _dataContext.tblTeamMember.Join(_dataContext.tblUser, teammenber => teammenber.TeamMemberId, user => user.TeamMemberId,
+                                                      (teammenber, user) => new { teammenber, user }).Where(x => x.user.UserId == s.T5.T3.T1.ModifiedBy).Select(x => x.teammenber.TeamMemberName).FirstOrDefault(),
                                                       ModifiedTime = s.T5.T3.T1.ModifiedTime,
                                                       Customer = new CustomerFormDataModel
                                                       {
