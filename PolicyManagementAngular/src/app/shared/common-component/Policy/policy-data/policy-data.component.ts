@@ -1378,7 +1378,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto) as Date;
         //startDate = new Date(startDate.setDate(startDate.getDate() + 1));
 
-        if (startDate != null && !moment(startDate).isBefore(this.policyForm.getRawValue().tpStartDate)) {
+        if (startDate != null && !moment(startDate).subtract(90,'days').isBefore(this.policyForm.getRawValue().tpStartDate )) {
           this.policyForm.patchValue({
             tpStartDate: undefined
           });
@@ -1388,7 +1388,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
             title: 'Sorry',
             text: "Previous date is not allowed",
           });
-          return;
         }
 
         if (startDate != null && !this.isDateValid(moment(startDate), this.policyForm.getRawValue().tpStartDate)) {
@@ -1401,7 +1400,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
             title: 'Sorry',
             text: "Please select date less than 93 days"
           });
-          return;
         }
       }
       this.commonService.getDate(this.commonService.getDateInString(this.policyForm.getRawValue().tpStartDate), tpYear?.Year).subscribe((response: IDateDto) => {
@@ -1418,7 +1416,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.OdPolicy.ExpiryDateDto as IDateDto) as Date;
         //startDate = new Date(startDate.setDate(startDate.getDate() + 1));
 
-        if (startDate != null && !moment(startDate).isBefore(this.policyForm.getRawValue().odStartDate)) {
+        if (startDate != null && !moment(startDate).subtract(90,'days').isBefore(this.policyForm.getRawValue().odStartDate)) {
           this.policyForm.patchValue({
             odStartDate: undefined
           });
@@ -1427,7 +1425,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
             title: 'Sorry',
             text: "Previous date is not allowed",
           });
-          return;
         }
 
         if (startDate != null && !this.isDateValid(moment(startDate), this.policyForm.getRawValue().odStartDate)) {
@@ -1439,7 +1436,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
             title: 'Sorry',
             text: "Please select date less than 93 days"
           });
-          return;
         }
       }
 
@@ -1889,7 +1885,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         this.premiumForm.patchValue({
           vehicleIdv: response.Premium.VehicleIdv,
           electricAccessoriesIdv: response.Premium.ElectricAccessoriesIdv,
-          nonElectricAccessoriesIdv: response.Premium.NonCommissionComponentPremium,
+          nonElectricAccessoriesIdv: response.Premium.NonElectricAccessoriesIdv,
           cngLpgIdv: response.Premium.CngLpgIdv,
           totalIdv: response.Premium.TotalIdv,
           od: response.Premium.Od,
@@ -2905,7 +2901,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   validatePolicyDetail(response: IMotorPolicyFormDataModel) {
-
+    if(!response.FinanceBy || response.FinanceBy ==0 ){
+      this.errorList.push("Finance By " + this.erorr)
+    }
     if (response.PolicyTerm.PackageTypeId === PackageType.TP_ONLY) {
       if (!response.TpPolicy.PolicyNumber) {
         this.errorList.push("TP Policy Number" + this.erorr)

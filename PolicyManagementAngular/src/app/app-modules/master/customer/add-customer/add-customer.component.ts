@@ -54,7 +54,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
   public _customerId:any =0;
   public _cityName:string="";
   private _policyTypeId: any;
-
+  public _isSaveDisable: boolean = false
   //#endregion
 
   //#region Search Customer Form
@@ -353,9 +353,10 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
     if (this.addCustomerForm.invalid) return;
     let model = this.getAddCustomerPayload();
     console.log(model);
-
+    this._isSaveDisable = true;
     this.customerService.addCustomer(model).subscribe((response: ICommonDto<any>) => {
       if (response.IsSuccess) {
+        this._isSaveDisable = false
         Swal.fire({
           icon: 'success',
           text: response.Message

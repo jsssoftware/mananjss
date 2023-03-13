@@ -373,6 +373,7 @@ namespace PolicyManagement.Services.Motor
                                                       ModifiedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user => user.TeamMemberId, teammember => teammember.TeamMemberId,
                                                       (user, teammember) => new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.ModifiedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
                                                       ModifiedTime = s.T5.T3.T1.ModifiedTime,
+                                                      
                                                       Customer = new CustomerFormDataModel
                                                       {
                                                           AddressInPolicy = s.T5.T3.T1.AddressInPolicy,
@@ -774,6 +775,10 @@ namespace PolicyManagement.Services.Motor
             motorPolicyData.NetPremium = model.Premium.NetPremium;
             motorPolicyData.VehicleSegment = model.Vehicle.VehicleSegment;
             motorPolicyData.IsVerified = model.IsVerified;
+            if(motorPolicyData.IsVerified == true) {
+                motorPolicyData.VerifiedBy = baseModel.LoginUserId;
+                motorPolicyData.VerifiedTime= DateTime.Now;
+            }
             motorPolicyData.IsPreviousPolicyApplicable = model.IsPreviousPolicyApplicable;
             motorPolicyData.Flag2 =  model.IsVerified  == false ? IsFlag2True(model) : true;
             motorPolicyData.Flag1 = true;
@@ -826,15 +831,15 @@ namespace PolicyManagement.Services.Motor
 
             }
             #region Update Payment Data
+            List<tblPolicyPaymentData> previousPaymentDatas = await _dataContext.tblPolicyPaymentData.Where(w => w.PolicyId == policyId).ToListAsync();
+            if (previousPaymentDatas.Any())
+            {
+                _dataContext.tblPolicyPaymentData.RemoveRange(previousPaymentDatas);
+                await _dataContext.SaveChangesAsync();
+            }
             if (model.PaymentData.Any())
             {
-                List<tblPolicyPaymentData> previousPaymentDatas = await _dataContext.tblPolicyPaymentData.Where(w => w.PolicyId == policyId).ToListAsync();
-                if (previousPaymentDatas.Any())
-                {
-                    _dataContext.tblPolicyPaymentData.RemoveRange(previousPaymentDatas);
-                    await _dataContext.SaveChangesAsync();
-                }
-
+             
                 List<tblPolicyPaymentData> payments = new List<tblPolicyPaymentData>();
                 model.PaymentData.ForEach(f => payments.Add(new tblPolicyPaymentData
                 {
@@ -856,14 +861,15 @@ namespace PolicyManagement.Services.Motor
             #endregion
 
             #region Update Document Data
+            List<tblUploadedDocuments> previousDocuments = await _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == policyId).ToListAsync();
+            if (previousDocuments.Any())
+            {
+                _dataContext.tblUploadedDocuments.RemoveRange(previousDocuments);
+                await _dataContext.SaveChangesAsync();
+            }
             if (model.Document.Any())
             {
-                List<tblUploadedDocuments> previousDocuments = await _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == policyId).ToListAsync();
-                if (previousDocuments.Any())
-                {
-                    _dataContext.tblUploadedDocuments.RemoveRange(previousDocuments);
-                    await _dataContext.SaveChangesAsync();
-                }
+                
 
                 string documentDirectory = ConfigurationManager.AppSettings[AppConstant.DocumentFolder];
                 if (!Directory.Exists(documentDirectory)) Directory.CreateDirectory(documentDirectory);
@@ -986,6 +992,10 @@ namespace PolicyManagement.Services.Motor
 
         private bool ValidatePolicyDetail(MotorPolicyFormDataModel model)
         {
+            if (model.FinanceBy == 0)
+            {
+                return false;
+            }
             if (model.PolicyTerm.PackageTypeId == (short)PackageType.TP_ONLY)
             {
                 //22 IS ZERO YEAR IN TP

@@ -75,7 +75,7 @@ namespace PolicyManagement.Models.Motor
         public bool? IsPreviousPolicyApplicable { get; set; }
         public bool? Flag2 { get; set; }
         public bool? Flag1 { get; set; }
-
-
+        public string QcCreatedBy { get; set; }
+        public DateTime? QcCreatedTime { get; set; }
     }
 }
