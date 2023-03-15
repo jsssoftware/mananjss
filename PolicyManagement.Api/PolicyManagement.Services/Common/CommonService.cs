@@ -160,7 +160,8 @@ namespace PolicyManagement.Services.Common
                             FileName = s.FileName,
                             Id = s.Id ?? 0,
                             Remarks = s.Remarks,
-                            UniqueId = Guid.NewGuid().ToString()
+                            UniqueId = Guid.NewGuid().ToString(),
+                            DocumentTypeId =  s.DocId
                         })
                         .ToList());
         }

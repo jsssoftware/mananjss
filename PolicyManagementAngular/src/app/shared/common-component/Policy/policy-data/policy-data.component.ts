@@ -468,6 +468,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public maxValueAllowedPercentage: number = 999.99;
   public listAccepts: string =
     ".png,.jpg,.jpeg,.pdf";
+
+    public rtoNotAvailable: number = 1;
   public get SearchPolicyType(): typeof SearchPolicyType {
     return SearchPolicyType;
   }
@@ -1143,32 +1145,32 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         PackageType: (this.MenuVertical == 'Motor') ? this._packageTypes.filter(f => f.Value == this.PolicyTermForm.packageType)[0]?.Name : '',
       },
       Premium: {
-        AddOnRiderOd: this.PremiumForm.addOnRiderOd,
-        CngLpgIdv: this.PremiumForm.cngLpgIdv,
-        CommissionPaidOn: this.PremiumForm.commissionPaidOn,
-        CommissionablePremium: this.PremiumForm.commissionablePremium,
-        ElectricAccessoriesIdv: this.PremiumForm.electricAccessoriesIdv,
-        EndorseGrossPremium: this.PremiumForm.endorseGrossPremium,
-        EndorseOd: this.PremiumForm.endorseOd,
-        EndorseTp: this.PremiumForm.endorseTp,
-        GrossPremium: this.PremiumForm.grossPremium,
-        GstPercentage: this.PremiumForm.gst,
-        GstValue: this.PremiumForm.gstValue,
-        Loading: this.PremiumForm.loading,
-        Ncb: this.PremiumForm.ncb,
+        AddOnRiderOd: Number(this.PremiumForm.addOnRiderOd),
+        CngLpgIdv: Number(this.PremiumForm.cngLpgIdv),
+        CommissionPaidOn: Number(this.PremiumForm.commissionPaidOn),
+        CommissionablePremium: Number(this.PremiumForm.commissionablePremium),
+        ElectricAccessoriesIdv: Number(this.PremiumForm.electricAccessoriesIdv),
+        EndorseGrossPremium: Number(this.PremiumForm.endorseGrossPremium),
+        EndorseOd: Number(this.PremiumForm.endorseOd),
+        EndorseTp: Number(this.PremiumForm.endorseTp),
+        GrossPremium: Number(this.PremiumForm.grossPremium),
+        GstPercentage: Number(this.PremiumForm.gst),
+        GstValue: Number(this.PremiumForm.gstValue),
+        Loading: Number(this.PremiumForm.loading),
+        Ncb: Number(this.PremiumForm.ncb),
         NonCommissionComponentPremium: Number(this.PremiumForm.nonCommissionComponentPremium),
-        NonElectricAccessoriesIdv: this.PremiumForm.nonElectricAccessoriesIdv,
-        Od: this.PremiumForm.od,
-        PassengerCover: this.PremiumForm.passengerCover,
-        SpecialDiscount: this.PremiumForm.specialDiscount,
-        TotalGrossPremium: this.PremiumForm.totalGrossPremium,
-        TotalIdv: this.PremiumForm.totalIdv,
-        TotalOd: this.PremiumForm.totalOd,
-        TotalTp: this.PremiumForm.totalTp,
-        Tp: this.PremiumForm.tp,
-        VehicleIdv: this.PremiumForm.vehicleIdv,
-        BasicTpGstPercentage: this.PremiumForm.basicTPgstPercent,
-        NetPremium: this.PremiumForm.netpremium
+        NonElectricAccessoriesIdv: Number(this.PremiumForm.nonElectricAccessoriesIdv),
+        Od: Number(this.PremiumForm.od),
+        PassengerCover: Number(this.PremiumForm.passengerCover),
+        SpecialDiscount: Number(this.PremiumForm.specialDiscount),
+        TotalGrossPremium: Number(this.PremiumForm.totalGrossPremium),
+        TotalIdv: Number(this.PremiumForm.totalIdv),
+        TotalOd: Number(this.PremiumForm.totalOd),
+        TotalTp: Number(this.PremiumForm.totalTp),
+        Tp: Number(this.PremiumForm.tp),
+        VehicleIdv: Number(this.PremiumForm.vehicleIdv),
+        BasicTpGstPercentage: Number(this.PremiumForm.basicTPgstPercent),
+        NetPremium: Number(this.PremiumForm.netpremium)
       },
       Vehicle: {
         Cc: this.VehicleForm.cc,
@@ -1185,7 +1187,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         RegistrationDateDto: null,
         RegistrationNumber: this.VehicleForm.registrationNumber,
         RiskZone: this.VehicleForm.riskZone,
-        RtoZone: this.VehicleForm.rtoZone.Value,
+        RtoZone: this.VehicleForm?.rtoZone?.Value,
         Seating: this.VehicleForm.seating,
         Usage: this.VehicleForm.usage,
         Varient: this.VehicleForm.varient.VarientId,
@@ -1619,7 +1621,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         DocumentTypeName: this.uploadDocumentForm.value.documentType?.Name,
         FileName: document.FileName,
         Remarks: document.Remarks,
-        FileData: this.uploadDocumentForm.value.browse._files
+        FileData: this.uploadDocumentForm.value.browse._files,
       });
       this.uploadDocumentForm.reset();
       this._dataSourceUploadDocuments = new MatTableDataSource<IPolicyDocumentDto>(this._policyDocuments.reverse());
@@ -1881,7 +1883,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         odExpiryDate: this.commonService.getDateFromIDateDto(response.OdPolicy.ExpiryDateDto as IDateDto),
         isPreviousPolicyApplicable: response.IsPreviousPolicyApplicable
       });
-      if (this._type !== SearchPolicyType.Motor_Renew) {
+      if (this._policyType !== SearchPolicyType.Motor_Renew) {
         this.premiumForm.patchValue({
           vehicleIdv: response.Premium.VehicleIdv,
           electricAccessoriesIdv: response.Premium.ElectricAccessoriesIdv,
@@ -2016,7 +2018,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       });
     });
 
-    if (this._type !== PolicyType.SameCompanyRetention) {
+    if (this._policyType !== SearchPolicyType.Motor_Renew) {
       for (var i = 0; i < response.PaymentData.length; i++) {
         if (i == 0) {
           this.paymentForm.patchValue({
@@ -2579,7 +2581,23 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.commonService.getPolicyDocumentsByPolicyId(this._policyId).subscribe((response: IPolicyDocumentDto[]) => {
       this._policyDocuments = response;
       this._dataSourceUploadDocuments = new MatTableDataSource<IPolicyDocumentDto>(this._policyDocuments);
+      this._dataSourceUploadDocuments._updateChangeSubscription(); // <-- Refresh the datasource
+      this.addDocumentMotor()
     });
+  }
+
+  addDocumentMotor(){
+    this._policyDocuments.forEach(x=>{
+      let document: IDocumentModel = {
+        DocumentId: x.Id,
+        UniqueId: x.UniqueId,
+        DocumentTypeId: x.DocumentTypeId,
+        DocumentTypeName: x.DocumentTypeName,
+        FileName: x.FileName,
+        Remarks: x.Remarks
+      };
+      this._uploadDocuments.push(document)
+    })
   }
 
   getInsuranceCompanyName(value: number): string {
@@ -3055,7 +3073,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     if (!response.Vehicle.MakeYear) {
       this.errorList.push("Make Year " + this.erorr)
     }
-    if (!response.Vehicle.RtoZone) {
+   
+    if (response.Vehicle.IsSpecialRegistrationNumber && response.Vehicle.RtoZone == this.rtoNotAvailable) {
       this.errorList.push("RTO Zone " + this.erorr)
     }
 

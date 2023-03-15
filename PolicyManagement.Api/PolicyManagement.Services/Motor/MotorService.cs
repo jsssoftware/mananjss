@@ -246,7 +246,7 @@ namespace PolicyManagement.Services.Motor
                             BankId = f.Bank,
                             BranchId = short.Parse(model.BranchId),
                             ChequeDate = !string.IsNullOrEmpty(f.DatedString) ? DateTime.ParseExact(f.DatedString, "MM/dd/yyyy", CultureInfo.InvariantCulture) : (DateTime?)null,
-                            CreatedBy = 1, //later change by token
+                            CreatedBy = baseModel.LoginUserId, //later change by token
                             CreatedTime = DateTime.Now,
                             PaymentAmount = f.Amount,
                             PaymentModeId = f.Mode,
@@ -878,7 +878,7 @@ namespace PolicyManagement.Services.Motor
 
                 model.Document.ForEach(f =>
                 {
-                    if (f.DocumentBase64.Contains(","))
+                    if (f.DocumentBase64.Contains(",") && string.IsNullOrEmpty(f.DocumentBase64))
                         f.DocumentBase64 = f.DocumentBase64.Substring(f.DocumentBase64.IndexOf(",") + 1);
 
                     byte[] bytes = Convert.FromBase64String(f.DocumentBase64);
@@ -968,7 +968,8 @@ namespace PolicyManagement.Services.Motor
 
         private bool IsFlag2True(MotorPolicyFormDataModel model)
         {
-                if(ValidatePolicyTerm(model) && ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model)) { 
+                if(ValidatePolicyTerm(model) && ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model) 
+                && ValidateVehicleDetail(model)) { 
                 return true; 
             } 
             return false;
@@ -990,12 +991,27 @@ namespace PolicyManagement.Services.Motor
             return true;
         }
 
+        private bool ValidateVehicleDetail(MotorPolicyFormDataModel model)
+        {
+            if (model.Vehicle.IsSpecialRegistrationNumber  && model.Vehicle.RtoZone == 0)
+            {
+                return false;
+            }
+            if (model.Vehicle.Manufacturer == 0 || model.Vehicle.Model == 0 || string.IsNullOrEmpty(model.Vehicle.EngineNumber) || string.IsNullOrEmpty(model.Vehicle.ChassisNumber)
+                || model.Vehicle.MakeYear == 0 || model.Vehicle.Varient == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
         private bool ValidatePolicyDetail(MotorPolicyFormDataModel model)
         {
             if (model.FinanceBy == 0)
             {
                 return false;
             }
+
             if (model.PolicyTerm.PackageTypeId == (short)PackageType.TP_ONLY)
             {
                 //22 IS ZERO YEAR IN TP
