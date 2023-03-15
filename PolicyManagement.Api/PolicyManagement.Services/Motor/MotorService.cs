@@ -861,48 +861,56 @@ namespace PolicyManagement.Services.Motor
             #endregion
 
             #region Update Document Data
-            List<tblUploadedDocuments> previousDocuments = await _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == policyId).ToListAsync();
-            if (previousDocuments.Any())
-            {
-                _dataContext.tblUploadedDocuments.RemoveRange(previousDocuments);
-                await _dataContext.SaveChangesAsync();
-            }
+           
             if (model.Document.Any())
             {
-                
+               
 
                 string documentDirectory = ConfigurationManager.AppSettings[AppConstant.DocumentFolder];
                 if (!Directory.Exists(documentDirectory)) Directory.CreateDirectory(documentDirectory);
 
                 List<tblUploadedDocuments> documents = new List<tblUploadedDocuments>();
-
-                model.Document.ForEach(f =>
+                string fileName = "";
+                model.Document.ForEach(async f =>
                 {
-                    if (f.DocumentBase64.Contains(",") && string.IsNullOrEmpty(f.DocumentBase64))
-                        f.DocumentBase64 = f.DocumentBase64.Substring(f.DocumentBase64.IndexOf(",") + 1);
-
-                    byte[] bytes = Convert.FromBase64String(f.DocumentBase64);
-                    string fileName = $"{Guid.NewGuid()}.{f.FileName.Split('.').LastOrDefault()}";
-
-                    using (FileStream fileStream = new FileStream($"{documentDirectory}/{fileName}", FileMode.OpenOrCreate))
+                    List<tblUploadedDocuments> previousDocuments = await _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == policyId && w.DocumentId == f.DocumentId).ToListAsync();
+                    if (previousDocuments.Count() == 0)
                     {
-                        fileStream.Write(bytes, 0, bytes.Length);
-                        fileStream.Close();
+                        _dataContext.tblUploadedDocuments.RemoveRange(previousDocuments);
+                        await _dataContext.SaveChangesAsync();
+
+
+                         fileName = $"{Guid.NewGuid()}.{f.FileName.Split('.').LastOrDefault()}";
+                        if (string.IsNullOrEmpty(f.DocumentBase64) && f.DocumentBase64.Contains(","))
+                        {
+                            f.DocumentBase64 = f.DocumentBase64.Substring(f.DocumentBase64.IndexOf(",") + 1);
+
+                            byte[] bytes = Convert.FromBase64String(f.DocumentBase64);
+
+                            using (FileStream fileStream = new FileStream($"{documentDirectory}/{fileName}", FileMode.OpenOrCreate))
+                            {
+                                fileStream.Write(bytes, 0, bytes.Length);
+                                fileStream.Close();
+                            }
+                        }
+
+
+
+                        documents.Add(new tblUploadedDocuments
+                        {
+                            CreatedBy = baseModel.LoginUserId,
+                            CreatedTime = DateTime.Now,
+                            CustomerId = model.Customer.CustomerId,
+                            Directory = documentDirectory,
+                            DocId = f.DocumentTypeId,
+                            FileName = fileName,
+                            OriginalFileName = f.FileName,
+                            PolicyId = motorPolicyData.PolicyId,
+                            Remarks = f.Remarks
+                        });
                     }
-
-                    documents.Add(new tblUploadedDocuments
-                    {
-                        CreatedBy = baseModel.LoginUserId,
-                        CreatedTime = DateTime.Now,
-                        CustomerId = model.Customer.CustomerId,
-                        Directory = documentDirectory,
-                        DocId = f.DocumentTypeId,
-                        FileName = fileName,
-                        OriginalFileName = f.FileName,
-                        PolicyId = motorPolicyData.PolicyId,
-                        Remarks = f.Remarks
-                    });
                 });
+
 
                 _dataContext.tblUploadedDocuments.AddRange(documents);
                 await _dataContext.SaveChangesAsync();
