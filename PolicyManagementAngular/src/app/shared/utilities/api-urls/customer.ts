@@ -13,5 +13,5 @@ export class Customer {
     public static readonly CustomerById = "api/customer";
     public static readonly CustomerShortDetailById = "api/customer/short-detail";
     public static readonly TitlesWithoutMS = "api/customer/titlesWithoutMS";
-    public static readonly Clusters = "api/customer/clusters";
+    public static readonly Clusters = "api/customer/customercluster";
 }

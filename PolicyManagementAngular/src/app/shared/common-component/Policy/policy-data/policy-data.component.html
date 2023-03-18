@@ -1,15 +1,15 @@
-<div    >
-<mat-card class="mat-elevation-z2">
+<div>
+  <mat-card class="mat-elevation-z2">
     <mat-card-header>
-      <div mat-card-avatar class="header-image"
-        style="background-image: url('../../../../assets/images/motor.png');"></div> <!-- to do dynamic -->
-       <mat-card-title >{{MenuVertical}} Policy</mat-card-title>  <!-- to do dynamic -->
+      <div mat-card-avatar class="header-image" style="background-image: url('../../../../assets/images/motor.png');">
+      </div> <!-- to do dynamic -->
+      <mat-card-title>{{MenuVertical}} Policy</mat-card-title> <!-- to do dynamic -->
       <mat-card-subtitle>Insurance</mat-card-subtitle>
       <mat-card-subtitle>{{_headerTitle}}</mat-card-subtitle>
     </mat-card-header>
     <hr class="hrClass" />
     <mat-card-content>
-  
+
       <mat-card class="mat-elevation-z2" style="margin-left:0px; margin-right: 0px;">
         <mat-card-content>
           <div class="row">
@@ -18,7 +18,7 @@
             </div>
           </div>
           <hr class="hrClass" />
-          <div class="row" >
+          <div class="row">
             <div class="col-lg-4">
               <mat-list>
                 <mat-list-item>
@@ -32,7 +32,7 @@
                 </mat-list-item>
               </mat-list>
             </div>
-            <div class="col-lg-4" >
+            <div class="col-lg-4">
               <mat-list>
                 <mat-list-item *ngIf="_type != SearchPolicyType.Motor_Renew">
                   <div mat-line>Vertical</div>
@@ -71,9 +71,9 @@
               </mat-list>
             </div>
           </div>
-  
+
           <hr />
-          <div class="row" >
+          <div class="row">
             <div class="col-lg-4">
               <button mat-flat-button color="primary"
                 [ngStyle]="{'background-color':_policyData != undefined ? _policyData.PolicyCancelReasonColor :'#ffffff'}">
@@ -100,11 +100,11 @@
               {{error}}
             </div>
 
-            </div>
+          </div>
         </mat-card-content>
-        
+
       </mat-card>
-  
+
       <mat-accordion>
         <!--Start Customer Details-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
@@ -121,22 +121,22 @@
           <form [formGroup]="customerForm" autocomplete="off" [ngClass]="{disabledDiv: _isViewPolicyActive}">
             <hr style="margin-top: 0px;" />
             <input type="hidden" formControlName="customerId" />
-            <div class="row"  >
+            <div class="row">
               <div class="col-lg-4" *ngIf="MenuVertical=='Motor'">
-                <mat-form-field >
+                <mat-form-field>
                   <mat-label>Name in Policy <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="nameInPolicy" [errorStateMatcher]="matcher"
-                    placeholder="Name in Policy" class="uppercase"  [readonly]="true">
+                    placeholder="Name in Policy" class="uppercase" [readonly]="true">
                   <mat-error *ngIf="customerForm.controls.nameInPolicy">
                     Name in Policy is <strong>required</strong>
                   </mat-error>
-                </mat-form-field> 
+                </mat-form-field>
               </div>
-              <div class="col-lg-4" *ngIf="MenuVertical!='Motor'"> 
+              <div class="col-lg-4" *ngIf="MenuVertical!='Motor'">
                 <mat-form-field>
                   <mat-label>Proposer Name <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="nameInPolicy" [errorStateMatcher]="matcher"
-                    placeholder="Proposer Name"  class="uppercase">
+                    placeholder="Proposer Name" class="uppercase">
                   <mat-error *ngIf="customerForm.controls.nameInPolicy">
                     Proposer Name is <strong>required</strong>
                   </mat-error>
@@ -145,11 +145,11 @@
               <div class="col-lg-8">
                 <mat-form-field>
                   <mat-label>Address in Policy</mat-label>
-                  <input matInput formControlName="addressInPolicy" placeholder="Address in Policy"  class="uppercase"/>
+                  <input matInput formControlName="addressInPolicy" placeholder="Address in Policy" class="uppercase" />
                 </mat-form-field>
               </div>
             </div>
-            <div class="row"  >
+            <div class="row">
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Customer Code</mat-label>
@@ -160,7 +160,8 @@
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Cluster Code</mat-label>
-                  <input type="text" matInput formControlName="clusterCode" placeholder="Cluster Code" [readonly]="true">
+                  <input type="text" matInput formControlName="clusterCode" placeholder="Cluster Code"
+                    [readonly]="true">
                 </mat-form-field>
               </div>
               <div class="col-lg-4">
@@ -170,7 +171,7 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row"  >
+            <div class="row">
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Cluster</mat-label>
@@ -192,7 +193,7 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row"  >
+            <div class="row">
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Contact Number</mat-label>
@@ -213,8 +214,8 @@
                 </mat-form-field>
               </div>
             </div>
-  
-            <div class="row"  >
+
+            <div class="row">
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Gender</mat-label>
@@ -224,21 +225,23 @@
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Date Of Birth</mat-label>
-                  <input type="text" matInput formControlName="dateOfBirth" placeholder="Date Of Birth" [readonly]="true">
+                  <input type="text" matInput formControlName="dateOfBirth" placeholder="Date Of Birth"
+                    [readonly]="true">
                 </mat-form-field>
               </div>
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Passport Number</mat-label>
-                  <input type="text" matInput formControlName="passportNumber" placeholder="Passport Number" [readonly]="true">
+                  <input type="text" matInput formControlName="passportNumber" placeholder="Passport Number"
+                    [readonly]="true">
                 </mat-form-field>
               </div>
             </div>
-  
+
           </form>
         </mat-expansion-panel>
         <!--End Customer Details-->
-  
+
         <!--Start Policy Term-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -248,11 +251,12 @@
           </mat-expansion-panel-header>
           <form [formGroup]="policyTermForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
             <hr style="margin-top: 0px;" />
-            <div class="row"  >
+            <div class="row">
               <div class="col-lg-6">
                 <mat-form-field appearance="fill">
                   <mat-label>Policy Type</mat-label>
-                  <mat-select formControlName="policyType" required (selectionChange)="getPolicyTerms()" [disabled]="_type !== SearchPolicyType.Motor_Renew">
+                  <mat-select formControlName="policyType" required (selectionChange)="getPolicyTerms()"
+                    [disabled]="_type !== SearchPolicyType.Motor_Renew">
                     <mat-option>Select</mat-option>
                     <mat-option *ngFor="let policyType of _policyTypes" [value]="policyType.Value">{{policyType.Name}}
                     </mat-option>
@@ -272,13 +276,14 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row" *ngIf="MenuVertical=='Motor'"  >
+            <div class="row" *ngIf="MenuVertical=='Motor'">
               <div class="col-lg-6">
                 <mat-form-field appearance="fill">
                   <mat-label>Package Type</mat-label>
                   <mat-select formControlName="packageType" required (selectionChange)="getPolicyTerms()">
                     <mat-option>Select</mat-option>
-                    <mat-option *ngFor="let packageType of _packageTypes" [value]="packageType.Value">{{packageType.Name}}
+                    <mat-option *ngFor="let packageType of _packageTypes" [value]="packageType.Value">
+                      {{packageType.Name}}
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="policyTermForm.controls.packageType">Please choose Package Type</mat-error>
@@ -287,8 +292,9 @@
               <div class="col-lg-6">
                 <mat-form-field appearance="fill">
                   <mat-label>Policy Term</mat-label>
-                  <mat-select formControlName="policyTerm" required (selectionChange)="setPolicyTermDetails($event.value)">
-                    <mat-option>Select</mat-option>
+                  <mat-select formControlName="policyTerm" required
+                    (selectionChange)="setPolicyTermDetails($event.value)">
+                    <mat-option [value]="">Select</mat-option>
                     <mat-option *ngFor="let policyTerm of _policyTerms" [value]="policyTerm">
                       {{policyTerm.PolicyTermName}}
                     </mat-option>
@@ -297,7 +303,7 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row"  >
+            <div class="row">
               <div class="col-lg-6">
                 <mat-form-field>
                   <mat-label>Acknowledgement Slip Number</mat-label>
@@ -317,7 +323,7 @@
           </form>
         </mat-expansion-panel>
         <!--End PolicyTerm-->
-  
+
         <!--Start Policy Details-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -325,19 +331,19 @@
               Policy Details
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <form [formGroup]="policyForm"  [ngClass]="{disabledDiv: _isViewPolicyActive}">
+          <form [formGroup]="policyForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
             <hr style="margin-top: 0px;" />
-            <div class="row" >
+            <div class="row">
               <div class="col-lg-6">
                 <mat-form-field>
                   <mat-label>{{(MenuVertical=='Motor')? 'Cover Note Number' : 'Proposal Number'}} </mat-label>
-                  <input type="text" matInput formControlName="coverNoteNumber" 
-                    [ngStyle]="{'line-height':'30px'}" class="uppercase">
+                  <input type="text" matInput formControlName="coverNoteNumber" [ngStyle]="{'line-height':'30px'}"
+                    class="uppercase">
                 </mat-form-field>
               </div>
               <div class="col-lg-6">
                 <mat-form-field appearance="fill">
-                  <mat-label> {{(MenuVertical=='Motor')?'Cover Note Issue Date' : 'Proposal Date'}}  </mat-label>
+                  <mat-label> {{(MenuVertical=='Motor')?'Cover Note Issue Date' : 'Proposal Date'}} </mat-label>
                   <input matInput [matDatepicker]="CNIssueDate" formControlName="coverNoteIssueDate">
                   <mat-datepicker-toggle matSuffix [for]="CNIssueDate"></mat-datepicker-toggle>
                   <mat-datepicker #CNIssueDate></mat-datepicker>
@@ -346,41 +352,40 @@
             </div>
             <div class="row">
               <div class="col-lg-12">
-                <h4 *ngIf="MenuVertical=='Motor'">{{(MenuVertical=='Motor')?'TP Policy Details' : 'Policy Details'}}</h4>
+                <h4 *ngIf="MenuVertical=='Motor'">{{(MenuVertical=='Motor')?'TP Policy Details' : 'Policy Details'}}
+                </h4>
               </div>
             </div>
             <hr style="margin-top: 0px;" />
             <div class="row">
-              <div class="col-lg-8"> 
-                <mat-form-field  appearance="fill" [ngClass]="{disabledDiv: isTpInsuranceDisable}">
+              <div class="col-lg-8">
+                <mat-form-field appearance="fill" [ngClass]="{disabledDiv: isTpInsuranceDisable}">
                   <mat-label>{{(MenuVertical=='Motor')?'TP Insurance Company' : 'Insurance Company'}}</mat-label>
-                  <input type="text" 
-                        [placeholder]="(MenuVertical=='Motor')?'TP Insurance Company' : 'Insurance Company'" 
-                        aria-label="(MenuVertical=='Motor')?'TP Insurance Company' : 'Insurance Company'" 
-                        matInput 
-                        formControlName="tpInsuranceCompany" 
-                        [matAutocomplete]="autoInsuranceCompany">
-                  <mat-autocomplete 
-                       autoActiveFirstOption 
-                       #autoInsuranceCompany="matAutocomplete"
-                      [displayWith]="getInsuranceCompanyName.bind(this)"  (optionSelected)='getInsuranceCompanyBranches()' >
+                  <input type="text"
+                    [placeholder]="(MenuVertical=='Motor')?'TP Insurance Company' : 'Insurance Company'"
+                    aria-label="(MenuVertical=='Motor')?'TP Insurance Company' : 'Insurance Company'" matInput
+                    formControlName="tpInsuranceCompany" [matAutocomplete]="autoInsuranceCompany">
+                  <mat-autocomplete autoActiveFirstOption #autoInsuranceCompany="matAutocomplete"
+                    [displayWith]="getInsuranceCompanyName.bind(this)" (optionSelected)='getInsuranceCompanyBranches()'>
                     <mat-option *ngFor="let insuranceCompany of _filteredInsuranceCompaniesOptions"
-                                [value]="insuranceCompany.Value">
-                            {{insuranceCompany.Name}}
+                      [value]="insuranceCompany.Value">
+                      {{insuranceCompany.Name}}
                     </mat-option>
-                    
+
                   </mat-autocomplete>
 
-                  <mat-error style="padding-right: 0px; margin-left: 0px;">{{(MenuVertical=='Motor')?'Please Select TP Insurance Company' : 'Please Select Insurance Company'}}
+                  <mat-error style="padding-right: 0px; margin-left: 0px;">{{(MenuVertical=='Motor')?'Please Select TP
+                    Insurance Company' : 'Please Select Insurance Company'}}
                   </mat-error>
-              </mat-form-field>  
+                </mat-form-field>
               </div>
               <div class="col-lg-4" *ngIf="MenuVertical!='Motor'">
                 <mat-form-field appearance="fill">
                   <mat-label>Portability</mat-label>
                   <mat-select formControlName="portability" required>
                     <mat-option>Select</mat-option>
-                    <mat-option *ngFor="let portability of _portability" [value]="portability.Value">{{portability.Name}}
+                    <mat-option *ngFor="let portability of _portability" [value]="portability.Value">
+                      {{portability.Name}}
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="policyForm.controls.portability">Please Select Portability</mat-error>
@@ -394,7 +399,7 @@
                 <mat-form-field>
                   <mat-label>Policy Number <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="policyNumber" [errorStateMatcher]="matcher"
-                    placeholder="Policy Number" maxlength="30" (change)="setOdPolicyDetail()" >
+                    placeholder="Policy Number" maxlength="30" (change)="setOdPolicyDetail()">
                   <mat-error *ngIf="policyForm.controls.policyNumber">
                     Policy Number is <strong>required</strong>
                   </mat-error>
@@ -433,8 +438,8 @@
               <div class="col-lg-4">
                 <mat-form-field appearance="fill">
                   <mat-label>{{(MenuVertical=='Motor')?'Expiry Date' : 'Risk End Date'}}</mat-label>
-                  <input matInput [matDatepicker]="ExpiryDate" formControlName="tpExpiryDate"  />
-                  <mat-datepicker-toggle matSuffix [for]="ExpiryDate" ></mat-datepicker-toggle>
+                  <input matInput [matDatepicker]="ExpiryDate" formControlName="tpExpiryDate" />
+                  <mat-datepicker-toggle matSuffix [for]="ExpiryDate"></mat-datepicker-toggle>
                   <mat-datepicker #ExpiryDate></mat-datepicker>
                 </mat-form-field>
               </div>
@@ -450,27 +455,21 @@
                 <div class="col-lg-12">
 
 
-                  <mat-form-field  appearance="fill" [ngClass]="{disabledDiv: _isDisableOdPolicyDetails}"> 
+                  <mat-form-field appearance="fill" [ngClass]="{disabledDiv: _isDisableOdPolicyDetails}">
                     <mat-label>OD Insurance Company</mat-label>
-                    <input type="text" 
-                          placeholder="OD Insurance Company" 
-                          aria-label="OD Insurance Company" 
-                          matInput 
-                          required
-                          formControlName="odInsuranceCompany" 
-                          [matAutocomplete]="autoInsuranceCompanyOd">
-                    <mat-autocomplete 
-                         autoActiveFirstOption 
-                         #autoInsuranceCompanyOd="matAutocomplete"
-                        [displayWith]="getInsuranceCompanyOd.bind(this)" (optionSelected)='getInsuranceCompanyBranches()' >
+                    <input type="text" placeholder="OD Insurance Company" aria-label="OD Insurance Company" matInput
+                      required formControlName="odInsuranceCompany" [matAutocomplete]="autoInsuranceCompanyOd">
+                    <mat-autocomplete autoActiveFirstOption #autoInsuranceCompanyOd="matAutocomplete"
+                      [displayWith]="getInsuranceCompanyOd.bind(this)" (optionSelected)='getInsuranceCompanyBranches()'>
                       <mat-option *ngFor="let insuranceCompany of _filteredInsuranceCompaniesOdOptions"
-                                  [value]="insuranceCompany.Value">
-                              {{insuranceCompany.Name}}
+                        [value]="insuranceCompany.Value">
+                        {{insuranceCompany.Name}}
                       </mat-option>
                     </mat-autocomplete>
-  
-                    <mat-error *ngIf="policyForm.controls.lastYearInsuranceCompany">Please choose OD Insurance Company</mat-error>  
-                  </mat-form-field>  
+
+                    <mat-error *ngIf="policyForm.controls.lastYearInsuranceCompany">Please choose OD Insurance Company
+                    </mat-error>
+                  </mat-form-field>
 
                 </div>
               </div>
@@ -491,7 +490,7 @@
                   <mat-form-field appearance="fill" [ngClass]="{disabledDiv: _isDisableOdPolicyDetails}">
                     <mat-label>OD Start Date</mat-label>
                     <input matInput [matDatepicker]="ODStartDate" formControlName="odStartDate"
-                      (dateChange)="setExpiryDate('od')"  >
+                      (dateChange)="setExpiryDate('od')">
                     <mat-datepicker-toggle matSuffix [for]="ODStartDate">
                     </mat-datepicker-toggle>
                     <mat-datepicker #ODStartDate></mat-datepicker>
@@ -500,7 +499,8 @@
                 <div class="col-lg-4">
                   <mat-form-field appearance="fill">
                     <mat-label>Number of Year</mat-label>
-                    <mat-select formControlName="odNumberOfYear" required  (selectionChange)="setExpiryDate('od')" [ngClass]="{disabledDiv: _isDisableOdPolicyDetails}">
+                    <mat-select formControlName="odNumberOfYear" required (selectionChange)="setExpiryDate('od')"
+                      [ngClass]="{disabledDiv: _isDisableOdPolicyDetails}">
                       <mat-option>Select</mat-option>
                       <mat-option *ngFor="let numberofyear of _numberOfYears" [value]="numberofyear.Value">
                         {{numberofyear.Name}}</mat-option>
@@ -512,8 +512,9 @@
                 <div class="col-lg-4">
                   <mat-form-field appearance="fill" [ngClass]="{disabledDiv: _isDisableOdPolicyDetails}">
                     <mat-label>{{(MenuVertical=='Motor')?'Expiry Date' : 'End Date'}}</mat-label>
-                    <input matInput [matDatepicker]="ExpiryDate2" formControlName="odExpiryDate" [readonly]="_isDisableOdPolicyDetails">
-                    <mat-datepicker-toggle matSuffix [for]="ExpiryDate2" ></mat-datepicker-toggle>
+                    <input matInput [matDatepicker]="ExpiryDate2" formControlName="odExpiryDate"
+                      [readonly]="_isDisableOdPolicyDetails">
+                    <mat-datepicker-toggle matSuffix [for]="ExpiryDate2"></mat-datepicker-toggle>
                     <mat-datepicker #ExpiryDate2></mat-datepicker>
                   </mat-form-field>
                 </div>
@@ -589,52 +590,55 @@
                   <h4>Previous Policy Details</h4>
                 </div>
                 <div class="col-lg-4">
-                  <mat-checkbox color="primary" style="margin-top: 15px;" (change)="prvePolicydisableFields($event)" formControlName="isPreviousPolicyApplicable">
+                  <mat-checkbox color="primary" style="margin-top: 15px;" (change)="prvePolicydisableFields($event)"
+                    formControlName="isPreviousPolicyApplicable">
                     Previous policy not applicable</mat-checkbox>
                 </div>
               </div>
               <hr style="margin-top: 0px;" />
-              <div class="row"  [ngClass]="{disabledDiv: _disableFields}">
+              <div class="row" [ngClass]="{disabledDiv: _disableFields}">
                 <div class="col-lg-12">
 
-                  <mat-form-field  appearance="fill">
-                    <mat-label>{{(MenuVertical=='Motor')?'Last Year Insurance Company' : 'Previous Policy Insurance Company'}}</mat-label>
-                    <input type="text" 
-                          [placeholder]="(MenuVertical=='Motor')?'Last Year Insurance Company' : 'Previous Policy Insurance Company'" 
-                          matInput 
-                          required
-                          [disabled]="_disableFields"
-                          formControlName="lastYearInsuranceCompany" 
-                          [matAutocomplete]="autoInsuranceCompanyLastYear">
-                    <mat-autocomplete 
-                         autoActiveFirstOption 
-                         #autoInsuranceCompanyLastYear="matAutocomplete"
-                        [displayWith]="getInsuranceCompanyLastName.bind(this)" >
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{(MenuVertical=='Motor')?'Last Year Insurance Company' : 'Previous Policy Insurance
+                      Company'}}</mat-label>
+                    <input type="text"
+                      [placeholder]="(MenuVertical=='Motor')?'Last Year Insurance Company' : 'Previous Policy Insurance Company'"
+                      matInput required [disabled]="_disableFields" formControlName="lastYearInsuranceCompany"
+                      [matAutocomplete]="autoInsuranceCompanyLastYear">
+                    <mat-autocomplete autoActiveFirstOption #autoInsuranceCompanyLastYear="matAutocomplete"
+                      [displayWith]="getInsuranceCompanyLastName.bind(this)">
                       <mat-option *ngFor="let insuranceCompany of _filteredInsuranceCompaniesLastOptions"
-                                  [value]="insuranceCompany.Value">
-                              {{insuranceCompany.Name}}
+                        [value]="insuranceCompany.Value">
+                        {{insuranceCompany.Name}}
                       </mat-option>
                     </mat-autocomplete>
-  
-                    <mat-error *ngIf="policyForm.controls.lastYearInsuranceCompany">{{(MenuVertical=='Motor')?'Please choose Last
-                      Year Insurance Company' : 'Please choose Previous Policy Insurance Company'}} </mat-error>  
-                </mat-form-field> 
+
+                    <mat-error *ngIf="policyForm.controls.lastYearInsuranceCompany">{{(MenuVertical=='Motor')?'Please
+                      choose Last
+                      Year Insurance Company' : 'Please choose Previous Policy Insurance Company'}} </mat-error>
+                  </mat-form-field>
                 </div>
               </div>
-              <div class="row"  [ngClass]="{disabledDiv: _disableFields}">
+              <div class="row" [ngClass]="{disabledDiv: _disableFields}">
                 <div class="col-lg-6">
                   <mat-form-field>
-                    <mat-label> {{(MenuVertical=='Motor')?'Previous CN / Policy Number' : 'Previous Policy Number'}}  <span style="color:red">*</span></mat-label>
+                    <mat-label> {{(MenuVertical=='Motor')?'Previous CN / Policy Number' : 'Previous Policy Number'}}
+                      <span style="color:red">*</span>
+                    </mat-label>
                     <input type="text" matInput formControlName="previousCnPolicyNumber" [errorStateMatcher]="matcher"
-                      [placeholder]="(MenuVertical=='Motor')?'Previous CN / Policy Number' : 'Previous Policy Number'" style="line-height: 30px;" [readonly]="_disableFields">
-                    <mat-error *ngIf="policyForm.controls.previousCNPolicyNumber" >
-                      {{(MenuVertical=='Motor')?'Previous CN / Policy Number ' : 'Previous Policy Number '}} <strong>is required</strong> 
+                      [placeholder]="(MenuVertical=='Motor')?'Previous CN / Policy Number' : 'Previous Policy Number'"
+                      style="line-height: 30px;" [readonly]="_disableFields">
+                    <mat-error *ngIf="policyForm.controls.previousCNPolicyNumber">
+                      {{(MenuVertical=='Motor')?'Previous CN / Policy Number ' : 'Previous Policy Number '}} <strong>is
+                        required</strong>
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-lg-6">
                   <mat-form-field appearance="fill">
-                    <mat-label> {{(MenuVertical=='Motor')?'Last Policy Expiry Date' : 'Previous Policy End Date'}}    </mat-label>
+                    <mat-label> {{(MenuVertical=='Motor')?'Last Policy Expiry Date' : 'Previous Policy End Date'}}
+                    </mat-label>
                     <input matInput [matDatepicker]="LastPolicyExpiryDate" formControlName="lastPolicyExpiryDate"
                       [disabled]="_disableFields">
                     <mat-datepicker-toggle matSuffix [for]="LastPolicyExpiryDate" [disabled]="_disableFields">
@@ -643,17 +647,19 @@
                   </mat-form-field>
                 </div>
               </div>
-              <div class="row" *ngIf="MenuVertical!='Motor'" >
+              <div class="row" *ngIf="MenuVertical!='Motor'">
                 <div class="col-lg-6">
                   <mat-form-field>
                     <mat-label> Previous Policy Plan <span style="color:red">*</span></mat-label>
-                    <input type="text" matInput formControlName="previousPolicyPlan"  placeholder="Previous Policy Plan" style="line-height: 30px;" class="uppercase"> 
+                    <input type="text" matInput formControlName="previousPolicyPlan" placeholder="Previous Policy Plan"
+                      style="line-height: 30px;" class="uppercase">
                   </mat-form-field>
                 </div>
                 <div class="col-lg-6">
                   <mat-form-field>
                     <mat-label> Previous Policy SumInsured <span style="color:red">*</span></mat-label>
-                    <input type="text" matInput formControlName="previousPolicySumInsured"  placeholder="Previous Policy SumInsured" style="line-height: 30px;"> 
+                    <input type="text" matInput formControlName="previousPolicySumInsured"
+                      placeholder="Previous Policy SumInsured" style="line-height: 30px;">
                   </mat-form-field>
                   <mat-error
                     *ngIf="policyForm.controls.previousPolicySumInsured.errors && policyForm.controls.previousPolicySumInsured.errors.pattern">
@@ -676,7 +682,7 @@
             </mat-expansion-panel-header>
             <form [formGroup]="productPlanForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
               <hr style="margin-top: 0px;" />
-              <div class="row"> 
+              <div class="row">
                 <div class="col-lg-4">
                   <mat-form-field appearance="fill">
                     <mat-label>Product</mat-label>
@@ -684,7 +690,7 @@
                       <mat-option>Select</mat-option>
                       <mat-option *ngFor="let products of _products" [value]="products.Value">
                         {{products.Name}}</mat-option>
-                    </mat-select> 
+                    </mat-select>
                     <mat-error *ngIf="policyTermForm.controls.policyType">Please Select Product</mat-error>
                   </mat-form-field>
                 </div>
@@ -692,12 +698,12 @@
                 <div class="col-lg-4">
                   <mat-form-field appearance="fill">
                     <mat-label>Plan</mat-label>
-                    <mat-select formControlName="plan" required >
+                    <mat-select formControlName="plan" required>
                       <mat-option>Select</mat-option>
                       <mat-option *ngFor="let plans of _plans" [value]="plans.Value">
                         {{plans.Name}}</mat-option>
-                    </mat-select> 
-                    <mat-error *ngIf="policyTermForm.controls.policyType">Please Select Plan</mat-error> 
+                    </mat-select>
+                    <mat-error *ngIf="policyTermForm.controls.policyType">Please Select Plan</mat-error>
                   </mat-form-field>
                 </div>
 
@@ -708,8 +714,8 @@
                       <mat-option>Select</mat-option>
                       <mat-option *ngFor="let planTypes of _planTypes" [value]="planTypes.Value">
                         {{planTypes.Name}}</mat-option>
-                    </mat-select> 
-                    <mat-error *ngIf="policyTermForm.controls.policyType">Please Select PlanType</mat-error> 
+                    </mat-select>
+                    <mat-error *ngIf="policyTermForm.controls.policyType">Please Select PlanType</mat-error>
                   </mat-form-field>
                 </div>
 
@@ -717,7 +723,7 @@
             </form>
           </mat-expansion-panel>
         </div>
-  
+
         <!--Start Vehicle Details-->
         <div *ngIf="MenuVertical=='Motor'">
           <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
@@ -728,13 +734,13 @@
             </mat-expansion-panel-header>
             <form [formGroup]="vehicleForm" autocomplete="off" [ngClass]="{disabledDiv: _isViewPolicyActive}">
               <hr style="margin-top: 0px;" />
-    
+
               <div class="row">
                 <div class="col-lg-12">
                   <mat-form-field appearance="fill">
                     <mat-label>Vehicle</mat-label>
-                    <input type="text" placeholder="Select Vehicle" aria-label="Vehicle" matInput formControlName="vehicle"
-                      [matAutocomplete]="auto">
+                    <input type="text" placeholder="Select Vehicle" aria-label="Vehicle" matInput
+                      formControlName="vehicle" [matAutocomplete]="auto">
                     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete"
                       (optionSelected)="setCompleteVehicleDetails($event)">
                       <mat-option *ngFor="let vehicle of _filteredOptions" [value]="vehicle">
@@ -749,27 +755,20 @@
               <div class="row">
                 <div class="col-lg-4">
 
-                  <mat-form-field  appearance="fill">
+                  <mat-form-field appearance="fill">
                     <mat-label>Manufacturer</mat-label>
-                    <input type="text" 
-                          placeholder="Manufacturer" 
-                          aria-label="Manufacturer" 
-                          matInput  
-                          required
-                          formControlName="manufacturer" 
-                          [matAutocomplete]="autoManufacturer" >
-                    <mat-autocomplete 
-                         autoActiveFirstOption 
-                         #autoManufacturer="matAutocomplete"
-                        [displayWith]="getManufacturerForBind.bind(this)"  (optionSelected)="getModels()">
+                    <input type="text" placeholder="Manufacturer" aria-label="Manufacturer" matInput required
+                      formControlName="manufacturer" [matAutocomplete]="autoManufacturer">
+                    <mat-autocomplete autoActiveFirstOption #autoManufacturer="matAutocomplete"
+                      [displayWith]="getManufacturerForBind.bind(this)" (optionSelected)="getModels()">
                       <mat-option *ngFor="let manufacturer of _filteredManufacturerOptions"
-                                  [value]="manufacturer.Value">
-                              {{manufacturer.Name}}
+                        [value]="manufacturer.Value">
+                        {{manufacturer.Name}}
                       </mat-option>
-                    </mat-autocomplete> 
+                    </mat-autocomplete>
                     <mat-error *ngIf="vehicleForm.controls.manufacturer">Please Select Manufacturer</mat-error>
-                  </mat-form-field> 
- 
+                  </mat-form-field>
+
                 </div>
                 <div class="col-lg-4">
                   <mat-form-field appearance="fill">
@@ -786,7 +785,8 @@
                     <mat-label>Varient</mat-label>
                     <mat-select formControlName="varient" required (selectionChange)="setVehicleDetails($event.value)">
                       <mat-option>Select</mat-option>
-                      <mat-option *ngFor="let varient of _varients" [value]="varient">{{varient.VarientName}}</mat-option>
+                      <mat-option *ngFor="let varient of _varients" [value]="varient">{{varient.VarientName}}
+                      </mat-option>
                     </mat-select>
                     <mat-error *ngIf="vehicleForm.controls.varient">Please Select Varient</mat-error>
                   </mat-form-field>
@@ -851,8 +851,8 @@
                 <div class="col-lg-4">
                   <mat-form-field>
                     <mat-label>Chassis Number <span style="color:red">*</span></mat-label>
-                    <input type="text" matInput formControlName="chassisNumber" placeholder="Please Enter Chassis Number"
-                      maxlength="17" class="uppercase">
+                    <input type="text" matInput formControlName="chassisNumber"
+                      placeholder="Please Enter Chassis Number" maxlength="17" class="uppercase">
                   </mat-form-field>
                 </div>
               </div>
@@ -922,7 +922,7 @@
                   </mat-form-field>
                 </div>
               </div>
-    
+
               <section *ngIf="_type != 1">
                 <div class="row">
                   <div class="col-lg-12">
@@ -966,13 +966,13 @@
                 </div>
                 <ng-template #elseBlockNoInspections>
                   <div class="alert alert-danger" role="alert">
-                   No Inspection
+                    No Inspection
                   </div>
                 </ng-template>
               </section>
-    
+
             </form>
-          </mat-expansion-panel> 
+          </mat-expansion-panel>
         </div>
         <!--End Vehchile Details-->
 
@@ -990,8 +990,8 @@
                 <mat-form-field>
                   <mat-label>Vehicle IDV <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="vehicleIdv" [errorStateMatcher]="matcher"
-                    (change)="calculateTotalIdv()" placeholder="Please Enter Vehicle IDV" numbersOnlyWithOutDecimal  [disableControl]="_isTpPremiumDetailsDisabled"
-                    maxlength="9" keyUpMaxValue >
+                    (change)="calculateTotalIdv()" placeholder="Please Enter Vehicle IDV" numbersOnlyWithOutDecimal
+                    [disableControl]="_isTpPremiumDetailsDisabled" maxlength="9" keyUpMaxValue>
                   <mat-error *ngIf="premiumForm.controls.vehicleIdv">
                     Vehicle IDV is <strong>required</strong>
                   </mat-error>
@@ -1001,21 +1001,24 @@
                 <mat-form-field>
                   <mat-label>Electric Accessories IDV</mat-label>
                   <input type="text" matInput formControlName="electricAccessoriesIdv" (change)="calculateTotalIdv()"
-                    placeholder="Electric Accessories IDV" numbersOnlyWithOutDecimal [disableControl]="_isTpPremiumDetailsDisabled"  maxlength="9">
+                    placeholder="Electric Accessories IDV" numbersOnlyWithOutDecimal
+                    [disableControl]="_isTpPremiumDetailsDisabled" maxlength="9">
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>Non-Electric Accessories IDV</mat-label>
                   <input type="text" matInput formControlName="nonElectricAccessoriesIdv" (change)="calculateTotalIdv()"
-                    placeholder="Non-Electric Accessories IDV" numbersOnlyWithOutDecimal [disableControl]="_isTpPremiumDetailsDisabled"  maxlength="9">
+                    placeholder="Non-Electric Accessories IDV" numbersOnlyWithOutDecimal
+                    [disableControl]="_isTpPremiumDetailsDisabled" maxlength="9">
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>CNG / LPG IDV</mat-label>
                   <input type="text" matInput formControlName="cngLpgIdv" placeholder="CNG / LPG IDV"
-                    (change)="calculateTotalIdv()" numbersOnlyWithOutDecimal [disableControl]="_isTpPremiumDetailsDisabled"  maxlength="9">
+                    (change)="calculateTotalIdv()" numbersOnlyWithOutDecimal
+                    [disableControl]="_isTpPremiumDetailsDisabled" maxlength="9">
                 </mat-form-field>
               </div>
               <div class="col-lg-3">
@@ -1030,8 +1033,8 @@
                 <mat-form-field>
                   <mat-label>OD <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="od" [errorStateMatcher]="matcher" placeholder="OD"
-                    (change)="calculateTotalOd()" appTwoDigitDecimaNumber [disableControl]="_isTpPremiumDetailsDisabled" 
-                     >
+                    (change)="calculateTotalOd()" appTwoDigitDecimaNumber
+                    [disableControl]="_isTpPremiumDetailsDisabled">
                   <mat-error *ngIf="premiumForm.controls.od">
                     OD is <strong>required</strong>
                   </mat-error>
@@ -1041,7 +1044,8 @@
                 <mat-form-field>
                   <mat-label>Add-On Rider OD</mat-label>
                   <input type="text" matInput formControlName="addOnRiderOd" placeholder="Add-On Rider OD"
-                    (change)="calculateTotalOd()" appTwoDigitDecimaNumber [disableControl]="_isTpPremiumDetailsDisabled">
+                    (change)="calculateTotalOd()" appTwoDigitDecimaNumber
+                    [disableControl]="_isTpPremiumDetailsDisabled">
                 </mat-form-field>
               </div>
               <div class="col-lg-3">
@@ -1053,7 +1057,8 @@
               <div class="col-lg-3">
                 <mat-form-field>
                   <mat-label>Total OD</mat-label>
-                  <input type="text" matInput formControlName="totalOd" placeholder="Total OD" [readonly]="true" (change)="calculateNetPremium()">
+                  <input type="text" matInput formControlName="totalOd" placeholder="Total OD" [readonly]="true"
+                    (change)="calculateNetPremium()">
                 </mat-form-field>
               </div>
             </div>
@@ -1062,7 +1067,8 @@
                 <mat-form-field>
                   <mat-label>{{(MenuVertical=='Motor')?'Basic TP' : 'TP'}}<span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="tp" [errorStateMatcher]="matcher" placeholder="TP"
-                    (change)="calculateTotalTp()" appTwoDigitDecimaNumber [disableControl]="_isOdPremiumDetailsDisabled"> 
+                    (change)="calculateTotalTp()" appTwoDigitDecimaNumber
+                    [disableControl]="_isOdPremiumDetailsDisabled">
                   <mat-error *ngIf="premiumForm.controls.tp">
                     {{(MenuVertical=='Motor')?'Basic TP' : 'TP'}} is <strong>required</strong>
                   </mat-error>
@@ -1071,8 +1077,10 @@
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>Basic TP GST % <span style="color:red">*</span></mat-label>
-                  <input type="text" matInput formControlName="basicTPgstPercent" [errorStateMatcher]="matcher" placeholder="Basic TP GST %"
-                    (change)="calculateTotalTp()" appTwoDigitDecimaNumber  [disableControl]="_isOdPremiumDetailsDisabled" (input)="keyUpMaxValue($event,maxValueAllowedPercentage)">
+                  <input type="text" matInput formControlName="basicTPgstPercent" [errorStateMatcher]="matcher"
+                    placeholder="Basic TP GST %" (change)="calculateTotalTp()" appTwoDigitDecimaNumber
+                    [disableControl]="_isOdPremiumDetailsDisabled"
+                    (input)="keyUpMaxValue($event,maxValueAllowedPercentage)">
                   <mat-error *ngIf="premiumForm.controls.basicTPgstPercent">
                     Basic TP GST % is <strong>required</strong>
                   </mat-error>
@@ -1082,7 +1090,8 @@
                 <mat-form-field>
                   <mat-label>{{(MenuVertical=='Motor')?'Other TP (PC + ODC & PD)' : 'Passenger Cover'}}</mat-label>
                   <input type="text" matInput formControlName="passengerCover" placeholder="Passenger Cover"
-                    (change)="calculateTotalTp()" appTwoDigitDecimaNumber  [disableControl]="_isOdPremiumDetailsDisabled">
+                    (change)="calculateTotalTp()" appTwoDigitDecimaNumber
+                    [disableControl]="_isOdPremiumDetailsDisabled">
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
@@ -1094,7 +1103,8 @@
               <div class="col-lg-4">
                 <mat-form-field>
                   <mat-label>Total TP</mat-label>
-                  <input type="text" matInput formControlName="totalTp" placeholder="Total TP" [readonly]="true" (change)="calculateNetPremium()">
+                  <input type="text" matInput formControlName="totalTp" placeholder="Total TP" [readonly]="true"
+                    (change)="calculateNetPremium()">
                 </mat-form-field>
               </div>
             </div>
@@ -1109,7 +1119,7 @@
               <div class="col-lg-3">
                 <mat-form-field>
                   <mat-label>Net Premium</mat-label>
-                  <input type="text" matInput formControlName="netpremium"  [readonly]="true">
+                  <input type="text" matInput formControlName="netpremium" [readonly]="true">
                 </mat-form-field>
               </div>
 
@@ -1117,7 +1127,7 @@
                 <mat-form-field>
                   <mat-label>GST % <span style="color:red">*</span></mat-label>
                   <input type="number" matInput formControlName="gst" [errorStateMatcher]="matcher" placeholder="GST %"
-                    (change)="calculateGrossPremium()"  (input)="keyUpMaxValue($event,maxValueAllowedPercentage)">
+                    (change)="calculateGrossPremium()" (input)="keyUpMaxValue($event,maxValueAllowedPercentage)">
                   <mat-error *ngIf="premiumForm.controls.gst">
                     GST % is <strong>required</strong>
                   </mat-error>
@@ -1126,7 +1136,8 @@
               <div class="col-lg-3">
                 <mat-form-field>
                   <mat-label>{{(MenuVertical=='Motor')?'GST Amount' : 'GST'}} </mat-label>
-                  <input type="text" matInput formControlName="gstValue" (change)="calculateGrossPremium()" [readonly]="true">
+                  <input type="text" matInput formControlName="gstValue" (change)="calculateGrossPremium()"
+                    [readonly]="true">
                 </mat-form-field>
               </div>
             </div>
@@ -1158,20 +1169,24 @@
                 <mat-form-field>
                   <mat-label>Special Discount % <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="specialDiscount" [errorStateMatcher]="matcher"
-                    placeholder="Special Discount %" style="line-height: 28px;" appTwoDigitDecimaNumber (input)="keyUpMaxValue($event,maxValueAllowedPercentage)" [disableControl]="_isTpPremiumDetailsDisabled">
+                    placeholder="Special Discount %" style="line-height: 28px;" appTwoDigitDecimaNumber
+                    (input)="keyUpMaxValue($event,maxValueAllowedPercentage)"
+                    [disableControl]="_isTpPremiumDetailsDisabled">
                   <mat-error *ngIf="premiumForm.controls.specialDiscount">
                     Special Discount % is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
-              <div class="col-lg-4"  [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
+              <div class="col-lg-4" [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
                 <mat-form-field>
                   <mat-label>Loading %</mat-label>
                   <input type="text" matInput formControlName="loading" placeholder="Loading %"
-                    style="line-height: 28px;" appTwoDigitDecimaNumber (input)="keyUpMaxValue($event,maxValueAllowedPercentage)" [disableControl]="_isTpPremiumDetailsDisabled">
+                    style="line-height: 28px;" appTwoDigitDecimaNumber
+                    (input)="keyUpMaxValue($event,maxValueAllowedPercentage)"
+                    [disableControl]="_isTpPremiumDetailsDisabled">
                 </mat-form-field>
               </div>
-              <div class="col-lg-4"  [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
+              <div class="col-lg-4" [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
                 <mat-form-field appearance="fill">
                   <mat-label>NCB %</mat-label>
                   <mat-select formControlName="ncb" required [disableControl]="_isTpPremiumDetailsDisabled">
@@ -1205,9 +1220,9 @@
           </form>
         </mat-expansion-panel>
         <!--End Premium Details-->
-  
+
         <!--Start Add-On Rider Details-->
-  
+
         <mat-expansion-panel *ngIf="_isAddOnRiderEnable" (opened)="panelOpenState = true"
           (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -1241,7 +1256,7 @@
                 </div>
               </div>
             </form> -->
-          <form >
+          <form>
             <hr style="margin-top: 0px;" />
             <div class="row">
               <div class="col-lg-12">
@@ -1258,12 +1273,13 @@
             </div>
             <div class="row" [ngStyle]="{'margin-top':'12px'}">
               <div class="col-lg-3" *ngFor="let option of _addOnPlanOptions; let i = index;">
-                  <input type="text" matInput name="txtAddOn{{i}}" placeholder="AddonValue" [(ngModel)]="option.AddonValue" style="width: 40%;
+                <input type="text" matInput name="txtAddOn{{i}}" placeholder="AddonValue"
+                  [(ngModel)]="option.AddonValue" style="width: 40%;
                   float: left;
-                  line-height: 25px; border-bottom: 1px solid;  margin-right: 10px;"/> 
-                <mat-checkbox color="primary"    name="{{i}}"
+                  line-height: 25px; border-bottom: 1px solid;  margin-right: 10px;" />
+                <mat-checkbox color="primary" name="{{i}}"
                   (change)="getCheckboxValue(i, option.IsPlanAvailable, option.AddonPlanOptionName,$event)"
-                  [disabled]="option.IsDisabled" [(ngModel)] = "option.IsPlanAvailable">
+                  [disabled]="option.IsDisabled" [(ngModel)]="option.IsPlanAvailable">
                   {{option.AddonPlanOptionName}}
                 </mat-checkbox>
                 <p>{{option.AddonPlanOptionDescripation}}</p>
@@ -1275,9 +1291,9 @@
             </div>
           </form>
         </mat-expansion-panel>
-  
+
         <!--End Add-On Rider Details-->
-  
+
         <!--Start Nomination Details-->
         <div *ngIf="MenuVertical=='Motor'">
           <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
@@ -1317,7 +1333,8 @@
                 <div class="col-lg-12">
                   <mat-form-field>
                     <mat-label>If Minor then Guardian Name</mat-label>
-                    <input type="text" matInput formControlName="guardianName" placeholder="Please Enter Guardian Name" />
+                    <input type="text" matInput formControlName="guardianName"
+                      placeholder="Please Enter Guardian Name" />
                   </mat-form-field>
                 </div>
               </div>
@@ -1325,7 +1342,7 @@
           </mat-expansion-panel>
         </div>
         <!--End Nomination Details-->
-  
+
         <!--Start Policy Source-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -1384,24 +1401,17 @@
             <div class="row">
               <div class="col-lg-6">
 
-                <mat-form-field  appearance="fill">
+                <mat-form-field appearance="fill">
                   <mat-label>POS Name</mat-label>
-                  <input type="text" 
-                        placeholder="POS Name" 
-                        aria-label="POS Name" 
-                        matInput  
-                        formControlName="posName" 
-                        [matAutocomplete]="autoPos" >
-                  <mat-autocomplete 
-                       autoActiveFirstOption 
-                       #autoPos="matAutocomplete"
-                      [displayWith]="getPosForBind.bind(this)" (optionSelected)="businessDoneBy()">
-                    <mat-option *ngFor="let posData of _filteredPosOptions"
-                                [value]="posData.Value">
-                            {{posData.Name}}
+                  <input type="text" placeholder="POS Name" aria-label="POS Name" matInput formControlName="posName"
+                    [matAutocomplete]="autoPos">
+                  <mat-autocomplete autoActiveFirstOption #autoPos="matAutocomplete"
+                    [displayWith]="getPosForBind.bind(this)" (optionSelected)="businessDoneBy()">
+                    <mat-option *ngFor="let posData of _filteredPosOptions" [value]="posData.Value">
+                      {{posData.Name}}
                     </mat-option>
-                  </mat-autocomplete> 
-                </mat-form-field>  
+                  </mat-autocomplete>
+                </mat-form-field>
 
               </div>
               <div class="col-lg-6">
@@ -1464,9 +1474,9 @@
           </form>
         </mat-expansion-panel>
         <!--End Policy Source-->
-  
+
         <!--Start Payment Details-->
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" >
           <mat-expansion-panel-header>
             <mat-panel-title>
               Payment Details
@@ -1480,7 +1490,8 @@
                   <mat-label>Mode 1</mat-label>
                   <mat-select formControlName="mode1" required>
                     <mat-option>Select</mat-option>
-                    <mat-option *ngFor="let paymentType of _paymentTypes" [value]="paymentType.Value">{{paymentType.Name}}
+                    <mat-option *ngFor="let paymentType of _paymentTypes" [value]="paymentType.Value">
+                      {{paymentType.Name}}
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="paymentForm.controls.mode1">Please Select Mode 1</mat-error>
@@ -1489,8 +1500,8 @@
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>Amount <span style="color:red">*</span></mat-label>
-                  <input type="text" matInput formControlName="amount1" [errorStateMatcher]="matcher" placeholder="Amount"
-                    style="line-height: 30px;" appTwoDigitDecimaNumber/>
+                  <input type="text" matInput formControlName="amount1" [errorStateMatcher]="matcher"
+                    placeholder="Amount" style="line-height: 30px;" appTwoDigitDecimaNumber />
                   <mat-error *ngIf="paymentForm.controls.amount1">
                     Amount is <strong>required</strong>
                   </mat-error>
@@ -1535,7 +1546,8 @@
                   <mat-label>Mode 2</mat-label>
                   <mat-select formControlName="mode2">
                     <mat-option>Select</mat-option>
-                    <mat-option *ngFor="let paymentType of _paymentTypes" [value]="paymentType.Value">{{paymentType.Name}}
+                    <mat-option *ngFor="let paymentType of _paymentTypes" [value]="paymentType.Value">
+                      {{paymentType.Name}}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -1543,7 +1555,8 @@
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="number" matInput formControlName="amount2" placeholder="Amount" style="line-height: 30px;" appTwoDigitDecimaNumber />
+                  <input type="number" matInput formControlName="amount2" placeholder="Amount"
+                    style="line-height: 30px;" appTwoDigitDecimaNumber />
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
@@ -1556,9 +1569,9 @@
                     Instrument Number is <strong>invalid</strong>
                   </mat-error>
                   <mat-error
-                  *ngIf="paymentForm.controls.instrumentNumber2.errors && paymentForm.controls.instrumentNumber2.errors.maxlength">
-                  Maximum number of cheque <strong>is 6 Digit</strong>
-                </mat-error>
+                    *ngIf="paymentForm.controls.instrumentNumber2.errors && paymentForm.controls.instrumentNumber2.errors.maxlength">
+                    Maximum number of cheque <strong>is 6 Digit</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
@@ -1585,7 +1598,8 @@
                   <mat-label>Mode 3</mat-label>
                   <mat-select formControlName="mode3">
                     <mat-option>Select</mat-option>
-                    <mat-option *ngFor="let paymentType of _paymentTypes" [value]="paymentType.Value">{{paymentType.Name}}
+                    <mat-option *ngFor="let paymentType of _paymentTypes" [value]="paymentType.Value">
+                      {{paymentType.Name}}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
@@ -1593,22 +1607,23 @@
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>Amount</mat-label>
-                  <input type="text" matInput formControlName="amount3" placeholder="Amount" style="line-height: 30px;" appTwoDigitDecimaNumber/>
+                  <input type="text" matInput formControlName="amount3" placeholder="Amount" style="line-height: 30px;"
+                    appTwoDigitDecimaNumber />
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
                 <mat-form-field>
                   <mat-label>Instrument Number</mat-label>
                   <input type="text" matInput formControlName="instrumentNumber3" placeholder="Instrument Number"
-                    style="line-height: 30px;" maxlength="20"  />
+                    style="line-height: 30px;" maxlength="20" />
                   <mat-error
                     *ngIf="paymentForm.controls.instrumentNumber3.errors && paymentForm.controls.instrumentNumber3.errors.pattern">
                     Instrument Number is <strong>invalid</strong>
                   </mat-error>
                   <mat-error
-                  *ngIf="paymentForm.controls.instrumentNumber3.errors && paymentForm.controls.instrumentNumber3.errors.maxlength">
-                  Maximum number of cheque <strong>is 6 Digit</strong>
-                </mat-error>
+                    *ngIf="paymentForm.controls.instrumentNumber3.errors && paymentForm.controls.instrumentNumber3.errors.maxlength">
+                    Maximum number of cheque <strong>is 6 Digit</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-lg-2">
@@ -1632,7 +1647,7 @@
           </form>
         </mat-expansion-panel>
         <!--End Payment Details-->
-  
+
         <!--Start Voucher Details-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -1695,7 +1710,7 @@
           </div>
         </mat-expansion-panel>
         <!--End Voucher Details-->
-  
+
         <!--Start Endorsement Information-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -1711,22 +1726,22 @@
                   <th mat-header-cell *matHeaderCellDef>Endorsement Reason</th>
                   <td mat-cell *matCellDef="let element">{{element.endorsementReason}}</td>
                 </ng-container>
-  
+
                 <ng-container matColumnDef="entryDate">
                   <th mat-header-cell *matHeaderCellDef>Entry Date</th>
                   <td mat-cell *matCellDef="let element">{{element.entryDate}}</td>
                 </ng-container>
-  
+
                 <ng-container matColumnDef="odChanges">
                   <th mat-header-cell *matHeaderCellDef> OD Changes </th>
                   <td mat-cell *matCellDef="let element"> {{element.odChanges}} </td>
                 </ng-container>
-  
+
                 <ng-container matColumnDef="premiumChange">
                   <th mat-header-cell *matHeaderCellDef> Premium Change </th>
                   <td mat-cell *matCellDef="let element"> {{element.premiumChange}} </td>
                 </ng-container>
-  
+
                 <ng-container matColumnDef="idvChange">
                   <th mat-header-cell *matHeaderCellDef> IDV Change </th>
                   <td mat-cell *matCellDef="let element"> {{element.idvChange}} </td>
@@ -1754,8 +1769,8 @@
                     <mat-icon>{{element.action}}</mat-icon>
                   </td>
                 </ng-container>
-  
-  
+
+
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
               </table>
@@ -1763,7 +1778,7 @@
           </form>
         </mat-expansion-panel>
         <!--End Endorsement Information-->
-  
+
         <!--Start Claims Information-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -1815,10 +1830,10 @@
               No Claim
             </div>
           </ng-template>
-  
+
         </mat-expansion-panel>
         <!--End Claims Information-->
-  
+
         <!--Start Upload Files-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -1830,7 +1845,8 @@
             <hr style="margin-top: 0px;" />
             <div class="row">
               <div class="col-lg-12">
-                <h4>Upload Documents <span style="color:red; font-style: italic;">(File type should be PDF and Images file and max
+                <h4>Upload Documents <span style="color:red; font-style: italic;">(File type should be PDF and Images
+                    file and max
                     size 2 MB)</span></h4>
               </div>
             </div>
@@ -1850,17 +1866,17 @@
                   <ngx-mat-file-input placeholder="Browse" formControlName="browse" [errorStateMatcher]="matcher"
                     style="line-height: 20px;" [accept]="listAccepts">
                   </ngx-mat-file-input>
-                <!--   <ngx-doc-viewer [url]="DemoDoc" [viewer]="viewer" style="width:100%;height:100vh;"></ngx-doc-viewer>  --> 
+                  <!--   <ngx-doc-viewer [url]="DemoDoc" [viewer]="viewer" style="width:100%;height:100vh;"></ngx-doc-viewer>  -->
                   <mat-icon matSuffix>folder</mat-icon>
                 </mat-form-field>
               </div>
-              <div class="col-lg-2"  *ngIf="_type != SearchPolicyType.Motor_Modify && !_isViewPolicyActive">
+              <div class="col-lg-2" *ngIf="_type != SearchPolicyType.Motor_Modify && !_isViewPolicyActive">
                 <button class="btn-block" mat-raised-button style="background-color: #28a745;" color="primary"
                   (click)="openPreviewDialog()">
                   <mat-icon style="font-size: 20px;">remove_red_eye</mat-icon> Preview
                 </button>
               </div>
-             
+
             </div>
             <hr style="margin-top: 0px;" />
             <div class="row">
@@ -1874,8 +1890,7 @@
               <div class="col-lg-2">
                 <div class="row">
                   <div class="col-lg-12">
-                    <button class="btn-block" mat-raised-button color="primary" (click)="addDocument()"
-                      [disabled]="">
+                    <button class="btn-block" mat-raised-button color="primary" (click)="addDocument()" [disabled]="">
                       <mat-icon>note_add</mat-icon> Add
                     </button>
                   </div>
@@ -1920,13 +1935,16 @@
                   <ng-container matColumnDef="DocumentTypeId">
                     <th style="text-align:center;" mat-header-cell *matHeaderCellDef style="text-align: end;"> Action
                     </th>
-                    <td style="text-align:center;" mat-cell *matCellDef="let element; let i = index" style="width: 185px;">
+                    <td style="text-align:center;" mat-cell *matCellDef="let element; let i = index"
+                      style="width: 185px;">
                       <div class="row">
                         <div class="col-lg-1">
-                          <mat-icon matTooltip="Delete" color="warn" class="handOnHover" (click)="deletefiles(i)">delete_outline</mat-icon>
+                          <mat-icon matTooltip="Delete" color="warn" class="handOnHover" (click)="deletefiles(i)">
+                            delete_outline</mat-icon>
                         </div>
                         <div class="col-lg-1">
-                          <mat-icon matTooltip="Download" class="handOnHover" (click)="downloadFile(element)">download</mat-icon>
+                          <mat-icon matTooltip="Download" class="handOnHover" (click)="downloadFile(element)">download
+                          </mat-icon>
                         </div>
                       </div>
                     </td>
@@ -1947,66 +1965,144 @@
         <!--End Upload Files-->
 
         <!--Start insurance detaik-->
-      <!--   <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false" *ngIf="MenuVertical !=='Motor'">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Insurance Details
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <form >
+          <form>
             <hr style="margin-top: 0px;" />
-            <form [formGroup]="insurancePersonForm" autocomplete="off" >
+            <form [formGroup]="insuranceCustomerForm" autocomplete="off">
 
-            <div class="row">
-              <div class="col-lg-12">
-                <table style="width: 100%;" class="table">
-                <thead>
-                  <th>Name</th>
-                  <th>DOB</th>
-                  <th>Gender</th>
-                  <th>Mobile</th>
-                  <th>Customer Code</th>
-                  <th>Action</th>
-                </thead>
-                <tbody>
-                  <th>Manan</th>
-                  <th>DOB</th>
-                  <th>Gender</th>
-                  <th>Mobile</th>
-                  <th>Customer Code</th>
-                  <th>
-                    <button type="reset" class="btn-block" mat-raised-button color="accent" >
-                      <mat-icon style="font-size: 22px;">refresh</mat-icon> Reset
-                    </button>
-                  </th>
-                </tbody>
-                </table>
-              </div>
-              <div class="col-lg-12">
-                <div class="col-lg-4">
-                  <mat-form-field>
-                    <mat-label>Name of Insured Person</mat-label>
-                    <input type="text" matInput formControlName="nameInsuredPerson" placeholder="Name of Insured Person"
-                      style="line-height: 28px;">
-                  </mat-form-field>
+              <div class="row">
+                <div class="col-lg-12">
+                  <table mat-table [dataSource]="_dataSourceCustomerCluster">
+                    <ng-container matColumnDef="Sno">
+                      <th mat-header-cell *matHeaderCellDef> S.No. </th>
+                      <td mat-cell *matCellDef="let element;  let i = index"> <strong>{{i+1}}.</strong> </td>
+                    </ng-container>
+                    <ng-container matColumnDef="NameInPolicy">
+                      <th mat-header-cell *matHeaderCellDef> Name </th>
+                      <td mat-cell *matCellDef="let element"> {{element.Name}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="DateOfBirth">
+                      <th mat-header-cell *matHeaderCellDef> Date of Birth </th>
+                      <td mat-cell *matCellDef="let element"> {{element.DateOfBirth | date: 'dd/MM/yyyy' }} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Gender">
+                      <th mat-header-cell *matHeaderCellDef> Gender</th>
+                      <td mat-cell *matCellDef="let element"> {{element.Gender}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Mobile">
+                      <th mat-header-cell *matHeaderCellDef> Document Type </th>
+                      <td mat-cell *matCellDef="let element"> {{element.Mobile}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="Code">
+                      <th mat-header-cell *matHeaderCellDef> Customer Code</th>
+                      <td mat-cell *matCellDef="let element"> {{element.Code}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Action">
+                      <th style="text-align:center;" mat-header-cell *matHeaderCellDef style="text-align: end;"> Action
+                      </th>
+                      <td style="text-align:center;" mat-cell *matCellDef="let element; let i = index"
+                        style="width: 185px;">
+                        <div class="row">
+                          <div class="col-lg-1">
+                            <button type="button" class="btn-block" mat-raised-button color="accent"
+                              (click)="addCustomerClusterData(element)">Add</button>
+                          </div>
+                          <!--   <div class="col-lg-1">
+                            <mat-icon matTooltip="Delete" color="warn" class="handOnHover" (click)="deletefiles(i)">delete_outline</mat-icon>
+                          </div> -->
+
+                        </div>
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsCustomerCluster"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsCustomerCluster;"></tr>
+                  </table>
+
                 </div>
-                <div class="col-lg-4">
-                  <mat-form-field>
-                    <mat-label>Name of Insured Person</mat-label>
-                    <input type="text" matInput formControlName="nameInsuredPerson" placeholder="Name of Insured Person"
-                      style="line-height: 28px;">
-                  </mat-form-field>
+              </div>
+              <div class="row">
+                  <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Name of Insured Person</mat-label>
+                      <input type="text" matInput formControlName="cnameInsuredPerson"
+                        placeholder="Name of Insured Person" style="line-height: 28px;">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>DOB</mat-label>
+                      <input type="text" matInput formControlName="cdob"
+                        placeholder="Date of birth" style="line-height: 28px;">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Gender</mat-label>
+                      <input type="text" matInput formControlName="cgender"
+                        placeholder="Gender" style="line-height: 28px;">
+                    </mat-form-field>
                 </div>
               </div>
-            </div>
+              <div class="row">
+                  <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Mobile</mat-label>
+                      <input type="text" matInput formControlName="cmobile"
+                        placeholder="Mobile" style="line-height: 28px;">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Email</mat-label>
+                      <input type="text" matInput formControlName="cemail"
+                        placeholder="Email" style="line-height: 28px;">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Passport</mat-label>
+                      <input type="text" matInput formControlName="cpassport"
+                        placeholder="Passport" style="line-height: 28px;">
+                    </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                  <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Pan</mat-label>
+                      <input type="text" matInput formControlName="cpan"
+                        placeholder="Pan" style="line-height: 28px;">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Aadhar</mat-label>
+                      <input type="text" matInput formControlName="caadhar"
+                        placeholder="Aadhar" style="line-height: 28px;">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Profession</mat-label>
+                      <input type="text" matInput formControlName="cprofession"
+                        placeholder="Profession" style="line-height: 28px;">
+                    </mat-form-field>
+                  </div>
+              </div>
             </form>
             <hr style="margin-top: 0px;" />
           </form>
-        </mat-expansion-panel> -->
+        </mat-expansion-panel>
         <!--End insurance detaik-->
 
       </mat-accordion>
-  
+
       <mat-card class="mat-elevation-z2" style="margin-left:0px; margin-right: 0px;">
         <mat-card-content>
           <div class="row">
@@ -2021,7 +2117,7 @@
                 <mat-list-item>
                   <mat-icon mat-list-icon>date_range</mat-icon>
                   <div mat-line>Policy Created On</div>
-                  <div mat-line> {{_policyData?.CreatedTime |date: 'dd/MM/yyyy hh:mm:a'}}  </div>
+                  <div mat-line> {{_policyData?.CreatedTime |date: 'dd/MM/yyyy hh:mm:a'}} </div>
                 </mat-list-item>
               </mat-list>
             </div>
@@ -2062,15 +2158,19 @@
       <div class="row">
         <div class="col-lg-4"></div>
         <div class="col-lg-2" *ngIf="_policyType != SearchPolicyType.Motor_Verify">
-          <button type="reset" class="btn-block" mat-raised-button color="accent" (click)="resetForm()" *ngIf=!_isViewPolicyActive>
+          <button type="reset" class="btn-block" mat-raised-button color="accent" (click)="resetForm()"
+            *ngIf=!_isViewPolicyActive>
             <mat-icon style="font-size: 22px;">refresh</mat-icon> Reset
           </button>
         </div>
         <div class="col-lg-2">
-          <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createPolicy()" *ngIf="!_isViewPolicyActive">
-            <mat-icon style="font-size: 22px;">save</mat-icon> {{ _policyType != SearchPolicyType.Motor_Verify? 'Save' : 'Verify' }}
+          <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createPolicy()"
+            *ngIf="!_isViewPolicyActive">
+            <mat-icon style="font-size: 22px;">save</mat-icon> {{ _policyType != SearchPolicyType.Motor_Verify? 'Save' :
+            'Verify' }}
           </button>
-          <button type="button" class="btn-block" mat-raised-button color="primary" [routerLink]="['/pms/motor/motor-policy-management']" *ngIf=_isViewPolicyActive>
+          <button type="button" class="btn-block" mat-raised-button color="primary"
+            [routerLink]="['/pms/motor/motor-policy-management']" *ngIf=_isViewPolicyActive>
             <mat-icon style="font-size: 22px;">save</mat-icon> Back
           </button>
         </div>
@@ -2078,4 +2178,4 @@
       </div>
     </mat-card-content>
   </mat-card>
-  </div>
+</div>

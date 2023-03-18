@@ -267,32 +267,41 @@ namespace PolicyManagement.Services.Motor
 
                         List<tblUploadedDocuments> documents = new List<tblUploadedDocuments>();
 
-                        model.Document.ForEach(f =>
+                        model.Document.ForEach(async f =>
                         {
-                            if (f.DocumentBase64.Contains(","))
-                                f.DocumentBase64 = f.DocumentBase64.Substring(f.DocumentBase64.IndexOf(",") + 1);
-
-                            byte[] bytes = Convert.FromBase64String(f.DocumentBase64);
-                            string fileName = $"{Guid.NewGuid()}.{f.FileName.Split('.').LastOrDefault()}";
-
-                            using (FileStream fileStream = new FileStream($"{documentDirectory}/{f.FileName}", FileMode.OpenOrCreate))
+                            string fileName = "";
+                            List<tblUploadedDocuments> previousDocuments = await _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == motorPolicyData.PolicyId && w.DocumentId == f.DocumentId).ToListAsync();
+                            if (previousDocuments.Count() == 0)
                             {
-                                fileStream.Write(bytes, 0, bytes.Length);
-                                fileStream.Close();
+
+                                fileName = $"{Guid.NewGuid()}.{f.FileName.Split('.').LastOrDefault()}";
+                                if (!string.IsNullOrEmpty(f.DocumentBase64)&& f.DocumentBase64.Contains(","))
+                                {
+                                    f.DocumentBase64.Substring(f.DocumentBase64.IndexOf(",") + 1);
+                                   
+                                    byte[] bytes = Convert.FromBase64String(f.DocumentBase64);
+
+                                    using (FileStream fileStream = new FileStream($"{documentDirectory}/{fileName}", FileMode.OpenOrCreate))
+                                    {
+                                        fileStream.Write(bytes, 0, bytes.Length);
+                                        fileStream.Close();
+                                    }
+                                }
+
+
+                                documents.Add(new tblUploadedDocuments
+                                {
+                                    CreatedBy = baseModel.LoginUserId,
+                                    CreatedTime = DateTime.Now,
+                                    CustomerId = model.Customer.CustomerId,
+                                    Directory = documentDirectory,
+                                    DocId = f.DocumentTypeId,
+                                    FileName = fileName,
+                                    OriginalFileName = f.FileName,
+                                    PolicyId = motorPolicyData.PolicyId,
+                                    Remarks = f.Remarks
+                                });
                             }
-
-                            documents.Add(new tblUploadedDocuments
-                            {
-                                CreatedBy = baseModel.LoginUserId,
-                                CreatedTime = DateTime.Now,
-                                CustomerId = model.Customer.CustomerId,
-                                Directory = documentDirectory,
-                                DocId = f.DocumentTypeId,
-                                FileName = fileName,
-                                OriginalFileName = f.FileName,
-                                PolicyId = motorPolicyData.PolicyId,
-                                Remarks = f.Remarks
-                            });
                         });
 
                         _dataContext.tblUploadedDocuments.AddRange(documents);
@@ -876,10 +885,7 @@ namespace PolicyManagement.Services.Motor
                     List<tblUploadedDocuments> previousDocuments = await _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == policyId && w.DocumentId == f.DocumentId).ToListAsync();
                     if (previousDocuments.Count() == 0)
                     {
-                        _dataContext.tblUploadedDocuments.RemoveRange(previousDocuments);
-                        await _dataContext.SaveChangesAsync();
-
-
+                        
                          fileName = $"{Guid.NewGuid()}.{f.FileName.Split('.').LastOrDefault()}";
                         if (string.IsNullOrEmpty(f.DocumentBase64) && f.DocumentBase64.Contains(","))
                         {

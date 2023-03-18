@@ -1,4 +1,6 @@
-﻿namespace PolicyManagement.Dtos.Customer
+﻿using System;
+
+namespace PolicyManagement.Dtos.Customer
 {
     public class CustomerDto
     {
@@ -11,5 +13,19 @@
         public string City { get; set; }
         public string PinCode { get; set; }
         public string Type { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string Gender { get; set; }
+
+    }
+
+    public class ClusterCustomerDto:CustomerDto
+    {
+
+        public string Profession { get; set; }
+        public string Aadhar { get; set; }
+        public string Pan { get; set; }
+        public string Email { get; set; }
+        public string Passport { get; set; }
+
     }
 }

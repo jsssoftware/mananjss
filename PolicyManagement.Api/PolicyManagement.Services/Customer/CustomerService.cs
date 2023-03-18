@@ -13,6 +13,7 @@ using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 
 namespace PolicyManagement.Services.Customer
 {
@@ -746,7 +747,8 @@ namespace PolicyManagement.Services.Customer
                     Pan = customer.T1.PAN,
                     Cluster = !string.IsNullOrEmpty(cluster.ClusterName) ? cluster.ClusterName : "NA",
                     ClusterCode = !string.IsNullOrEmpty(cluster.ClusterCode) ? cluster.ClusterCode : "NA",
-                    GenderId = customer.T1.GenderId
+                    GenderId = customer.T1.GenderId,
+                    ClusterId =  customer.T1.ClusterId
                 })
                 .FirstOrDefaultAsync(f => f.CustomerId == customerId);
 
@@ -854,27 +856,37 @@ namespace PolicyManagement.Services.Customer
                                                                                                            })
                                                                                                            .ToListAsync();
 
-        public async Task<DataTableDto<List<CustomerDto>>> FindCustomrByClusterCode(int? clusterId)
+        public async Task<DataTableDto<List<ClusterCustomerDto>>> FindCustomrByClusterCode(int? clusterId)
         {
 
 
-            List<CustomerDto> customers = await _dataContext.tblCustomer.GroupJoin(_dataContext.tblCluster, T1 => T1.ClusterId, T2 => T2.ClusterId, (T1, T2) => new { T1, T2 })
+            List<ClusterCustomerDto> customers = await _dataContext.tblCustomer.GroupJoin(_dataContext.tblCluster, T1 => T1.ClusterId, T2 => T2.ClusterId, (T1, T2) => new { T1, T2 })
                                                     .SelectMany(s => s.T2.DefaultIfEmpty(), (customer, cluster) => new { customer.T1, T2 = cluster })
-                                                    .Where(w => w.T1.ClusterId == clusterId)
-                                                    .OrderBy(o => o.T1.CustomerName)
-                                                    .Select(s => new CustomerDto
+                                                    .Join(_dataContext.tblProfession,T3 => T3.T1.ProfessionId,T4 => T4.ProfessionId,(T3, T4) => new {T3,T4})
+                                                    .Join(_dataContext.tblGender, T5 => T5.T3.T1.GenderId, T6 => T6.GenderId, (T5, T6) => new { T5, T6 })
+        
+                                                    .Where(w => w.T5.T3.T1.ClusterId == clusterId)
+                                                    .OrderBy(o => o.T5.T3.T1.CustomerName)
+                                                    .Select( s => new ClusterCustomerDto
                                                     {
-                                                        Address = s.T1.DefaultAddress == 1 ? s.T1.CustomerAddress1 : s.T1.DefaultAddress == 2 ? s.T1.CustomerAddress2 : s.T1.CustomerAddress3,
-                                                        ClusterName = s.T2.ClusterName,
-                                                        Code = s.T1.CustomerCode,
-                                                        Id = s.T1.CustomerId,
-                                                        Mobile = s.T1.DefaultContactNo == 1 ? s.T1.CustomerMobile1 : s.T1.DefaultContactNo == 2 ? s.T1.CustomerMobile2 : s.T1.DefaultContactNo == 3 ? s.T1.CustomerPhone1 : s.T1.CustomerPhone2,
-                                                        Name = s.T1.CustomerName,
-                                                        PinCode = s.T1.DefaultAddress == 1 ? s.T1.CustomerPinCode1 : s.T1.DefaultAddress == 2 ? s.T1.CustomerPinCode2 : s.T1.CustomerPinCode3,
+                                                        Address = s.T5.T3.T1.DefaultAddress == 1 ? s.T5.T3.T1.CustomerAddress1 : s.T5.T3.T1.DefaultAddress == 2 ? s.T5.T3.T1.CustomerAddress2 : s.T5.T3.T1.CustomerAddress3,
+                                                            ClusterName = s.T5.T3.T2.ClusterName,
+                                                            Code = s.T5.T3.T1.CustomerCode,
+                                                        Id = s.T5.T3.T1.CustomerId,
+                                                        Mobile = s.T5.T3.T1.DefaultContactNo == 1 ? s.T5.T3.T1.CustomerMobile1 : s.T5.T3.T1.DefaultContactNo == 2 ? s.T5.T3.T1.CustomerMobile2 : s.T5.T3.T1.DefaultContactNo == 3 ? s.T5.T3.T1.CustomerPhone1 : s.T5.T3.T1.CustomerPhone2,
+                                                        Name = s.T5.T3.T1.CustomerName,
+                                                        PinCode = s.T5.T3.T1.DefaultAddress == 1 ? s.T5.T3.T1.CustomerPinCode1 : s.T5.T3.T1.DefaultAddress == 2 ? s.T5.T3.T1.CustomerPinCode2 : s.T5.T3.T1.CustomerPinCode3,
+                                                        DateOfBirth =s.T5.T3.T1.CustomerDOB,
+                                                        Gender =  s.T6.Gender,
+                                                        Pan =s.T5.T3.T1.PAN,
+                                                        Aadhar = s.T5.T3.T1.AadhaarNo,
+                                                        Profession = _dataContext.tblProfession.Where(x => x.ProfessionId == s.T5.T3.T1.ProfessionId).Select(x => x.ProfessionName).FirstOrDefault(),
+                                                        Email = s.T5.T3.T1.CustomerEmail1,
+                                                        Passport = s.T5.T3.T1.PassportNo
                                                     })
                                                    .ToListAsync();
 
-            return new DataTableDto<List<CustomerDto>>
+            return new DataTableDto<List<ClusterCustomerDto>>
             {
                 Data = customers
             };

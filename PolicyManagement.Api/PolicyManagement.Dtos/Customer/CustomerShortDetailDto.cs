@@ -20,6 +20,8 @@ namespace PolicyManagement.Dtos.Customer
         public string DateOfBirth { get; set; }
         public string PassportNumber { get; set; } 
         public Nullable<short> GenderId { get; set; }
+        public int? ClusterId { get; set; }
+
 
     }
 }

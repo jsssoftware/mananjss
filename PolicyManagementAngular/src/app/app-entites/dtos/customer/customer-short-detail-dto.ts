@@ -15,4 +15,5 @@ export interface ICustomerShortDetailDto
     DateOfBirth: string;
     PassportNumber: string;
     CustomerId: number;
+    ClusterId?:number
 }

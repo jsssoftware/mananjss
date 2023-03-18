@@ -23,6 +23,6 @@ namespace PolicyManagement.Services.Customer.Interface
         Task<List<DropDownDto<int>>> FindAllTitlesWithoutMS();
         Task<List<DropDownDto<int>>> FindAllClusters(int branchId);
         Task<List<DropDownDto<int>>> FindAllCustomerNames();
-        Task<DataTableDto<List<CustomerDto>>> FindCustomrByClusterCode(int? clusterId);
+        Task<DataTableDto<List<ClusterCustomerDto>>> FindCustomrByClusterCode(int? clusterId);
     }
 }
