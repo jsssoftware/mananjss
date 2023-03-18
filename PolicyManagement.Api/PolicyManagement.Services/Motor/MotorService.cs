@@ -267,10 +267,10 @@ namespace PolicyManagement.Services.Motor
 
                         List<tblUploadedDocuments> documents = new List<tblUploadedDocuments>();
 
-                        model.Document.ForEach(async f =>
+                        model.Document.ForEach( f =>
                         {
                             string fileName = "";
-                            List<tblUploadedDocuments> previousDocuments = await _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == motorPolicyData.PolicyId && w.DocumentId == f.DocumentId).ToListAsync();
+                            List<tblUploadedDocuments> previousDocuments =  _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == motorPolicyData.PolicyId && w.DocumentId == f.DocumentId).ToList();
                             if (previousDocuments.Count() == 0)
                             {
 
