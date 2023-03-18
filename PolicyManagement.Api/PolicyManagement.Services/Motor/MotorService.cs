@@ -277,7 +277,7 @@ namespace PolicyManagement.Services.Motor
                                 fileName = $"{Guid.NewGuid()}.{f.FileName.Split('.').LastOrDefault()}";
                                 if (!string.IsNullOrEmpty(f.DocumentBase64)&& f.DocumentBase64.Contains(","))
                                 {
-                                    f.DocumentBase64.Substring(f.DocumentBase64.IndexOf(",") + 1);
+                                    f.DocumentBase64 = f.DocumentBase64.Substring(f.DocumentBase64.IndexOf(",") + 1);
                                    
                                     byte[] bytes = Convert.FromBase64String(f.DocumentBase64);
 
