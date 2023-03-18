@@ -1307,6 +1307,22 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
                 title: 'Sorry',
                 text: response.Message,
               });
+            } else {
+              Swal.fire({
+                title: 'Warning',
+                text: response.Message,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, Save it!',
+                cancelButtonText: 'Cancel'
+              }).then(async (result) => {
+                if (result.isConfirmed) {
+                  this.isSameModelAllowed = true
+                  await this.createPolicy()
+                  this.redirectRoute();
+
+                }
+              })
             }
           }
         }
@@ -2413,6 +2429,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.policyForm.get("tpInsuranceCompany")?.disable();
       this.policyForm.get("policyNumber")?.disable();
       this.policyForm.get("tpStartDate")?.disable();
+      this.policyForm.get("odInsuranceCompany")?.enable();
 
       let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.OdPolicy.ExpiryDateDto as IDateDto) as Date;
       try {
