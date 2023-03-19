@@ -2013,7 +2013,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         vehicleClass: response.PolicyTerm.VehicleClass,
         packageType: ''
       });
-      if (response.Premium.Ncb <= 50) {
+      if (response.Premium.Ncb <= Common.NCB50VALUE) {
         this.premiumForm.patchValue({
           ncb: response.Premium.Ncb +1,
         })
@@ -2035,9 +2035,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.policyForm.get("previousCnPolicyNumber")?.disable();
       this.policyForm.get("lastPolicyExpiryDate")?.disable();
     }
-   
-    this._renewalCounter = response.RenewalCounter ;
-    this._previousControlNumber = response.PreviousControlNumber;
+  
 
     await this.commonService.getVehicles(response.PolicyTerm.VehicleClass).subscribe(async (responseVehicle: IDropDownDto<number>[]) => {
       this._vehicles = responseVehicle;
@@ -2057,6 +2055,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     });
 
     if (this._policyType !== SearchPolicyType.Motor_Renew) {
+       
+    this._renewalCounter = response.RenewalCounter ;
+    this._previousControlNumber = response.PreviousControlNumber;
       for (var i = 0; i < response.PaymentData.length; i++) {
         if (i == 0) {
           this.paymentForm.patchValue({
@@ -2516,7 +2517,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         odInsuranceCompany: this.policyForm.value.tpInsuranceCompany,
         odPolicyNumber: this.policyForm.value.policyNumber,
         odStartDate: this.policyForm.value.tpStartDate,
-        odNumberOfYear: this.policyForm.value.tpNumberOfYear,
+       // odNumberOfYear: this.policyForm.value.tpNumberOfYear,
       });
       let odYear = this._numberOfYears.filter(f => f.Value == this.policyForm.getRawValue().odNumberOfYear)[0];
       if (odYear?.Year) {

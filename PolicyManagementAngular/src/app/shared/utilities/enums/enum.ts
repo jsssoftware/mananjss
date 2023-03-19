@@ -58,5 +58,6 @@ export enum PackageType{
 }
 
 export enum Common{
-    ZERO =22
+    ZERO =22,
+    NCB50VALUE = 6
 }
