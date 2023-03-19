@@ -603,7 +603,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     await this.getPolicyVouchers();
     await this.getPolicyInspections();
     //Not calling on edit
-    if (this._policyId == 0) {
+    if (this._policyId == 0 ||  this._policyType == SearchPolicyType.Motor_Renew) {
       //      await this.getAddOnRiders();
       await this.getAddOnPlanOptions(-1);
     }
@@ -2015,7 +2015,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       });
       if (response.Premium.Ncb <= 50) {
         this.premiumForm.patchValue({
-          ncb: response.Premium.Ncb,
+          ncb: response.Premium.Ncb +1,
         })
       }
       let age = (response.Nomination.Age) + 1
@@ -2036,6 +2036,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.policyForm.get("lastPolicyExpiryDate")?.disable();
     }
    
+    this._renewalCounter = response.RenewalCounter ;
+    this._previousControlNumber = response.PreviousControlNumber;
 
     await this.commonService.getVehicles(response.PolicyTerm.VehicleClass).subscribe(async (responseVehicle: IDropDownDto<number>[]) => {
       this._vehicles = responseVehicle;
@@ -3140,7 +3142,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.errorList.push("Make Year " + this.erorr)
     }
 
-    if (response.Vehicle.IsSpecialRegistrationNumber && response.Vehicle.RtoZone == this.rtoNotAvailable) {
+    if (response.Vehicle.RtoZone == this.rtoNotAvailable) {
       this.errorList.push("RTO Zone " + this.erorr)
     }
 

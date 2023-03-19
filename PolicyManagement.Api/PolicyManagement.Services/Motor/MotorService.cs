@@ -157,8 +157,9 @@ namespace PolicyManagement.Services.Motor
                         IsPreviousPolicyApplicable = model.IsPreviousPolicyApplicable,
                     };
 
-                    if (model.RenewalCounter > 0)
+                    if (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4)
                     {
+                        motorPolicyData.PreviousPolicyId = model.PreviousPolicyId;
                         motorPolicyData.PolicyId = 0;
                     }
 
@@ -522,8 +523,8 @@ namespace PolicyManagement.Services.Motor
                                                       PreviousPolicyId = s.T5.T3.T1.PreviousPolicyId ?? 0,
                                                       PolicyStatusId = s.T5.T3.T1.PolicyStatusId,
                                                       PolicyCancelReasonId = s.T5.T3.T1.PolicyCancelReasonId ?? 0,
-                                                      DataEntryStatus = s.T5.T3.T1.Flag1.HasValue && s.T5.T3.T1.Flag1.Value == false && s.T5.T3.T1.Flag2.HasValue && s.T5.T3.T1.Flag2.Value == false ? "Data Entry In-Process" : s.T5.T3.T1.Flag1.HasValue && s.T5.T3.T1.Flag1.Value && s.T5.T3.T1.Flag2.HasValue && s.T5.T3.T1.Flag2.Value && s.T5.T3.T1.IsVerified.HasValue && s.T5.T3.T1.IsVerified.Value == false ? "Data Entry Complete but QC Pending" : s.T5.T3.T1.Flag1.HasValue && s.T5.T3.T1.Flag1.Value && s.T5.T3.T1.Flag2.HasValue && s.T5.T3.T1.Flag2.Value && s.T5.T3.T1.IsVerified.HasValue && s.T5.T3.T1.IsVerified.Value ? "Data Entry Complete and QC Done" : null,
-                                                      DataEntryStatusColor = s.T5.T3.T1.Flag1.HasValue && s.T5.T3.T1.Flag1.Value == false && s.T5.T3.T1.Flag2.HasValue && s.T5.T3.T1.Flag2.Value == false ? HtmlColor.LightPink : s.T5.T3.T1.Flag1.HasValue && s.T5.T3.T1.Flag1.Value && s.T5.T3.T1.Flag2.HasValue && s.T5.T3.T1.Flag2.Value && s.T5.T3.T1.IsVerified.HasValue && s.T5.T3.T1.IsVerified.Value == false ? HtmlColor.LightPink : s.T5.T3.T1.Flag1.HasValue && s.T5.T3.T1.Flag1.Value && s.T5.T3.T1.Flag2.HasValue && s.T5.T3.T1.Flag2.Value && s.T5.T3.T1.IsVerified.HasValue && s.T5.T3.T1.IsVerified.Value ? HtmlColor.LightGreen : HtmlColor.White,
+                                                      DataEntryStatus =  s.T5.T3.T1.Flag1 == false && s.T5.T3.T1.Flag2 == false ? "Data Entry In-Process" : s.T5.T3.T1.Flag1  && s.T5.T3.T1.Flag2  && s.T5.T3.T1.IsVerified == false ? "Data Entry Complete but QC Pending" : s.T5.T3.T1.Flag1 && s.T5.T3.T1.Flag2  && s.T5.T3.T1.IsVerified ? "Data Entry Complete and QC Done" : null,
+                                                      DataEntryStatusColor = s.T5.T3.T1.Flag1 == false &&  s.T5.T3.T1.Flag2 == false ? HtmlColor.LightPink :  s.T5.T3.T1.Flag1 &&  s.T5.T3.T1.Flag2 &&  s.T5.T3.T1.IsVerified == false ? HtmlColor.LightPink :  s.T5.T3.T1.Flag1 &&  s.T5.T3.T1.Flag2 &&  s.T5.T3.T1.IsVerified ? HtmlColor.LightGreen : HtmlColor.White,
                                                       PolicyStatusColor = s.T5.T3.T1.PolicyStatusId == 2 ? HtmlColor.LightRed : HtmlColor.LightYellow,
                                                       PolicyCancelReasonColor = s.T5.T3.T1.PolicyStatusId == 2 ? HtmlColor.LightPink : HtmlColor.White,
                                                       IsReconDone = s.T5.T3.T1.IRDACommissionReceived,
@@ -681,7 +682,7 @@ namespace PolicyManagement.Services.Motor
             {
                 tblMotorPolicyData data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(predicate);
 
-                if (data != null && data.PolicyId != model.PolicyId && model.RenewalCounter ==0) return new CommonDto<object>
+                if (data != null && data.PolicyId != model.PolicyId) return new CommonDto<object>
                 {
                     Message = $"Same Engine Number and Chassis Number Data already in database as Control Number {data.ControlNo}, Please check for duplicate data entry.",
                     Response = new
@@ -880,9 +881,9 @@ namespace PolicyManagement.Services.Motor
 
                 List<tblUploadedDocuments> documents = new List<tblUploadedDocuments>();
                 string fileName = "";
-                model.Document.ForEach(async f =>
+                model.Document.ForEach( f =>
                 {
-                    List<tblUploadedDocuments> previousDocuments = await _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == policyId && w.DocumentId == f.DocumentId).ToListAsync();
+                    List<tblUploadedDocuments> previousDocuments = _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == policyId && w.DocumentId == f.DocumentId).ToList();
                     if (previousDocuments.Count() == 0)
                     {
                         
@@ -1007,7 +1008,7 @@ namespace PolicyManagement.Services.Motor
 
         private bool ValidateVehicleDetail(MotorPolicyFormDataModel model)
         {
-            if (model.Vehicle.IsSpecialRegistrationNumber  && model.Vehicle.RtoZone == 0)
+            if ( model.Vehicle.RtoZone == 1)
             {
                 return false;
             }

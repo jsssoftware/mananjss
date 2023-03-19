@@ -1108,9 +1108,9 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="BusinessDoneBy" Type="nvarchar" MaxLength="20" />
           <Property Name="PolicyRemarks" Type="nvarchar" MaxLength="250" />
           <Property Name="IsActive" Type="bit" />
-          <Property Name="Flag1" Type="bit" />
-          <Property Name="Flag2" Type="bit" />
-          <Property Name="IsVerified" Type="bit" />
+          <Property Name="Flag1" Type="bit" Nullable="false" />
+          <Property Name="Flag2" Type="bit" Nullable="false" />
+          <Property Name="IsVerified" Type="bit" Nullable="false" />
           <Property Name="IsConverted" Type="bit" />
           <Property Name="BranchId" Type="smallint" Nullable="false" />
           <Property Name="PolicyStatusId" Type="smallint" Nullable="false" />
@@ -8935,9 +8935,9 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="BusinessDoneBy" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="PolicyRemarks" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" />
-          <Property Name="Flag1" Type="Boolean" />
-          <Property Name="Flag2" Type="Boolean" />
-          <Property Name="IsVerified" Type="Boolean" />
+          <Property Name="Flag1" Type="Boolean" Nullable="false" />
+          <Property Name="Flag2" Type="Boolean" Nullable="false" />
+          <Property Name="IsVerified" Type="Boolean" Nullable="false" />
           <Property Name="IsConverted" Type="Boolean" />
           <Property Name="BranchId" Type="Int16" Nullable="false" />
           <Property Name="PolicyStatusId" Type="Int16" Nullable="false" />

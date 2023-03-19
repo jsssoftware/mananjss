@@ -13,17 +13,19 @@ namespace PolicyManagement.Infrastructures.EntityFramework
 {
 
 using System;
+    
+public partial class Usp_PolicyDocuments_Result1
+{
 
-    public partial class Usp_PolicyDocuments_Result1
-    {
+    public Nullable<int> Id { get; set; }
 
-        public Nullable<int> Id { get; set; }
+    public string DocumentType { get; set; }
 
-        public string DocumentType { get; set; }
+    public string FileName { get; set; }
 
-        public string FileName { get; set; }
-        public string Remarks { get; set; }
-        public int DocId { get; set; }
+    public string Remarks { get; set; }
+    public int DocId { get; set; }
+
     }
 
 }
