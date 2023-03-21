@@ -23,13 +23,14 @@ using System.Linq.Expressions;
 using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-
+using log4net;
 
 namespace PolicyManagement.Services.Motor
 {
     public class MotorService : BaseService, IMotorService
     {
         private readonly ICommonService _commonService;
+        private readonly ILog log = LogManager.GetLogger("API Logger");
 
         public MotorService(DataContext dataContext,
                             ICommonService commonService,
@@ -347,9 +348,11 @@ namespace PolicyManagement.Services.Motor
 
                 catch (Exception ex)
                 {
-                    dbContextTransaction.Rollback();
+                    dbContextTransaction.Rollback(); 
+                    log.Error(ex);
                     return new CommonDto<object>
                     {
+
                         Message = ex.Message
                     };
 
@@ -606,6 +609,7 @@ namespace PolicyManagement.Services.Motor
             }
             catch (Exception ex)
             {
+                log.Error("FindMotoPolicyByPolicyId -", ex);
                 Console.WriteLine(ex.Message.ToString());
 
             }
@@ -837,6 +841,7 @@ namespace PolicyManagement.Services.Motor
                 await _dataContext.SaveChangesAsync();
             } catch (Exception ex)
             {
+                log.Error(ex);
                 Console.WriteLine(ex.Message.ToString());
 
             }

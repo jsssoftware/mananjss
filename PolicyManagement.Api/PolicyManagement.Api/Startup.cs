@@ -1,4 +1,5 @@
-﻿using Microsoft.Owin;
+﻿using log4net.Config;
+using Microsoft.Owin;
 using Microsoft.Owin.Security.OAuth;
 using Owin;
 using PolicyManagement.Api;
@@ -7,6 +8,7 @@ using PolicyManagement.Api.Swagger;
 using Swashbuckle.Application;
 using Swashbuckle.Swagger;
 using System;
+using System.IO;
 using System.Web.Http;
 using System.Web.Http.Description;
 
@@ -33,6 +35,7 @@ namespace PolicyManagement.Api
             }).EnableSwaggerUi();
 
             UnityConfig.RegisterComponents(config);
+            XmlConfigurator.Configure();
         }
 
         private void ConfigureOAuth(IAppBuilder app)

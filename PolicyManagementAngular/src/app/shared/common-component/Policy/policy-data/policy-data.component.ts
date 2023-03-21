@@ -1975,7 +1975,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     await this.commonService.getPolicyTerms(response.PolicyTerm.PolicyType, response.PolicyTerm.VehicleClass, response.PolicyTerm.PackageTypeId).subscribe((responsePolicyTerms: IPolicyTermDto[]) => {
       this._policyTerms = responsePolicyTerms;
       let policyTerm = responsePolicyTerms.filter(f => f.Id == response.PolicyTerm.PolicyTerm)[0]
-      if (this._type !== SearchPolicyType.Motor_Renew) {
+      if (this._policyType !== SearchPolicyType.Motor_Renew) {
         this.policyTermForm.patchValue({
           policyTerm: policyTerm
         });
