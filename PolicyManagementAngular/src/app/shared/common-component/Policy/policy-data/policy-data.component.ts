@@ -2846,13 +2846,12 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   setCompanyInsuranceBranch(response: any) {
     let insuranceCompanyId: number = 0
-    let insuranceBranch = response.InsuranceBranch;
     if (response.PolicyTerm.PackageTypeId == PackageType.TP_ONLY) {
       insuranceCompanyId = response.TpPolicy.InsuranceCompany
     } else {
       insuranceCompanyId = response.OdPolicy.InsuranceCompany
     }
-    this.commonService.getInsuranceCompanyBranches(Vertical.Motor, insuranceCompanyId, insuranceBranch).subscribe((data: IDropDownDto<number>[]) => {
+    this.commonService.getInsuranceCompanyBranches(Vertical.Motor, insuranceCompanyId, this._branchId).subscribe((data: IDropDownDto<number>[]) => {
       this._insuranceCompanyBranches = data;
       this.policyForm.patchValue({
         insuranceBranch: response.InsuranceBranch,
