@@ -2111,13 +2111,13 @@
                 <mat-list-item>
                   <mat-icon mat-list-icon>person</mat-icon>
                   <div mat-line>Policy Created By</div>
-                  <div mat-line> {{_policyData?.CreatedBy}} </div>
+                  <div mat-line *ngIf="_policyType !== SearchPolicyType.Motor_Renew"> {{_policyData?.CreatedBy}} </div>
                 </mat-list-item>
                 <hr class="hrClass" />
                 <mat-list-item>
                   <mat-icon mat-list-icon>date_range</mat-icon>
                   <div mat-line>Policy Created On</div>
-                  <div mat-line> {{_policyData?.CreatedTime |date: 'dd/MM/yyyy hh:mm:a'}} </div>
+                  <div mat-line *ngIf="_policyType !== SearchPolicyType.Motor_Renew"> {{_policyData?.CreatedTime |date: 'dd/MM/yyyy hh:mm:a'}} </div>
                 </mat-list-item>
               </mat-list>
             </div>
@@ -2126,13 +2126,13 @@
                 <mat-list-item>
                   <mat-icon mat-list-icon>person</mat-icon>
                   <div mat-line>QC By</div>
-                  <div mat-line> {{_policyData?.VerifiedBy}} </div>
+                  <div mat-line *ngIf="_policyType !== SearchPolicyType.Motor_Renew"> {{ _policyData?.VerifiedBy}} </div>
                 </mat-list-item>
                 <hr class="hrClass" />
                 <mat-list-item>
                   <mat-icon mat-list-icon>date_range</mat-icon>
                   <div mat-line>QC Time</div>
-                  <div mat-line> {{_policyData?.VerifiedTime |date: 'dd/MM/yyyy hh:mm:a'}} </div>
+                  <div mat-line *ngIf="_policyType !== SearchPolicyType.Motor_Renew"> {{_policyData?.VerifiedTime |date: 'dd/MM/yyyy hh:mm:a'}} </div>
                 </mat-list-item>
               </mat-list>
             </div>
@@ -2141,13 +2141,13 @@
                 <mat-list-item>
                   <mat-icon mat-list-icon>person</mat-icon>
                   <div mat-line>Last Modified By</div>
-                  <div mat-line> {{_policyData?.ModifiedBy}} </div>
+                  <div mat-line *ngIf="_policyType !== SearchPolicyType.Motor_Renew"> {{_policyData?.ModifiedBy}} </div>
                 </mat-list-item>
                 <hr class="hrClass" />
                 <mat-list-item>
                   <mat-icon mat-list-icon>date_range</mat-icon>
                   <div mat-line>Modified On</div>
-                  <div mat-line> {{_policyData?.ModifiedTime|date: 'dd/MM/yyyy hh:mm:a'}} </div>
+                  <div mat-line *ngIf="_policyType !== SearchPolicyType.Motor_Renew"> {{_policyData?.ModifiedTime|date: 'dd/MM/yyyy hh:mm:a'}} </div>
                 </mat-list-item>
               </mat-list>
             </div>

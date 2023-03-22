@@ -782,6 +782,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   async getPolicyTerms(): Promise<void> {
     this.policyForm.reset();
+    //this.premiumForm.reset();
     this._isTpPremiumDetailsDisabled = false;
     this._isOdPremiumDetailsDisabled = false;
     this.policyTermForm.patchValue({ policyTerm: undefined });
@@ -833,6 +834,36 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.setOdPolicyDetail()
     this.getVehicles();
 
+  }
+
+  disabledPremiumfieldonUpdate(PackageTypeId :number){
+    this._isTpPremiumDetailsDisabled = false;
+    this._isOdPremiumDetailsDisabled = false;
+    if (PackageTypeId === PackageType.COMPREHENSIVE || PackageTypeId === PackageType.USAGE_BASE) {
+      this._isDisableOdPolicyDetails = true;
+      this._isOdPolicyEnable = true;
+      this._isAddOnRiderEnable = true;
+    }
+    else if (PackageTypeId === PackageType.TP_ONLY) {
+      this._isDisableOdPolicyDetails = false;
+      this._isOdPolicyEnable = false;
+      this._isAddOnRiderEnable = false;
+      this._isTpPremiumDetailsDisabled = true
+    } else if (PackageTypeId === PackageType.OD_ONLY) {
+      this._isDisableOdPolicyDetails = false;
+      this._isOdPolicyEnable = true;
+      this._isAddOnRiderEnable = true;
+      this._isOdPremiumDetailsDisabled = true
+    }
+
+    if (PackageTypeId === PackageType.USAGE_BASE) {
+      this.policyForm.get("numberOfKiloMeterCovered")?.enable();
+      this.policyForm.get("extendedKiloMeterCovered")?.enable();
+    }
+    else {
+      this.policyForm.get("numberOfKiloMeterCovered")?.disable();
+      this.policyForm.get("extendedKiloMeterCovered")?.disable();
+    }
   }
   async setPolicySourceRenewal() {
     this._insuranceCompanies = this._savedinsuranceCompanies
@@ -2098,11 +2129,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.policyForm.get("tpStartDate")?.disable();
     }
     //Calling insurance company branch api location
+    this.disabledPremiumfieldonUpdate(response.PolicyTerm.PackageTypeId)
     setTimeout(() => {
       this.setPolicyDetails()
       this._showErrors = true;
       this.previousPolicyChecked(response.IsPreviousPolicyApplicable);
       this.getAddOnRiders();
+
      
     }, 3000);
     this.setvalues();

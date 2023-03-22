@@ -686,7 +686,7 @@ namespace PolicyManagement.Services.Motor
             {
                 tblMotorPolicyData data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(predicate);
 
-                if (data != null && data.PolicyId != model.PolicyId) return new CommonDto<object>
+                if (data != null && data.PolicyId != model.PolicyId && !model.Condition1) return new CommonDto<object>
                 {
                     Message = $"Same Engine Number and Chassis Number Data already in database as Control Number {data.ControlNo}, Please check for duplicate data entry.",
                     Response = new
@@ -876,7 +876,16 @@ namespace PolicyManagement.Services.Motor
             #endregion
 
             #region Update Document Data
-           
+            List<tblUploadedDocuments> previousUploadDocument = await _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == policyId).ToListAsync();
+            if (previousUploadDocument.Any())
+            {
+                previousUploadDocument.ForEach(f =>
+                {
+                    f.IsDelete = true;
+                });
+                await _dataContext.SaveChangesAsync();
+
+            }
             if (model.Document.Any())
             {
                
