@@ -239,6 +239,9 @@
     <Compile Include="EntityFramework\tblInsuredPerson.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\tblLog.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\tblMakeYear.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>

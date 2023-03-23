@@ -50,6 +50,8 @@ public partial class tblUploadedDocuments
 
     public string OriginalFileName { get; set; }
 
+    public string DocumentBase64 { get; set; }
+
 }
 
 }

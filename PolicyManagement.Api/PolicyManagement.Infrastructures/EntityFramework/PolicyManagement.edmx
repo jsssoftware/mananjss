@@ -914,6 +914,18 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <EntityType Name="tblLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Date" Type="datetime" Nullable="false" />
+          <Property Name="Thread" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Level" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Logger" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Message" Type="varchar" MaxLength="4000" Nullable="false" />
+          <Property Name="Exception" Type="varchar" MaxLength="2000" />
+        </EntityType>
         <EntityType Name="tblMakeYear">
           <Key>
             <PropertyRef Name="MakeYearId" />
@@ -1791,6 +1803,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedTime" Type="smalldatetime" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="OriginalFileName" Type="varchar" MaxLength="100" />
+          <Property Name="DocumentBase64" Type="text" />
         </EntityType>
         <EntityType Name="tblUser">
           <Key>
@@ -3716,6 +3729,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <EntitySet Name="tblInsuranceCompany" EntityType="Self.tblInsuranceCompany" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblInsuranceCompanyBranch" EntityType="Self.tblInsuranceCompanyBranch" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblInsuredPerson" EntityType="Self.tblInsuredPerson" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblLog" EntityType="Self.tblLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblMakeYear" EntityType="Self.tblMakeYear" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblManufacturer" EntityType="Self.tblManufacturer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblMaritalStatus" EntityType="Self.tblMaritalStatus" Schema="dbo" store:Type="Tables" />
@@ -5837,6 +5851,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Parameter Name="policyId" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="tblMotorPolicyDatas" EntityType="PolicyManagerModel.tblMotorPolicyData" />
+          <EntitySet Name="tblLogs" EntityType="PolicyManagerModel.tblLog" />
         </EntityContainer>
         <ComplexType Name="GetPolicyFamilyDtl_Result">
           <Property Type="String" Name="InsuredPersonName" Nullable="true" MaxLength="50" />
@@ -7493,6 +7508,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
           <Property Name="CreatedBy" Type="Int32" />
           <Property Name="OriginalFileName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DocumentBase64" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblUser">
           <Key>
@@ -9004,6 +9020,18 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="NonCommissionComponentPremium" Type="Decimal" Precision="30" Scale="2" />
           <Property Name="VehicleSegment" Type="Int32" />
           <Property Name="IsPreviousPolicyApplicable" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="tblLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Thread" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Level" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Logger" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Message" Type="String" Nullable="false" MaxLength="4000" FixedLength="false" Unicode="false" />
+          <Property Name="Exception" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -10687,6 +10715,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <EntitySetMapping Name="tblUploadedDocuments">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblUploadedDocuments">
               <MappingFragment StoreEntitySet="tblUploadedDocuments">
+                <ScalarProperty Name="DocumentBase64" ColumnName="DocumentBase64" />
                 <ScalarProperty Name="OriginalFileName" ColumnName="OriginalFileName" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
@@ -12075,6 +12104,19 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
                 <ScalarProperty Name="LoyaltyCounter" ColumnName="LoyaltyCounter" />
                 <ScalarProperty Name="ControlNo" ColumnName="ControlNo" />
                 <ScalarProperty Name="PolicyId" ColumnName="PolicyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblLogs">
+            <EntityTypeMapping TypeName="PolicyManagerModel.tblLog">
+              <MappingFragment StoreEntitySet="tblLog">
+                <ScalarProperty Name="Exception" ColumnName="Exception" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Logger" ColumnName="Logger" />
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="Thread" ColumnName="Thread" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

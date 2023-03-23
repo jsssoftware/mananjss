@@ -6,5 +6,6 @@ export interface IPolicyDocumentDto {
     UniqueId: string;
     FileData?:any;
     DocumentTypeId?: number;
+    DocumentBase64?: string;
 
 }

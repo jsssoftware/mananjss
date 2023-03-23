@@ -162,7 +162,8 @@ namespace PolicyManagement.Services.Common
                             Id = s.Id ?? 0,
                             Remarks = s.Remarks,
                             UniqueId = Guid.NewGuid().ToString(),
-                            DocumentTypeId =  s.DocId
+                            DocumentTypeId =  s.DocId,
+                            DocumentBase64  = s.DocumentBase64
                         })
                         .ToList());
         }
@@ -880,8 +881,8 @@ namespace PolicyManagement.Services.Common
                 var result = await _dataContext.Database.SqlQuery<SearchPolicyDto>(string.Format(query, "*"), string.Empty).ToListAsync();
                 result.ToList().ForEach(f =>
                 {
-                    f.StartDateInString = f.StartDate.ToString("dd-MM-yyyy").Replace('-', '/');
-                    f.ExpiryDateInString = f.ExpiryDate.ToString("dd-MM-yyyy").Replace('-', '/');
+                    f.StartDateInString = f.StartDate.HasValue ? f.StartDate.Value.ToString("dd-MM-yyyy").Replace('-', '/'):"";
+                    f.ExpiryDateInString = f.ExpiryDate.HasValue ? f.ExpiryDate.Value.ToString("dd-MM-yyyy").Replace('-', '/'):"";
                 });
                   
 

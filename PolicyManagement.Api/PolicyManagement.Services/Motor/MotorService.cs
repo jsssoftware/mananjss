@@ -1073,13 +1073,12 @@ namespace PolicyManagement.Services.Motor
                     return false;
                 }
             }
-            else
-            {
-                if (model.Premium.BasicTpGstPercentage == 0 || model.Premium.Tp == 0 || model.Premium.VehicleIdv == 0 || model.Premium.GstPercentage == 0 ||
+            else if (model.Premium.VehicleIdv == 0 || model.Premium.GstPercentage == 0 ||
                     model.Premium.SpecialDiscount == 0 || model.Premium.Ncb == 0)
-                {
+            {
+               
+               
                     return false;
-                }
             }
             return true;
         }

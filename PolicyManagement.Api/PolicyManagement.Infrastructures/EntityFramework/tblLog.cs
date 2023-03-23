@@ -13,20 +13,25 @@ namespace PolicyManagement.Infrastructures.EntityFramework
 {
 
 using System;
+    using System.Collections.Generic;
     
-public partial class Usp_PolicyDocuments_Result1
+public partial class tblLog
 {
 
-    public Nullable<int> Id { get; set; }
+    public int Id { get; set; }
 
-    public string DocumentType { get; set; }
+    public System.DateTime Date { get; set; }
 
-    public string FileName { get; set; }
+    public string Thread { get; set; }
 
-    public string Remarks { get; set; }
-    public int DocId { get; set; }
-    public string DocumentBase64 { get; set; }
+    public string Level { get; set; }
 
-    }
+    public string Logger { get; set; }
+
+    public string Message { get; set; }
+
+    public string Exception { get; set; }
+
+}
 
 }

@@ -521,6 +521,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this._customerId = this.route.snapshot.paramMap.get('customerId');
     this._policyTypeId = Number(this.route.snapshot.paramMap.get('policyTypeId'));//is the id when customer saved
     this._policyId = Number(this.route?.snapshot?.paramMap.get('policyId') || 0);
+    debugger
     this._policyType = Number(this.route?.snapshot?.paramMap.get('policyType') || 0);
     switch (this._policyTypeId) {
       case 1:
@@ -782,6 +783,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   async getPolicyTerms(): Promise<void> {
     this.policyForm.reset();
+    if(this._policyType== SearchPolicyType.Motor_Renew){
+      this.policyForm.patchValue({
+        financeBy: this._policyData?.FinanceBy,
+      });
+    }
     //this.premiumForm.reset();
     this._isTpPremiumDetailsDisabled = false;
     this._isOdPremiumDetailsDisabled = false;
@@ -825,8 +831,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.commonService.getPolicyTerms(model.PolicyTypeId, model.VehicleClassId, model.PackageTypeId).subscribe((response: IPolicyTermDto[]) => {
       this._policyTerms = response;
     });
-
-    if (this._type == SearchPolicyType.Motor_Renew) {
+    if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
+     
       await this.setPolicySourceRenewal()
       await this.setPreviousInsuranceCompany()
       this.removePrevTpOdInsurance()
@@ -1256,7 +1262,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       IsVerified: this.IsVerified,
       PreviousPolicyId: this._type == SearchPolicyType.Motor_Renew ? this._policyId : ""
     }
-    debugger
 
     if (this._policyId == 0 || this._policyType == SearchPolicyType.Motor_Renew) {
       console.log(model, 'model')
@@ -1876,7 +1881,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   getMotorPolicyById(policyId: number) {
     this.motorService.getMotorPolicyById(policyId).subscribe((response: IMotorPolicyFormDataModel) => {
-
+      debugger
       this._policyData = response;
       this.setMotorPolicyData(response);
       this.getPolicyDocuments();
@@ -2036,7 +2041,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.policyForm.get("lastPolicyExpiryDate")?.disable();
     }
 
-    if (this._type == SearchPolicyType.Motor_Renew && this._policyType != SearchPolicyType.Motor_Modify) {
+    if (this._policyType == SearchPolicyType.Motor_Renew ) {
       this._previousControlNumber = response.ControlNumber;
       this._controlNumber = '';
       this._renewalCounter = response.RenewalCounter + 1;
@@ -2044,9 +2049,15 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         vehicleClass: response.PolicyTerm.VehicleClass,
         packageType: ''
       });
+    
       if (response.Premium.Ncb <= Common.NCB50VALUE) {
         this.premiumForm.patchValue({
           ncb: response.Premium.Ncb +1,
+        })
+      }
+      else{
+        this.premiumForm.patchValue({
+          ncb: Common.NCB50VALUE,
         })
       }
       let age = (response.Nomination.Age) + 1
@@ -2120,7 +2131,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       }
 
     }
-    if (this._type !== SearchPolicyType.Motor_Renew || this._policyType == SearchPolicyType.Motor_Incomplete) {
+    if (this._policyType !== SearchPolicyType.Motor_Renew || this._policyType == SearchPolicyType.Motor_Incomplete) {
       this.validationPolicyData(response)
     }
     if (this._type == PolicyType.OtherCompanyRetention) {
@@ -2243,10 +2254,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   setPreviousInsuranceCompany() {
-    if (this._policyType == SearchPolicyType.Motor_Renew) {
-      let insuranceCompany = this.policyTermForm.value.packageType === 1 ? this._policyData?.TpPolicy.InsuranceCompany : this._policyData?.OdPolicy.InsuranceCompany;
-      let policyNumber = this.policyTermForm.value.packageType === 1 ? this._policyData?.TpPolicy.PolicyNumber : this._policyData?.OdPolicy.PolicyNumber;
-      let policyExpiryDate = this.policyTermForm.value.packageType === 1 ? this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto)
+    if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
+      let insuranceCompany = this.policyTermForm.value.packageType === PackageType.TP_ONLY ? this._policyData?.TpPolicy.InsuranceCompany : this._policyData?.OdPolicy.InsuranceCompany;
+      let policyNumber = this.policyTermForm.value.packageType === PackageType.TP_ONLY  ? this._policyData?.TpPolicy.PolicyNumber : this._policyData?.OdPolicy.PolicyNumber;
+      let policyExpiryDate = this.policyTermForm.value.packageType === PackageType.TP_ONLY  ? this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto)
         : this.commonService.getDateFromIDateDto(this._policyData?.OdPolicy.ExpiryDateDto as IDateDto);
 
       this.policyForm.patchValue({
@@ -2259,7 +2270,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.refreshLastInsuranceCompanies();
       /*   this.policyForm.patchValue({
           lastYearInsuranceCompany: undefined
-        }); */
+        }); */ 
     }
 
 
@@ -2695,7 +2706,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         DocumentTypeId: x.DocumentTypeId,
         DocumentTypeName: x.DocumentTypeName,
         FileName: x.FileName,
-        Remarks: x.Remarks
+        Remarks: x.Remarks,
+        DocumentBase64 :x.DocumentBase64
       };
       this._uploadDocuments.push(document)
     })
@@ -2869,7 +2881,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.policyForm.get("numberOfKiloMeterCovered")?.disable();
       this.policyForm.get("extendedKiloMeterCovered")?.disable();
     }
-    if (this._type == SearchPolicyType.Motor_Renew && this._policyType != SearchPolicyType.Motor_Modify) {
+    if (this._policyType == SearchPolicyType.Motor_Renew && this._policyType != SearchPolicyType.Motor_Modify) {
+      //adding finance after resetting
+      debugger
+      
       this.setPolicySourceRenewal()
       this.setOdPolicyDetail()
       this.removePrevTpOdInsurance()

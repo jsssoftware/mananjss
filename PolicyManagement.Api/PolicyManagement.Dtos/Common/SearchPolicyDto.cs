@@ -30,8 +30,8 @@ namespace PolicyManagement.Dtos.Common
         public string POSName { get; set; }
         public string PolicyStatus { get; set; }
         public short PolicyStatusId { get; set; }
-        public DateTime ExpiryDate { get; set; }
-        public DateTime StartDate { get; set; }
+        public DateTime? ExpiryDate { get; set; }
+        public DateTime? StartDate { get; set; }
         public string ExpiryDateInString { get; set; }
         public string StartDateInString { get; set; }
         public string PolicyNumber { get; set; }

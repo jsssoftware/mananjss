@@ -297,6 +297,8 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<tblMotorPolicyData> tblMotorPolicyData { get; set; }
 
+    public virtual DbSet<tblLog> tblLogs { get; set; }
+
 
     public virtual int GetOtherHelathPolicy(Nullable<int> policyId, Nullable<int> customerID)
     {
