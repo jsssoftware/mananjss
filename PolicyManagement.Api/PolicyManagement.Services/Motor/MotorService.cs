@@ -232,14 +232,14 @@ namespace PolicyManagement.Services.Motor
                     #endregion
 
                     #region Insert Payment Data
-                    if (model.PolicyId != 0) {
+                    /*if (model.PolicyId != 0) {
                         List<tblPolicyPaymentData> previousPaymentDatas = await _dataContext.tblPolicyPaymentData.Where(w => w.PolicyId == model.PolicyId).ToListAsync();
                         if (previousPaymentDatas.Any())
                         {
                             _dataContext.tblPolicyPaymentData.RemoveRange(previousPaymentDatas);
                             await _dataContext.SaveChangesAsync();
                         }
-                    }
+                    }*/
                     if (model.PaymentData.Any())
                     {
                         List<tblPolicyPaymentData> payments = new List<tblPolicyPaymentData>();
