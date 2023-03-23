@@ -2050,7 +2050,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         packageType: ''
       });
     
-      if (response.Premium.Ncb <= Common.NCB50VALUE) {
+      if (response.Premium.Ncb < Common.NCB50VALUE) {
         this.premiumForm.patchValue({
           ncb: response.Premium.Ncb +1,
         })
