@@ -596,16 +596,19 @@ namespace PolicyManagement.Services.Motor
 
             try
             {
-                var data = await _dataContext.tblPolicyAddonOptionDetails.Where(w => w.PolicyId == policyId).Distinct().ToListAsync();
+                var data = await _dataContext.tblPolicyAddonOptionDetails.Where(w => w.PolicyId == policyId).ToListAsync();
                 var addOnRiderId = motorPolicy.AddOnRider.AddOnRiderId;
+
                 if (data != null && data.Count > 0)
+                {
                     motorPolicy.AddOnRider = new AddOnRiderModel
                     {
                         AddOnRiderId = addOnRiderId,
-                        AddOnRiderOptionId = data.Select(x => x.AddonPlanOptionId).ToList(),
-                        AddOnValue = data.Select(x => x.AddonValue).ToList(),
+                        AddOnRiderOptionId = data.Distinct().Select(x => x.AddonPlanOptionId).ToList(),
+                        AddOnValue = data.Distinct().Select(x => x.AddonValue).ToList(),
 
                     };
+                }
             }
             catch (Exception ex)
             {
@@ -897,9 +900,7 @@ namespace PolicyManagement.Services.Motor
                 string fileName = "";
                 model.Document.ForEach( f =>
                 {
-                    List<tblUploadedDocuments> previousDocuments = _dataContext.tblUploadedDocuments.Where(w => w.PolicyId == policyId && w.DocumentId == f.DocumentId).ToList();
-                    if (previousDocuments.Count() == 0)
-                    {
+                   
                         
                          fileName = $"{Guid.NewGuid()}.{f.FileName.Split('.').LastOrDefault()}";
                         if (string.IsNullOrEmpty(f.DocumentBase64) && f.DocumentBase64.Contains(","))
@@ -926,12 +927,12 @@ namespace PolicyManagement.Services.Motor
                             DocId = f.DocumentTypeId,
                             FileName = fileName,
                             OriginalFileName = f.FileName,
-                            PolicyId = motorPolicyData.PolicyId,
-                            Remarks = f.Remarks
+                            PolicyId = policyId,
+                            Remarks = f.Remarks,
+                            DocumentBase64= f.DocumentBase64,
                         });
-                    }
+                    
                 });
-
 
                 _dataContext.tblUploadedDocuments.AddRange(documents);
                 await _dataContext.SaveChangesAsync();
@@ -1026,6 +1027,8 @@ namespace PolicyManagement.Services.Motor
             {
                 return false;
             }
+            if(!string.IsNullOrEmpty(model.Vehicle.EngineNumber) && model.Vehicle.EngineNumber.Length < 6) return false;
+            if (!string.IsNullOrEmpty(model.Vehicle.ChassisNumber) && model.Vehicle.ChassisNumber.Length < 6) return false;
             if (model.Vehicle.Manufacturer == 0 || model.Vehicle.Model == 0 || string.IsNullOrEmpty(model.Vehicle.EngineNumber) || string.IsNullOrEmpty(model.Vehicle.ChassisNumber)
                 || model.Vehicle.MakeYear == 0 || model.Vehicle.Varient == 0)
             {

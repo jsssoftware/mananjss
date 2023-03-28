@@ -154,6 +154,7 @@ namespace PolicyManagement.Services.Common
 
         public async Task<List<PolicyDocumentDto>> FindPolicyDocumentsById(int policyId)
         {
+            var data = _dataContext.Usp_PolicyDocuments(policyId);
             return await Task.FromResult(_dataContext.Usp_PolicyDocuments(policyId)
                         .Select(s => new PolicyDocumentDto
                         {

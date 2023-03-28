@@ -7,7 +7,7 @@
         public string FileName { get; set; }
         public string Remarks { get; set; }
         public string UniqueId { get; set; }
-        public int? DocumentTypeId { get; set; }
+        public string DocumentTypeId { get; set; }
         public string DocumentBase64 { get; set; }
 
     }

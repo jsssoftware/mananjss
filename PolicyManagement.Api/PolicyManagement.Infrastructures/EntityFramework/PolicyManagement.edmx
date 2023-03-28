@@ -8832,6 +8832,8 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Type="String" Name="DocumentType" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="FileName" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="Remarks" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="DocId" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="DocumentBase64" Nullable="true" MaxLength="Max" />
         </ComplexType>
         <ComplexType Name="Usp_InspectionByPolicyId_Result1">
           <Property Type="Int32" Name="InspectionId" Nullable="false" />
@@ -11911,6 +11913,8 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
                 <ScalarProperty Name="DocumentType" ColumnName="DocumentType" />
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+                <ScalarProperty Name="DocId" ColumnName="DocId" />
+                <ScalarProperty Name="DocumentBase64" ColumnName="DocumentBase64" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

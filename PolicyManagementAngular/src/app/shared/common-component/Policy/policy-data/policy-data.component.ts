@@ -3183,8 +3183,16 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     if (!response.Vehicle.EngineNumber) {
       this.errorList.push("Vehicle Engine Number" + this.erorr)
     }
+
+    if (response.Vehicle.EngineNumber && response.Vehicle.EngineNumber?.length < 6) {
+      this.errorList.push("Vehicle Engine Number" + "Minimum six word required")
+    }
     if (!response.Vehicle.ChassisNumber) {
       this.errorList.push("Chassis Number " + this.erorr)
+    }
+
+    if (response.Vehicle.ChassisNumber && response.Vehicle.ChassisNumber?.length < 6) {
+      this.errorList.push("Chassis Number " + "Minimum six word required")
     }
     if (!response.Vehicle.MakeYear) {
       this.errorList.push("Make Year " + this.erorr)

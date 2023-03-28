@@ -24,9 +24,11 @@ public partial class Usp_PolicyDocuments_Result1
     public string FileName { get; set; }
 
     public string Remarks { get; set; }
-    public int DocId { get; set; }
+
+    public string DocId { get; set; }
+
     public string DocumentBase64 { get; set; }
 
-    }
+}
 
 }
