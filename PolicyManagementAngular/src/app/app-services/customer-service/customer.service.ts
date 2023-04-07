@@ -44,7 +44,7 @@ export class CustomerService extends ICustomerService {
 
     getAllTitlesWithoutMS = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Customer.TitlesWithoutMS);
 
-    getAllClusters = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Customer.Clusters);
+    getAllClusters = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Customer.AllClusters);
 
     getCustomerDataByClusterId = (customerId: number): Observable<ICustomerShortDetailDto> =>
     this.apiManagerService.getRequest<ICustomerShortDetailDto>(`${Customer.Clusters}/${customerId}`);

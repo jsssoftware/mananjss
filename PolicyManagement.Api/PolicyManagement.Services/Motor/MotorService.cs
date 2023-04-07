@@ -336,6 +336,51 @@ namespace PolicyManagement.Services.Motor
                     }
                     #endregion
 
+                    #region Insert Insurance Person Details
+                    if (model.InsuredPersonData.Any())
+                    {
+                        List<tblInsuredPerson> tblInsuredPersons = new List<tblInsuredPerson>();
+                        foreach (var f in model.InsuredPersonData)
+                        {
+
+                            var customer = await AddorUpdateCustomerDetails(f, baseModel);
+                            tblInsuredPersons.Add(new tblInsuredPerson
+                            {
+                                PolicyId = motorPolicyData.PolicyId,
+                                CustomerId = customer.CustomerId,
+                                InsuredPersonName = f.Name,
+                                InsuredGenderId = f.GenderId,
+                                InsuredDOB = f.DateOfBirth,
+                                InsuredAge = CalculateAge(f.DateOfBirth),
+                                SumInsuredIndividual = f.SumInsuredIndividual,
+                                SumInsuredFloater = f.SumInsuredFloater,
+                                CummulativeBonus = f.CumulativeBonus,
+                                Deductable = f.Deductable,
+                                Loading = f.Loading,
+                                LoadingReason = f.LoadingReason,
+                                NomineeName = f.NomineeName,
+                                NomineeRelationId = 0,
+                                PEDId = f.Ped,
+                                PEDExclusion = f.PedExclusion,
+                                AnnualIncome = f.AnualIncome,
+                                //RiskClassId = f.RiskClass,
+                                CreatedBy = baseModel.LoginUserId,
+                                CreatedTime = DateTime.Now,
+                                PassportNo = f.PassportNumber,
+                                BranchId= f.BranchId,
+                                IsActive = true
+
+                            });
+                        }
+                       
+                        _dataContext.tblInsuredPerson.AddRange(tblInsuredPersons);
+                        await _dataContext.SaveChangesAsync();
+
+                    }
+                    #endregion
+
+
+
                     dbContextTransaction.Commit();
 
 
@@ -358,6 +403,13 @@ namespace PolicyManagement.Services.Motor
 
                 }
             }
+        }
+        public static int CalculateAge(DateTime? dob)
+        {
+            int age = 0;
+            age = DateTime.Now.Subtract(dob.GetValueOrDefault()).Days;
+            age = age / 365;
+            return age;
         }
 
         public async Task<MotorPolicyFormDataModel> FindMotorPolicyByPolicyId(int policyId)
@@ -1196,6 +1248,36 @@ namespace PolicyManagement.Services.Motor
                 IsSuccess = true
             };
         }
-    
+
+        public async Task<tblCustomer> AddorUpdateCustomerDetails(InsuredPersonModel insuredPersonModel, BaseModel baseModel)
+        {
+            tblCustomer tblCustomers = new tblCustomer
+            {
+                CustomerId = insuredPersonModel.CustomerId,
+                CustomerName = insuredPersonModel.Name,
+                GenderId = insuredPersonModel.Gender,
+                CustomerDOB = insuredPersonModel.DateOfBirth,
+                CustomerMobile1 = insuredPersonModel.Mobile,
+                CustomerEmail1 = insuredPersonModel.Email,
+                CustomerAddress1 =  insuredPersonModel.Address,
+                CreatedBy = baseModel.LoginUserId,
+                CreatedTime = DateTime.Now,
+                PassportNo = insuredPersonModel.PassportNumber,
+                PAN = insuredPersonModel.Pan,
+                IsCompany = false,
+                DefaultAddress = 1,
+                DefaultWhatsAppNo = 1,
+                DefaultContactNo = 1,
+                BranchId = insuredPersonModel.BranchId,
+                ClusterId =  insuredPersonModel.ClusterId,
+                CustomerCityId1= insuredPersonModel.City,
+                IsActive = true,
+            };
+                   
+            _dataContext.tblCustomer.AddOrUpdate(tblCustomers);
+            await _dataContext.SaveChangesAsync();
+            return  tblCustomers;
+        }
+
     }
 }

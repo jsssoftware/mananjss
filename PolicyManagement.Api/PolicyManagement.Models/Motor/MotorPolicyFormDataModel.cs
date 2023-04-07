@@ -77,5 +77,7 @@ namespace PolicyManagement.Models.Motor
         public bool? Flag1 { get; set; }
         public string QcCreatedBy { get; set; }
         public DateTime? QcCreatedTime { get; set; }
+        public List<InsuredPersonModel> InsuredPersonData { get; set; }
+        public short GenderId { get; set; }
     }
 }

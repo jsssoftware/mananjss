@@ -26,6 +26,12 @@ namespace PolicyManagement.Dtos.Customer
         public string Pan { get; set; }
         public string Email { get; set; }
         public string Passport { get; set; }
+        public short? GenderId { get; set; }
+        public short? City { get; set; }
+        public short BranchId { get; set; }
+        public int CustomerId { get; set; }
+        public int? ClusterId { get; set; }
+
 
     }
 }

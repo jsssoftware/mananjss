@@ -20,7 +20,7 @@ import { PolicyType, SearchPolicyType, Vertical, PackageType, Common } from 'src
 import { IPolicyTermDto } from '../../../../app-entites/dtos/motor/policy-term-dto';
 import { ICommonService } from '../../../../app-services/common-service/abstracts/common.iservice';
 import { IMotorService } from '../../../../app-services/motor-service/abstracts/motor.iservice';
-import { ICustomerShortDetailDto } from 'src/app/app-entites/dtos/customer/customer-short-detail-dto';
+import { ICustomerInsuranceDetail, ICustomerShortDetailDto } from 'src/app/app-entites/dtos/customer/customer-short-detail-dto';
 import { MatDialog } from '@angular/material/dialog';
 import { IAddOnRiderModel } from 'src/app/app-entites/models/motor/add-on-rider-model';
 import Swal from 'sweetalert2';
@@ -120,6 +120,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   @Output() tableNameToDialogBox = new EventEmitter<string>();
   displayedColumnsDocumentTable: string[] = ["Sno", "DocumentTypeName", "FileName", "Remarks", "DocumentTypeId"];
   displayedColumnsCustomerCluster: string[] = ["Sno", "NameInPolicy", "DateOfBirth", "Gender", "Mobile", "Code", "Action"];
+  displayedColumnsInsuranceCluster: string[] = ["Action","Sno", "NameInPolicy", "DateOfBirth", "Gender", "Mobile", "Code","RelationProposer"
+  ,"SumInsuredIndividual","SumInsuredFloater","CumulativeBonus","Deductable","Loading","LoadingReason","Ped","PedExclusion"
+  ,"AnualIncome","RiskClass","NomineeName","NomineeRelationship"];
   displayedColumns: string[] = [
     'endorsementReason',
     'entryDate',
@@ -386,7 +389,22 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     cpassport: new FormControl(''),
     cpan: new FormControl(''),
     caadhar: new FormControl(''),
-    cprofession: new FormControl('')
+    cprofession: new FormControl(''),
+    crelprposer: new FormControl(''),
+    csuminsuredindividual: new FormControl(''),
+    csuminsuredfloater: new FormControl(''),
+    ccummbonus : new FormControl(''),
+    cdeductable : new FormControl(''),
+    cloading : new FormControl(''),
+    cloadingreason : new FormControl(''),
+    cped : new FormControl(''),
+    cpedexclusion : new FormControl(''),
+    cppc : new FormControl(''),
+    canualincome : new FormControl(''),
+    criskclass : new FormControl(''),
+    cnomineename : new FormControl(''),
+    cnomineerelation : new FormControl(''),
+    ccustomerId :  new FormControl(0),
   });
   //endregion
   //#region Variables
@@ -428,8 +446,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _posDatas: IDropDownDto<number>[] = [];
   public _documentTypes: IDropDownDto<number>[] = [];
   public _paymentTypes: IDropDownDto<number>[] = [];
+  public _genders: IDropDownDto<number>[] = [];
 
   public _customerId: any;
+  public _customerClusterId: any;
+
   public _policyTypeId: any;
   public _policyType: any;
   public _policyId: any;
@@ -437,7 +458,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _filteredOptions: IDropDownDto<number>[] = [];
   public _tableName: string = "";
   public _dataSourceUploadDocuments: MatTableDataSource<IPolicyDocumentDto> = new MatTableDataSource<IPolicyDocumentDto>();
-  public _dataSourceCustomerCluster: MatTableDataSource<ICustomerShortDetailDto> = new MatTableDataSource<ICustomerShortDetailDto>();
+  public _dataSourceCustomerCluster: MatTableDataSource<ICustomerInsuranceDetail> = new MatTableDataSource<ICustomerInsuranceDetail>();
+  public _dataInsuranceCustomerCluster: MatTableDataSource<ICustomerInsuranceDetail> = new MatTableDataSource<ICustomerInsuranceDetail>();
 
   public _controlNumber: string = "";
   public _headerTitle: string = "";
@@ -521,7 +543,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this._customerId = this.route.snapshot.paramMap.get('customerId');
     this._policyTypeId = Number(this.route.snapshot.paramMap.get('policyTypeId'));//is the id when customer saved
     this._policyId = Number(this.route?.snapshot?.paramMap.get('policyId') || 0);
-    debugger
     this._policyType = Number(this.route?.snapshot?.paramMap.get('policyType') || 0);
     switch (this._policyTypeId) {
       case 1:
@@ -603,6 +624,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     await this.getPolicyClaims();
     await this.getPolicyVouchers();
     await this.getPolicyInspections();
+    await this.getGenders();
     //Not calling on edit
     if (this._policyId == 0 ||  this._policyType == SearchPolicyType.Motor_Renew) {
       //      await this.getAddOnRiders();
@@ -722,7 +744,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   }
 
-
+  getGenders(): any {
+    this.commonService.getAllGenders().subscribe((response: IDropDownDto<number>[]) => {
+      this._genders = response;
+    });
+  }
 
   setvalues() {
 
@@ -1144,6 +1170,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       },
       InsuranceBranch: this.PolicyForm.insuranceBranch,
       FinanceBy: this.PolicyForm.financeBy,
+      InsuredPersonData : this._selectedinsuranceCustomerPersonDetail,
       PreviousPolicy: {
         LastPolicyExpiryDateString: this.commonService.getDateInString(this.PolicyForm.lastPolicyExpiryDate),
         LastPolicyExpiryDateDto: null,
@@ -1762,6 +1789,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     return this.addOnRiderForm.controls.addOnPlanOption as FormArray;
   }
 
+  get InsurancePersonForm() {
+    return this.insuranceCustomerForm.getRawValue();
+  }
+
+
   calculateTotalIdv() {
     let vehicleIdv: any = this.premiumForm.controls.vehicleIdv.value || 0;
     let electricAccessoriesIdv: any = this.premiumForm.controls.electricAccessoriesIdv.value || 0;
@@ -1855,6 +1887,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   getCustomerShortDetailById(customerId: number) {
     this.customerService.getCustomerShortDetailById(customerId).subscribe((response: ICustomerShortDetailDto) => {
       this.setCustomerDetail(response);
+      this._customerClusterId = response.ClusterId
       this.getCustomerDataByClusterId(Number(response.ClusterId))
     });
   }
@@ -2845,7 +2878,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   getCustomerDataByClusterId(clusterId: number) {
     this.customerService.getCustomerDataByClusterId(clusterId).subscribe((response: any) => {
-      this._dataSourceCustomerCluster = new MatTableDataSource<ICustomerShortDetailDto>(response?.Data);
+      this._dataSourceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(response?.Data);
       this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
     });
   }
@@ -3185,7 +3218,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     }
 
     if (response.Vehicle.EngineNumber && response.Vehicle.EngineNumber?.length < 6) {
-      this.errorList.push("Vehicle Engine Number" + "Minimum six word required")
+      this.errorList.push("Vehicle Engine Number " + "Minimum six word required")
     }
     if (!response.Vehicle.ChassisNumber) {
       this.errorList.push("Chassis Number " + this.erorr)
@@ -3238,11 +3271,129 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       event.target.value = maxValue
     }
   }
-
-
-  addCustomerClusterData(data: any) {
-
+  public _insuranceCustomerPersonDetails: ICustomerInsuranceDetail[] = [];
+  public _selectedinsuranceCustomerPersonDetail : ICustomerInsuranceDetail[] = [];
+  _isInsurancePersoneEdit : boolean =  false;
+  addCustomerClusterData(data: ICustomerInsuranceDetail,index:number) {
+    debugger
+    this.insuranceCustomerForm.patchValue({
+      cnameInsuredPerson: data.Name,
+      cdob:  data.DateOfBirth != null ? new Date(data.DateOfBirth): null,
+      cgender:  data.GenderId,
+      cmobile: data.Mobile,
+      cemail:  data.Email,
+      cpassport:  data.PassportNumber,
+      cpan:  data.Pan,
+      addressInPolicy: data.AddressInPolicy,
+      cprofession:  data.Profession,
+      ccustomerId : data.CustomerId
+    })
+    this._insuranceCustomerPersonDetails.push(data)
+    this.removeInsuranceCLuster(index)
   }
+  insurancePerson :ICustomerInsuranceDetail = <ICustomerInsuranceDetail>{};
+  addInsuracePersondetail(): void {
+   this._isInsurancePersoneEdit = false;
+   let insurancePersonIndex =  this._selectedinsuranceCustomerPersonDetail?.findIndex(x=>x.CustomerId == this.InsurancePersonForm?.ccustomerId );
+   if(insurancePersonIndex >= 0){
+
+    this._selectedinsuranceCustomerPersonDetail?.splice(insurancePersonIndex,1 );
+    this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
+    this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+   }
+    this.insurancePerson.CustomerId =  this.InsurancePersonForm?.ccustomerId || 0
+    this.insurancePerson.Name = this.InsurancePersonForm.cnameInsuredPerson
+    this.insurancePerson.DateOfBirth = this.InsurancePersonForm.cdob
+    this.insurancePerson.Gender = this._genders?.find(x=>x.Value == this.InsurancePersonForm.cgender).Name
+    this.insurancePerson.Mobile = this.InsurancePersonForm.cmobile
+    this.insurancePerson.Email = this.InsurancePersonForm.cemail
+    this.insurancePerson.PassportNumber = this.InsurancePersonForm.cpassport
+    this.insurancePerson.Pan = this.InsurancePersonForm.cpan
+    this.insurancePerson.Profession = this.InsurancePersonForm.cprofession
+    this.insurancePerson.RelationProposer = this.InsurancePersonForm.crelprposer
+    this.insurancePerson.SumInsuredIndividual = this.InsurancePersonForm.csuminsuredindividual
+    this.insurancePerson.SumInsuredFloater = this.InsurancePersonForm.csuminsuredfloater
+    this.insurancePerson.CumulativeBonus = this.InsurancePersonForm.ccummbonus
+    this.insurancePerson.Deductable = this.InsurancePersonForm.cdeductable
+    this.insurancePerson.Loading = this.InsurancePersonForm.cloading
+    this.insurancePerson.LoadingReason = this.InsurancePersonForm.cloadingreason
+    this.insurancePerson.Ped = this.InsurancePersonForm.cped
+    this.insurancePerson.PedExclusion = this.InsurancePersonForm.cpedexclusion
+    this.insurancePerson.AnualIncome = this.InsurancePersonForm.canualincome
+    this.insurancePerson.RiskClass = this.InsurancePersonForm.criskclass
+    this.insurancePerson.NomineeName = this.InsurancePersonForm.cnomineename
+    this.insurancePerson.NomineeRelationship = this.InsurancePersonForm.cnomineerelation,
+    this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
+    this.insurancePerson.GenderId = this.InsurancePersonForm.cgender;
+    this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId ? this._insuranceCustomerPersonDetails.find(x=>x.CustomerId == this.InsurancePersonForm?.ccustomerId).BranchId:
+    parseInt(sessionStorage.getItem("branchId") as string);
+    this.insurancePerson.ClusterId = this._customerClusterId;
+
+    //insurancePerson
+    this._selectedinsuranceCustomerPersonDetail.push({...this.insurancePerson})
+    this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
+    this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+    console.log(this._selectedinsuranceCustomerPersonDetail)
+    this.insuranceCustomerForm.reset();
+   
+  }
+
+  removeInsuranceCLuster(index: any) {
+    this._dataSourceCustomerCluster.data.splice(index, 1);
+    this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+  }
+
+  reverseInsuranceDetail() {
+    this.insuranceCustomerForm.reset();
+    if(this._insuranceCustomerPersonDetails && this._insuranceCustomerPersonDetails.length> 0){
+      var customerDetail = this._insuranceCustomerPersonDetails[this._insuranceCustomerPersonDetails.length -1]
+      this._dataSourceCustomerCluster.data.push(customerDetail);
+      this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+      this._insuranceCustomerPersonDetails.pop();
+    }
+  }
+
+  deleteCustomerClusterData(element:ICustomerInsuranceDetail,index:number){
+    if(this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length> 0){
+      var customerDetail = this._selectedinsuranceCustomerPersonDetail[index];
+      this._dataSourceCustomerCluster.data.push(customerDetail);
+      this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+      this._selectedinsuranceCustomerPersonDetail = this._selectedinsuranceCustomerPersonDetail.filter((item ,index)=> index !== index)
+      this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
+      this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+    }
+  }
+
+  editCustomerCLusterData(element:ICustomerInsuranceDetail,index:number){
+    this._isInsurancePersoneEdit = true;
+    this.insuranceCustomerForm.patchValue({
+      cnameInsuredPerson :  element.Name ,
+      cdob :  element.DateOfBirth ,
+      cgender : element.GenderId ,
+      cmobile : element.Mobile,
+      cemail :element.Email,
+      cpassport : element.PassportNumber,
+      cpan  : element.Pan ,
+      cprofession : element.Profession ,
+      crelprposer : element.RelationProposer ,
+      csuminsuredindividual:  element.SumInsuredIndividual ,
+      csuminsuredfloater :element.SumInsuredFloater ,
+      ccummbonus : element.CumulativeBonus ,
+      cdeductable: element.Deductable ,
+      cloading : element.Loading ,
+      cloadingreason: element.LoadingReason ,
+      cped: element.Ped ,
+      cpedexclusion : element.PedExclusion ,
+      canualincome :element.AnualIncome ,
+      criskclass :element.RiskClass ,
+      cnomineename:element.NomineeName ,
+      cnomineerelation: element.NomineeRelationship,
+      caadhar : element.Aadhar,
+      ccustomerId: element.CustomerId
+    })
+  }
+
+  
 
 }
 

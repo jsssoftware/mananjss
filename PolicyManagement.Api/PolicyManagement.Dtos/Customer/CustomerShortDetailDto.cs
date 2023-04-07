@@ -21,6 +21,8 @@ namespace PolicyManagement.Dtos.Customer
         public string PassportNumber { get; set; } 
         public Nullable<short> GenderId { get; set; }
         public int? ClusterId { get; set; }
+        public string AadhaarNo { get; set; }
+        public string Profession { get; set; }
 
 
     }

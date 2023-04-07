@@ -20,22 +20,12 @@
     margin-left: 16px;
   }
 
-  table {
-    width: 100%;
-  }
+ 
 
   .thick {
     font-weight: bold;
   }
 
-  tr.mat-row,
-  tr.mat-footer-row {
-    height: 30px !important;
-  }
-
-  tr.mat-header-row {
-    height: 30px !important;
-  }
 
   .disabledDiv {
     pointer-events: none;
@@ -43,4 +33,27 @@
   }
 
 
+  .mat-table {
+    overflow-x: scroll;
+  }
   
+  .mat-cell,
+  .mat-header-cell {
+    word-wrap: initial;
+    display: table-cell;
+    padding: 0px 10px;
+    line-break: unset;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    vertical-align: middle;
+  }
+  
+  .mat-row,
+  .mat-header-row {
+    display: table-row;
+  }
+
+  .example-container {
+    overflow-x: scroll;
+  }

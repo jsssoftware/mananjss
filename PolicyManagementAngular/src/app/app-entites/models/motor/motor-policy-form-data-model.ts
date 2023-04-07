@@ -1,4 +1,5 @@
 import { IDateDto } from "src/app/app-entites/dtos/common/date-dto";
+import { ICustomerInsuranceDetail } from "../../dtos/customer/customer-short-detail-dto";
 import { IDocumentModel } from "../common/document-model";
 import { ICustomerFormDataModel } from "../customer/customer-form-data-model";
 import { IAddOnRiderModel } from "./add-on-rider-model";
@@ -68,5 +69,7 @@ export interface IMotorPolicyFormDataModel {
     CreatedTime?: string;
     PreviousPolicyId:number;
     Flag1?:boolean
-    Flag2?:boolean
+    Flag2?:boolean;
+    InsuredPersonData?: ICustomerInsuranceDetail[];
+
 }

@@ -57,7 +57,7 @@ namespace PolicyManagement.Models.Customer
         public bool? IsPos { get; set; }
         public bool? IsTeamMember { get; set; }
         public string PassportNumber { get; set; }
-        public Nullable<short> Gender { get; set; }
+        public short? Gender { get; set; }
 
     }
 }

@@ -59,6 +59,7 @@
     <Compile Include="Motor\AddOnRiderModel.cs" />
     <Compile Include="Motor\CustomerPolicyDataModel.cs" />
     <Compile Include="Motor\InspectionFormDataModel.cs" />
+    <Compile Include="Motor\InsuredPersonModel.cs" />
     <Compile Include="Motor\NominationFormDataModel.cs" />
     <Compile Include="Motor\PaymentFormDataModel.cs" />
     <Compile Include="Motor\MotorPolicyFormDataModel.cs" />

@@ -766,70 +766,74 @@ namespace PolicyManagement.Services.Customer
             
 
         private CommonDto<AddUpdateCustomerModel> CreateCustomerData(tblCustomer customer) {
-
-       
-
-            return new CommonDto<AddUpdateCustomerModel>
+            try
             {
-                IsSuccess = true,
-                Message = "Record found",
-                Response = new AddUpdateCustomerModel
-                {
-                    Aadhaar = customer.AadhaarNo,
-                    Address1 = customer.CustomerAddress1,
-                    Address2 = customer.CustomerAddress2,
-                    Address3 = customer.CustomerAddress3,
-                    City1 = customer.CustomerCityId1 ?? 0,
-                    City2 = customer.CustomerCityId2 ?? 0,
-                    City3 = customer.CustomerCityId3 ?? 0,
-                    Pincode1 = customer.CustomerPinCode1,
-                    Pincode2 = customer.CustomerPinCode2,
-                    Pincode3 = customer.CustomerPinCode3,
-                    CompanyTerritory = customer.TerritoryId ?? 0,
-                    CustomerCluster = customer.ClusterId ?? 0,
-                    CustomerContact = customer.CustomerContact,
-                    CustomerContactSalutation = customer.CustomerContactTitleId ?? 0,
-                    CustomerName = customer.CustomerName,
-                    CustomerNameSalutation = customer.CustomerTitleId ?? 0,
-                    CustomerType = customer.IsCompany.HasValue ? customer.IsCompany.Value ? 1 : 2 : 0,
-                    DateOfAnniversary = customer.CustomerAnniversery.HasValue ? customer.CustomerAnniversery.Value.ToString() : null,
-                    DateOfBirth = customer.CustomerDOB.HasValue ? customer.CustomerDOB.Value.ToString() : null,
-                    DecisionMaker = customer.IsDecisionMaker ?? false,
-                    Designation = customer.DesignationId ?? 0,
-                    Email1 = customer.CustomerEmail1,
-                    Email2 = customer.CustomerEmail2,
-                    Gstin1 = customer.GSTIN1,
-                    Gstin2 = customer.GSTIN2,
-                    Gstin3 = customer.GSTIN3,
-                    Id = customer.CustomerId,
-                    Industry = customer.IndustryId ?? 0,
-                    LineOfBusiness = customer.BusinessTypeId ?? 0,
-                    MaritalStatus = customer.MaritalStatusId ?? 0,
-                    Mobile1 = customer.CustomerMobile1,
-                    Mobile2 = customer.CustomerMobile2,
-                    NumberOfDependent = customer.CustomerNoofDependent ?? 0,
-                    Pan = customer.PAN,
-                    Phone1 = customer.CustomerPhone1,
-                    Phone2 = customer.CustomerPhone2,
-                    Pos = customer.POSId ?? 0,
-                    Profession = customer.ProfessionId ?? 0,
-                    ReferBy = (int)customer.ReferById ,
-                    Reference = customer.ReferenceId ?? 0,
-                    SelectedMobileCommunication = customer.DefaultContactNo ?? 0,
-                    SelectedPolicyAddress = customer.DefaultAddress ?? 0,
-                    SelectedWhatsAppCommunication = customer    .DefaultWhatsAppNo ?? 0,
-                    TeamMember = customer.TeamMemberId ?? 0,
-                    PassportNumber = customer.PassportNo,
-                    Gender = customer.GenderId,
-                    IsPos = customer.IsPos,
-                    CommunicationOptOut1 = customer.IsCommunicationOptOut1 ,
-                    CommunicationOptOut2 = customer.IsCommunicationOptOut2,
-                    CommunicationOptOut3 = customer.IsCommunicationOptOut3,
-                    CommunicationOptOut4 = customer.IsCommunicationOptOut4,
-                    IsTeamMember =  customer.IsTeamMember
 
-                }
-            };
+                return new CommonDto<AddUpdateCustomerModel>
+                {
+                    IsSuccess = true,
+                    Message = "Record found",
+                    Response = new AddUpdateCustomerModel
+                    {
+                        Aadhaar = customer.AadhaarNo ?? "",
+                        Address1 = customer.CustomerAddress1 ?? "",
+                        Address2 = customer.CustomerAddress2 ?? "",
+                        Address3 = customer.CustomerAddress3 ?? "",
+                       City1 = customer.CustomerCityId1 ?? 0,
+                         City2 = customer.CustomerCityId2 ?? 0,
+                         City3 = customer.CustomerCityId3 ?? 0,
+                         Pincode1 = customer.CustomerPinCode1 ?? "",
+                         Pincode2 = customer.CustomerPinCode2 ?? "",
+                         Pincode3 = customer.CustomerPinCode3 ?? ""    ,
+                         CompanyTerritory = customer.TerritoryId ?? 0,
+                         CustomerCluster = customer.ClusterId ?? 0,
+                         CustomerContact = customer.CustomerContact,
+                         CustomerContactSalutation = customer.CustomerContactTitleId ?? 0,
+                         CustomerName = customer.CustomerName,
+                        CustomerNameSalutation = customer.CustomerTitleId ?? 0,
+                        CustomerType = 1,
+                        DateOfAnniversary =  "",
+                        DateOfBirth =  "",
+                        DecisionMaker = customer.IsDecisionMaker ?? false,
+                        Designation = customer.DesignationId ?? 0,
+                        Email1 = customer.CustomerEmail1 ??  "",
+                        Email2 = customer.CustomerEmail2 ?? "",
+                        Gstin1 = customer.GSTIN1 ?? "",
+                        Gstin2 = customer.GSTIN2 ?? "",
+                        Gstin3 = customer.GSTIN3 ?? "",
+                         Id = customer.CustomerId,
+                        Industry = customer.IndustryId ?? 0,
+                        LineOfBusiness = customer.BusinessTypeId ?? 0,
+                        MaritalStatus = customer.MaritalStatusId ?? 0,
+                        Mobile1 = customer.CustomerMobile1,
+                        Mobile2 = customer.CustomerMobile2 ?? "",
+                        NumberOfDependent = customer.CustomerNoofDependent ?? 0,
+                        Pan = customer.PAN ?? "",
+                        Phone1 = customer.CustomerPhone1 ?? "",
+                        Phone2 = customer.CustomerPhone2 ?? "",
+                        Pos = customer.POSId ?? 0,
+                        Profession = customer.ProfessionId ?? 0,
+                        ReferBy = customer.ReferById ??0,
+                        Reference = customer.ReferenceId ?? 0,
+                        SelectedMobileCommunication = customer.DefaultContactNo ?? 0,
+                        SelectedPolicyAddress = customer.DefaultAddress ?? 0,
+                        SelectedWhatsAppCommunication = customer.DefaultWhatsAppNo ?? 0,
+                        TeamMember = customer.TeamMemberId ?? 0,
+                        PassportNumber = customer.PassportNo,
+                        Gender = customer.GenderId ?? 0,
+                        IsPos = customer.IsPos ?? false,
+                        CommunicationOptOut1 = customer.IsCommunicationOptOut1 ?? false,
+                        CommunicationOptOut2 = customer.IsCommunicationOptOut2 ?? false,
+                        CommunicationOptOut3 = customer.IsCommunicationOptOut3 ?? false,
+                        CommunicationOptOut4 = customer.IsCommunicationOptOut4 ?? false,
+                        IsTeamMember = customer.IsTeamMember ?? false
+
+                    }
+                };
+            }catch(Exception ex)
+            {
+                throw new Exception(ex.Message, ex);
+            }
         }
 
         public async Task<List<DropDownDto<int>>> FindAllTitlesWithoutMS() => await _dataContext.tblTitle.Where(w => w.TitleId != 3).Select(s => new DropDownDto<int>
@@ -860,31 +864,35 @@ namespace PolicyManagement.Services.Customer
         {
 
 
-            List<ClusterCustomerDto> customers = await _dataContext.tblCustomer.GroupJoin(_dataContext.tblCluster, T1 => T1.ClusterId, T2 => T2.ClusterId, (T1, T2) => new { T1, T2 })
-                                                    .SelectMany(s => s.T2.DefaultIfEmpty(), (customer, cluster) => new { customer.T1, T2 = cluster })
-                                                    .Join(_dataContext.tblProfession,T3 => T3.T1.ProfessionId,T4 => T4.ProfessionId,(T3, T4) => new {T3,T4})
-                                                    .Join(_dataContext.tblGender, T5 => T5.T3.T1.GenderId, T6 => T6.GenderId, (T5, T6) => new { T5, T6 })
-        
-                                                    .Where(w => w.T5.T3.T1.ClusterId == clusterId)
-                                                    .OrderBy(o => o.T5.T3.T1.CustomerName)
-                                                    .Select( s => new ClusterCustomerDto
+            List<ClusterCustomerDto> customers =    await (from customer in _dataContext.tblCustomer.Where(w => w.ClusterId == clusterId && w.IsActive == true && w.IsCompany == false)
+                                                     join cluster in _dataContext.tblCluster on customer.ClusterId equals cluster.ClusterId
+                                                     join profesional in _dataContext.tblProfession on customer.ProfessionId equals profesional.ProfessionId into profession
+                                                     from profesional in profession.DefaultIfEmpty()
+                                                     join gender in _dataContext.tblGender on customer.GenderId equals gender.GenderId into genders
+                                                     from gender in genders.DefaultIfEmpty()
+                                                     orderby customer.CustomerName
+                                                     select  new ClusterCustomerDto
                                                     {
-                                                        Address = s.T5.T3.T1.DefaultAddress == 1 ? s.T5.T3.T1.CustomerAddress1 : s.T5.T3.T1.DefaultAddress == 2 ? s.T5.T3.T1.CustomerAddress2 : s.T5.T3.T1.CustomerAddress3,
-                                                            ClusterName = s.T5.T3.T2.ClusterName,
-                                                            Code = s.T5.T3.T1.CustomerCode,
-                                                        Id = s.T5.T3.T1.CustomerId,
-                                                        Mobile = s.T5.T3.T1.DefaultContactNo == 1 ? s.T5.T3.T1.CustomerMobile1 : s.T5.T3.T1.DefaultContactNo == 2 ? s.T5.T3.T1.CustomerMobile2 : s.T5.T3.T1.DefaultContactNo == 3 ? s.T5.T3.T1.CustomerPhone1 : s.T5.T3.T1.CustomerPhone2,
-                                                        Name = s.T5.T3.T1.CustomerName,
-                                                        PinCode = s.T5.T3.T1.DefaultAddress == 1 ? s.T5.T3.T1.CustomerPinCode1 : s.T5.T3.T1.DefaultAddress == 2 ? s.T5.T3.T1.CustomerPinCode2 : s.T5.T3.T1.CustomerPinCode3,
-                                                        DateOfBirth =s.T5.T3.T1.CustomerDOB,
-                                                        Gender =  s.T6.Gender,
-                                                        Pan =s.T5.T3.T1.PAN,
-                                                        Aadhar = s.T5.T3.T1.AadhaarNo,
-                                                        Profession = _dataContext.tblProfession.Where(x => x.ProfessionId == s.T5.T3.T1.ProfessionId).Select(x => x.ProfessionName).FirstOrDefault(),
-                                                        Email = s.T5.T3.T1.CustomerEmail1,
-                                                        Passport = s.T5.T3.T1.PassportNo
-                                                    })
-                                                   .ToListAsync();
+                                                        Address = customer.DefaultAddress == 1 ? customer.CustomerAddress1 : customer.DefaultAddress == 2 ? customer.CustomerAddress2 : customer.CustomerAddress3,
+                                                        ClusterName = cluster.ClusterName,
+                                                        Code = customer.CustomerCode,
+                                                        CustomerId = customer.CustomerId,
+                                                        Mobile = customer.DefaultContactNo == 1 ? customer.CustomerMobile1 : customer.DefaultContactNo == 2 ? customer.CustomerMobile2 : customer.DefaultContactNo == 3 ? customer.CustomerPhone1 : customer.CustomerPhone2,
+                                                        Name = customer.CustomerName,
+                                                        PinCode = customer.DefaultAddress == 1 ? customer.CustomerPinCode1 : customer.DefaultAddress == 2 ? customer.CustomerPinCode2 : customer.CustomerPinCode3,
+                                                        DateOfBirth =customer.CustomerDOB,
+                                                        Gender =  gender.Gender,
+                                                        Pan =customer.PAN,
+                                                        Aadhar = customer.AadhaarNo,
+                                                        Profession = profesional.ProfessionName,
+                                                        Email = customer.CustomerEmail1,
+                                                        Passport = customer.PassportNo,
+                                                        GenderId = customer.GenderId,
+                                                        City = customer.CustomerCityId1,
+                                                        BranchId =customer.BranchId,
+                                                        ClusterId=  customer.ClusterId
+                                                     }).ToListAsync();
+                         
 
             return new DataTableDto<List<ClusterCustomerDto>>
             {
