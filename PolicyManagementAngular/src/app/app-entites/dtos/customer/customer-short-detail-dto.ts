@@ -18,12 +18,13 @@ export interface ICustomerShortDetailDto
     ClusterId?:number,
     Profession :  string;
     Name? :  string;
+    CityId? :  number;
 
 }
 
 export interface ICustomerInsuranceDetail{
     Name: string;
-    AddressInPolicy: string;
+    Address: string;
     CustomerCode: string;
     ClusterCode: string;
     Email: string;
@@ -56,5 +57,6 @@ export interface ICustomerInsuranceDetail{
     Aadhar?: string;
     GenderId:number;
     BranchId:number;
+    CityId:number;
 
 }

@@ -1251,29 +1251,58 @@ namespace PolicyManagement.Services.Motor
 
         public async Task<tblCustomer> AddorUpdateCustomerDetails(InsuredPersonModel insuredPersonModel, BaseModel baseModel)
         {
-            tblCustomer tblCustomers = new tblCustomer
-            {
-                CustomerId = insuredPersonModel.CustomerId,
-                CustomerName = insuredPersonModel.Name,
-                GenderId = insuredPersonModel.Gender,
-                CustomerDOB = insuredPersonModel.DateOfBirth,
-                CustomerMobile1 = insuredPersonModel.Mobile,
-                CustomerEmail1 = insuredPersonModel.Email,
-                CustomerAddress1 =  insuredPersonModel.Address,
-                CreatedBy = baseModel.LoginUserId,
-                CreatedTime = DateTime.Now,
-                PassportNo = insuredPersonModel.PassportNumber,
-                PAN = insuredPersonModel.Pan,
-                IsCompany = false,
-                DefaultAddress = 1,
-                DefaultWhatsAppNo = 1,
-                DefaultContactNo = 1,
-                BranchId = insuredPersonModel.BranchId,
-                ClusterId =  insuredPersonModel.ClusterId,
-                CustomerCityId1= insuredPersonModel.City,
-                IsActive = true,
-            };
+            tblCustomer tblCustomers = new tblCustomer();
+            
                    
+            if(insuredPersonModel.CustomerId == 0)
+            {
+
+                tblCustomers.CustomerId = insuredPersonModel.CustomerId;
+                tblCustomers.CustomerName = insuredPersonModel.Name;
+                tblCustomers.GenderId = insuredPersonModel.Gender;
+                tblCustomers.CustomerDOB = insuredPersonModel.DateOfBirth;
+                tblCustomers.CustomerMobile1 = insuredPersonModel.Mobile;
+                tblCustomers.CustomerEmail1 = insuredPersonModel.Email;
+                tblCustomers.CustomerAddress1 = insuredPersonModel.Address;
+                tblCustomers.CreatedBy = baseModel.LoginUserId;
+                tblCustomers.CreatedTime = DateTime.Now;
+                tblCustomers.PassportNo = insuredPersonModel.PassportNumber;
+                tblCustomers.PAN = insuredPersonModel.Pan;
+                tblCustomers.IsCompany = false;
+                tblCustomers.DefaultAddress = 1;
+                tblCustomers.DefaultWhatsAppNo = 1;
+                tblCustomers.DefaultContactNo = 1;
+                tblCustomers.BranchId = insuredPersonModel.BranchId;
+                tblCustomers.ClusterId = insuredPersonModel.ClusterId;
+                tblCustomers.CustomerCityId1 = insuredPersonModel.City;
+                tblCustomers.IsActive = true;
+                _dataContext.tblCustomer.Add(tblCustomers);
+            }
+            else
+            {
+                tblCustomers  = await _dataContext.tblCustomer.FirstOrDefaultAsync(f => f.CustomerId == insuredPersonModel.CustomerId);
+                tblCustomers.CustomerId = insuredPersonModel.CustomerId;
+                tblCustomers.CustomerName = insuredPersonModel.Name;
+                tblCustomers.GenderId = insuredPersonModel.Gender;
+                tblCustomers.CustomerDOB = insuredPersonModel.DateOfBirth;
+                tblCustomers.CustomerMobile1 = insuredPersonModel.Mobile;
+                tblCustomers.CustomerEmail1 = insuredPersonModel.Email;
+                tblCustomers.CustomerAddress1 = insuredPersonModel.Address;
+                tblCustomers.CreatedBy = baseModel.LoginUserId;
+                tblCustomers.CreatedTime = DateTime.Now;
+                tblCustomers.PassportNo = insuredPersonModel.PassportNumber;
+                tblCustomers.PAN = insuredPersonModel.Pan;
+                tblCustomers.IsCompany = false;
+                tblCustomers.DefaultAddress = 1;
+                tblCustomers.DefaultWhatsAppNo = 1;
+                tblCustomers.DefaultContactNo = 1;
+                tblCustomers.BranchId = insuredPersonModel.BranchId;
+                tblCustomers.ClusterId = insuredPersonModel.ClusterId;
+                tblCustomers.CustomerCityId1 = insuredPersonModel.City;
+                tblCustomers.IsActive = true;
+
+
+            }
             _dataContext.tblCustomer.AddOrUpdate(tblCustomers);
             await _dataContext.SaveChangesAsync();
             return  tblCustomers;

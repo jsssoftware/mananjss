@@ -23,6 +23,7 @@ namespace PolicyManagement.Dtos.Customer
         public int? ClusterId { get; set; }
         public string AadhaarNo { get; set; }
         public string Profession { get; set; }
+        public int? CityId { get; set; }
 
 
     }

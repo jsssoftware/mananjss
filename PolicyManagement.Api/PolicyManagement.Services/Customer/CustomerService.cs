@@ -748,7 +748,8 @@ namespace PolicyManagement.Services.Customer
                     Cluster = !string.IsNullOrEmpty(cluster.ClusterName) ? cluster.ClusterName : "NA",
                     ClusterCode = !string.IsNullOrEmpty(cluster.ClusterCode) ? cluster.ClusterCode : "NA",
                     GenderId = customer.T1.GenderId,
-                    ClusterId =  customer.T1.ClusterId
+                    ClusterId =  customer.T1.ClusterId,
+                    CityId = customer.T1.CustomerCityId1.HasValue ? customer.T1.CustomerCityId1.Value : 0,   
                 })
                 .FirstOrDefaultAsync(f => f.CustomerId == customerId);
 

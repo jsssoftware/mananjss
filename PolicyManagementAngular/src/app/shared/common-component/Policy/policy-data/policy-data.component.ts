@@ -449,6 +449,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _genders: IDropDownDto<number>[] = [];
 
   public _customerId: any;
+  public _customerCityId: any;
   public _customerClusterId: any;
 
   public _policyTypeId: any;
@@ -1887,6 +1888,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   getCustomerShortDetailById(customerId: number) {
     this.customerService.getCustomerShortDetailById(customerId).subscribe((response: ICustomerShortDetailDto) => {
       this.setCustomerDetail(response);
+      this._customerCityId = response.CityId;
       this._customerClusterId = response.ClusterId
       this.getCustomerDataByClusterId(Number(response.ClusterId))
     });
@@ -3284,7 +3286,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       cemail:  data.Email,
       cpassport:  data.PassportNumber,
       cpan:  data.Pan,
-      addressInPolicy: data.AddressInPolicy,
       cprofession:  data.Profession,
       ccustomerId : data.CustomerId
     })
@@ -3326,7 +3327,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
     this.insurancePerson.GenderId = this.InsurancePersonForm.cgender;
     this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId ? this._insuranceCustomerPersonDetails.find(x=>x.CustomerId == this.InsurancePersonForm?.ccustomerId).BranchId:
-    parseInt(sessionStorage.getItem("branchId") as string);
+    this._branchId
+
+    this.insurancePerson.Address = this.customerForm.getRawValue().addressInPolicy;
+    this.insurancePerson.CityId =this._customerCityId
     this.insurancePerson.ClusterId = this._customerClusterId;
 
     //insurancePerson
@@ -3358,7 +3362,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       var customerDetail = this._selectedinsuranceCustomerPersonDetail[index];
       this._dataSourceCustomerCluster.data.push(customerDetail);
       this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-      this._selectedinsuranceCustomerPersonDetail = this._selectedinsuranceCustomerPersonDetail.filter((item ,index)=> index !== index)
+      this._selectedinsuranceCustomerPersonDetail.splice(index,1)
       this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
       this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
     }
