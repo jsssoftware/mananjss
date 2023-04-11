@@ -405,6 +405,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     cnomineename : new FormControl(''),
     cnomineerelation : new FormControl(''),
     ccustomerId :  new FormControl(0),
+    ccustomerUid: new FormControl(0)
   });
   //endregion
   //#region Variables
@@ -447,9 +448,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _documentTypes: IDropDownDto<number>[] = [];
   public _paymentTypes: IDropDownDto<number>[] = [];
   public _genders: IDropDownDto<number>[] = [];
+  public _riskClass: IDropDownDto<number>[] = [];
 
   public _customerId: any;
   public _customerCityId: any;
+  public _referById: any;
   public _customerClusterId: any;
 
   public _policyTypeId: any;
@@ -626,6 +629,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     await this.getPolicyVouchers();
     await this.getPolicyInspections();
     await this.getGenders();
+    await this.getRisksClass();
     //Not calling on edit
     if (this._policyId == 0 ||  this._policyType == SearchPolicyType.Motor_Renew) {
       //      await this.getAddOnRiders();
@@ -1889,7 +1893,8 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.customerService.getCustomerShortDetailById(customerId).subscribe((response: ICustomerShortDetailDto) => {
       this.setCustomerDetail(response);
       this._customerCityId = response.CityId;
-      this._customerClusterId = response.ClusterId
+      this._customerClusterId = response.ClusterId;
+      this._referById = response.ReferById;
       this.getCustomerDataByClusterId(Number(response.ClusterId))
     });
   }
@@ -2880,6 +2885,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   getCustomerDataByClusterId(clusterId: number) {
     this.customerService.getCustomerDataByClusterId(clusterId).subscribe((response: any) => {
+      this._storeCustomerClusterDetail = JSON.parse(JSON.stringify(response?.Data)) ;
       this._dataSourceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(response?.Data);
       this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
     });
@@ -3275,9 +3281,13 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
   public _insuranceCustomerPersonDetails: ICustomerInsuranceDetail[] = [];
   public _selectedinsuranceCustomerPersonDetail : ICustomerInsuranceDetail[] = [];
+  public _storeCustomerClusterDetail : ICustomerInsuranceDetail[] = [];
   _isInsurancePersoneEdit : boolean =  false;
+  _incrementalUid : number = 0;
   addCustomerClusterData(data: ICustomerInsuranceDetail,index:number) {
-    debugger
+    this.reverseInsurcanceDataifExist()
+    this._incrementalUid = this._incrementalUid+ 1;
+    data.uid = this._incrementalUid+ 1;
     this.insuranceCustomerForm.patchValue({
       cnameInsuredPerson: data.Name,
       cdob:  data.DateOfBirth != null ? new Date(data.DateOfBirth): null,
@@ -3287,25 +3297,30 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       cpassport:  data.PassportNumber,
       cpan:  data.Pan,
       cprofession:  data.Profession,
-      ccustomerId : data.CustomerId
+      ccustomerId : data.CustomerId,
+      ccustomerUid :  data.uid
     })
-    this._insuranceCustomerPersonDetails.push(data)
+    this._insuranceCustomerPersonDetails.push(data);
+    console.log(this._insuranceCustomerPersonDetails)
     this.removeInsuranceCLuster(index)
   }
   insurancePerson :ICustomerInsuranceDetail = <ICustomerInsuranceDetail>{};
   addInsuracePersondetail(): void {
-   this._isInsurancePersoneEdit = false;
-   let insurancePersonIndex =  this._selectedinsuranceCustomerPersonDetail?.findIndex(x=>x.CustomerId == this.InsurancePersonForm?.ccustomerId );
-   if(insurancePersonIndex >= 0){
+    console.log(this.insuranceCustomerForm.value)
 
-    this._selectedinsuranceCustomerPersonDetail?.splice(insurancePersonIndex,1 );
+   this._isInsurancePersoneEdit = false;
+   let selectedInsurancePersonIndex =  this._selectedinsuranceCustomerPersonDetail?.findIndex(x=>x.uid ==  this.insuranceCustomerForm.value.ccustomerUid );
+   // for updating remove existing and adding new
+   if(selectedInsurancePersonIndex >= 0){
+
+    this._selectedinsuranceCustomerPersonDetail?.splice(selectedInsurancePersonIndex,1 );
     this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
     this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
    }
     this.insurancePerson.CustomerId =  this.InsurancePersonForm?.ccustomerId || 0
     this.insurancePerson.Name = this.InsurancePersonForm.cnameInsuredPerson
-    this.insurancePerson.DateOfBirth = this.InsurancePersonForm.cdob
-    this.insurancePerson.Gender = this._genders?.find(x=>x.Value == this.InsurancePersonForm.cgender).Name
+    this.insurancePerson.DateOfBirth = this.InsurancePersonForm.cdob,
+    this.insurancePerson.Gender = this._genders?.find(x=>x.Value == this.InsurancePersonForm.cgender)?.Name
     this.insurancePerson.Mobile = this.InsurancePersonForm.cmobile
     this.insurancePerson.Email = this.InsurancePersonForm.cemail
     this.insurancePerson.PassportNumber = this.InsurancePersonForm.cpassport
@@ -3326,23 +3341,30 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.insurancePerson.NomineeRelationship = this.InsurancePersonForm.cnomineerelation,
     this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
     this.insurancePerson.GenderId = this.InsurancePersonForm.cgender;
-    this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId ? this._insuranceCustomerPersonDetails.find(x=>x.CustomerId == this.InsurancePersonForm?.ccustomerId).BranchId:
+    let ss= 
+    this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId ? this._storeCustomerClusterDetail.find(x=>x.CustomerId == this.insuranceCustomerForm.value.ccustomerId).BranchId:
     this._branchId
+    this.insurancePerson.uid = this.InsurancePersonForm.ccustomerUid;
+    this.insurancePerson.CustomerCode =  this._insuranceCustomerPersonDetails?.find(x=>x.uid == this.InsurancePersonForm?.ccustomerUid)?.CustomerCode
 
     this.insurancePerson.Address = this.customerForm.getRawValue().addressInPolicy;
     this.insurancePerson.CityId =this._customerCityId
     this.insurancePerson.ClusterId = this._customerClusterId;
+    this.insurancePerson.ReferById = this._referById;
 
     //insurancePerson
     this._selectedinsuranceCustomerPersonDetail.push({...this.insurancePerson})
     this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
     this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
     console.log(this._selectedinsuranceCustomerPersonDetail)
+    let insurancePersonIndex =  this._insuranceCustomerPersonDetails?.findIndex(x=>x.uid ==  this.insuranceCustomerForm.value.ccustomerUid );
+    this._insuranceCustomerPersonDetails.splice(insurancePersonIndex, 1);
     this.insuranceCustomerForm.reset();
    
   }
 
   removeInsuranceCLuster(index: any) {
+    //this._insuranceCustomerPersonDetails.splice(index, 1);
     this._dataSourceCustomerCluster.data.splice(index, 1);
     this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
   }
@@ -3350,10 +3372,14 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   reverseInsuranceDetail() {
     this.insuranceCustomerForm.reset();
     if(this._insuranceCustomerPersonDetails && this._insuranceCustomerPersonDetails.length> 0){
+      
       var customerDetail = this._insuranceCustomerPersonDetails[this._insuranceCustomerPersonDetails.length -1]
+      let existinSelectedInsurance = this._selectedinsuranceCustomerPersonDetail.some(x=>x.uid == customerDetail.uid)
+      if(!existinSelectedInsurance){
       this._dataSourceCustomerCluster.data.push(customerDetail);
       this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
       this._insuranceCustomerPersonDetails.pop();
+      }
     }
   }
 
@@ -3369,10 +3395,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   editCustomerCLusterData(element:ICustomerInsuranceDetail,index:number){
+   this.reverseInsurcanceDataifExist()
     this._isInsurancePersoneEdit = true;
     this.insuranceCustomerForm.patchValue({
       cnameInsuredPerson :  element.Name ,
-      cdob :  element.DateOfBirth ,
+      cdob : element.DateOfBirth != null ? new Date(element.DateOfBirth): null,
       cgender : element.GenderId ,
       cmobile : element.Mobile,
       cemail :element.Email,
@@ -3393,8 +3420,37 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       cnomineename:element.NomineeName ,
       cnomineerelation: element.NomineeRelationship,
       caadhar : element.Aadhar,
-      ccustomerId: element.CustomerId
+      ccustomerId: element.CustomerId,
+      ccustomerUid : element.uid
     })
+  }
+
+  getRisksClass(): any {
+    this.commonService.getRiskClass().subscribe((response: IDropDownDto<number>[]) => {
+      this._riskClass = response;
+    });
+  }
+
+  reverseSelectedInsurcanceDataifExist(){
+    let insurancePersonIndex = this._selectedinsuranceCustomerPersonDetail.every( e => this._insuranceCustomerPersonDetails.includes(e) )
+
+    //let insurancePersonIndex =  this._selectedinsuranceCustomerPersonDetail?.findIndex(y=>y.uid == this._insuranceCustomerPersonDetails?.find(x=>x.uid == y.uid).uid );
+
+    if(this.insuranceCustomerForm.value.ccustomerId !=0 && insurancePersonIndex ){
+      this.reverseInsuranceDetail();
+    }
+  }
+
+  reverseInsurcanceDataifExist(){
+    let insurancePersonIndex =  this._insuranceCustomerPersonDetails?.findIndex(x=>x.uid == this.InsurancePersonForm?.ccustomerUid );
+
+    //let insurancePersonIndex =  this._selectedinsuranceCustomerPersonDetail?.findIndex(y=>y.uid == this._insuranceCustomerPersonDetails?.find(x=>x.uid == y.uid).uid );
+
+    if( insurancePersonIndex >=0){
+      var customerDetail = this._insuranceCustomerPersonDetails[insurancePersonIndex]
+      this._dataSourceCustomerCluster.data.push(customerDetail);
+      this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+    }
   }
 
   

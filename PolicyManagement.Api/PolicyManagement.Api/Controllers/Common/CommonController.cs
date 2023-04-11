@@ -260,5 +260,9 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("portability")]
         [HttpGet]
         public async Task<IHttpActionResult> GetPortability() => Json(await _commonService.FindAllPortability());
+
+        [Route("riskclass")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllRiskMaster() => Json(await _commonService.FindAllRisks());
     }
 }

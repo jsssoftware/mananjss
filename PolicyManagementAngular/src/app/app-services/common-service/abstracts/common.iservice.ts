@@ -80,4 +80,5 @@ export abstract class ICommonService {
     abstract getPlan(productId: number): Observable<any>;
     abstract getPlanType(): Observable<any>;
     abstract getPortability(): Observable<any>; 
+    abstract getRiskClass(): Observable<any>; 
 }

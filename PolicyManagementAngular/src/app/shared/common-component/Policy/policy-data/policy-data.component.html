@@ -2015,7 +2015,7 @@
                       <td style="text-align:center;" mat-cell *matCellDef="let element; let i = index"
                         style="width: 185px;">
                         <div class="row">
-                          <div class="col-lg-1">
+                          <div class="col-lg-1" *ngIf="!_isInsurancePersoneEdit">
                             <button type="button" class="btn-block" mat-raised-button color="accent"
                               (click)="addCustomerClusterData(element,i)">Add</button>
                           </div>
@@ -2187,10 +2187,13 @@
                   </mat-form-field>
                 </div>
                 <div class="col-lg-3">
+                  
                   <mat-form-field>
                     <mat-label>Risk Class</mat-label>
-                    <input type="text" matInput formControlName="criskclass" placeholder="Aadhar"
-                      style="line-height: 28px;">
+                      <mat-select formControlName="criskclass">
+                        <mat-option>Select</mat-option>
+                        <mat-option *ngFor="let riskclass of _riskClass" [value]="riskclass.Value">{{riskclass.Name}}</mat-option>
+                      </mat-select>
                   </mat-form-field>
                 </div>
                 <div class="col-lg-3">
@@ -2247,7 +2250,7 @@
                     </ng-container>
                     <ng-container matColumnDef="DateOfBirth">
                       <th mat-header-cell *matHeaderCellDef> Date of Birth </th>
-                      <td mat-cell *matCellDef="let element"> {{element.DateOfBirth | date: 'dd/MM/yyyy' }} </td>
+                      <td mat-cell *matCellDef="let element"> {{element.DateOfBirth  | date: 'dd/MM/yyyy' }} </td>
                     </ng-container>
                     <ng-container matColumnDef="Gender">
                       <th mat-header-cell *matHeaderCellDef> Gender</th>
