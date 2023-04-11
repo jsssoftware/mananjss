@@ -1262,6 +1262,15 @@ namespace PolicyManagement.Services.Common
                                                                                            .OrderBy(o => o.Name)
                                                                                            .ToListAsync();
 
-        
+        public async Task<List<DropDownDto<int>>> FindAllRisks() => await _dataContext.tblRiskClass.Where(w => w.IsActive)
+                                                                                          .Select(s => new DropDownDto<int>
+                                                                                          {
+                                                                                              Name = s.RiskClassName,
+                                                                                              Value = s.RiskClassId
+                                                                                          })
+                                                                                          .OrderBy(o => o.Name)
+                                                                                          .ToListAsync();
+
+
     }
 }

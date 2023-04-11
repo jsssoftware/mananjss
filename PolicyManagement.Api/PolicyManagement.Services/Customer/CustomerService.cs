@@ -181,11 +181,11 @@ namespace PolicyManagement.Services.Customer
                 DateTime? customerAnniversery = null;
                 DateTime? customerDateOfBirth = null;
 
-                if (!string.IsNullOrEmpty(model.DateOfAnniversary))
-                    customerAnniversery = DateTime.ParseExact(model.DateOfAnniversary, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                if (!string.IsNullOrEmpty(model.DateOfAnniversary.ToString()))
+                    customerAnniversery = DateTime.ParseExact(model.DateOfAnniversary.ToString(), "MM/dd/yyyy", CultureInfo.InvariantCulture);
 
-                if (!string.IsNullOrEmpty(model.DateOfBirth))
-                    customerDateOfBirth = DateTime.ParseExact(model.DateOfBirth, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+                if (!string.IsNullOrEmpty(model.DateOfBirth.ToString()))
+                    customerDateOfBirth = DateTime.ParseExact(model.DateOfBirth.ToString(), "MM/dd/yyyy", CultureInfo.InvariantCulture);
 
 
                 tblCustomer customer = new tblCustomer
@@ -736,7 +736,7 @@ namespace PolicyManagement.Services.Customer
                 .SelectMany(s => s.T2.DefaultIfEmpty(), (customer, cluster) => new CustomerShortDetailDto
                 {
                     AddressInPolicy = customer.T1.DefaultAddress == 1 ? customer.T1.CustomerAddress1 : customer.T1.DefaultAddress == 2 ? customer.T1.CustomerAddress2 : customer.T1.CustomerAddress3,
-                    ContactNumber = customer.T1.DefaultContactNo == 1 ? customer.T1.CustomerMobile1 : customer.T1.DefaultContactNo == 2 ? customer.T1.CustomerMobile2 : customer.T1.DefaultContactNo == 3 ? customer.T1.CustomerPhone1 : customer.T1.CustomerPhone2,
+                    ContactNumber = customer.T1.DefaultContactNo == 1 ? customer.T1.CustomerMobile1  : customer.T1.DefaultContactNo == 2 ? customer.T1.CustomerMobile2 : customer.T1.DefaultContactNo == 3 ? customer.T1.CustomerPhone1 : customer.T1.CustomerPhone2,
                     ContactPerson = customer.T1.CustomerContact,
                     CustomerCode = customer.T1.CustomerCode,
                     CustomerId = customer.T1.CustomerId,
@@ -750,6 +750,8 @@ namespace PolicyManagement.Services.Customer
                     GenderId = customer.T1.GenderId,
                     ClusterId =  customer.T1.ClusterId,
                     CityId = customer.T1.CustomerCityId1.HasValue ? customer.T1.CustomerCityId1.Value : 0,   
+                    ReferById = customer.T1.ReferById,
+                    ReferenceId = customer.T1.ReferenceId
                 })
                 .FirstOrDefaultAsync(f => f.CustomerId == customerId);
 
@@ -793,8 +795,8 @@ namespace PolicyManagement.Services.Customer
                          CustomerName = customer.CustomerName,
                         CustomerNameSalutation = customer.CustomerTitleId ?? 0,
                         CustomerType = 1,
-                        DateOfAnniversary =  "",
-                        DateOfBirth =  "",
+                        DateOfAnniversary = customer.CustomerAnniversery,
+                        DateOfBirth =  customer.CustomerDOB,
                         DecisionMaker = customer.IsDecisionMaker ?? false,
                         Designation = customer.DesignationId ?? 0,
                         Email1 = customer.CustomerEmail1 ??  "",
@@ -863,37 +865,38 @@ namespace PolicyManagement.Services.Customer
 
         public async Task<DataTableDto<List<ClusterCustomerDto>>> FindCustomrByClusterCode(int? clusterId)
         {
+            int max = 100, min = 10;
+
+            List<ClusterCustomerDto> customers = await (from customer in _dataContext.tblCustomer.Where(w => w.ClusterId == clusterId && w.IsActive == true && w.IsCompany == false)
+                                                        join cluster in _dataContext.tblCluster on customer.ClusterId equals cluster.ClusterId
+                                                        join profesional in _dataContext.tblProfession on customer.ProfessionId equals profesional.ProfessionId into profession
+                                                        from profesional in profession.DefaultIfEmpty()
+                                                        join gender in _dataContext.tblGender on customer.GenderId equals gender.GenderId into genders
+                                                        from gender in genders.DefaultIfEmpty()
+                                                        orderby customer.CustomerName
+                                                        select new ClusterCustomerDto
+                                                        {
+                                                            Address = customer.DefaultAddress == 1 ? customer.CustomerAddress1 : customer.DefaultAddress == 2 ? customer.CustomerAddress2 : customer.CustomerAddress3,
+                                                            ClusterName = cluster.ClusterName,
+                                                            Code = customer.CustomerCode,
+                                                            CustomerId = customer.CustomerId,
+                                                            Mobile = customer.DefaultContactNo == 1 ? customer.CustomerMobile1 : customer.DefaultContactNo == 2 ? customer.CustomerMobile2 : customer.DefaultContactNo == 3 ? customer.CustomerPhone1 : customer.CustomerPhone2,
+                                                            Name = customer.CustomerName,
+                                                            PinCode = customer.DefaultAddress == 1 ? customer.CustomerPinCode1 : customer.DefaultAddress == 2 ? customer.CustomerPinCode2 : customer.CustomerPinCode3,
+                                                            DateOfBirth = customer.CustomerDOB,
+                                                            Gender = gender.Gender,
+                                                            Pan = customer.PAN,
+                                                            Aadhar = customer.AadhaarNo,
+                                                            Profession = profesional.ProfessionName,
+                                                            Email = customer.CustomerEmail1,
+                                                            Passport = customer.PassportNo,
+                                                            GenderId = customer.GenderId,
+                                                            City = customer.CustomerCityId1,
+                                                            BranchId = customer.BranchId,
+                                                            ClusterId = customer.ClusterId
+                                                        }).ToListAsync();
 
 
-            List<ClusterCustomerDto> customers =    await (from customer in _dataContext.tblCustomer.Where(w => w.ClusterId == clusterId && w.IsActive == true && w.IsCompany == false)
-                                                     join cluster in _dataContext.tblCluster on customer.ClusterId equals cluster.ClusterId
-                                                     join profesional in _dataContext.tblProfession on customer.ProfessionId equals profesional.ProfessionId into profession
-                                                     from profesional in profession.DefaultIfEmpty()
-                                                     join gender in _dataContext.tblGender on customer.GenderId equals gender.GenderId into genders
-                                                     from gender in genders.DefaultIfEmpty()
-                                                     orderby customer.CustomerName
-                                                     select  new ClusterCustomerDto
-                                                    {
-                                                        Address = customer.DefaultAddress == 1 ? customer.CustomerAddress1 : customer.DefaultAddress == 2 ? customer.CustomerAddress2 : customer.CustomerAddress3,
-                                                        ClusterName = cluster.ClusterName,
-                                                        Code = customer.CustomerCode,
-                                                        CustomerId = customer.CustomerId,
-                                                        Mobile = customer.DefaultContactNo == 1 ? customer.CustomerMobile1 : customer.DefaultContactNo == 2 ? customer.CustomerMobile2 : customer.DefaultContactNo == 3 ? customer.CustomerPhone1 : customer.CustomerPhone2,
-                                                        Name = customer.CustomerName,
-                                                        PinCode = customer.DefaultAddress == 1 ? customer.CustomerPinCode1 : customer.DefaultAddress == 2 ? customer.CustomerPinCode2 : customer.CustomerPinCode3,
-                                                        DateOfBirth =customer.CustomerDOB,
-                                                        Gender =  gender.Gender,
-                                                        Pan =customer.PAN,
-                                                        Aadhar = customer.AadhaarNo,
-                                                        Profession = profesional.ProfessionName,
-                                                        Email = customer.CustomerEmail1,
-                                                        Passport = customer.PassportNo,
-                                                        GenderId = customer.GenderId,
-                                                        City = customer.CustomerCityId1,
-                                                        BranchId =customer.BranchId,
-                                                        ClusterId=  customer.ClusterId
-                                                     }).ToListAsync();
-                         
 
             return new DataTableDto<List<ClusterCustomerDto>>
             {

@@ -35,7 +35,8 @@ namespace PolicyManagement.Models.Motor
         public short ClusterId { get; set; }
         public string Address { get; set; }
         public short City { get; set; }
-
+        public int? ReferById { get; set; }
+        public int? ReferenceId { get; set; }
 
 
     }
