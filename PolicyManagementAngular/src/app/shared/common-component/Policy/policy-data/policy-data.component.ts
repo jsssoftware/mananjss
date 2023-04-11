@@ -1888,10 +1888,11 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.calculateTotalGrossPremium();
 
   }
-
+  customerDetails : ICustomerShortDetailDto =   <ICustomerShortDetailDto>{};
   getCustomerShortDetailById(customerId: number) {
     this.customerService.getCustomerShortDetailById(customerId).subscribe((response: ICustomerShortDetailDto) => {
       this.setCustomerDetail(response);
+      this.customerDetails =  JSON.parse(JSON.stringify(response))
       this._customerCityId = response.CityId;
       this._customerClusterId = response.ClusterId;
       this._referById = response.ReferById;
@@ -3351,7 +3352,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.insurancePerson.CityId =this._customerCityId
     this.insurancePerson.ClusterId = this._customerClusterId;
     this.insurancePerson.ReferById = this._referById;
-
+    this.insurancePerson.TeamMemebrId =  this.customerDetails.TeamMemebrId;
+    this.insurancePerson.ReferenceId =  this.customerDetails.ReferenceId;
+    this.insurancePerson.PosId =  this.customerDetails.PosId;
     //insurancePerson
     this._selectedinsuranceCustomerPersonDetail.push({...this.insurancePerson})
     this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
@@ -3442,7 +3445,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   reverseInsurcanceDataifExist(){
-    let insurancePersonIndex =  this._insuranceCustomerPersonDetails?.findIndex(x=>x.uid == this.InsurancePersonForm?.ccustomerUid );
+    let insurancePersonIndex =  this._insuranceCustomerPersonDetails?.findIndex(x=>x.uid == this.insuranceCustomerForm.value.ccustomerUid);
 
     //let insurancePersonIndex =  this._selectedinsuranceCustomerPersonDetail?.findIndex(y=>y.uid == this._insuranceCustomerPersonDetails?.find(x=>x.uid == y.uid).uid );
 

@@ -181,12 +181,14 @@ namespace PolicyManagement.Services.Customer
                 DateTime? customerAnniversery = null;
                 DateTime? customerDateOfBirth = null;
 
-                if (!string.IsNullOrEmpty(model.DateOfAnniversary.ToString()))
+              /*  if (!string.IsNullOrEmpty(model.DateOfAnniversary.ToString()))
                     customerAnniversery = DateTime.ParseExact(model.DateOfAnniversary.ToString(), "MM/dd/yyyy", CultureInfo.InvariantCulture);
 
                 if (!string.IsNullOrEmpty(model.DateOfBirth.ToString()))
                     customerDateOfBirth = DateTime.ParseExact(model.DateOfBirth.ToString(), "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
+              */
+                customerDateOfBirth = model.DateOfBirth;
+                customerAnniversery = model.DateOfAnniversary;
 
                 tblCustomer customer = new tblCustomer
                 {
@@ -751,7 +753,9 @@ namespace PolicyManagement.Services.Customer
                     ClusterId =  customer.T1.ClusterId,
                     CityId = customer.T1.CustomerCityId1.HasValue ? customer.T1.CustomerCityId1.Value : 0,   
                     ReferById = customer.T1.ReferById,
-                    ReferenceId = customer.T1.ReferenceId
+                    ReferenceId = customer.T1.ReferenceId,
+                    PosId = customer.T1.POSId,
+                    TeamMemberId =  customer.T1.TeamMemberId,
                 })
                 .FirstOrDefaultAsync(f => f.CustomerId == customerId);
 

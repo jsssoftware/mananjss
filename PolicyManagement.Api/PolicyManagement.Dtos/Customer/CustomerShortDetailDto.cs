@@ -26,6 +26,8 @@ namespace PolicyManagement.Dtos.Customer
         public int? CityId { get; set; }
         public int? ReferById { get; set; }
         public int? ReferenceId { get; set; }
+        public int? PosId { get; set; }
+        public int? TeamMemberId { get; set; }
 
 
     }

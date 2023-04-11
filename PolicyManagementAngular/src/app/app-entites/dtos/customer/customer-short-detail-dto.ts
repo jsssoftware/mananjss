@@ -21,6 +21,9 @@ export interface ICustomerShortDetailDto
     CityId? :  number;
     ReferById? :  number;
     ReferByName? :  string;
+    PosId? :  number;
+    TeamMemebrId? :  number;
+    ReferenceId? :  number;
 
 }
 
@@ -62,6 +65,9 @@ export interface ICustomerInsuranceDetail{
     CityId:number;
     uid:number;
     ReferById? :  number;
+    PosId? :  number;
+    TeamMemebrId? :  number;
+    ReferenceId? :  number;
 
 
 }

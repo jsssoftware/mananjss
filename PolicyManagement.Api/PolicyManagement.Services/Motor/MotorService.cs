@@ -24,6 +24,7 @@ using System.Runtime.Remoting.Contexts;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using log4net;
+using System.Security.Cryptography;
 
 namespace PolicyManagement.Services.Motor
 {
@@ -1274,11 +1275,13 @@ namespace PolicyManagement.Services.Motor
                 tblCustomers.DefaultContactNo = 1;
                 tblCustomers.BranchId = insuredPersonModel.BranchId;
                 tblCustomers.ClusterId = insuredPersonModel.ClusterId;
-                tblCustomers.CustomerCityId1 = insuredPersonModel.City;
+                tblCustomers.CustomerCityId1 = insuredPersonModel.CityId;
                 tblCustomers.IsActive = true;
                 tblCustomers.CustomerCode =  GenerateCustomerCode();
                 tblCustomers.ReferById = insuredPersonModel.ReferById;
                 tblCustomers.ReferenceId= insuredPersonModel.ReferenceId;
+                tblCustomers.POSId = insuredPersonModel.PosId;
+                tblCustomers.TeamMemberId = insuredPersonModel.TeamMemberId;
 
             }
             else
@@ -1295,7 +1298,6 @@ namespace PolicyManagement.Services.Motor
                 tblCustomers.CreatedTime = DateTime.Now;
                 tblCustomers.PassportNo = insuredPersonModel.PassportNumber;
                 tblCustomers.PAN = insuredPersonModel.Pan;
-                tblCustomers.CustomerCityId1 = insuredPersonModel.City;
 
             }
             _dataContext.tblCustomer.AddOrUpdate(tblCustomers);

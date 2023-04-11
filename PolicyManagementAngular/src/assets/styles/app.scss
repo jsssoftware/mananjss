@@ -962,7 +962,7 @@ Grid
 /*******************
 Table
 *******************/
-.table{
+/*.table{
     width: 100%;
     text-align: left;
 }
@@ -975,7 +975,9 @@ th.mat-header-cell{
 .table-rasponsive{
     overflow:auto;
     .mat-table{
-        min-width: 280px;
+        min-width: auto;
+        overflow:auto;
+
     }
     .mat-header-row{
         .mat-header-cell{
@@ -987,7 +989,7 @@ th.mat-header-cell{
     .mat-cell{
             white-space: nowrap;
         }
-}
+}*/
 /*******************
 Sparkline chart tooltip
 *******************/
