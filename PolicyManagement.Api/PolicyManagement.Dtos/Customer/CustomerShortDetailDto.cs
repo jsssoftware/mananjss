@@ -24,8 +24,6 @@ namespace PolicyManagement.Dtos.Customer
         public string AadhaarNo { get; set; }
         public string Profession { get; set; }
         public int? CityId { get; set; }
-        public int? ReferById { get; set; }
-        public int? ReferenceId { get; set; }
 
 
     }

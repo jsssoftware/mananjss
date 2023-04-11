@@ -363,7 +363,7 @@ namespace PolicyManagement.Services.Motor
                                 PEDId = f.Ped,
                                 PEDExclusion = f.PedExclusion,
                                 AnnualIncome = f.AnualIncome,
-                                RiskClassId = f.RiskClass,
+                                //RiskClassId = f.RiskClass,
                                 CreatedBy = baseModel.LoginUserId,
                                 CreatedTime = DateTime.Now,
                                 PassportNo = f.PassportNumber,
@@ -1259,7 +1259,7 @@ namespace PolicyManagement.Services.Motor
 
                 tblCustomers.CustomerId = insuredPersonModel.CustomerId;
                 tblCustomers.CustomerName = insuredPersonModel.Name;
-                tblCustomers.GenderId = insuredPersonModel.GenderId;
+                tblCustomers.GenderId = insuredPersonModel.Gender;
                 tblCustomers.CustomerDOB = insuredPersonModel.DateOfBirth;
                 tblCustomers.CustomerMobile1 = insuredPersonModel.Mobile;
                 tblCustomers.CustomerEmail1 = insuredPersonModel.Email;
@@ -1268,7 +1268,7 @@ namespace PolicyManagement.Services.Motor
                 tblCustomers.CreatedTime = DateTime.Now;
                 tblCustomers.PassportNo = insuredPersonModel.PassportNumber;
                 tblCustomers.PAN = insuredPersonModel.Pan;
-                tblCustomers.IsCompany = true;
+                tblCustomers.IsCompany = false;
                 tblCustomers.DefaultAddress = 1;
                 tblCustomers.DefaultWhatsAppNo = 1;
                 tblCustomers.DefaultContactNo = 1;
@@ -1276,10 +1276,7 @@ namespace PolicyManagement.Services.Motor
                 tblCustomers.ClusterId = insuredPersonModel.ClusterId;
                 tblCustomers.CustomerCityId1 = insuredPersonModel.City;
                 tblCustomers.IsActive = true;
-                tblCustomers.CustomerCode =  GenerateCustomerCode();
-                tblCustomers.ReferById = insuredPersonModel.ReferById;
-                tblCustomers.ReferenceId= insuredPersonModel.ReferenceId;
-
+                _dataContext.tblCustomer.Add(tblCustomers);
             }
             else
             {
@@ -1295,29 +1292,20 @@ namespace PolicyManagement.Services.Motor
                 tblCustomers.CreatedTime = DateTime.Now;
                 tblCustomers.PassportNo = insuredPersonModel.PassportNumber;
                 tblCustomers.PAN = insuredPersonModel.Pan;
+                tblCustomers.IsCompany = false;
+                tblCustomers.DefaultAddress = 1;
+                tblCustomers.DefaultWhatsAppNo = 1;
+                tblCustomers.DefaultContactNo = 1;
+                tblCustomers.BranchId = insuredPersonModel.BranchId;
+                tblCustomers.ClusterId = insuredPersonModel.ClusterId;
                 tblCustomers.CustomerCityId1 = insuredPersonModel.City;
+                tblCustomers.IsActive = true;
+
 
             }
             _dataContext.tblCustomer.AddOrUpdate(tblCustomers);
             await _dataContext.SaveChangesAsync();
             return  tblCustomers;
-        }
-
-        public  string GenerateCustomerCode()
-        {
-            string lastCutomerCode =  _dataContext.tblCustomer.OrderByDescending(o => o.CustomerId).Select(s => s.CustomerCode).FirstOrDefault();
-            if (!string.IsNullOrEmpty(lastCutomerCode) && lastCutomerCode.Length == 7)
-            {
-                lastCutomerCode = lastCutomerCode.Substring(1);
-                int.TryParse(lastCutomerCode, out int code);
-                return $"C{(code + 1).ToString().PadLeft(6, '0')}";
-            }
-            else if (string.IsNullOrEmpty(lastCutomerCode) || lastCutomerCode.Length < 7)
-            {
-                return "C000001";
-            }
-            else
-                return null;
         }
 
     }

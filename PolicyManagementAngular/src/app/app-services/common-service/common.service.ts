@@ -178,6 +178,5 @@ export class CommonService extends ICommonService {
     getPlan = (productId: number): Observable<IDropDownDto<string>> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.Plan}/${productId}`);
     getPlanType = (): Observable<IDropDownDto<string>> => this.apiManagerService.getRequest<IDropDownDto<string>>(Common.PlanType);
     getPortability = (): Observable<IDropDownDto<string>> => this.apiManagerService.getRequest<IDropDownDto<string>>(Common.Portability);
-    getRiskClass = (): Observable<IDropDownDto<string>> => this.apiManagerService.getRequest<IDropDownDto<string>>(Common.Portability);
 
 }

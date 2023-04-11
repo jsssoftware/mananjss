@@ -58,5 +58,4 @@ export class Common {
     public static readonly Plan = "api/common/plans";
     public static readonly PlanType = "api/common/planTypes";
     public static readonly Portability = "api/common/portability";
-    public static readonly RIskClass = "api/common/riskclass";
 }

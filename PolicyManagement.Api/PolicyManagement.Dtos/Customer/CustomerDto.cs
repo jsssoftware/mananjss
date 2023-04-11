@@ -31,7 +31,6 @@ namespace PolicyManagement.Dtos.Customer
         public short BranchId { get; set; }
         public int CustomerId { get; set; }
         public int? ClusterId { get; set; }
-        public int UniqueId { get; set; }
 
 
     }

@@ -19,8 +19,6 @@ export interface ICustomerShortDetailDto
     Profession :  string;
     Name? :  string;
     CityId? :  number;
-    ReferById? :  number;
-    ReferByName? :  string;
 
 }
 
@@ -53,15 +51,12 @@ export interface ICustomerInsuranceDetail{
     PedExclusion?: string;
     Ppc?: string;
     AnualIncome?: string;
-    RiskClass?: number;
+    RiskClass?: string;
     NomineeName?: string;
     NomineeRelationship?: string;
     Aadhar?: string;
     GenderId:number;
     BranchId:number;
     CityId:number;
-    uid:number;
-    ReferById? :  number;
-
 
 }

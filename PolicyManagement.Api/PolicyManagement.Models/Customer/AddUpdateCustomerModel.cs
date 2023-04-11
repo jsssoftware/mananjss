@@ -45,8 +45,8 @@ namespace PolicyManagement.Models.Customer
         public int TeamMember { get; set; }
         public int Reference { get; set; }
         public string Pan { get; set; }
-        public DateTime? DateOfBirth { get; set; }
-        public DateTime? DateOfAnniversary { get; set; }
+        public string DateOfBirth { get; set; }
+        public string DateOfAnniversary { get; set; }
         public string Aadhaar { get; set; }
         public short MaritalStatus { get; set; }
         public int NumberOfDependent { get; set; }
