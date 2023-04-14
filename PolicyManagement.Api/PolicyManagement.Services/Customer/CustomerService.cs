@@ -798,7 +798,7 @@ namespace PolicyManagement.Services.Customer
                          CustomerContactSalutation = customer.CustomerContactTitleId ?? 0,
                          CustomerName = customer.CustomerName,
                         CustomerNameSalutation = customer.CustomerTitleId ?? 0,
-                        CustomerType = 1,
+                        CustomerType = customer.IsCompany.HasValue && customer.IsCompany == true ? 1:2,
                         DateOfAnniversary = customer.CustomerAnniversery,
                         DateOfBirth =  customer.CustomerDOB,
                         DecisionMaker = customer.IsDecisionMaker ?? false,

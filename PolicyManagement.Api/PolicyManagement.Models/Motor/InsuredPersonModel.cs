@@ -39,6 +39,8 @@ namespace PolicyManagement.Models.Motor
         public int? ReferenceId { get; set; }
         public int? PosId { get; set; }
         public int? TeamMemberId { get; set; }
+        public string Aadhar { get; set; }
+
 
 
     }

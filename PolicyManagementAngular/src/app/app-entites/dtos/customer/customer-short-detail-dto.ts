@@ -40,14 +40,14 @@ export interface ICustomerInsuranceDetail{
     Pan: string;
     Gstin: string;
     Gender: string;
-    DateOfBirth: string;
+    DateOfBirth: Date;
     PassportNumber: string;
     CustomerId: number;
     ClusterId?:number
     Profession :  string;
     RelationProposer?: string;
-    SumInsuredIndividual?: string;
-    SumInsuredFloater?: string;
+    SumInsuredIndividual?: number;
+    SumInsuredFloater?: number;
     CumulativeBonus?: string;
     Deductable?: string;
     LoadingReason?: string;

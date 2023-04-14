@@ -3308,7 +3308,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   insurancePerson :ICustomerInsuranceDetail = <ICustomerInsuranceDetail>{};
   addInsuracePersondetail(): void {
     console.log(this.insuranceCustomerForm.value)
-
+   if(!this.InsurancePersonForm.cnameInsuredPerson){
+     alert("Customer name is required");
+     return
+   }
    this._isInsurancePersoneEdit = false;
    let selectedInsurancePersonIndex =  this._selectedinsuranceCustomerPersonDetail?.findIndex(x=>x.uid ==  this.insuranceCustomerForm.value.ccustomerUid );
    // for updating remove existing and adding new
@@ -3359,11 +3362,12 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this._selectedinsuranceCustomerPersonDetail.push({...this.insurancePerson})
     this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
     this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-    console.log(this._selectedinsuranceCustomerPersonDetail)
+    if(this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length>0){
+      this.calculatInsuredData()
+    }
     let insurancePersonIndex =  this._insuranceCustomerPersonDetails?.findIndex(x=>x.uid ==  this.insuranceCustomerForm.value.ccustomerUid );
     this._insuranceCustomerPersonDetails.splice(insurancePersonIndex, 1);
     this.insuranceCustomerForm.reset();
-   
   }
 
   removeInsuranceCLuster(index: any) {
@@ -3375,7 +3379,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   reverseInsuranceDetail() {
     this.insuranceCustomerForm.reset();
     if(this._insuranceCustomerPersonDetails && this._insuranceCustomerPersonDetails.length> 0){
-      
       var customerDetail = this._insuranceCustomerPersonDetails[this._insuranceCustomerPersonDetails.length -1]
       let existinSelectedInsurance = this._selectedinsuranceCustomerPersonDetail.some(x=>x.uid == customerDetail.uid)
       if(!existinSelectedInsurance){
@@ -3394,6 +3397,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this._selectedinsuranceCustomerPersonDetail.splice(index,1)
       this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
       this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+      this.calculatInsuredData()
     }
   }
 
@@ -3454,6 +3458,30 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this._dataSourceCustomerCluster.data.push(customerDetail);
       this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
     }
+  }
+  noofchild:number = 0
+  noofAdult:number = 0;
+  totalSumInsured:number = 0
+  allAge :any = [];
+  maxAge:number = 0;
+  calculatInsuredData(){
+    this.allAge = [];
+    this.noofAdult = 0;
+    this.noofchild = 0;
+    this.totalSumInsured = 0;
+    this._selectedinsuranceCustomerPersonDetail.filter((x)=>{
+      let DOB =  new Date(x.DateOfBirth)
+      let timeDiff = Math.abs(Date.now() - DOB.getTime());
+      let age = Math.floor((timeDiff / (1000 * 3600 * 24))/365.25);
+      if(age <=18){
+       this.noofchild ++;
+      }else{
+        this.noofAdult ++;
+      }
+      this.totalSumInsured = this.totalSumInsured + x.SumInsuredFloater + x.SumInsuredIndividual;
+      this.allAge.push(age);
+    })
+    this.maxAge = Math.max.apply(null,this.allAge);
   }
 
   

@@ -2121,7 +2121,7 @@
                 <div class="col-lg-4">
                   <mat-form-field>
                     <mat-label>Sum Insured (Floater)</mat-label>
-                    <input type="text" matInput formControlName="csuminsuredfloater" placeholder="Sum Insured (Floater)"
+                    <input type="number" matInput formControlName="csuminsuredfloater" placeholder="Sum Insured (Floater)"
                       style="line-height: 28px;">
                   </mat-form-field>
                 </div>
@@ -2328,7 +2328,37 @@
               </div>
             </form>
             <hr style="margin-top: 0px;" />
+          
           </form>
+          <div class="row">
+            <div class="col-lg-3">
+              <mat-form-field>
+                <mat-label>No of Adult</mat-label>
+                <input type="number" matInput  placeholder="PED" style="line-height: 28px;" [(ngModel)] ="noofAdult" readonly>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3">
+              <mat-form-field>
+                <mat-label>No of Child</mat-label>
+                <input type="number" matInput placeholder="PED Exclusion" [(ngModel)] ="noofchild"
+                  style="line-height: 28px;" readonly>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3">
+              <mat-form-field>
+                <mat-label>Max Age</mat-label>
+                <input type="number" matInput  placeholder="PPC"  [(ngModel)] ="maxAge"
+                  style="line-height: 28px;" readonly>
+              </mat-form-field>
+            </div>
+            <div class="col-lg-3">
+              <mat-form-field>
+                <mat-label>Total Sum Insured</mat-label>
+                <input type="number" matInput placeholder="PPC" [(ngModel)] ="totalSumInsured"
+                  style="line-height: 28px;" readonly>
+              </mat-form-field>
+            </div>
+          </div>
         </mat-expansion-panel>
         <!--End insurance detaik-->
 

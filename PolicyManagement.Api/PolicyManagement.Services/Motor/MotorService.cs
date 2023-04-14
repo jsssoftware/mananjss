@@ -1282,6 +1282,7 @@ namespace PolicyManagement.Services.Motor
                 tblCustomers.ReferenceId= insuredPersonModel.ReferenceId;
                 tblCustomers.POSId = insuredPersonModel.PosId;
                 tblCustomers.TeamMemberId = insuredPersonModel.TeamMemberId;
+                tblCustomers.AadhaarNo = insuredPersonModel.Aadhar;
 
             }
             else
@@ -1294,10 +1295,12 @@ namespace PolicyManagement.Services.Motor
                 tblCustomers.CustomerMobile1 = insuredPersonModel.Mobile;
                 tblCustomers.CustomerEmail1 = insuredPersonModel.Email;
                 tblCustomers.CustomerAddress1 = insuredPersonModel.Address;
-                tblCustomers.CreatedBy = baseModel.LoginUserId;
-                tblCustomers.CreatedTime = DateTime.Now;
+                tblCustomers.ModifiedBy = baseModel.LoginUserId;
+                tblCustomers.ModifiedTime = DateTime.Now;
                 tblCustomers.PassportNo = insuredPersonModel.PassportNumber;
                 tblCustomers.PAN = insuredPersonModel.Pan;
+                tblCustomers.AadhaarNo = insuredPersonModel.Aadhar;
+
 
             }
             _dataContext.tblCustomer.AddOrUpdate(tblCustomers);
