@@ -629,7 +629,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     await this.getPolicyVouchers();
     await this.getPolicyInspections();
     await this.getGenders();
-    await this.getRisksClass();
     //Not calling on edit
     if (this._policyId == 0 ||  this._policyType == SearchPolicyType.Motor_Renew) {
       //      await this.getAddOnRiders();
@@ -1175,7 +1174,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       },
       InsuranceBranch: this.PolicyForm.insuranceBranch,
       FinanceBy: this.PolicyForm.financeBy,
-      InsuredPersonData : this._selectedinsuranceCustomerPersonDetail,
       PreviousPolicy: {
         LastPolicyExpiryDateString: this.commonService.getDateInString(this.PolicyForm.lastPolicyExpiryDate),
         LastPolicyExpiryDateDto: null,
@@ -1896,7 +1894,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this._customerCityId = response.CityId;
       this._customerClusterId = response.ClusterId;
       this._referById = response.ReferById;
-      this.getCustomerDataByClusterId(Number(response.ClusterId))
     });
   }
 
@@ -2884,14 +2881,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     }
   }
 
-  getCustomerDataByClusterId(clusterId: number) {
-    this.customerService.getCustomerDataByClusterId(clusterId).subscribe((response: any) => {
-      this._storeCustomerClusterDetail = JSON.parse(JSON.stringify(response?.Data)) ;
-      this._dataSourceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(response?.Data);
-      this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-    });
-  }
-
 
   setPolicyDetails(): void {
     let model = this.getPolicyFormData();
@@ -3280,211 +3269,6 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       event.target.value = maxValue
     }
   }
-  public _insuranceCustomerPersonDetails: ICustomerInsuranceDetail[] = [];
-  public _selectedinsuranceCustomerPersonDetail : ICustomerInsuranceDetail[] = [];
-  public _storeCustomerClusterDetail : ICustomerInsuranceDetail[] = [];
-  _isInsurancePersoneEdit : boolean =  false;
-  _incrementalUid : number = 0;
-  addCustomerClusterData(data: ICustomerInsuranceDetail,index:number) {
-    this.reverseInsurcanceDataifExist()
-    this._incrementalUid = this._incrementalUid+ 1;
-    data.uid = this._incrementalUid+ 1;
-    this.insuranceCustomerForm.patchValue({
-      cnameInsuredPerson: data.Name,
-      cdob:  data.DateOfBirth != null ? new Date(data.DateOfBirth): null,
-      cgender:  data.GenderId,
-      cmobile: data.Mobile,
-      cemail:  data.Email,
-      cpassport:  data.PassportNumber,
-      cpan:  data.Pan,
-      cprofession:  data.Profession,
-      ccustomerId : data.CustomerId,
-      ccustomerUid :  data.uid
-    })
-    this._insuranceCustomerPersonDetails.push(data);
-    console.log(this._insuranceCustomerPersonDetails)
-    this.removeInsuranceCLuster(index)
-  }
-  insurancePerson :ICustomerInsuranceDetail = <ICustomerInsuranceDetail>{};
-  addInsuracePersondetail(): void {
-    console.log(this.insuranceCustomerForm.value)
-   if(!this.InsurancePersonForm.cnameInsuredPerson){
-     alert("Customer name is required");
-     return
-   }
-   this._isInsurancePersoneEdit = false;
-   let selectedInsurancePersonIndex =  this._selectedinsuranceCustomerPersonDetail?.findIndex(x=>x.uid ==  this.insuranceCustomerForm.value.ccustomerUid );
-   // for updating remove existing and adding new
-   if(selectedInsurancePersonIndex >= 0){
-
-    this._selectedinsuranceCustomerPersonDetail?.splice(selectedInsurancePersonIndex,1 );
-    this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
-    this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-   }
-    this.insurancePerson.CustomerId =  this.InsurancePersonForm?.ccustomerId || 0
-    this.insurancePerson.Name = this.InsurancePersonForm.cnameInsuredPerson
-    this.insurancePerson.DateOfBirth = this.InsurancePersonForm.cdob,
-    this.insurancePerson.Gender = this._genders?.find(x=>x.Value == this.InsurancePersonForm.cgender)?.Name
-    this.insurancePerson.Mobile = this.InsurancePersonForm.cmobile
-    this.insurancePerson.Email = this.InsurancePersonForm.cemail
-    this.insurancePerson.PassportNumber = this.InsurancePersonForm.cpassport
-    this.insurancePerson.Pan = this.InsurancePersonForm.cpan
-    this.insurancePerson.Profession = this.InsurancePersonForm.cprofession
-    this.insurancePerson.RelationProposer = this.InsurancePersonForm.crelprposer
-    this.insurancePerson.SumInsuredIndividual = this.InsurancePersonForm.csuminsuredindividual
-    this.insurancePerson.SumInsuredFloater = this.InsurancePersonForm.csuminsuredfloater
-    this.insurancePerson.CumulativeBonus = this.InsurancePersonForm.ccummbonus
-    this.insurancePerson.Deductable = this.InsurancePersonForm.cdeductable
-    this.insurancePerson.Loading = this.InsurancePersonForm.cloading
-    this.insurancePerson.LoadingReason = this.InsurancePersonForm.cloadingreason
-    this.insurancePerson.Ped = this.InsurancePersonForm.cped
-    this.insurancePerson.PedExclusion = this.InsurancePersonForm.cpedexclusion
-    this.insurancePerson.AnualIncome = this.InsurancePersonForm.canualincome
-    this.insurancePerson.RiskClass = this.InsurancePersonForm.criskclass
-    this.insurancePerson.NomineeName = this.InsurancePersonForm.cnomineename
-    this.insurancePerson.NomineeRelationship = this.InsurancePersonForm.cnomineerelation,
-    this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
-    this.insurancePerson.GenderId = this.InsurancePersonForm.cgender;
-    let ss= 
-    this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId ? this._storeCustomerClusterDetail.find(x=>x.CustomerId == this.insuranceCustomerForm.value.ccustomerId).BranchId:
-    this._branchId
-    this.insurancePerson.uid = this.InsurancePersonForm.ccustomerUid;
-    this.insurancePerson.CustomerCode =  this._insuranceCustomerPersonDetails?.find(x=>x.uid == this.InsurancePersonForm?.ccustomerUid)?.CustomerCode
-
-    this.insurancePerson.Address = this.customerForm.getRawValue().addressInPolicy;
-    this.insurancePerson.CityId =this._customerCityId
-    this.insurancePerson.ClusterId = this._customerClusterId;
-    this.insurancePerson.ReferById = this._referById;
-    this.insurancePerson.TeamMemebrId =  this.customerDetails.TeamMemebrId;
-    this.insurancePerson.ReferenceId =  this.customerDetails.ReferenceId;
-    this.insurancePerson.PosId =  this.customerDetails.PosId;
-    //insurancePerson
-    this._selectedinsuranceCustomerPersonDetail.push({...this.insurancePerson})
-    this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
-    this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-    if(this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length>0){
-      this.calculatInsuredData()
-    }
-    let insurancePersonIndex =  this._insuranceCustomerPersonDetails?.findIndex(x=>x.uid ==  this.insuranceCustomerForm.value.ccustomerUid );
-    this._insuranceCustomerPersonDetails.splice(insurancePersonIndex, 1);
-    this.insuranceCustomerForm.reset();
-  }
-
-  removeInsuranceCLuster(index: any) {
-    //this._insuranceCustomerPersonDetails.splice(index, 1);
-    this._dataSourceCustomerCluster.data.splice(index, 1);
-    this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-  }
-
-  reverseInsuranceDetail() {
-    this.insuranceCustomerForm.reset();
-    if(this._insuranceCustomerPersonDetails && this._insuranceCustomerPersonDetails.length> 0){
-      var customerDetail = this._insuranceCustomerPersonDetails[this._insuranceCustomerPersonDetails.length -1]
-      let existinSelectedInsurance = this._selectedinsuranceCustomerPersonDetail.some(x=>x.uid == customerDetail.uid)
-      if(!existinSelectedInsurance){
-      this._dataSourceCustomerCluster.data.push(customerDetail);
-      this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-      this._insuranceCustomerPersonDetails.pop();
-      }
-    }
-  }
-
-  deleteCustomerClusterData(element:ICustomerInsuranceDetail,index:number){
-    if(this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length> 0){
-      var customerDetail = this._selectedinsuranceCustomerPersonDetail[index];
-      this._dataSourceCustomerCluster.data.push(customerDetail);
-      this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-      this._selectedinsuranceCustomerPersonDetail.splice(index,1)
-      this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
-      this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-      this.calculatInsuredData()
-    }
-  }
-
-  editCustomerCLusterData(element:ICustomerInsuranceDetail,index:number){
-   this.reverseInsurcanceDataifExist()
-    this._isInsurancePersoneEdit = true;
-    this.insuranceCustomerForm.patchValue({
-      cnameInsuredPerson :  element.Name ,
-      cdob : element.DateOfBirth != null ? new Date(element.DateOfBirth): null,
-      cgender : element.GenderId ,
-      cmobile : element.Mobile,
-      cemail :element.Email,
-      cpassport : element.PassportNumber,
-      cpan  : element.Pan ,
-      cprofession : element.Profession ,
-      crelprposer : element.RelationProposer ,
-      csuminsuredindividual:  element.SumInsuredIndividual ,
-      csuminsuredfloater :element.SumInsuredFloater ,
-      ccummbonus : element.CumulativeBonus ,
-      cdeductable: element.Deductable ,
-      cloading : element.Loading ,
-      cloadingreason: element.LoadingReason ,
-      cped: element.Ped ,
-      cpedexclusion : element.PedExclusion ,
-      canualincome :element.AnualIncome ,
-      criskclass :element.RiskClass ,
-      cnomineename:element.NomineeName ,
-      cnomineerelation: element.NomineeRelationship,
-      caadhar : element.Aadhar,
-      ccustomerId: element.CustomerId,
-      ccustomerUid : element.uid
-    })
-  }
-
-  getRisksClass(): any {
-    this.commonService.getRiskClass().subscribe((response: IDropDownDto<number>[]) => {
-      this._riskClass = response;
-    });
-  }
-
-  reverseSelectedInsurcanceDataifExist(){
-    let insurancePersonIndex = this._selectedinsuranceCustomerPersonDetail.every( e => this._insuranceCustomerPersonDetails.includes(e) )
-
-    //let insurancePersonIndex =  this._selectedinsuranceCustomerPersonDetail?.findIndex(y=>y.uid == this._insuranceCustomerPersonDetails?.find(x=>x.uid == y.uid).uid );
-
-    if(this.insuranceCustomerForm.value.ccustomerId !=0 && insurancePersonIndex ){
-      this.reverseInsuranceDetail();
-    }
-  }
-
-  reverseInsurcanceDataifExist(){
-    let insurancePersonIndex =  this._insuranceCustomerPersonDetails?.findIndex(x=>x.uid == this.insuranceCustomerForm.value.ccustomerUid);
-
-    //let insurancePersonIndex =  this._selectedinsuranceCustomerPersonDetail?.findIndex(y=>y.uid == this._insuranceCustomerPersonDetails?.find(x=>x.uid == y.uid).uid );
-
-    if( insurancePersonIndex >=0){
-      var customerDetail = this._insuranceCustomerPersonDetails[insurancePersonIndex]
-      this._dataSourceCustomerCluster.data.push(customerDetail);
-      this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-    }
-  }
-  noofchild:number = 0
-  noofAdult:number = 0;
-  totalSumInsured:number = 0
-  allAge :any = [];
-  maxAge:number = 0;
-  calculatInsuredData(){
-    this.allAge = [];
-    this.noofAdult = 0;
-    this.noofchild = 0;
-    this.totalSumInsured = 0;
-    this._selectedinsuranceCustomerPersonDetail.filter((x)=>{
-      let DOB =  new Date(x.DateOfBirth)
-      let timeDiff = Math.abs(Date.now() - DOB.getTime());
-      let age = Math.floor((timeDiff / (1000 * 3600 * 24))/365.25);
-      if(age <=18){
-       this.noofchild ++;
-      }else{
-        this.noofAdult ++;
-      }
-      this.totalSumInsured = this.totalSumInsured + x.SumInsuredFloater + x.SumInsuredIndividual;
-      this.allAge.push(age);
-    })
-    this.maxAge = Math.max.apply(null,this.allAge);
-  }
-
-  
 
 }
 
