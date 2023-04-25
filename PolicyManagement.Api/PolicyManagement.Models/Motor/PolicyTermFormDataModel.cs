@@ -14,5 +14,8 @@ namespace PolicyManagement.Models.Motor
         public string AcknowledgementSlipIssueDateString { get; set; }
         public DateTime? AcknowledgementSlipIssueDate { get; set; }
         public DateDto AcknowledgementSlipIssueDateDto { get; set; }
+        public DateTime? ContinueStartDate { get; set; }
+        public short Portabality { get; set; }
+
     }
 }

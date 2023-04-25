@@ -10,6 +10,7 @@ import { IPolicySourceFormDataModel } from "./policy-source-form-data-model";
 import { IPolicyTermFormDataModel } from "./policy-term-form-data-model";
 import { IPremiumFormDataModel } from "./premium-form-data-model";
 import { IPreviousPolicyFormDataModel } from "./previous-policy-form-data-model";
+import { IProductPlanFormDataModel } from "./product-plan-form-data-model";
 import { ITpOdPolicyFormDataModel } from "./tp-od-policy-form-data-model";
 import { IVehicleFormDataModel } from "./vehicle-form-data-model";
 
@@ -69,5 +70,9 @@ export interface IHealthPolicyFormDataModel {
     Flag1?:boolean
     Flag2?:boolean;
     InsuredPersonData?: ICustomerInsuranceDetail[];
-
+    Vehicle : IVehicleFormDataModel;
+    Nomination: INominationFormDataModel;
+    ProductPlan : IProductPlanFormDataModel;
+    Portabality: number | null;
+    ContinueStartDate : IDateDto | null;
 }

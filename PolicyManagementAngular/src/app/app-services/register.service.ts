@@ -18,6 +18,8 @@ import { OAuthTokenInterceptor } from "./token-interceptor/oauth-token-intercept
 import { IVoucherService } from "./voucher/abstracts/voucher.iservice";
 import { VoucherService } from "./voucher/voucher.service";
 import { CUSTOM_DATE_FORMAT } from "../shared/utilities/helpers/helper";
+import { IHealthService } from "./health-service/abstracts/health.iservice";
+import { HealthService } from "./health-service/health.service";
 
 export const Services = [
   { provide: IApiManagerService, useClass: ApiManagerService },
@@ -28,6 +30,7 @@ export const Services = [
   { provide: IVoucherService, useClass: VoucherService },
   { provide: IClaimsService, useClass: ClaimsService },
   { provide: IInspectionService, useClass: InspectionService },
+  { provide: IHealthService, useClass: HealthService },
   { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT },
   { provide: HTTP_INTERCEPTORS, useClass: OAuthTokenInterceptor, multi: true }
 ];

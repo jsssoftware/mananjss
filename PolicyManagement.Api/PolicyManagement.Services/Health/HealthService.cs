@@ -4,10 +4,9 @@ using PolicyManagement.Dtos.Common;
 using PolicyManagement.Infrastructures.EntityFramework;
 using PolicyManagement.Models.Common;
 using PolicyManagement.Models.Customer;
-using PolicyManagement.Models.Motor;
 using PolicyManagement.Services.Base;
 using PolicyManagement.Services.Common.Interface;
-using PolicyManagement.Services.Motor.Interface;
+using PolicyManagement.Services.Health.Interface;
 using PolicyManagement.Utilities.Constants;
 using PolicyManagement.Utilities.Enums;
 using System;
@@ -25,21 +24,23 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using log4net;
 using System.Security.Cryptography;
+using PolicyManagement.Models.Health;
+using PolicyManagement.Models.Motor;
 
-namespace PolicyManagement.Services.Motor
+namespace PolicyManagement.Services.Health
 {
-    public class MotorService : BaseService, IMotorService
+    public class HealthService : BaseService, IHealthService
     {
         private readonly ICommonService _commonService;
         private readonly ILog log = LogManager.GetLogger("API Logger");
 
-        public MotorService(DataContext dataContext,
+        public HealthService(DataContext dataContext,
                             ICommonService commonService,
                             IMapper mapper) : base(dataContext, mapper)
         {
             _commonService = commonService;
         }
-        public async Task<CommonDto<object>> CreateMotorPolicy(MotorPolicyFormDataModel model, BaseModel baseModel)
+        public async Task<CommonDto<object>> CreateHealthPolicy(HealthPolicyFormDataModel model, BaseModel baseModel)
         {
             short DefaultRToZoneId = 1;
             using (var dbContextTransaction = _dataContext.Database.BeginTransaction())
@@ -164,6 +165,8 @@ namespace PolicyManagement.Services.Motor
                         ProductId = (short)(model.ProductPlan!=null ? model.ProductPlan.ProductId : 0),
                         PlanId = (short)(model.ProductPlan != null ? model.ProductPlan.Plan : 0)    ,
                         PlanTypeId = (short)(model.ProductPlan != null ? model.ProductPlan.PlanTypes : 0),
+                        PortabilityId = model.PolicyTerm.Portabality,
+                        CBStartDate = model.PolicyTerm.ContinueStartDate
                     };
 
                     if ( model.PolicyTerm != null && (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4))
@@ -183,16 +186,7 @@ namespace PolicyManagement.Services.Motor
                     else
                         motorPolicyData.CoverNoteDate = DateTime.ParseExact(model.CoverNoteIssueDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
 
-                    if (string.IsNullOrEmpty(model.Vehicle.RegistrationDateString))
-                        motorPolicyData.RegistrationDate = null;
-                    else
-                        motorPolicyData.RegistrationDate = DateTime.ParseExact(model.Vehicle.RegistrationDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
-                    if (string.IsNullOrEmpty(model.OdPolicy.ExpiryDateString))
-                        motorPolicyData.PolicyEndDateOD = null;
-                    else
-                        motorPolicyData.PolicyEndDateOD = DateTime.ParseExact(model.OdPolicy.ExpiryDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-
+                
                     if (string.IsNullOrEmpty(model.PreviousPolicy.LastPolicyExpiryDateString))
                         motorPolicyData.PreviousPolicyEndDate = null;
                     else
@@ -420,14 +414,14 @@ namespace PolicyManagement.Services.Motor
             return age;
         }
 
-        public async Task<MotorPolicyFormDataModel> FindMotorPolicyByPolicyId(int policyId)
-        {    
-            MotorPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
+        public async Task<HealthPolicyFormDataModel> FindHealthPolicyByPolicyId(int policyId)
+        {
+            HealthPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
                                                   .Join(_dataContext.tblRTOZone, T3 => T3.T1.RTOZoneId, T4 => T4.RTOZoneId, (T3, T4) => new { T3, T4 })
                                                     .GroupJoin(_dataContext.tblCluster, T5 => T5.T3.T2.ClusterId, T6 => T6.ClusterId, (T5, T6) => new { T5, T6 })
                                                   .SelectMany(s => s.T6.DefaultIfEmpty(), (policyWithCustomer, cluster) => new { policyWithCustomer.T5, T6 = cluster })
                                                   .Where(w => w.T5.T3.T1.PolicyId == policyId)
-                                                  .Select(s => new MotorPolicyFormDataModel
+                                                  .Select(s => new HealthPolicyFormDataModel
                                                   {
                                                       PolicyId = s.T5.T3.T1.PolicyId,
                                                       BranchId = s.T5.T3.T1.BranchId.ToString(),
@@ -437,8 +431,8 @@ namespace PolicyManagement.Services.Motor
                                                       {
                                                           AddOnRiderId = s.T5.T3.T1.AddonRiderId
                                                       },
-                                                      CreatedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user=> user.TeamMemberId, teammember=> teammember.TeamMemberId,
-                                                      (user, teammember)=>new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.CreatedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),                                                       
+                                                      CreatedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user => user.TeamMemberId, teammember => teammember.TeamMemberId,
+                                                      (user, teammember) => new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.CreatedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
                                                       VerifiedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user => user.TeamMemberId, teammember => teammember.TeamMemberId,
                                                       (user, teammember) => new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.VerifiedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
                                                       CreatedTime = s.T5.T3.T1.CreatedTime,
@@ -446,7 +440,7 @@ namespace PolicyManagement.Services.Motor
                                                       ModifiedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user => user.TeamMemberId, teammember => teammember.TeamMemberId,
                                                       (user, teammember) => new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.ModifiedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
                                                       ModifiedTime = s.T5.T3.T1.ModifiedTime,
-                                                      
+
                                                       Customer = new CustomerFormDataModel
                                                       {
                                                           AddressInPolicy = s.T5.T3.T1.AddressInPolicy,
@@ -483,14 +477,6 @@ namespace PolicyManagement.Services.Motor
                                                           Relation = s.T5.T3.T1.NomineeRelationShipId
                                                       },
                                                       NumberOfKiloMeterCovered = s.T5.T3.T1.KMCovered ?? 0,
-                                                      OdPolicy = new TpOdPolicyFormDataModel
-                                                      {
-                                                          ExpiryDate = s.T5.T3.T1.PolicyEndDateOD,
-                                                          InsuranceCompany = s.T5.T3.T1.InsuranceCompanyODId ?? 0,
-                                                          NumberOfYear = s.T5.T3.T1.NoofYearODId ?? 0,
-                                                          PolicyNumber = s.T5.T3.T1.PolicyNoOD,
-                                                          StartDate = s.T5.T3.T1.PolicyStartDateOD
-                                                      },
                                                       PolicySource = new PolicySourceFormDataModel
                                                       {
                                                           BusinessDoneBy = s.T5.T3.T1.BusinessDoneBy,
@@ -509,7 +495,6 @@ namespace PolicyManagement.Services.Motor
                                                           PackageTypeId = s.T5.T3.T1.PolicyPackageTypeId,
                                                           PolicyTerm = s.T5.T3.T1.PolicyTermId,
                                                           PolicyType = s.T5.T3.T1.PolicyTypeId,
-                                                          VehicleClass = s.T5.T3.T1.VehicleClassId
                                                       },
                                                       Premium = new PremiumFormDataModel
                                                       {
@@ -555,28 +540,11 @@ namespace PolicyManagement.Services.Motor
                                                           PolicyNumber = s.T5.T3.T1.PolicyNo,
                                                           StartDate = s.T5.T3.T1.PolicyStartDate,
                                                       },
-                                                      Vehicle = new VehicleFormDataModel
+                                                      ProductPlan = new ProductPlanModel
                                                       {
-                                                          Cc = s.T5.T3.T1.CubicCapacity ?? 0,
-                                                          ChassisNumber = s.T5.T3.T1.ChassisNo,
-                                                          EngineNumber = s.T5.T3.T1.EngineNo,
-                                                          ExShowRoomValue = s.T5.T3.T1.Exshowroom ?? 0,
-                                                          FuelType = s.T5.T3.T1.FuelType,
-                                                          Gvw = s.T5.T3.T1.GVW ?? 0,
-                                                          Kw = s.T5.T3.T1.KW ?? 0,
-                                                          MakeYear = s.T5.T3.T1.MakeYearId,
-                                                          Manufacturer = s.T5.T3.T1.ManufacturerId,
-                                                          Model = s.T5.T3.T1.ModelId,
-                                                          RegistrationDate = s.T5.T3.T1.RegistrationDate,
-                                                          RegistrationNumber = s.T5.T3.T1.RegistrationNo,
-                                                          RiskZone = s.T5.T4.RiskZone, //ask later
-                                                          RtoZone = s.T5.T3.T1.RTOZoneId,
-                                                          Seating = s.T5.T3.T1.SeatingCapacity ?? 0,
-                                                          Usage = s.T5.T3.T1.VehicleUsageId ?? 0,
-                                                          Varient = s.T5.T3.T1.VariantId,
-                                                          VehicleSegment = s.T5.T3.T1.VehicleSegment ?? 0,
-                                                          IsSpecialRegistrationNumber = s.T5.T3.T1.SpecialRegistrationNo ?? false,
-
+                                                          ProductId = s.T5.T3.T1.ProductId,
+                                                          Plan = s.T5.T3.T1.PlanId,
+                                                          PlanTypes = s.T5.T3.T1.PlanTypeId
                                                       },
                                                       InsuranceBranch = s.T5.T3.T1.InsuranceBranchId ?? 0,
                                                       ControlNumber = s.T5.T3.T1.ControlNo,
@@ -586,8 +554,8 @@ namespace PolicyManagement.Services.Motor
                                                       PreviousPolicyId = s.T5.T3.T1.PreviousPolicyId ?? 0,
                                                       PolicyStatusId = s.T5.T3.T1.PolicyStatusId,
                                                       PolicyCancelReasonId = s.T5.T3.T1.PolicyCancelReasonId ?? 0,
-                                                      DataEntryStatus =  s.T5.T3.T1.Flag1 == false && s.T5.T3.T1.Flag2 == false ? "Data Entry In-Process" : s.T5.T3.T1.Flag1  && s.T5.T3.T1.Flag2  && s.T5.T3.T1.IsVerified == false ? "Data Entry Complete but QC Pending" : s.T5.T3.T1.Flag1 && s.T5.T3.T1.Flag2  && s.T5.T3.T1.IsVerified ? "Data Entry Complete and QC Done" : null,
-                                                      DataEntryStatusColor = s.T5.T3.T1.Flag1 == false &&  s.T5.T3.T1.Flag2 == false ? HtmlColor.LightPink :  s.T5.T3.T1.Flag1 &&  s.T5.T3.T1.Flag2 &&  s.T5.T3.T1.IsVerified == false ? HtmlColor.LightPink :  s.T5.T3.T1.Flag1 &&  s.T5.T3.T1.Flag2 &&  s.T5.T3.T1.IsVerified ? HtmlColor.LightGreen : HtmlColor.White,
+                                                      DataEntryStatus = s.T5.T3.T1.Flag1 == false && s.T5.T3.T1.Flag2 == false ? "Data Entry In-Process" : s.T5.T3.T1.Flag1 && s.T5.T3.T1.Flag2 && s.T5.T3.T1.IsVerified == false ? "Data Entry Complete but QC Pending" : s.T5.T3.T1.Flag1 && s.T5.T3.T1.Flag2 && s.T5.T3.T1.IsVerified ? "Data Entry Complete and QC Done" : null,
+                                                      DataEntryStatusColor = s.T5.T3.T1.Flag1 == false && s.T5.T3.T1.Flag2 == false ? HtmlColor.LightPink : s.T5.T3.T1.Flag1 && s.T5.T3.T1.Flag2 && s.T5.T3.T1.IsVerified == false ? HtmlColor.LightPink : s.T5.T3.T1.Flag1 && s.T5.T3.T1.Flag2 && s.T5.T3.T1.IsVerified ? HtmlColor.LightGreen : HtmlColor.White,
                                                       PolicyStatusColor = s.T5.T3.T1.PolicyStatusId == 2 ? HtmlColor.LightRed : HtmlColor.LightYellow,
                                                       PolicyCancelReasonColor = s.T5.T3.T1.PolicyStatusId == 2 ? HtmlColor.LightPink : HtmlColor.White,
                                                       IsReconDone = s.T5.T3.T1.IRDACommissionReceived,
@@ -600,14 +568,50 @@ namespace PolicyManagement.Services.Motor
                                                       AddOnSelected = s.T5.T3.T1.AddOnSelected,
                                                       IsVerified = s.T5.T3.T1.IsVerified,
                                                       Flag2 = s.T5.T3.T1.Flag2,
-                                                      Flag1 = s.T5.T3.T1.Flag1
+                                                      Flag1 = s.T5.T3.T1.Flag1,
+                                                      Portabality = s.T5.T3.T1.PortabilityId,
+                                                      ContinueStartDate = s.T5.T3.T1.CBStartDate
+                                                     
                                                   })
                                                   .FirstOrDefaultAsync();
 
             try
             {
                 var data = await _dataContext.tblPolicyPaymentData.Where(w => w.PolicyId == policyId).ToListAsync();
+                var insuredPersons = await _dataContext.tblInsuredPerson.Where(x => x.PolicyId == policyId && x.IsActive ==  true).ToListAsync();
+                List<InsuredPersonModel> tblInsuredPersons = new List<InsuredPersonModel>();
+                foreach (var f in insuredPersons)
+                {
 
+                    tblInsuredPersons.Add(new InsuredPersonModel
+                    {
+                        PolicyId = f.PolicyId,
+                        CustomerId = f.CustomerId.GetValueOrDefault(),
+                        Name = f.InsuredPersonName,
+                        GenderId = f.InsuredGenderId.GetValueOrDefault(),
+                        DateOfBirth = f.InsuredDOB,
+                        Age = f.InsuredAge,
+                        SumInsuredIndividual = f.SumInsuredIndividual,
+                        SumInsuredFloater = f.SumInsuredFloater,
+                        PassportNumber = f.PassportNo,
+                        CumulativeBonus = f.CummulativeBonus,
+                        Deductable = f.Deductable,
+                        Loading = f.Loading,
+                        LoadingReason = f.LoadingReason,
+                        NomineeName = f.NomineeName,
+                        NomineeRelationship = f.NomineeRelationId,
+                        Ped = f.PEDId,
+                        PedExclusion = f.PEDExclusion,
+                        AnualIncome = f.AnnualIncome,
+                        RiskClass = f.RiskClassId,
+                        BranchId = f.BranchId,
+                    });
+                }
+                if (insuredPersons != null && insuredPersons.Count > 0)
+                {
+                    motorPolicy.InsuredPersonData = tblInsuredPersons;
+
+                }
                 if (data != null && data.Count > 0)
                 {
                     var dataPaymentFormDataModel = data.Select(s => new PaymentFormDataModel
@@ -622,6 +626,7 @@ namespace PolicyManagement.Services.Motor
                     motorPolicy.PaymentData = dataPaymentFormDataModel;
                 }
 
+           
             }
             catch (Exception ex)
             {
@@ -679,13 +684,10 @@ namespace PolicyManagement.Services.Motor
 
             motorPolicy.CoverNoteIssueDateDto = _commonService.GetDate(motorPolicy.CoverNoteIssueDate);
             //motorPolicy.InspectionData.InspectionDateDto = _commonService.GetDate(motorPolicy.InspectionData.InspectionDate);
-            motorPolicy.OdPolicy.StartDateDto = _commonService.GetDate(motorPolicy.OdPolicy.StartDate);
-            motorPolicy.OdPolicy.ExpiryDateDto = _commonService.GetDate(motorPolicy.OdPolicy.ExpiryDate);
             motorPolicy.TpPolicy.StartDateDto = _commonService.GetDate(motorPolicy.TpPolicy.StartDate);
             motorPolicy.TpPolicy.ExpiryDateDto = _commonService.GetDate(motorPolicy.TpPolicy.ExpiryDate);
             motorPolicy.PolicyTerm.AcknowledgementSlipIssueDateDto = _commonService.GetDate(motorPolicy.PolicyTerm.AcknowledgementSlipIssueDate);
             motorPolicy.PreviousPolicy.LastPolicyExpiryDateDto = _commonService.GetDate(motorPolicy.PreviousPolicy.LastPolicyExpiryDate);
-            motorPolicy.Vehicle.RegistrationDateDto = _commonService.GetDate(motorPolicy.Vehicle.RegistrationDate);
             motorPolicy.PaymentData.ForEach(f => f.DatedDto = _commonService.GetDate(f.Dated));
 
             motorPolicy.PolicyStatus = (await _dataContext.tblPolicyStatus.AsNoTracking().FirstOrDefaultAsync(s => s.PolicyStatusId == motorPolicy.PolicyStatusId))?.PolicyStatus;
@@ -726,7 +728,7 @@ namespace PolicyManagement.Services.Motor
             return motorPolicy;
         }
 
-        public async Task<CommonDto<object>> UpdateMotorPolicy(int policyId, MotorPolicyFormDataModel model, BaseModel baseModel)
+        public async Task<CommonDto<object>> UpdateHealthPolicy(int policyId, HealthPolicyFormDataModel model, BaseModel baseModel)
         {
 
             tblMotorPolicyData motorPolicyData = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => f.PolicyId == policyId);
@@ -1037,67 +1039,17 @@ namespace PolicyManagement.Services.Motor
             };
         }
 
-        private bool IsFlag1True(MotorPolicyFormDataModel model) => model.Vehicle.Manufacturer > 0
-                                                                    && model.Vehicle.Model > 0
-                                                                    && model.Vehicle.Varient > 0
-                                                                    && model.Vehicle.MakeYear > 0
-                                                                    && !string.IsNullOrEmpty(model.Vehicle.RegistrationNumber)
-                                                                    && !string.IsNullOrEmpty(model.Vehicle.EngineNumber)
-                                                                    && !string.IsNullOrEmpty(model.Vehicle.ChassisNumber)
-                                                                    && model.Vehicle.RtoZone > 0
-                                                                    && model.Premium.VehicleIdv > 0
-                                                                    && model.Premium.Tp > 0
-                                                                    && model.Premium.GrossPremium > 0M
-                                                                    && model.Premium.GstPercentage > 0M
-                                                                    && model.Premium.GstValue > 0M
-                                                                    && model.Premium.TotalGrossPremium > 0
-                                                                    && model.Premium.CommissionPaidOn > 0
-                                                                    && model.Premium.CommissionablePremium > 0
-                                                                    && model.Premium.Ncb > 0
-                                                                    && model.Premium.SpecialDiscount > 0M;
-
-        private bool IsFlag2True(MotorPolicyFormDataModel model)
+        private bool IsFlag2True(HealthPolicyFormDataModel model)
         {
-                if(ValidatePolicyTerm(model) && ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model) 
-                && ValidateVehicleDetail(model)) { 
+                if( ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model) 
+                ) { 
                 return true; 
             } 
             return false;
         }
-        /*=> (model.PolicySource.TeleCaller > 0
-                                                                    || model.PolicySource.Fos > 0
-                                                                    || model.PolicySource.Pos > 0
-                                                                    || model.PolicySource.Reference > 0
-                                                                    || !string.IsNullOrEmpty(model.PolicySource.BusinessDoneBy))
-                                                                    && model.PaymentData.Any(a => a.Amount > 0 && !string.IsNullOrEmpty(a.DatedString) && a.Mode > 0)
-                                                                    && model.PaymentData.Sum(s => s.Amount) >= model.Premium.GrossPremium;*/
-
-        private bool ValidatePolicyTerm(MotorPolicyFormDataModel model)
-        {
-            if (model.PolicyTerm.VehicleClass == 0 || model.PolicyTerm.PackageTypeId == 0 || model.PolicyTerm.PolicyTerm == 0 || model.PolicyTerm.PolicyType == 0)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        private bool ValidateVehicleDetail(MotorPolicyFormDataModel model)
-        {
-            if ( model.Vehicle.RtoZone == 1)
-            {
-                return false;
-            }
-            if(!string.IsNullOrEmpty(model.Vehicle.EngineNumber) && model.Vehicle.EngineNumber.Length < 6) return false;
-            if (!string.IsNullOrEmpty(model.Vehicle.ChassisNumber) && model.Vehicle.ChassisNumber.Length < 6) return false;
-            if (model.Vehicle.Manufacturer == 0 || model.Vehicle.Model == 0 || string.IsNullOrEmpty(model.Vehicle.EngineNumber) || string.IsNullOrEmpty(model.Vehicle.ChassisNumber)
-                || model.Vehicle.MakeYear == 0 || model.Vehicle.Varient == 0)
-            {
-                return false;
-            }
-            return true;
-        }
-
-        private bool ValidatePolicyDetail(MotorPolicyFormDataModel model)
+       
+   
+        private bool ValidatePolicyDetail(HealthPolicyFormDataModel model)
         {
             if (model.FinanceBy == 0)
             {
@@ -1112,18 +1064,11 @@ namespace PolicyManagement.Services.Motor
                     return false;
                 }
             }
-            else
-            {
-                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || (model.TpPolicy.ExpiryDateString == null && model.TpPolicy.NumberOfYear != 22) || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null
-                    || string.IsNullOrEmpty(model.OdPolicy.PolicyNumber) || (model.OdPolicy.ExpiryDateString == null && model.OdPolicy.NumberOfYear != 22) || model.OdPolicy.NumberOfYear == 0 || model.OdPolicy.StartDateString == null)
-                {
-                    return false;
-                }
-            }
+            
             return true;
         }
 
-        private bool ValidatePremiumDetail(MotorPolicyFormDataModel model)
+        private bool ValidatePremiumDetail(HealthPolicyFormDataModel model)
         {
             if (model.Premium.CommissionPaidOn ==0)
             {
@@ -1136,17 +1081,14 @@ namespace PolicyManagement.Services.Motor
                     return false;
                 }
             }
-            else if (model.Premium.VehicleIdv == 0 || model.Premium.GstPercentage == 0 ||
-                    model.Premium.SpecialDiscount == 0 || model.Premium.Ncb == 0)
+            else if (model.Premium.VehicleIdv == 0 || model.Premium.GstPercentage == 0 || model.Premium.Ncb == 0)
             {
-               
-               
-                    return false;
+                return false;
             }
             return true;
         }
 
-        private bool ValidatePolicySourceDetail(MotorPolicyFormDataModel model)
+        private bool ValidatePolicySourceDetail(HealthPolicyFormDataModel model)
         {
             if (model.PolicySource.TeleCaller == 0 && model.PolicySource.Fos == 0 && model.PolicySource.Pos == 0 && model.PolicySource.Reference == 0 )
             {
@@ -1155,7 +1097,7 @@ namespace PolicyManagement.Services.Motor
             return true;
         }
 
-        private bool ValidatePaymentData(MotorPolicyFormDataModel model)
+        private bool ValidatePaymentData(HealthPolicyFormDataModel model)
         {
 
             if ( model.PaymentData.Count == 0)
@@ -1166,7 +1108,7 @@ namespace PolicyManagement.Services.Motor
         }
 
 
-        private async Task<CommonDto<object>> ValidateData(MotorPolicyFormDataModel model)
+        private async Task<CommonDto<object>> ValidateData(HealthPolicyFormDataModel model)
         {
             //Check Amount
             if (model.Premium != null && model.PaymentData.Sum(s => s.Amount) < model.Premium.TotalGrossPremium && model.PaymentData != null && model.PaymentData.Count>0)
@@ -1174,82 +1116,6 @@ namespace PolicyManagement.Services.Motor
                 {
                     Message = "Amount should be greater than or equal to Total Gross Premium"
                 };
-
-            // Condition 1
-            if (model.Vehicle != null  && model.PolicyTerm != null && !model.Condition1 && (model.PolicyTerm.PolicyType == 1 || model.PolicyTerm.PolicyType == 3) && model.Vehicle.MakeYear !=0 && model.Vehicle.Model!=0 &&  model.RenewalCounter == 0)
-            {
-                var data = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
-                                                                 .FirstOrDefaultAsync(f => f.T1.MakeYearId == model.Vehicle.MakeYear
-                                                                                           && f.T1.ModelId == model.Vehicle.Model
-                                                                                           && f.T2.CustomerName.Equals(model.Customer.NameInPolicy, StringComparison.CurrentCultureIgnoreCase));
-
-                if (data != null)
-                {
-                    return new CommonDto<object>
-                    {
-                        Message = $"{(model.PolicyTerm.PolicyType == 1 ? "(New Car)" : "(Rollover)")} Same Make, Modal and Customer Name Data already in database as Control Number - {data.T1.ControlNo}, Please check for duplicate record.",
-                        Response = new
-                        {
-                            IsWarning = true,
-                            IsError = false,
-                            Condition = 1
-                        }
-                    };
-                }
-            }
-
-            // Condition 2
-            if (model.PolicyTerm != null && !model.Condition2 && model.PolicyTerm.PolicyType > 1 && model.Vehicle.IsSpecialRegistrationNumber)
-            {
-                var data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => !string.IsNullOrEmpty(model.Vehicle.RegistrationNumber)
-                                                                                        && !string.IsNullOrEmpty(f.RegistrationNo)
-                                                                                        && f.RegistrationNo.ToLower().Equals(model.Vehicle.RegistrationNumber.ToLower())
-                                                                                        && f.RegistrationNo.ToLower() != "new"
-                                                                                    );
-
-                if (data != null)
-                {
-                    DateTime modelStartDate = DateTime.MinValue;
-                    DateTime dbEndDate = DateTime.MinValue;
-
-                    if (model.PolicyTerm.PackageTypeId == 1)
-                    {
-                        if (!string.IsNullOrEmpty(model.TpPolicy.StartDateString))
-                            modelStartDate = DateTime.ParseExact(model.TpPolicy.StartDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-                        dbEndDate = data.PolicyEndDate ?? dbEndDate;
-                    }
-                    else
-                    {
-                        if (!string.IsNullOrEmpty(model.OdPolicy.StartDateString))
-                            modelStartDate = DateTime.ParseExact(model.OdPolicy.StartDateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
-                        dbEndDate = data.PolicyEndDateOD ?? dbEndDate;
-                    }
-
-
-                    if (modelStartDate > dbEndDate)
-                        return new CommonDto<object>
-                        {
-                            Message = $"Similer Registartion Number previous policy not Expired, This is Advance Entry of Next year Policy",
-                            Response = new
-                            {
-                                IsWarning = true,
-                                IsError = false,
-                                Condition = 2
-                            }
-                        };
-                    else
-                        return new CommonDto<object>
-                        {
-                            Message = $"Same Registration No Data already in database as control number {data.ControlNo}, Please Check for duplicate record",
-                            Response = new
-                            {
-                                IsWarning = false,
-                                IsError = true,
-                                Condition = 2
-                            }
-                        };
-                }
-            }
 
             return new CommonDto<object>
             {

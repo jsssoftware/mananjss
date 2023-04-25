@@ -52,6 +52,8 @@
     <Compile Include="Common\SearchPolicyModel.cs" />
     <Compile Include="Customer\AddUpdateCustomerModel.cs" />
     <Compile Include="Customer\CustomerFormDataModel.cs" />
+    <Compile Include="Health\InsuredPersonModel.cs" />
+    <Compile Include="Health\HealthPolicyFormDataModel.cs" />
     <Compile Include="Inspection\AddUpdateInspectionModel.cs" />
     <Compile Include="Inspection\InspectionDocumentModel.cs" />
     <Compile Include="Inspection\InspectionSearchPolicyModel.cs" />

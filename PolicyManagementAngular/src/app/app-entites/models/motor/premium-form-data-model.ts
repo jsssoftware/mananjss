@@ -24,5 +24,9 @@ export interface IPremiumFormDataModel {
     CommissionPaidOn: number;
     CommissionablePremium: number;
     BasicTpGstPercentage :number;
-    NetPremium:Number
+    NetPremium:Number;
+    FamilyDiscount?:number;
+    AdditionalDiscount?:number;
+    LongtermDiscount?:number;
+    SectionDiscount?:number;
 }

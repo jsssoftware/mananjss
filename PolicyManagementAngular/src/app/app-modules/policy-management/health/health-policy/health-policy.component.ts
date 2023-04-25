@@ -12,13 +12,12 @@ import { IVarientDto } from 'src/app/app-entites/dtos/motor/varient-dto';
 import { IVehicleDto } from 'src/app/app-entites/dtos/motor/vehicle-dto';
 import { IYearDto } from 'src/app/app-entites/dtos/motor/year-dto';
 import { IDocumentModel } from 'src/app/app-entites/models/common/document-model';
-import { IMotorPolicyFormDataModel } from 'src/app/app-entites/models/motor/motor-policy-form-data-model';
 import { ICustomerService } from 'src/app/app-services/customer-service/abstracts/customer.iservice';
 import { IPaymentFormDataModel } from 'src/app/app-entites/models/motor/payment-form-data-model';
 import { PolicyType, SearchPolicyType, Vertical, PackageType, Common } from 'src/app/shared/utilities/enums/enum';
 import { IPolicyTermDto } from '../../../../app-entites/dtos/motor/policy-term-dto';
 import { ICommonService } from '../../../../app-services/common-service/abstracts/common.iservice';
-import { IMotorService } from '../../../../app-services/motor-service/abstracts/motor.iservice';
+import { IHealthService } from '../../../../app-services/health-service/abstracts/health.iservice';
 import { ICustomerInsuranceDetail, ICustomerShortDetailDto } from 'src/app/app-entites/dtos/customer/customer-short-detail-dto';
 import { MatDialog } from '@angular/material/dialog';
 import { IAddOnRiderModel } from 'src/app/app-entites/models/motor/add-on-rider-model';
@@ -31,7 +30,7 @@ import { IPolicyInspectionDto } from 'src/app/app-entites/dtos/common/policy-ins
 import { IPolicyDocumentDto } from 'src/app/app-entites/dtos/common/policy-document-dto';
 import { v4 as uuidv4 } from 'uuid';
 import { ViewClaimsComponent } from 'src/app/app-modules/sub-system/claims/view-claims/view-claims.component';
-import { MotorService } from 'src/app/app-services/motor-service/motor.service';
+import { HealthService } from 'src/app/app-services/health-service/health.service';
 import { TwoDigitDecimaNumberDirective } from 'src/app/shared/utilities/directive/twodecimal.directive';
 import { Observable, ReplaySubject } from 'rxjs';
 import { saveAs } from 'file-saver';
@@ -44,6 +43,8 @@ import { DialogBoxComponent } from 'src/app/shared/common-component/Policy/dialo
 import { InspectionDetailComponent } from 'src/app/shared/common-component/Policy/detail/inspection-detail/inspection-detail.component';
 import { VoucherDetailComponent } from 'src/app/shared/common-component/Policy/detail/voucher-detail/voucher-detail.component';
 import { IHealthPolicyFormDataModel } from 'src/app/app-entites/models/motor/health-policy-form-data-model';
+import { IVehicleFormDataModel } from 'src/app/app-entites/models/motor/vehicle-form-data-model';
+import { INominationFormDataModel } from 'src/app/app-entites/models/motor/nomination-form-data-model';
 
 export interface PeriodicElement {
   endorsementReason: string;
@@ -240,15 +241,10 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
 
   //#region Premium Form
   premiumForm = new FormGroup({
-    vehicleIdv: new FormControl('', [Validators.required]),
-    electricAccessoriesIdv: new FormControl(''),
-    nonElectricAccessoriesIdv: new FormControl(''),
-    cngLpgIdv: new FormControl(''),
-    totalIdv: new FormControl(''),
-    od: new FormControl('', [Validators.required]),
-    addOnRiderOd: new FormControl(''),
-    endorseOd: new FormControl(''),
-    totalOd: new FormControl(''),
+    familyDiscount: new FormControl(''),
+    longtermDiscount: new FormControl(''),
+    sectionDiscount: new FormControl(''),
+    additionalDiscount: new FormControl(''),
     tp: new FormControl('', [Validators.required]),
     passengerCover: new FormControl(''),
     endorseTp: new FormControl(''),
@@ -448,7 +444,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   public _isOdPremiumDetailsDisabled: boolean = false;
   public _isDisableOdPolicyDetails: boolean = false;
   public _showErrors: boolean = false;
-  public _policyData?: IMotorPolicyFormDataModel;
+  public _policyData?: IHealthPolicyFormDataModel;
   public _verticalName: any = "";
   public _policyStatus: string = "";
   public _policyStatusColor: string = "";
@@ -482,13 +478,13 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
   constructor(
     private commonService: ICommonService,
-    private motorService: IMotorService,
+    private healthService: IHealthService,
     private customerService: ICustomerService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,
     public dialog: MatDialog,
-    public mainmotorService: MotorService,
+    public mainhealthService: HealthService,
     public _sanitizer: DomSanitizer,
     public _commonFunction: CommonFunction
   ) {
@@ -502,8 +498,8 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
   ngOnInit(): void {
    
-    this._verticalName = this.mainmotorService.vertical$.getValue();
-    this._headerTitle = this.mainmotorService._headerTitle$.getValue();
+    this._verticalName = this.mainhealthService.vertical$.getValue();
+    this._headerTitle = this.mainhealthService._headerTitle$.getValue();
     this._customerId = this.route.snapshot.paramMap.get('customerId');
     this._policyTypeId = Number(this.route.snapshot.paramMap.get('policyTypeId'));//is the id when customer saved
     this._policyId = Number(this.route?.snapshot?.paramMap.get('policyId') || 0);
@@ -597,7 +593,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       await this.getAddOnPlanOptions(-1);
     }
     if (this._policyId != 0) {
-      await this.getMotorPolicyById(this._policyId);
+      await this.getHealthPolicyById(this._policyId);
     }
 
     this.policyForm.get("tpInsuranceCompany")?.valueChanges.subscribe(input => {
@@ -618,16 +614,6 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
         this.filterInsurancerCompaniesLastData(input);
       else
         this.filterInsurancerCompaniesLastData(input.Name);
-    });
-
-    this.policyForm.get("odInsuranceCompany")?.valueChanges.subscribe(input => {
-      if (input == null || input === undefined || input === '')
-        return;
-
-      if (typeof (input) == "string")
-        this.filterInsurancerCompaniesOdData(input);
-      else
-        this.filterInsurancerCompaniesOdData(input.Name);
     });
 
     this.policySourceForm.get("posName")?.valueChanges.subscribe(input => {
@@ -732,7 +718,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
 
   getVerticalDetail(): void {
-    this.commonService.getVerticalById(Vertical.Motor).subscribe((response: any) => {
+    this.commonService.getVerticalById(Vertical.Health).subscribe((response: any) => {
       this._verticalDetail = response;
     });
   }
@@ -785,106 +771,60 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       model.PackageTypeId == "") return;
 
 
-    if (model.PackageTypeId === PackageType.COMPREHENSIVE || model.PackageTypeId === PackageType.USAGE_BASE) {
-      this._isDisableOdPolicyDetails = true;
-      this._isOdPolicyEnable = true;
-      this._isAddOnRiderEnable = true;
-    }
-    else if (model.PackageTypeId === PackageType.TP_ONLY) {
+   if (model.PackageTypeId === PackageType.TP_ONLY) {
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = false;
       this._isAddOnRiderEnable = false;
       this._isTpPremiumDetailsDisabled = true
-    } else if (model.PackageTypeId === PackageType.OD_ONLY) {
-      this._isDisableOdPolicyDetails = false;
-      this._isOdPolicyEnable = true;
-      this._isAddOnRiderEnable = true;
-      this._isOdPremiumDetailsDisabled = true
+    } 
 
-    }
-
-    if (model.PackageTypeId === PackageType.USAGE_BASE) {
-      this.policyForm.get("numberOfKiloMeterCovered")?.enable();
-      this.policyForm.get("extendedKiloMeterCovered")?.enable();
-    }
-    else {
+   
       this.policyForm.get("numberOfKiloMeterCovered")?.disable();
       this.policyForm.get("extendedKiloMeterCovered")?.disable();
-    }
+    
 
-    this.commonService.getPolicyTerms(model.PolicyTypeId, model.VehicleClassId, model.PackageTypeId).subscribe((response: IPolicyTermDto[]) => {
-      this._policyTerms = response;
-    });
+   
     if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
      
       await this.setPolicySourceRenewal()
       await this.setPreviousInsuranceCompany()
       this.removePrevTpOdInsurance()
     }
-    this.setOdPolicyDetail()
-    this.getVehicles();
-
   }
 
   disabledPremiumfieldonUpdate(PackageTypeId :number){
     this._isTpPremiumDetailsDisabled = false;
-    this._isOdPremiumDetailsDisabled = false;
-    if (PackageTypeId === PackageType.COMPREHENSIVE || PackageTypeId === PackageType.USAGE_BASE) {
-      this._isDisableOdPolicyDetails = true;
-      this._isOdPolicyEnable = true;
-      this._isAddOnRiderEnable = true;
-    }
-    else if (PackageTypeId === PackageType.TP_ONLY) {
+    if (PackageTypeId === PackageType.TP_ONLY) {
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = false;
       this._isAddOnRiderEnable = false;
       this._isTpPremiumDetailsDisabled = true
-    } else if (PackageTypeId === PackageType.OD_ONLY) {
-      this._isDisableOdPolicyDetails = false;
-      this._isOdPolicyEnable = true;
-      this._isAddOnRiderEnable = true;
-      this._isOdPremiumDetailsDisabled = true
-    }
+    } 
 
-    if (PackageTypeId === PackageType.USAGE_BASE) {
-      this.policyForm.get("numberOfKiloMeterCovered")?.enable();
-      this.policyForm.get("extendedKiloMeterCovered")?.enable();
-    }
-    else {
       this.policyForm.get("numberOfKiloMeterCovered")?.disable();
       this.policyForm.get("extendedKiloMeterCovered")?.disable();
-    }
+    
   }
   async setPolicySourceRenewal() {
     this._insuranceCompanies = this._savedinsuranceCompanies
     if (this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
-      if (this.policyTermForm.value.packageType == PackageType.OD_ONLY) {
-
-        await this.setDataForSameCompanyRetentionPolicyTypeOd();
-      }
+    
       if (this.policyTermForm.value.packageType == PackageType.TP_ONLY) {
         this.setDataForSameCompanyRetentionPolicyTypeTp();
       }
-      if (this.policyTermForm.value.packageType == PackageType.COMPREHENSIVE || this.policyTermForm.value.packageType == PackageType.USAGE_BASE) {
-        await this.setDataForSameCompanyRetentionPolicyTypeComprehensiveOrUsageBased();
-      }
+      
     }
 
     if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention) {  
       if (this.policyTermForm.value.packageType == PackageType.TP_ONLY) {
         await this.setDataForOtherCompanyRetentionPolicyTypeTp();
       } 
-      if (this.policyTermForm.value.packageType == PackageType.OD_ONLY) {
-        await this.setDataForOtherCompanyRetentionPolicyTypeOd();
-      } if (this.policyTermForm.value.packageType == PackageType.COMPREHENSIVE || this.policyTermForm.value.packageType == PackageType.USAGE_BASE) {
-        await this.setDataForOtherCompanyRetentionPolicyTypeComprehensiveOrUsageBased();
-      }
     }
     this.getAddOnRiders();
   }
 
   getInsuranceCompanies(): any {
-    this.commonService.getInsuranceCompanies(Vertical.Motor).subscribe((response: IDropDownDto<number>[]) => {
+    this.commonService.getInsuranceCompanies(Vertical.Health).subscribe((response: IDropDownDto<number>[]) => {
       this._insuranceCompanies = this._tpInsuranceCompanies = this._odInsuranceCompanies = this._lastInsuranceCompanies = this._savedinsuranceCompanies = response;
     });
   }
@@ -909,9 +849,6 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
 
   getInsuranceCompanyBranches(): void {
     let insuranceCompanyId: number = 0;
-    this.setOdPolicyDetail();
-
-
     if (this._isOdPolicyEnable) {
       if (this.policyForm.value.odInsuranceCompany == undefined || this.policyForm.value.odInsuranceCompany == "") return;
       insuranceCompanyId = this.policyForm.controls['odInsuranceCompany'].value;
@@ -921,7 +858,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
 
     let branchId: number = this.PolicyForm.isAll ? -1 : this._branchId;
 
-    this.commonService.getInsuranceCompanyBranches(Vertical.Motor, insuranceCompanyId, branchId).subscribe((response: IDropDownDto<number>[]) => {
+    this.commonService.getInsuranceCompanyBranches(Vertical.Health, insuranceCompanyId, branchId).subscribe((response: IDropDownDto<number>[]) => {
       this._insuranceCompanyBranches = response;
     });
     this.getAddOnRiders();
@@ -987,14 +924,14 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       insuranceCompanyId = this.policyForm.controls['odInsuranceCompany'].value;
     }
     if (insuranceCompanyId) {
-      this.commonService.getAddOnRiders(insuranceCompanyId, Vertical.Motor).subscribe((response: IDropDownDto<number>[]) => {
+      this.commonService.getAddOnRiders(insuranceCompanyId, Vertical.Health).subscribe((response: IDropDownDto<number>[]) => {
         this._addOnRiders = response;
       });
     }
   }
 
   getAddOnPlanOptions(addOnRiderId: number): void {
-    this.commonService.getAddOnPlanOptions(addOnRiderId, Vertical.Motor, 0).subscribe((response: IAddOnPlanOptionDto[]) => {
+    this.commonService.getAddOnPlanOptions(addOnRiderId, Vertical.Health, 0).subscribe((response: IAddOnPlanOptionDto[]) => {
       response.forEach((value, index) => {
         value.IsDisabled = value.IsPlanAvailable;
         if (value.IsPlanAvailable) {
@@ -1013,7 +950,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
 
   getTeleCallers(branchId: number): any {
-    this.commonService.getTeleCallers(Vertical.Motor, branchId).subscribe((response: any) => {
+    this.commonService.getTeleCallers(Vertical.Health, branchId).subscribe((response: any) => {
       this._teleCallers = response;
     });
   }
@@ -1025,7 +962,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
 
   getFosNames(branchId: number): any {
-    this.commonService.getFosNames(Vertical.Motor, branchId).subscribe((response: any) => {
+    this.commonService.getFosNames(Vertical.Health, branchId).subscribe((response: any) => {
       this._fosNames = response;
     });
   }
@@ -1138,7 +1075,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
         PackageTypeId: (this.MenuVertical == 'Motor') ? this.PolicyTermForm.packageType : 0,
         PolicyTerm: (this.MenuVertical == 'Motor') ? this.PolicyTermForm.policyTerm?.Id : 0,
         PolicyType: this.PolicyTermForm.policyType,
-        VehicleClass: this.PolicyTermForm.vehicleClass,
+        VehicleClass: 0,
         PackageType: (this.MenuVertical == 'Motor') ? this._packageTypes.filter(f => f.Value == this.PolicyTermForm.packageType)[0]?.Name : '',
       },
       Premium: {
@@ -1167,9 +1104,19 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
         Tp: Number(this.PremiumForm.tp),
         VehicleIdv: Number(this.PremiumForm.vehicleIdv),
         BasicTpGstPercentage: Number(this.PremiumForm.basicTPgstPercent),
-        NetPremium: Number(this.PremiumForm.netpremium)
+        NetPremium: Number(this.PremiumForm.netpremium),
+        FamilyDiscount: Number(this.PremiumForm.familyDiscount),
+        LongtermDiscount: Number(this.PremiumForm.longtermDiscount),
+        AdditionalDiscount: Number(this.PremiumForm.additionalDiscount),
+        SectionDiscount: Number(this.PremiumForm.sectionDiscount)
       },
-     
+      Vehicle :  <IVehicleFormDataModel>{},
+      Nomination: <INominationFormDataModel>{},
+      ProductPlan : {
+        ProductId:this.ProductPlanForm.product,
+        Plan:this.ProductPlanForm.plan,
+        PlanTypes: this.ProductPlanForm.planTypes
+      },
       Document: this._uploadDocuments,
       AddOnRider: this.getAddOnRiderFormData(),
       ControlNumber: "", // not save in api
@@ -1196,12 +1143,14 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       VerticalId: this._verticalDetail.VerticalId,
       VerticalSegmentId: this._verticalDetail.VerticalSegmentId,
       IsVerified: this.IsVerified,
-      PreviousPolicyId: this._type == SearchPolicyType.Motor_Renew ? this._policyId : ""
+      PreviousPolicyId: this._type == SearchPolicyType.Motor_Renew ? this._policyId : "",
+      Portabality: this.PolicyForm.inspectionCompany,
+      ContinueStartDate : this.PolicyForm.continutyStartDate
     }
 
     if (this._policyId == 0 || this._policyType == SearchPolicyType.Motor_Renew) {
       console.log(model, 'model')
-      this.motorService.createPolicy(model).subscribe((response: ICommonDto<any>) => {
+      this.healthService.createPolicy(model).subscribe((response: ICommonDto<any>) => {
         if (response.IsSuccess) {
           Swal.fire({
             icon: 'success',
@@ -1251,7 +1200,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       });
     }
     else {
-      this.motorService.updatePolicy(this._policyId, model).subscribe((response: ICommonDto<any>) => {
+      this.healthService.updatePolicy(this._policyId, model).subscribe((response: ICommonDto<any>) => {
 
         if (response.IsSuccess) {
           Swal.fire({
@@ -1367,14 +1316,11 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
 
     if (this.policyForm.value.tpNumberOfYear == undefined
       || this.policyForm.value.tpNumberOfYear === ""
-      || this.policyForm.value.odNumberOfYear == undefined
-      || this.policyForm.value.odNumberOfYear === ""
       || policyTerm === undefined
       || policyTerm == null) return;
     let tpYear = this._numberOfYears.filter(f => f.Value == this.policyForm.getRawValue().tpNumberOfYear)[0];
     let odYear = this._numberOfYears.filter(f => f.Value == this.policyForm.getRawValue().odNumberOfYear)[0];
-    this.setOdPolicyDetail();
-    if (policy === "tp") {
+    if (policy === "tp") {   
 
       if (this.policyTermForm.value.policyType === PolicyType.SameCompanyRetention || this.policyTermForm.value.policyType === PolicyType.OtherCompanyRetention) {
         let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto) as Date;
@@ -1497,7 +1443,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
 
 
   getPos(branchId: number): void {
-    this.commonService.getPos(Vertical.Motor, branchId).subscribe((response: IDropDownDto<number>[]) => {
+    this.commonService.getPos(Vertical.Health, branchId).subscribe((response: IDropDownDto<number>[]) => {
       this._posDatas = response;
     })
   }
@@ -1595,6 +1541,9 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   get PolicyForm() {
     return this.policyForm.getRawValue();
   }
+  get ProductPlanForm() {
+    return this.productPlanForm.getRawValue();
+  }
 
   get PolicyTermForm() {
     return this.policyTermForm.value;
@@ -1631,18 +1580,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
 
 
-  calculateTotalIdv() {
-    let vehicleIdv: any = this.premiumForm.controls.vehicleIdv.value || 0;
-    let electricAccessoriesIdv: any = this.premiumForm.controls.electricAccessoriesIdv.value || 0;
-    let nonElectricAccessoriesIdv: any = this.premiumForm.controls.nonElectricAccessoriesIdv.value || 0;
-    let cngLpgIdv: any = this.premiumForm.controls.cngLpgIdv.value || 0;
 
-    let sum = parseInt(vehicleIdv == "" ? 0 : vehicleIdv) + parseInt(electricAccessoriesIdv == "" ? 0 : electricAccessoriesIdv)
-      + parseInt(nonElectricAccessoriesIdv == "" ? 0 : nonElectricAccessoriesIdv) + parseInt(cngLpgIdv == "" ? 0 : cngLpgIdv);
-    this.premiumForm.patchValue({ totalIdv: sum });
-
-    this.calculateCommissionablePremium(this._commissionPaidOnId);
-  }
 
   calculateTotalOd() {
     let od: any = this.premiumForm.controls.od.value;
@@ -1752,21 +1690,18 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     });
   }
 
-  getMotorPolicyById(policyId: number) {
-    this.motorService.getMotorPolicyById(policyId).subscribe((response: IMotorPolicyFormDataModel) => {
+  getHealthPolicyById(policyId: number) {
+    this.healthService.getHealthPolicyById(policyId).subscribe((response: IHealthPolicyFormDataModel) => {
       debugger
       this._policyData = response;
-      this.setMotorPolicyData(response);
+      this.setHealthPolicyData(response);
       this.getPolicyDocuments();
 
     });
   }
 
 
-  async setMotorPolicyData(response: IMotorPolicyFormDataModel): Promise<void> {
-
-    // if (this._type == 6)
-    //    this._policyTypes = (<IDropDownDto<number>[]>this._policyTypes).filter(f => f.Value == response.PolicyTerm.PolicyType);
+  async setHealthPolicyData(response: IHealthPolicyFormDataModel): Promise<void> {
 
     this.setCompanyInsuranceBranch(response)
     this.setCustomerDetail(<ICustomerShortDetailDto>{
@@ -1793,14 +1728,9 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     // if (this._type == SearchPolicyType.Motor_New || this._type == SearchPolicyType.Motor_rollover || this._type == SearchPolicyType.Motor_Renew) {
     this._controlNumber = response.ControlNumber
     this.policyTermForm.patchValue({
-      policyType: response.PolicyTerm.PolicyType,
-      vehicleClass: response.PolicyTerm.VehicleClass,
-      packageType: response.PolicyTerm.PackageTypeId,
-      policyTerm: response.PolicyTerm,
       acknowledgementSlipNumber: response.PolicyTerm.AcknowledgementSlipNumber,
       acknowledgementSlipIssueDate: this.commonService.getDateFromIDateDto(response.PolicyTerm.AcknowledgementSlipIssueDateDto as IDateDto)
     });
-
 
     if (this._policyType !== SearchPolicyType.Motor_Renew) {
       this.policyForm.patchValue({
@@ -1815,35 +1745,19 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
         numberOfKiloMeterCovered: response.NumberOfKiloMeterCovered,
         extendedKiloMeterCovered: response.ExtendedKiloMeterCovered,
         financeBy: response.FinanceBy,
-        odInsuranceCompany: response.OdPolicy.InsuranceCompany,
-        odPolicyNumber: response.OdPolicy.PolicyNumber,
-        odStartDate: this.commonService.getDateFromIDateDto(response.OdPolicy.StartDateDto as IDateDto),
-        odNumberOfYear: response.OdPolicy.NumberOfYear,
-        odExpiryDate: this.commonService.getDateFromIDateDto(response.OdPolicy.ExpiryDateDto as IDateDto),
         isPreviousPolicyApplicable: response.IsPreviousPolicyApplicable
       });
 
       this.premiumForm.patchValue({
-        vehicleIdv: response.Premium.VehicleIdv,
-        electricAccessoriesIdv: response.Premium.ElectricAccessoriesIdv,
-        nonElectricAccessoriesIdv: response.Premium.NonElectricAccessoriesIdv,
-        cngLpgIdv: response.Premium.CngLpgIdv,
-        totalIdv: response.Premium.TotalIdv,
-        od: response.Premium.Od,
-        addOnRiderOd: response.Premium.AddOnRiderOd,
-        endorseOd: response.Premium.EndorseOd,
-        totalOd: response.Premium.TotalOd,
+       
         tp: response.Premium.Tp,
         passengerCover: response.Premium.PassengerCover,
         endorseTp: response.Premium.EndorseTp,
         totalTp: response.Premium.TotalTp,
-        nonCommissionComponentPremium: response.Premium.NonCommissionComponentPremium,
         gst: response.Premium.GstPercentage,
         gstValue: response.Premium.GstValue,
         grossPremium: response.Premium.GrossPremium,
         endorseGrossPremium: response.Premium.EndorseGrossPremium,
-        totalGrossPremium: response.Premium.TotalGrossPremium,
-        specialDiscount: response.Premium.SpecialDiscount,
         loading: response.Premium.Loading,
         ncb: response.Premium.Ncb,
         commissionPaidOn: response.Premium.CommissionPaidOn,
@@ -1867,12 +1781,9 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       //Updating add on rider value
       if (response?.AddOnRider?.AddOnRiderId) await this.getAddOnRiders()
       this._addOnRiderModel.AddOnRiderId = response?.AddOnRider?.AddOnRiderId;
-      this.commonService.getAddOnPlanOptions(this._addOnRiderModel.AddOnRiderId, Vertical.Motor, 0).subscribe((addOnResponse: IAddOnPlanOptionDto[]) => {
+      this.commonService.getAddOnPlanOptions(this._addOnRiderModel.AddOnRiderId, Vertical.Health, 0).subscribe((addOnResponse: IAddOnPlanOptionDto[]) => {
         addOnResponse.forEach((value, index) => {
           value.IsDisabled = value.IsPlanAvailable;
-          /* if (value.IsPlanAvailable) {
-            this._addOnRiderArray.push(value.AddonPlanOptionName);
-          } */
         });
         this._addOnPlanOptions = addOnResponse;
         this.UpdateAddonPlanValue(response)
@@ -1881,14 +1792,12 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
 
     this.businessDoneBy();
 
-    await this.commonService.getPolicyTerms(response.PolicyTerm.PolicyType, response.PolicyTerm.VehicleClass, response.PolicyTerm.PackageTypeId).subscribe((responsePolicyTerms: IPolicyTermDto[]) => {
-      this._policyTerms = responsePolicyTerms;
-      let policyTerm = responsePolicyTerms.filter(f => f.Id == response.PolicyTerm.PolicyTerm)[0]
-      if (this._policyType !== SearchPolicyType.Motor_Renew) {
-        this.policyTermForm.patchValue({
-          policyTerm: policyTerm
-        });
-      }
+    await this.commonService.getProduct().subscribe((response: any) => {
+      this._products = response;
+      this._selectedProductId = this.productPlanForm.value.product;
+      this.commonService.getPlan(this._selectedProductId).subscribe((response: any) => {
+        this._plans = response;
+      });
     });
 
    
@@ -1918,18 +1827,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
         packageType: ''
       });
     
-      if (response.Premium.Ncb < Common.NCB50VALUE) {
-        this.premiumForm.patchValue({
-          ncb: response.Premium.Ncb +1,
-        })
-      }
-      else{
-        this.premiumForm.patchValue({
-          ncb: Common.NCB50VALUE,
-        })
-      }
-
-
+      
       this.policyForm.patchValue({
         lastYearInsuranceCompany: response.PreviousPolicy.LastYearInsuranceCompany,
         previousCnPolicyNumber: response.PreviousPolicy.PreviousPolicyNumber,
@@ -2013,7 +1911,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
 
   searchCustomer() {
-    this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_New + "/" + Vertical.Motor + ""]);
+    this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_New + "/" + Vertical.Health + ""]);
     // this.router.navigate(["/master/customer", 1]);
   }
 
@@ -2068,21 +1966,21 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   openClaimsDialog(data: IPreviousClaimDto) {
     const dialogRef = this.dialog.open(ViewClaimsComponent, {
       width: '50%',
-      data: { claimsId: data.ClaimId, verticalId: Vertical.Motor }
+      data: { claimsId: data.ClaimId, verticalId: Vertical.Health }
     });
   }
 
   openVoucherDialog(data: IPolicyVoucherDto): void {
     const dialogRef = this.dialog.open(VoucherDetailComponent, {
       width: '50%',
-      data: { voucherId: data.VoucherId, verticalId: Vertical.Motor }
+      data: { voucherId: data.VoucherId, verticalId: Vertical.Health }
     });
   }
 
   openInspectionDialog(data: IPolicyInspectionDto): void {
     const dialogRef = this.dialog.open(InspectionDetailComponent, {
       width: '50%',
-      data: { inspectionId: data.Id, verticalId: Vertical.Motor }
+      data: { inspectionId: data.Id, verticalId: Vertical.Health }
     });
   }
 
@@ -2401,25 +2299,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     return diffInDays <= 93;
   }
 
-  async setOdPolicyDetail() {
-
-    if (this.policyTermForm.value.packageType == PackageType.COMPREHENSIVE || this.policyTermForm.value.packageType == PackageType.USAGE_BASE) {
-      await this.policyForm.patchValue({
-        odInsuranceCompany: this.policyForm.value.tpInsuranceCompany,
-        odPolicyNumber: this.policyForm.value.policyNumber,
-        odStartDate: this.policyForm.value.tpStartDate,
-       // odNumberOfYear: this.policyForm.value.tpNumberOfYear,
-      });
-      let odYear = this._numberOfYears.filter(f => f.Value == this.policyForm.getRawValue().odNumberOfYear)[0];
-      if (odYear?.Year) {
-        this.commonService.getDate(this.commonService.getDateInString(this.policyForm.getRawValue().odStartDate), odYear?.Year).subscribe((response: IDateDto) => {
-          this.policyForm.patchValue({
-            odExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
-          });
-        });
-      }
-    }
-  }
+ 
 
   getCheckboxValue(index: number, IsPlanAvailable: boolean, AddOnPlanOptionName: string, event: MatCheckboxChange) {
     if (IsPlanAvailable) {
@@ -2620,7 +2500,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
 
   getProduct() {
-    this.commonService.getProduct().subscribe((response: any) => {
+    this.commonService.getProducts(Vertical.Health).subscribe((response: any) => {
       this._products = response;
     });
   }
@@ -2658,7 +2538,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   routeWithEnum(enumName: string) {
 
     if (this.MenuVertical == 'Motor') {
-      this.verticalData = Vertical.Motor;
+      this.verticalData = Vertical.Health;
     }
     else if (this.MenuVertical == 'Health') {
       this.verticalData = Vertical.Health;
@@ -2680,12 +2560,8 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
 
   redirectRoute() {
-    if (this.MenuVertical == 'Motor') {
-      this.router.navigate(["../pms/motor/motor-policy-management"]);
-    }
-    else if (this.MenuVertical == 'Health') {
       this.verticalData = Vertical.Health;
-    }
+      this.router.navigate(["../pms/health/motor-policy-management"]);
   }
 
   getCustomerDataByClusterId(clusterId: number) {
@@ -2728,11 +2604,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       this.policyForm.get("extendedKiloMeterCovered")?.disable();
     }
     if (this._policyType == SearchPolicyType.Motor_Renew && this._policyType != SearchPolicyType.Motor_Modify) {
-      //adding finance after resetting
-      debugger
-      
       this.setPolicySourceRenewal()
-      this.setOdPolicyDetail()
       this.removePrevTpOdInsurance()
       this.setPreviousInsuranceCompany()
     }
@@ -2742,10 +2614,8 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     let insuranceCompanyId: number = 0
     if (response.PolicyTerm.PackageTypeId == PackageType.TP_ONLY) {
       insuranceCompanyId = response.TpPolicy.InsuranceCompany
-    } else {
-      insuranceCompanyId = response.OdPolicy.InsuranceCompany
     }
-    this.commonService.getInsuranceCompanyBranches(Vertical.Motor, insuranceCompanyId, this._branchId).subscribe((data: IDropDownDto<number>[]) => {
+    this.commonService.getInsuranceCompanyBranches(Vertical.Health, insuranceCompanyId, this._branchId).subscribe((data: IDropDownDto<number>[]) => {
       this._insuranceCompanyBranches = data;
       this.policyForm.patchValue({
         insuranceBranch: response.InsuranceBranch,
@@ -2791,18 +2661,17 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
 
 
-  validationPolicyData(response: IMotorPolicyFormDataModel) {
+  validationPolicyData(response: IHealthPolicyFormDataModel) {
     this.validatePolicyTerm(response)
     this.validatePolicyDetail(response)
     this.validatePolicyType(response)
     this.validatePremiumDetail(response)
     this.validatePolicySourceDetail(response)
     this.validatePaymentData(response)
-    this.validateVehicleDetail(response)
   };
   erorr: string = "This Field is Required";
   errorList: any = [];
-  validatePolicyTerm(response: IMotorPolicyFormDataModel) {
+  validatePolicyTerm(response: IHealthPolicyFormDataModel) {
 
     if (!response.PolicyTerm.VehicleClass) {
       this.errorList.push("Vehicle Class" + this.erorr)
@@ -2819,7 +2688,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     }
   }
 
-  validatePolicyDetail(response: IMotorPolicyFormDataModel) {
+  validatePolicyDetail(response: IHealthPolicyFormDataModel) {
     if (!response.FinanceBy || response.FinanceBy == 0) {
       this.errorList.push("Finance By " + this.erorr)
     }
@@ -2836,37 +2705,11 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       if (!response.TpPolicy.StartDateDto) {
         this.errorList.push("TP Policy start date" + this.erorr)
       }
-    } else {
-
-      if (!response.TpPolicy.PolicyNumber) {
-        this.errorList.push(" TP Policy Number" + this.erorr)
-      }
-      if (!response.TpPolicy.ExpiryDateDto && response.TpPolicy.NumberOfYear !== Common.ZERO) {
-        this.errorList.push(" TP Expiry date " + this.erorr)
-      }
-      if (!response.TpPolicy.NumberOfYear && response.TpPolicy.NumberOfYear !== Common.ZERO) {
-        this.errorList.push("TP Number of Year" + this.erorr)
-      }
-      if (!response.TpPolicy.StartDateDto) {
-        this.errorList.push("TP Policy start date" + this.erorr)
-      }
-
-      if (!response.OdPolicy.PolicyNumber) {
-        this.errorList.push("OD Policy Number" + this.erorr)
-      }
-      if (!response.OdPolicy.ExpiryDateDto && response.OdPolicy.NumberOfYear !== Common.ZERO) {
-        this.errorList.push("OD Expiry date " + this.erorr)
-      }
-      if (!response.OdPolicy.NumberOfYear && response.OdPolicy.NumberOfYear !== Common.ZERO) {
-        this.errorList.push(" OD Number of year" + this.erorr)
-      }
-      if (!response.OdPolicy.StartDateDto) {
-        this.errorList.push("OD Policy Start date" + this.erorr)
-      }
+    
     }
   }
 
-  validatePolicyType(response: IMotorPolicyFormDataModel) {
+  validatePolicyType(response: IHealthPolicyFormDataModel) {
     if (this._type !== SearchPolicyType.Motor_New && !response.IsPreviousPolicyApplicable && this._type !== SearchPolicyType.Motor_Renew) {
       if (!response.PreviousPolicy.LastPolicyExpiryDateDto) {
         this.errorList.push("Previous Policy Expiry Date" + this.erorr)
@@ -2883,33 +2726,14 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     }
   }
 
-  validatePremiumDetail(response: IMotorPolicyFormDataModel) {
+  validatePremiumDetail(response: IHealthPolicyFormDataModel) {
     if (!response.Premium.CommissionPaidOn) {
       this.errorList.push("Commision Paid on  % " + this.erorr)
     }
     if (response.PolicyTerm.PackageTypeId === PackageType.TP_ONLY && !this._isTpPremiumDetailsDisabled) {
-      if (!response.Premium.BasicTpGstPercentage || response.Premium.BasicTpGstPercentage == 0) {
-        this.errorList.push("Basic Tp Gst % " + this.erorr)
-      }
-
+  
       if (!response.Premium.Tp || response.Premium.Tp == 0) {
-        this.errorList.push("Basic Tp " + this.erorr)
-      }
-    } else if (response.PolicyTerm.PackageTypeId === PackageType.OD_ONLY && !this._isOdPremiumDetailsDisabled) {
-      if ((!response.Premium.VehicleIdv || response.Premium.VehicleIdv == 0) && !this._isOdPremiumDetailsDisabled) {
-        this.errorList.push("Vehicle IDV Amount" + this.erorr)
-      }
-      if ((!response.Premium.Od || response.Premium.Od == 0) && !this._isOdPremiumDetailsDisabled) {
-        this.errorList.push("OD Amount" + this.erorr)
-      }
-      if ((!response.Premium.GstPercentage || response.Premium.GstPercentage == 0) && !this._isOdPremiumDetailsDisabled) {
-        this.errorList.push("GST % " + this.erorr)
-      }
-      if ((!response.Premium.SpecialDiscount || response.Premium.SpecialDiscount == 0)) {
-        this.errorList.push("Special Discount " + this.erorr)
-      }
-      if (!response.Premium.Ncb || response.Premium.Ncb == 0) {
-        this.errorList.push("NCB %" + this.erorr)
+        this.errorList.push("Basic Premium " + this.erorr)
       }
     } else {
       if ((!response.Premium.BasicTpGstPercentage || response.Premium.BasicTpGstPercentage == 0) && !this._isTpPremiumDetailsDisabled) {
@@ -2928,23 +2752,18 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       if ((!response.Premium.GstPercentage || response.Premium.GstPercentage == 0) && !this._isOdPremiumDetailsDisabled) {
         this.errorList.push("GST % " + this.erorr)
       }
-      if ((!response.Premium.SpecialDiscount || response.Premium.SpecialDiscount == 0)) {
-        this.errorList.push("Special Discount " + this.erorr)
-      }
-      if (!response.Premium.Ncb || response.Premium.Ncb == 0) {
-        this.errorList.push("NCB %" + this.erorr)
-      }
+     
     }
   }
 
-  validatePolicySourceDetail(response: IMotorPolicyFormDataModel) {
+  validatePolicySourceDetail(response: IHealthPolicyFormDataModel) {
     if (response.PolicySource.TeleCaller == 0 && response.PolicySource.Fos == 0 && response.PolicySource.Pos == 0 && response.PolicySource.Reference == 0) {
       this.errorList.push("Atleast one policy source should selected ")
     }
 
   }
 
-  validatePaymentData(response: IMotorPolicyFormDataModel) {
+  validatePaymentData(response: IHealthPolicyFormDataModel) {
 
     if (!response.PaymentData || response.PaymentData.length == 0) {
       this.errorList.push("Atleast one Payment mode should be selected")
@@ -2952,42 +2771,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     }
   }
 
-  validateVehicleDetail(response: IMotorPolicyFormDataModel) {
-    if (!response.Vehicle.Manufacturer || response.Vehicle.Manufacturer == 0) {
-      this.errorList.push("Vehicle Manufacturer " + this.erorr)
-    }
-    if (!response.Vehicle.Model || response.Vehicle.Model == 0) {
-      this.errorList.push("Vehicle Model " + this.erorr)
-    }
-    if (!response.Vehicle.Varient || response.Vehicle.Varient == 0) {
-      this.errorList.push("Vehicle Varient " + this.erorr)
-    }
-    if (!response.Vehicle.RegistrationNumber && !response.Vehicle.IsSpecialRegistrationNumber) {
-      this.errorList.push("Vehicle Registration Number " + this.erorr)
-    }
-    if (!response.Vehicle.EngineNumber) {
-      this.errorList.push("Vehicle Engine Number" + this.erorr)
-    }
-
-    if (response.Vehicle.EngineNumber && response.Vehicle.EngineNumber?.length < 6) {
-      this.errorList.push("Vehicle Engine Number " + "Minimum six word required")
-    }
-    if (!response.Vehicle.ChassisNumber) {
-      this.errorList.push("Chassis Number " + this.erorr)
-    }
-
-    if (response.Vehicle.ChassisNumber && response.Vehicle.ChassisNumber?.length < 6) {
-      this.errorList.push("Chassis Number " + "Minimum six word required")
-    }
-    if (!response.Vehicle.MakeYear) {
-      this.errorList.push("Make Year " + this.erorr)
-    }
-
-    if (response.Vehicle.RtoZone == this.rtoNotAvailable) {
-      this.errorList.push("RTO Zone " + this.erorr)
-    }
-
-  }
+  
 
   previousPolicyChecked(isPreviousPolicyChecked: boolean) {
     if (isPreviousPolicyChecked) {

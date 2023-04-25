@@ -28,5 +28,9 @@
         public decimal CommissionablePremium { get; set; }
         public decimal BasicTpGstPercentage { get; set; }
         public int NetPremium { get; set; }
+        public int? FamilyDiscount { get; set; }
+        public int? AdditionalDiscount { get; set; }
+        public int? LongtermDiscount { get; set; }
+        public int? SectionDiscount { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace PolicyManagement.Models.Motor
         public int? AnualIncome { get; set; }
         public short? RiskClass { get; set; }
         public string NomineeName { get; set; }
-        public string NomineeRelationship { get; set; }
+        public short? NomineeRelationship { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string Mobile { get; set; }
         public string Email { get; set; }
@@ -40,8 +40,7 @@ namespace PolicyManagement.Models.Motor
         public int? PosId { get; set; }
         public int? TeamMemberId { get; set; }
         public string Aadhar { get; set; }
-
-
+        public int? Age { get; set; }
 
     }
 }

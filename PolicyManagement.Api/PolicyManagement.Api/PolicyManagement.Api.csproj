@@ -215,6 +215,7 @@
     <Compile Include="Controllers\Claims\ClaimsController.cs" />
     <Compile Include="Controllers\Common\CommonController.cs" />
     <Compile Include="Controllers\Customer\CustomerController.cs" />
+    <Compile Include="Controllers\Health\HealthController.cs" />
     <Compile Include="Controllers\Inspection\InspectionController.cs" />
     <Compile Include="Controllers\Motor\MotorController.cs" />
     <Compile Include="Controllers\Voucher\VoucherController.cs" />

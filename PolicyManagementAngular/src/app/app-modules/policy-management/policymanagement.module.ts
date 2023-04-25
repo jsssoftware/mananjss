@@ -21,6 +21,7 @@ import { NumbersOnlyDirective } from 'src/app/shared/utilities/directive/numbero
 import { PrintErrorComponent } from 'src/app/shared/common-component/print-error/print-error.component';
 import { PreviewDialogComponent } from 'src/app/shared/utilities/dialog/preview-dialog/preview-dialog.component';
 import { DisableControlDirective } from 'src/app/shared/utilities/directive/disabledcontrol.directive';
+import { HealthService } from 'src/app/app-services/health-service/health.service';
 
 @NgModule({
   declarations: [  
@@ -53,6 +54,6 @@ import { DisableControlDirective } from 'src/app/shared/utilities/directive/disa
     
     
   ],
-  providers:[MotorService]
+  providers:[MotorService,HealthService]
 })
 export class PolicyManagementModule { }

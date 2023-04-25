@@ -7,6 +7,8 @@ using PolicyManagement.Services.Common;
 using PolicyManagement.Services.Common.Interface;
 using PolicyManagement.Services.Customer;
 using PolicyManagement.Services.Customer.Interface;
+using PolicyManagement.Services.Health;
+using PolicyManagement.Services.Health.Interface;
 using PolicyManagement.Services.Inspection;
 using PolicyManagement.Services.Inspection.Interface;
 using PolicyManagement.Services.Motor;
@@ -38,6 +40,7 @@ namespace PolicyManagement.Api
             container.RegisterType<ICommonService, CommonService>(new HierarchicalLifetimeManager());
             container.RegisterType<ICustomerService, CustomerService>(new HierarchicalLifetimeManager());
             container.RegisterType<IMotorService, MotorService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IHealthService, HealthService>(new HierarchicalLifetimeManager());
             container.RegisterType<IVoucherService, VoucherService>(new HierarchicalLifetimeManager());
             container.RegisterType<IClaimsService, ClaimsService>(new HierarchicalLifetimeManager());
             container.RegisterType<IInspectionService, InspectionService>(new HierarchicalLifetimeManager());

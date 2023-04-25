@@ -69,3 +69,4 @@ PolicyManagement.Api/packages/
 /publish/
 PolicyManagement.Api/PolicyManagement.Utilities/bin/
 bin/
+PolicyManagement.Api/PolicyManagement.Api/Web.config

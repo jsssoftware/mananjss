@@ -1,15 +1,15 @@
 ﻿using PolicyManagement.Dtos.Common;
 using PolicyManagement.Models.Common;
 using PolicyManagement.Models.Customer;
-using PolicyManagement.Models.Health;
+using PolicyManagement.Models.Motor;
 using System;
 using System.Collections.Generic;
 
-namespace PolicyManagement.Models.Motor
+namespace PolicyManagement.Models.Health
 {
-    public class MotorPolicyFormDataModel
+    public class HealthPolicyFormDataModel
     {
-        public MotorPolicyFormDataModel()
+        public HealthPolicyFormDataModel()
         {
             PaymentData = new List<PaymentFormDataModel>();
             Document = new List<DocumentModel>();
@@ -81,6 +81,7 @@ namespace PolicyManagement.Models.Motor
         public List<InsuredPersonModel> InsuredPersonData { get; set; }
         public short GenderId { get; set; }
         public ProductPlanModel ProductPlan { get; set; }
-
+        public short? Portabality { get; set; }
+        public DateTime? ContinueStartDate { get; set; }
     }
 }

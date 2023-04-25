@@ -401,7 +401,7 @@
                   <mat-form-field>
                     <mat-label>Policy Number <span style="color:red">*</span></mat-label>
                     <input type="text" matInput formControlName="policyNumber" [errorStateMatcher]="matcher"
-                      placeholder="Policy Number" maxlength="30" (change)="setOdPolicyDetail()">
+                      placeholder="Policy Number" maxlength="30" >
                     <mat-error *ngIf="policyForm.controls.policyNumber">
                       Policy Number is <strong>required</strong>
                     </mat-error>
@@ -410,7 +410,7 @@
                 <div class="col-lg-4" *ngIf="MenuVertical!='Motor'">
                   <mat-form-field appearance="fill">
                     <mat-label>Continuty Start Date</mat-label>
-                    <input matInput [matDatepicker]="continutyStartDate" formControlName="continutyStartDate">
+                    <input matInput [matDatepicker]="continutyStartDate" formControlName="continutyStartDate" (dateChange)="setExpiryDate('tp')">
                     <mat-datepicker-toggle matSuffix [for]="continutyStartDate"></mat-datepicker-toggle>
                     <mat-datepicker #continutyStartDate></mat-datepicker>
                   </mat-form-field>
@@ -1108,49 +1108,44 @@
             </mat-expansion-panel-header>
             <form [formGroup]="premiumForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
               <hr style="margin-top: 0px;" />
-          <!--     <div class="row" [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
+             <div class="row" [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
                 <div class="col-lg-3">
                   <mat-form-field>
-                    <mat-label>Vehicle IDV <span style="color:red">*</span></mat-label>
-                    <input type="text" matInput formControlName="vehicleIdv" [errorStateMatcher]="matcher"
-                      (change)="calculateTotalIdv()" placeholder="Please Enter Vehicle IDV" numbersOnlyWithOutDecimal
-                      [disableControl]="_isTpPremiumDetailsDisabled" maxlength="9" keyUpMaxValue>
+                    <mat-label>Family Discount <span style="color:red">*</span></mat-label>
+                    <input type="text" matInput formControlName="familyDiscount" [errorStateMatcher]="matcher"
+                      (change)="calculateTotalTp()" placeholder="Please Enter Vehicle IDV" numbersOnlyWithOutDecimal
+                       maxlength="9" keyUpMaxValue>
                     <mat-error *ngIf="premiumForm.controls.vehicleIdv">
-                      Vehicle IDV is <strong>required</strong>
+                      Family Discount is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
                 </div>
                 <div class="col-lg-2">
                   <mat-form-field>
-                    <mat-label>Electric Accessories IDV</mat-label>
-                    <input type="text" matInput formControlName="electricAccessoriesIdv" (change)="calculateTotalIdv()"
+                    <mat-label>Long Term Discount</mat-label>
+                    <input type="text" matInput formControlName="longtermDiscount" (change)="calculateTotalTp()"
                       placeholder="Electric Accessories IDV" numbersOnlyWithOutDecimal
-                      [disableControl]="_isTpPremiumDetailsDisabled" maxlength="9">
+                       maxlength="9">
                   </mat-form-field>
                 </div>
                 <div class="col-lg-2">
                   <mat-form-field>
-                    <mat-label>Non-Electric Accessories IDV</mat-label>
-                    <input type="text" matInput formControlName="nonElectricAccessoriesIdv" (change)="calculateTotalIdv()"
-                      placeholder="Non-Electric Accessories IDV" numbersOnlyWithOutDecimal
-                      [disableControl]="_isTpPremiumDetailsDisabled" maxlength="9">
+                    <mat-label>Section Discount</mat-label>
+                    <input type="text" matInput formControlName="sectionDiscount" (change)="calculateTotalTp()"
+                      placeholder="Section Discount" numbersOnlyWithOutDecimal
+                       maxlength="9">
                   </mat-form-field>
                 </div>
                 <div class="col-lg-2">
                   <mat-form-field>
-                    <mat-label>CNG / LPG IDV</mat-label>
-                    <input type="text" matInput formControlName="cngLpgIdv" placeholder="CNG / LPG IDV"
-                      (change)="calculateTotalIdv()" numbersOnlyWithOutDecimal
-                      [disableControl]="_isTpPremiumDetailsDisabled" maxlength="9">
+                    <mat-label>Additional Discount</mat-label>
+                    <input type="text" matInput formControlName="additionalDiscount" placeholder="Additional Discount"
+                      (change)="calculateTotalTp()" numbersOnlyWithOutDecimal
+                      maxlength="9">
                   </mat-form-field>
                 </div>
-                <div class="col-lg-3">
-                  <mat-form-field>
-                    <mat-label>Total IDV</mat-label>
-                    <input type="text" matInput formControlName="totalIdv" placeholder="Total IDV" [readonly]="true">
-                  </mat-form-field>
-                </div>
-              </div> -->
+                
+              </div>
              <!--  <div class="row" [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
                 <div class="col-lg-3">
                   <mat-form-field>
@@ -1185,7 +1180,7 @@
                   </mat-form-field>
                 </div>
               </div> -->
-              <div class="row" [ngClass]="{disabledDiv: _isOdPremiumDetailsDisabled}">
+              <div class="row" >
                 <div class="col-lg-2">
                   <mat-form-field>
                     <mat-label>{{(MenuVertical=='Motor')?'Basic TP' : 'Premium'}}<span style="color:red">*</span></mat-label>
@@ -1197,18 +1192,7 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <!-- <div class="col-lg-2">
-                  <mat-form-field>
-                    <mat-label>Basic TP GST % <span style="color:red">*</span></mat-label>
-                    <input type="text" matInput formControlName="basicTPgstPercent" [errorStateMatcher]="matcher"
-                      placeholder="Basic TP GST %" (change)="calculateTotalTp()" appTwoDigitDecimaNumber
-                      [disableControl]="_isOdPremiumDetailsDisabled"
-                      (input)="keyUpMaxValue($event,maxValueAllowedPercentage)">
-                    <mat-error *ngIf="premiumForm.controls.basicTPgstPercent">
-                      Basic TP GST % is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div> -->
+               
                 <div class="col-lg-2">
                   <mat-form-field>
                     <mat-label>{{(MenuVertical=='Motor')?'Other TP (PC + ODC & PD)' : 'Add to Cover'}}</mat-label>
@@ -1287,39 +1271,6 @@
                   </mat-form-field>
                 </div>
               </div>
-<!--               <div class="row">
-                <div class="col-lg-4" [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
-                  <mat-form-field>
-                    <mat-label>Special Discount % <span style="color:red">*</span></mat-label>
-                    <input type="text" matInput formControlName="specialDiscount" [errorStateMatcher]="matcher"
-                      placeholder="Special Discount %" style="line-height: 28px;" appTwoDigitDecimaNumber
-                      (input)="keyUpMaxValue($event,maxValueAllowedPercentage)"
-                      [disableControl]="_isTpPremiumDetailsDisabled">
-                    <mat-error *ngIf="premiumForm.controls.specialDiscount">
-                      Special Discount % is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-4" [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
-                  <mat-form-field>
-                    <mat-label>Loading %</mat-label>
-                    <input type="text" matInput formControlName="loading" placeholder="Loading %"
-                      style="line-height: 28px;" appTwoDigitDecimaNumber
-                      (input)="keyUpMaxValue($event,maxValueAllowedPercentage)"
-                      [disableControl]="_isTpPremiumDetailsDisabled">
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-4" [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
-                  <mat-form-field appearance="fill">
-                    <mat-label>NCB %</mat-label>
-                    <mat-select formControlName="ncb" required [disableControl]="_isTpPremiumDetailsDisabled">
-                      <mat-option>Select</mat-option>
-                      <mat-option *ngFor="let ncb of _ncbs" [value]="ncb.Value">{{ncb.Name}}</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="premiumForm.controls.ncb">Please choose NCB %</mat-error>
-                  </mat-form-field>
-                </div>
-              </div> -->
               <div class="row">
                 <div class="col-lg-6">
                   <mat-form-field appearance="fill">
