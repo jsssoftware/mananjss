@@ -918,11 +918,8 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   getAddOnRiders(): void {
     let insuranceCompanyId: number = 0
 
-    if (this.policyForm.value.PackageTypeId == PackageType.TP_ONLY) {
       insuranceCompanyId = this.policyForm.controls['tpInsuranceCompany'].value;
-    } else {
-      insuranceCompanyId = this.policyForm.controls['odInsuranceCompany'].value;
-    }
+   
     if (insuranceCompanyId) {
       this.commonService.getAddOnRiders(insuranceCompanyId, Vertical.Health).subscribe((response: IDropDownDto<number>[]) => {
         this._addOnRiders = response;
@@ -1072,7 +1069,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
         AcknowledgementSlipIssueDateString: this.commonService.getDateInString(this.PolicyTermForm.acknowledgementSlipIssueDate),
         AcknowledgementSlipIssueDateDto: null,
         AcknowledgementSlipNumber: this.PolicyTermForm.acknowledgementSlipNumber,
-        PackageTypeId: (this.MenuVertical == 'Motor') ? this.PolicyTermForm.packageType : 0,
+        PackageTypeId:  PackageType.TP_ONLY ,
         PolicyTerm: (this.MenuVertical == 'Motor') ? this.PolicyTermForm.policyTerm?.Id : 0,
         PolicyType: this.PolicyTermForm.policyType,
         VehicleClass: 0,
@@ -1144,7 +1141,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       VerticalSegmentId: this._verticalDetail.VerticalSegmentId,
       IsVerified: this.IsVerified,
       PreviousPolicyId: this._type == SearchPolicyType.Motor_Renew ? this._policyId : "",
-      Portabality: this.PolicyForm.inspectionCompany,
+      Portabality: this.PolicyForm.portability,
       ContinueStartDate : this.PolicyForm.continutyStartDate
     }
 
@@ -1208,6 +1205,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
             title: 'Done',
             text: response.Message,
           }).then((result) => {
+            debugger
             if (result.isConfirmed) {
               this.redirectRoute();
             }
@@ -1629,26 +1627,20 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
 
   calculateGrossPremium() {
-    let od: any = this.premiumForm.controls.od.value;
-    let addOnRiderOd: any = this.premiumForm.controls.addOnRiderOd.value;
     let basictp: any = this.premiumForm.controls.tp.value;
     let passengerCover: any = this.premiumForm.controls.passengerCover.value;
     let nonCommissionComponentPremium: any = this.premiumForm.controls.nonCommissionComponentPremium.value;
     let gstValue: any = this.premiumForm.controls.gstValue.value;
     let gst: any = this.premiumForm.controls.gst.value;
-    let basicTPgstPercent: any = this.premiumForm.controls.basicTPgstPercent.value;
     let endroseTp: any = this.premiumForm.controls.endorseTp.value;
-    let endorseOd: any = this.premiumForm.controls.endorseOd.value;
 
-    let sum = parseInt(od == "" ? 0 : od) + parseInt(addOnRiderOd == "" ? 0 : addOnRiderOd) +
-      parseInt(endorseOd == "" ? 0 : endorseOd) +
+    let sum = 
       + parseInt(endroseTp == "" ? 0 : endroseTp) + parseInt(passengerCover == "" ? 0 : passengerCover)
       + parseInt(nonCommissionComponentPremium == "" ? 0 : nonCommissionComponentPremium);
 
     let sum2 = parseInt(basictp == "" ? 0 : basictp)
-    let sum2gst = (basicTPgstPercent / 100) * sum2;
     gstValue = ((gst / 100) * sum);
-    let gstFinalValue = Math.round(gstValue + sum2gst)
+    let gstFinalValue = Math.round(gstValue)
     this.premiumForm.patchValue({ gstValue: gstFinalValue });
     this.calculateNetPremium();
     // Calculating gross premium after updating net
@@ -1692,7 +1684,6 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
 
   getHealthPolicyById(policyId: number) {
     this.healthService.getHealthPolicyById(policyId).subscribe((response: IHealthPolicyFormDataModel) => {
-      debugger
       this._policyData = response;
       this.setHealthPolicyData(response);
       this.getPolicyDocuments();
@@ -1731,7 +1722,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       acknowledgementSlipNumber: response.PolicyTerm.AcknowledgementSlipNumber,
       acknowledgementSlipIssueDate: this.commonService.getDateFromIDateDto(response.PolicyTerm.AcknowledgementSlipIssueDateDto as IDateDto)
     });
-
+    debugger
     if (this._policyType !== SearchPolicyType.Motor_Renew) {
       this.policyForm.patchValue({
         tpInsuranceCompany: response.TpPolicy.InsuranceCompany,
@@ -1744,8 +1735,9 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
         //        insuranceBranch: response.InsuranceBranch,
         numberOfKiloMeterCovered: response.NumberOfKiloMeterCovered,
         extendedKiloMeterCovered: response.ExtendedKiloMeterCovered,
-        financeBy: response.FinanceBy,
-        isPreviousPolicyApplicable: response.IsPreviousPolicyApplicable
+        isPreviousPolicyApplicable: response.IsPreviousPolicyApplicable,
+        portability:response.Portabality,
+        continutyStartDate: response.ContinueStartDate,
       });
 
       this.premiumForm.patchValue({
@@ -1791,16 +1783,25 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     }
 
     this.businessDoneBy();
-
-    await this.commonService.getProduct().subscribe((response: any) => {
-      this._products = response;
-      this._selectedProductId = this.productPlanForm.value.product;
-      this.commonService.getPlan(this._selectedProductId).subscribe((response: any) => {
-        this._plans = response;
+    //Update insurance person
+    await this.commonService.getProduct().subscribe((presponse: any) => {
+      this._products = presponse;
+      debugger
+      this._selectedProductId = response.ProductPlan.ProductId;
+      this.commonService.getPlan(this._selectedProductId).subscribe((planresponse: any) => {
+        this._plans = planresponse;
+        this.productPlanForm.patchValue({
+          product: this._selectedProductId,
+          plan: response.ProductPlan.Plan,
+          planTypes : response.ProductPlan.PlanTypes
+        })
       });
     });
 
-   
+
+    this._selectedinsuranceCustomerPersonDetail =  JSON.parse(JSON.stringify(response.InsuredPersonData));
+    this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
+    this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
     // }
     //For previous value
 
@@ -2529,7 +2530,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
 
   calculateNetPremium() {
-    let sm = Math.round(this.premiumForm.controls.nonCommissionComponentPremium.value || 0) + Math.round(this.premiumForm.controls.totalTp.value || 0) + Math.round(this.premiumForm.controls.totalOd.value || 0);
+    let sm = Math.round(this.premiumForm.controls.nonCommissionComponentPremium.value || 0) + Math.round(this.premiumForm.controls.totalTp.value || 0);
     this.premiumForm.patchValue({ netpremium: sm });
 
   }
@@ -2561,7 +2562,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
 
   redirectRoute() {
       this.verticalData = Vertical.Health;
-      this.router.navigate(["../pms/health/motor-policy-management"]);
+      this.router.navigate(["../pms/health/health-policy-management"]);
   }
 
   getCustomerDataByClusterId(clusterId: number) {
@@ -2662,7 +2663,6 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
 
 
   validationPolicyData(response: IHealthPolicyFormDataModel) {
-    this.validatePolicyTerm(response)
     this.validatePolicyDetail(response)
     this.validatePolicyType(response)
     this.validatePremiumDetail(response)
@@ -2671,27 +2671,9 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   };
   erorr: string = "This Field is Required";
   errorList: any = [];
-  validatePolicyTerm(response: IHealthPolicyFormDataModel) {
-
-    if (!response.PolicyTerm.VehicleClass) {
-      this.errorList.push("Vehicle Class" + this.erorr)
-    }
-
-    if (!response.PolicyTerm.PackageTypeId) {
-      this.errorList.push("Package Type " + this.erorr)
-    }
-    if (!response.PolicyTerm.PolicyTerm) {
-      this.errorList.push("Policy Term" + this.erorr)
-    }
-    if (!response.PolicyTerm.PolicyType) {
-      this.errorList.push("Policy Type" + this.erorr)
-    }
-  }
+  
 
   validatePolicyDetail(response: IHealthPolicyFormDataModel) {
-    if (!response.FinanceBy || response.FinanceBy == 0) {
-      this.errorList.push("Finance By " + this.erorr)
-    }
     if (response.PolicyTerm.PackageTypeId === PackageType.TP_ONLY) {
       if (!response.TpPolicy.PolicyNumber) {
         this.errorList.push("TP Policy Number" + this.erorr)
@@ -2730,29 +2712,16 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     if (!response.Premium.CommissionPaidOn) {
       this.errorList.push("Commision Paid on  % " + this.erorr)
     }
-    if (response.PolicyTerm.PackageTypeId === PackageType.TP_ONLY && !this._isTpPremiumDetailsDisabled) {
+    if (response.PolicyTerm.PackageTypeId === PackageType.TP_ONLY ) {
   
       if (!response.Premium.Tp || response.Premium.Tp == 0) {
-        this.errorList.push("Basic Premium " + this.erorr)
-      }
-    } else {
-      if ((!response.Premium.BasicTpGstPercentage || response.Premium.BasicTpGstPercentage == 0) && !this._isTpPremiumDetailsDisabled) {
-        this.errorList.push("Basic Tp Gst % " + this.erorr)
+        this.errorList.push("Premium " + this.erorr)
       }
 
-      if ((!response.Premium.Tp || response.Premium.Tp == 0) && !this._isTpPremiumDetailsDisabled) {
-        this.errorList.push("Basic Tp " + this.erorr)
-      }
-      if ((!response.Premium.VehicleIdv || response.Premium.VehicleIdv == 0) && !this._isTpPremiumDetailsDisabled) {
-        this.errorList.push("Vehicle IDV " + this.erorr)
-      }
-      if ((!response.Premium.Od || response.Premium.Od == 0) && !this._isOdPremiumDetailsDisabled) {
-        this.errorList.push("OD Amount" + this.erorr)
-      }
-      if ((!response.Premium.GstPercentage || response.Premium.GstPercentage == 0) && !this._isOdPremiumDetailsDisabled) {
+      if ((!response.Premium.GstPercentage || response.Premium.GstPercentage == 0) ) {
         this.errorList.push("GST % " + this.erorr)
       }
-     
+    
     }
   }
 
@@ -3010,7 +2979,6 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     })
     this.maxAge = Math.max.apply(null,this.allAge);
   }
-
 
 
 }
