@@ -71,7 +71,7 @@ export class CommonService extends ICommonService {
 
     getNcbs = (): Observable<any> => this.apiManagerService.getRequest(Common.Ncbs);
 
-    getCommissionPaidOn = (): Observable<any> => this.apiManagerService.getRequest(Common.CommissionPaidOn);
+    getCommissionPaidOn = (vertical: Vertical): Observable<any> => this.apiManagerService.getRequest(`${Common.CommissionPaidOn}/${vertical}`);
 
     getAddOnRiders = (insuranceCompanyId: number, verticalId: number): Observable<IDropDownDto<number>[]> =>
         this.apiManagerService.getRequest<IDropDownDto<number>[]>(`${Common.AddOnRiders}?insuranceCompanyId=${insuranceCompanyId}&verticalId=${verticalId}`);

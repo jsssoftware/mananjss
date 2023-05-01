@@ -10,5 +10,7 @@ namespace PolicyManagement.Models.Motor
         public string LastPolicyExpiryDateString { get; set; }
         public DateTime? LastPolicyExpiryDate { get; set; }
         public DateDto LastPolicyExpiryDateDto { get; set; }
+        public string PreviousPolicyPlan { get; set; }
+        public int? PreviousPolicySumInsured { get; set; }
     }
 }

@@ -5,4 +5,6 @@ export interface IPreviousPolicyFormDataModel {
     PreviousPolicyNumber: string;
     LastPolicyExpiryDateString: string;
     LastPolicyExpiryDateDto: IDateDto|null;
+    PreviousPolicyPlan?:string|null,
+    PreviousPolicySumInsured?: number|null,
 }

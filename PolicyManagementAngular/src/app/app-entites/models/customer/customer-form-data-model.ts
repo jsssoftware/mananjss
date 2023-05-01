@@ -14,4 +14,5 @@ export interface ICustomerFormDataModel {
     Gender:string;
     DateOfBirth:string;
     PassportNumber:string;
+    ClusterId? : number;
 }

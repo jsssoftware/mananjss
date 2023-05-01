@@ -5,6 +5,24 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="PolicyManagerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.dbo.tblInsurancePersonDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="dbo_tblInsurancePersonDetails">
+          <Property Name="CustomerId" Type="varchar" MaxLength="50" />
+          <Property Name="RelationProposer" Type="varchar" MaxLength="50" />
+          <Property Name="SumInsuredIndividual" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="SumInsuredFloater" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="CumulativeBonus" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Deductable" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Loading" Type="varchar" MaxLength="50" />
+          <Property Name="LoadingReason" Type="varchar" MaxLength="250" />
+          <Property Name="Ped" Type="varchar" MaxLength="50" />
+          <Property Name="PedExclusion" Type="varchar" MaxLength="50" />
+          <Property Name="AnualIncome" Type="varchar" MaxLength="50" />
+          <Property Name="RiskClass" Type="varchar" MaxLength="50" />
+          <Property Name="NomineeName" Type="varchar" MaxLength="50" />
+          <Property Name="NomineeRelationship" Type="varchar" MaxLength="50" />
+        </EntityType>-->
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -336,6 +354,7 @@
           <Property Name="CreatedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
+          <Property Name="VerticalId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="tblCommissionSlab">
           <Key>
@@ -394,6 +413,12 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblCompanyDetails">
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -1924,6 +1949,13 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblVersion">
+          <Property Name="Major" Type="tinyint" />
+          <Property Name="Minor" Type="tinyint" />
+          <Property Name="Revision" Type="tinyint" />
+        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -6337,6 +6369,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <Property Name="CreatedTime" Type="DateTime" Precision="0" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
+          <Property Name="VerticalId" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="tblCommissionSlab">
           <Key>
@@ -9491,6 +9524,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.viewRenewPerformanceNonMotor' 
           <EntitySetMapping Name="tblCommissionPayType">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblCommissionPayType">
               <MappingFragment StoreEntitySet="tblCommissionPayType">
+                <ScalarProperty Name="VerticalId" ColumnName="VerticalId" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />

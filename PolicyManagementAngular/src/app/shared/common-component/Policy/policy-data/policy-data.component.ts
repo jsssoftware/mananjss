@@ -1042,7 +1042,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
 
   getCommissionPaidOn(): any {
-    this.commonService.getCommissionPaidOn().subscribe((response: any) => {
+    this.commonService.getCommissionPaidOn(Vertical.Motor).subscribe((response: any) => {
       this._commissionPaidOn = response;
     });
   }

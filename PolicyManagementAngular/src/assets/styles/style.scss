@@ -19,6 +19,7 @@
  @import 'pages';
  @import 'sidebar';
  @import 'responsive';
+ @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
  .cursor-loader {
   cursor: wait;

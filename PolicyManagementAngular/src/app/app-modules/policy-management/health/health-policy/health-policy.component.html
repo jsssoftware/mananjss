@@ -688,7 +688,7 @@
                   <div class="col-lg-4">
                     <mat-form-field appearance="fill">
                       <mat-label>Plan Type</mat-label>
-                      <mat-select formControlName="planTypes" required>
+                      <mat-select formControlName="planTypes" required (selectionChange)="sumInsuredCalculation()">
                         <mat-option>Select</mat-option>
                         <mat-option *ngFor="let planTypes of _planTypes" [value]="planTypes.Value">
                           {{planTypes.Name}}</mat-option>
@@ -715,7 +715,7 @@
               <form [formGroup]="insuranceCustomerForm" autocomplete="off">
   
                 <div class="row">
-                  <div class="col-lg-12 ">
+                  <div class="col-lg-12">
                     <table mat-table [dataSource]="_dataSourceCustomerCluster">
                       <ng-container matColumnDef="Sno">
                         <th mat-header-cell *matHeaderCellDef> S.No. </th>
@@ -1297,7 +1297,7 @@
   
           <!--Start Add-On Rider Details-->
   
-          <mat-expansion-panel *ngIf="_isAddOnRiderEnable" (opened)="panelOpenState = true"
+          <mat-expansion-panel (opened)="panelOpenState = true"
             (closed)="panelOpenState = false">
             <mat-expansion-panel-header>
               <mat-panel-title>
@@ -1333,10 +1333,10 @@
                   <p>{{option.AddonPlanOptionDescripation}}</p>
                   <hr>
                 </div>
-                <div>
+              </div>
+                <div class="row">
                   <p>{{_addOnRiderArray.join(', ') | uppercase}}</p>
                 </div>
-              </div>
             </form>
           </mat-expansion-panel>
   

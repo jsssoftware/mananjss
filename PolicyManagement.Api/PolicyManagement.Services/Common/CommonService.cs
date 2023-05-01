@@ -445,9 +445,9 @@ namespace PolicyManagement.Services.Common
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
 
-        public async Task<List<DropDownDto<int>>> FindAllCommissionPaidOn()
+        public async Task<List<DropDownDto<int>>> FindAllCommissionPaidOn(int verticalId)
         {
-            List<tblCommissionPayType> result = await _dataContext.tblCommissionPayType.OrderBy(o => o.CommissionPayTypeName).ToListAsync();
+            List<tblCommissionPayType> result = await _dataContext.tblCommissionPayType.Where(x=>x.VerticalId == verticalId).OrderBy(o => o.CommissionPayTypeId).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
 

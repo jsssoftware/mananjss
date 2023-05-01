@@ -61,3 +61,8 @@ export enum Common{
     ZERO =22,
     NCB50VALUE = 6
 }
+
+export enum ProductPlanType{
+    Floater =2,
+    Individual = 1
+}

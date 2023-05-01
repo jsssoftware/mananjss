@@ -85,6 +85,8 @@ namespace PolicyManagement.Services.Health
                         NoofYearODId = model.OdPolicy.NumberOfYear,
                         PreviousInsuranceCompanyId = model.PreviousPolicy.LastYearInsuranceCompany,
                         PreviousPolicyNo = model.PreviousPolicy.PreviousPolicyNumber,
+                        PreviousSumInsured = model.PreviousPolicy.PreviousPolicySumInsured,
+                        PreviousPolicyPlan =  model.PreviousPolicy.PreviousPolicyPlan,
                         NomineeName = model.Nomination.Name,
                         NomineeRelationShipId = model.Nomination.Relation,
                         NomineeAge = model.Nomination.Age,
@@ -460,7 +462,8 @@ namespace PolicyManagement.Services.Health
                                                           Pan = s.T5.T3.T2.PAN,
                                                           Gender = _dataContext.tblGender.Where(x => x.GenderId == s.T5.T3.T2.GenderId).Select(x => x.Gender).FirstOrDefault(),
                                                           DateOfBirth = s.T5.T3.T2.CustomerDOB,
-                                                          PassportNumber = s.T5.T3.T2.PassportNo
+                                                          PassportNumber = s.T5.T3.T2.PassportNo,
+                                                          ClusterId =  s.T5.T3.T2.ClusterId
                                                       },
                                                       ExtendedKiloMeterCovered = s.T5.T3.T1.ExtendedKMCovered ?? 0,
                                                       FinanceBy = s.T5.T3.T1.FinancerId ?? 0,
@@ -526,13 +529,19 @@ namespace PolicyManagement.Services.Health
                                                           Tp = s.T5.T3.T1.TPPremium ?? 0,
                                                           VehicleIdv = s.T5.T3.T1.VehicleIDV ?? 0,
                                                           BasicTpGstPercentage = s.T5.T3.T1.BasicTpGstPercentage ?? 0,
-                                                          NetPremium = s.T5.T3.T1.NetPremium ?? 0
+                                                          NetPremium = s.T5.T3.T1.NetPremium ?? 0,
+                                                          FamilyDiscount = s.T5.T3.T1.FamilyDiscount ?? 0,
+                                                          LongtermDiscount = s.T5.T3.T1.LongTermDiscount?? 0,
+                                                          AdditionalDiscount = s.T5.T3.T1.AdditionalDiscount ?? 0,
+                                                          SectionDiscount = s.T5.T3.T1.SectionDiscount ?? 0
                                                       },
                                                       PreviousPolicy = new PreviousPolicyFormDataModel
                                                       {
                                                           LastPolicyExpiryDate = s.T5.T3.T1.PreviousPolicyEndDate,
                                                           LastYearInsuranceCompany = s.T5.T3.T1.PreviousInsuranceCompanyId ?? 0,
-                                                          PreviousPolicyNumber = s.T5.T3.T1.PreviousPolicyNo
+                                                          PreviousPolicyNumber = s.T5.T3.T1.PreviousPolicyNo,
+                                                          PreviousPolicyPlan = s.T5.T3.T1.PreviousPolicyPlan,
+                                                          PreviousPolicySumInsured = s.T5.T3.T1.PreviousSumInsured ?? 0,
                                                       },
                                                       VerticalCode = s.T5.T3.T1.VerticalCode,
                                                       TpPolicy = new TpOdPolicyFormDataModel
@@ -769,6 +778,8 @@ namespace PolicyManagement.Services.Health
             motorPolicyData.NoofYearODId = model.OdPolicy.NumberOfYear;
             motorPolicyData.PreviousInsuranceCompanyId = model.PreviousPolicy.LastYearInsuranceCompany;
             motorPolicyData.PreviousPolicyNo = model.PreviousPolicy.PreviousPolicyNumber;
+            motorPolicyData.PreviousSumInsured = model.PreviousPolicy.PreviousPolicySumInsured;
+            motorPolicyData.PreviousPolicyPlan = model.PreviousPolicy.PreviousPolicyPlan;
             motorPolicyData.NomineeName = model.Nomination.Name;
             motorPolicyData.NomineeRelationShipId = model.Nomination.Relation;
             motorPolicyData.NomineeAge = model.Nomination.Age;

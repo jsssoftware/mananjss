@@ -14,7 +14,7 @@ import { IYearDto } from 'src/app/app-entites/dtos/motor/year-dto';
 import { IDocumentModel } from 'src/app/app-entites/models/common/document-model';
 import { ICustomerService } from 'src/app/app-services/customer-service/abstracts/customer.iservice';
 import { IPaymentFormDataModel } from 'src/app/app-entites/models/motor/payment-form-data-model';
-import { PolicyType, SearchPolicyType, Vertical, PackageType, Common } from 'src/app/shared/utilities/enums/enum';
+import { PolicyType, SearchPolicyType, Vertical, PackageType, Common, ProductPlanType } from 'src/app/shared/utilities/enums/enum';
 import { IPolicyTermDto } from '../../../../app-entites/dtos/motor/policy-term-dto';
 import { ICommonService } from '../../../../app-services/common-service/abstracts/common.iservice';
 import { IHealthService } from '../../../../app-services/health-service/abstracts/health.iservice';
@@ -112,7 +112,7 @@ const ELEMENT_DATA_InspectionDetail: PeriodicElementForInspectionDetail[] = [
 @Component({
   selector: 'app-health-policy',
   templateUrl: './health-policy.component.html',
-  styleUrls: ['./health-policy.component.css']
+  styleUrls: ['./health-policy.component.scss']
 })
 export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   public Vertical ='Health'
@@ -587,6 +587,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     await this.getPolicyInspections();
     await this.getGenders();
     await this.getRisksClass();
+    await this.setPortaablity();
     //Not calling on edit
     if (this._policyId == 0 ||  this._policyType == SearchPolicyType.Motor_Renew) {
       //      await this.getAddOnRiders();
@@ -735,10 +736,19 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       if (this._type == SearchPolicyType.Motor_Renew) {
         this.policyTermForm.patchValue({ policyType: PolicyType.Renewal });
       }
-      //  this.getPolicyTerms()
     });
   }
 
+
+  setPortaablity(){
+    if (this._type == SearchPolicyType.Motor_rollover) {
+      this.policyForm.patchValue({ portability: 3}); // no
+    }
+    if (this._type == SearchPolicyType.Motor_Renew) {
+      this.policyForm.patchValue({ portability: 2});// Yes
+    }
+    
+  }
   getPackageTypes(): any {
     this.commonService.getPackageTypes().subscribe((response: IDropDownDto<number>[]) => {
       this._packageTypes = response;
@@ -763,32 +773,20 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     this._isOdPremiumDetailsDisabled = false;
     this.policyTermForm.patchValue({ policyTerm: undefined });
     let model = this.getPolicyFormData();
-    if (model.PolicyTypeId == undefined ||
-      model.VehicleClassId == undefined ||
-      model.PackageTypeId == undefined ||
-      model.PolicyTypeId == "" ||
-      model.VehicleClassId == "" ||
-      model.PackageTypeId == "") return;
-
-
+    
    if (model.PackageTypeId === PackageType.TP_ONLY) {
       this._isDisableOdPolicyDetails = false;
       this._isOdPolicyEnable = false;
       this._isAddOnRiderEnable = false;
       this._isTpPremiumDetailsDisabled = true
     } 
-
    
       this.policyForm.get("numberOfKiloMeterCovered")?.disable();
       this.policyForm.get("extendedKiloMeterCovered")?.disable();
-    
-
-   
     if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
      
       await this.setPolicySourceRenewal()
       await this.setPreviousInsuranceCompany()
-      this.removePrevTpOdInsurance()
     }
   }
 
@@ -806,6 +804,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     
   }
   async setPolicySourceRenewal() {
+    this.policyTermForm.value.packageType = PackageType.TP_ONLY;
     this._insuranceCompanies = this._savedinsuranceCompanies
     if (this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
     
@@ -814,7 +813,6 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       }
       
     }
-
     if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention) {  
       if (this.policyTermForm.value.packageType == PackageType.TP_ONLY) {
         await this.setDataForOtherCompanyRetentionPolicyTypeTp();
@@ -910,7 +908,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   }
 
   getCommissionPaidOn(): any {
-    this.commonService.getCommissionPaidOn().subscribe((response: any) => {
+    this.commonService.getCommissionPaidOn(Vertical.Health).subscribe((response: any) => {
       this._commissionPaidOn = response;
     });
   }
@@ -1044,7 +1042,9 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
         LastPolicyExpiryDateString: this.commonService.getDateInString(this.PolicyForm.lastPolicyExpiryDate),
         LastPolicyExpiryDateDto: null,
         LastYearInsuranceCompany: this.PolicyForm.lastYearInsuranceCompany,
-        PreviousPolicyNumber: this.PolicyForm.previousCnPolicyNumber
+        PreviousPolicyNumber: this.PolicyForm.previousCnPolicyNumber,
+        PreviousPolicyPlan: this.PolicyForm.previousPolicyPlan,
+        PreviousPolicySumInsured: this.PolicyForm.previousPolicySumInsured,
       },
       InspectionData: {
         InspectionCompany: this.PolicyForm.inspectionCompany,
@@ -1205,7 +1205,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
             title: 'Done',
             text: response.Message,
           }).then((result) => {
-            debugger
+            
             if (result.isConfirmed) {
               this.redirectRoute();
             }
@@ -1713,16 +1713,16 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       Pan: response.Customer.Pan,
     });
 
+    this.getCustomerDataByClusterId(Number(response.Customer.ClusterId))
 
     this.IsVerified = response.IsVerified;
-
-    // if (this._type == SearchPolicyType.Motor_New || this._type == SearchPolicyType.Motor_rollover || this._type == SearchPolicyType.Motor_Renew) {
     this._controlNumber = response.ControlNumber
     this.policyTermForm.patchValue({
+      packageType: response.PolicyTerm.PackageTypeId,
       acknowledgementSlipNumber: response.PolicyTerm.AcknowledgementSlipNumber,
       acknowledgementSlipIssueDate: this.commonService.getDateFromIDateDto(response.PolicyTerm.AcknowledgementSlipIssueDateDto as IDateDto)
     });
-    debugger
+    
     if (this._policyType !== SearchPolicyType.Motor_Renew) {
       this.policyForm.patchValue({
         tpInsuranceCompany: response.TpPolicy.InsuranceCompany,
@@ -1736,7 +1736,6 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
         numberOfKiloMeterCovered: response.NumberOfKiloMeterCovered,
         extendedKiloMeterCovered: response.ExtendedKiloMeterCovered,
         isPreviousPolicyApplicable: response.IsPreviousPolicyApplicable,
-        portability:response.Portabality,
         continutyStartDate: response.ContinueStartDate,
       });
 
@@ -1755,7 +1754,11 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
         commissionPaidOn: response.Premium.CommissionPaidOn,
         commissionablePremium: response.Premium.CommissionablePremium,
         basicTPgstPercent: response.Premium.BasicTpGstPercentage,
-        netpremium: response.Premium.NetPremium
+        netpremium: response.Premium.NetPremium,
+        familyDiscount : response.Premium.FamilyDiscount,
+        longtermDiscount : response.Premium.LongtermDiscount,
+        sectionDiscount : response.Premium.SectionDiscount,
+        additionalDiscount : response.Premium.AdditionalDiscount
       });
 
       this.policySourceForm.patchValue({
@@ -1786,7 +1789,6 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     //Update insurance person
     await this.commonService.getProduct().subscribe((presponse: any) => {
       this._products = presponse;
-      debugger
       this._selectedProductId = response.ProductPlan.ProductId;
       this.commonService.getPlan(this._selectedProductId).subscribe((planresponse: any) => {
         this._plans = planresponse;
@@ -1802,6 +1804,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     this._selectedinsuranceCustomerPersonDetail =  JSON.parse(JSON.stringify(response.InsuredPersonData));
     this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
     this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+    this.calculatInsuredData();
     // }
     //For previous value
 
@@ -1811,6 +1814,8 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       lastPolicyExpiryDate: this.commonService.getDateFromIDateDto(response.PreviousPolicy?.LastPolicyExpiryDateDto as IDateDto),
       isBlockAgent: false,
       isChangeAgent: false,
+      previousPolicyPlan: response.PreviousPolicy.PreviousPolicyPlan,
+      previousPolicySumInsured: response.PreviousPolicy.PreviousPolicySumInsured
     });
 
     if (this._type == PolicyType.OtherCompanyRetention || this._type == PolicyType.SameCompanyRetention) {
@@ -1840,6 +1845,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
       this.policyForm.get("lastYearInsuranceCompany")?.disable();
       this.policyForm.get("previousCnPolicyNumber")?.disable();
       this.policyForm.get("lastPolicyExpiryDate")?.disable();
+
     }
   
     if (this._policyType !== SearchPolicyType.Motor_Renew) {
@@ -1945,11 +1951,12 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   prvePolicydisableFields(event: any) {
     if (event.checked) {
       this._disableFields = true;
-      this.genericClearValidator(["lastYearInsuranceCompany", "previousCnPolicyNumber", "lastPolicyExpiryDate"], this.policyForm)
+      
+      this.genericClearValidator(["lastYearInsuranceCompany", "previousCnPolicyNumber", "lastPolicyExpiryDate","previousPolicyPlan","previousPolicySumInsured"], this.policyForm)
     }
     else {
       this._disableFields = false;
-      this.genericSetValidator(["lastYearInsuranceCompany", "previousCnPolicyNumber", "lastPolicyExpiryDate"], this.policyForm)
+      this.genericSetValidator(["lastYearInsuranceCompany", "previousCnPolicyNumber", "lastPolicyExpiryDate","previousPolicyPlan","previousPolicySumInsured"], this.policyForm)
 
     }
     this.setPreviousInsuranceCompany();
@@ -2001,15 +2008,17 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
 
   setPreviousInsuranceCompany() {
     if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
-      let insuranceCompany = this.policyTermForm.value.packageType === PackageType.TP_ONLY ? this._policyData?.TpPolicy.InsuranceCompany : this._policyData?.OdPolicy.InsuranceCompany;
-      let policyNumber = this.policyTermForm.value.packageType === PackageType.TP_ONLY  ? this._policyData?.TpPolicy.PolicyNumber : this._policyData?.OdPolicy.PolicyNumber;
-      let policyExpiryDate = this.policyTermForm.value.packageType === PackageType.TP_ONLY  ? this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto)
-        : this.commonService.getDateFromIDateDto(this._policyData?.OdPolicy.ExpiryDateDto as IDateDto);
-
+      let insuranceCompany =  this._policyData?.TpPolicy.InsuranceCompany;
+      let policyNumber =  this._policyData?.TpPolicy.PolicyNumber ;
+      let policyExpiryDate = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto);
+      let previousPolicyPlan = this._policyData.PreviousPolicy.PreviousPolicyPlan;
+      let previousPolicySumInsured = this._policyData.PreviousPolicy.PreviousPolicySumInsured;
       this.policyForm.patchValue({
         lastYearInsuranceCompany: insuranceCompany,
         previousCnPolicyNumber: policyNumber,
-        lastPolicyExpiryDate: policyExpiryDate
+        lastPolicyExpiryDate: policyExpiryDate,
+        previousPolicyPlan: previousPolicyPlan,
+        previousPolicySumInsured:previousPolicySumInsured
       });
     }
     else {
@@ -2173,7 +2182,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     this.policyForm.get("tpInsuranceCompany")?.enable();
 
     if (this.policyTermForm.value.policyType === PolicyType.OtherCompanyRetention && this.policyTermForm.value.packageType == PackageType.TP_ONLY) {
-      debugger
+      
       let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto) as Date;
       try {
         startDate = new Date(startDate.setDate(startDate.getDate() + 1));
@@ -2181,9 +2190,9 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
         startDate = new Date();
       }
 
-      let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
+      /* if (policyTerm === undefined || policyTerm == null) return;
+let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
 
-      if (policyTerm === undefined || policyTerm == null) return;
       this.policyForm.get("tpStartDate")?.enable();
 
       await this.policyForm.patchValue({
@@ -2196,6 +2205,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
           tpExpiryDate: new Date(`${response.Year}-${response.Month}-${response.Day}`)
         });
       });
+       */
       this._insuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this._policyData?.TpPolicy.InsuranceCompany);
 
     }
@@ -2317,58 +2327,34 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
   calculateCommissionablePremium(commissionPaidOnId: number) {
     this._commissionPaidOnId = commissionPaidOnId;
     switch (commissionPaidOnId) {
-      case 1:
-        this.calculateCommissionablePremiumOd();
-        break;
-      case 2:
+      case 6:
         this.calculateCommissionablePremiumTp();
         break;
-      case 3:
-        this.calculateCommissionablePremiumNet();
+      case 7:
+        this.calculateCommissionablePremiumAddonCover();
         break;
-      case 4:
+      case 8:
         this.calculateCommissionablePremiumNoCommission();
         break;
-      case 5:
-        this.calculateCommissionablePremiumOdAddon();
-        break;
     }
-  }
-
-  calculateCommissionablePremiumNet() {
-    let od: any = this.premiumForm.controls.od.value;
-    let addOnRiderOd: any = this.premiumForm.controls.addOnRiderOd.value;
-    let tp: any = this.premiumForm.controls.tp.value;
-    let passengerCover: any = this.premiumForm.controls.passengerCover.value;
-
-    let sum = Math.round(parseFloat(od == "" ? 0 : od) + parseFloat(addOnRiderOd == "" ? 0 : addOnRiderOd)
-      + parseFloat(tp == "" ? 0 : tp) + parseFloat(passengerCover == "" ? 0 : passengerCover));
-
-    this.premiumForm.patchValue({ commissionablePremium: sum });
   }
 
   calculateCommissionablePremiumNoCommission() {
     this.premiumForm.patchValue({ commissionablePremium: 0 });
   }
 
-  calculateCommissionablePremiumOd() {
-    let od: any = this.premiumForm.controls.od.value;
-    this.premiumForm.patchValue({ commissionablePremium: od });
-  }
+ 
+  calculateCommissionablePremiumAddonCover() {
+    let premium: any = this.premiumForm.controls.tp.value;
+    let addOnCover: any = this.premiumForm.controls.passengerCover.value;
 
-  calculateCommissionablePremiumOdAddon() {
-    let od: any = this.premiumForm.controls.od.value;
-    let addOnRiderOd: any = this.premiumForm.controls.addOnRiderOd.value;
-
-    let sum = parseInt(od == "" ? 0 : od) + parseInt(addOnRiderOd == "" ? 0 : addOnRiderOd);
+    let sum = parseInt(premium == "" ? 0 : premium) + parseInt(addOnCover == "" ? 0 : addOnCover);
     this.premiumForm.patchValue({ commissionablePremium: sum.toFixed(2) });
   }
 
   calculateCommissionablePremiumTp() {
     let tp: any = this.premiumForm.controls.tp.value;
-    let passengerCover: any = this.premiumForm.controls.passengerCover.value;
-
-    let sum = parseInt(tp == "" ? 0 : tp) + parseInt(passengerCover == "" ? 0 : passengerCover);
+    let sum = parseInt(tp == "" ? 0 : tp) ;
     this.premiumForm.patchValue({ commissionablePremium: sum.toFixed(2) });
   }
 
@@ -2575,27 +2561,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
 
 
   setPolicyDetails(): void {
-    let model = this.getPolicyFormData();
-    this._isTpPremiumDetailsDisabled = false
-    if (model.PackageTypeId === PackageType.COMPREHENSIVE || model.PackageTypeId === PackageType.USAGE_BASE) {
-      this._isDisableOdPolicyDetails = true;
-      this._isOdPolicyEnable = true;
-      this._isAddOnRiderEnable = true;
-    }
-    else if (model.PackageTypeId === PackageType.TP_ONLY) {
-      this._isDisableOdPolicyDetails = false;
-      this._isOdPolicyEnable = false;
-      this._isAddOnRiderEnable = false;
-      this._isTpPremiumDetailsDisabled = true
-      this.genericClearValidator(["odPolicyNumber"], this.policyForm)
-    } else if (model.PackageTypeId === PackageType.OD_ONLY) {
-      this._isDisableOdPolicyDetails = false;
-      this._isOdPolicyEnable = true;
-      this._isAddOnRiderEnable = true;
-      this.genericSetValidator(["odPolicyNumber"], this.policyForm)
-
-    }
-
+    let model = this.getPolicyFormData();    
     if (model.PackageTypeId === PackageType.USAGE_BASE) {
       this.policyForm.get("numberOfKiloMeterCovered")?.enable();
       this.policyForm.get("extendedKiloMeterCovered")?.enable();
@@ -2606,7 +2572,6 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     }
     if (this._policyType == SearchPolicyType.Motor_Renew && this._policyType != SearchPolicyType.Motor_Modify) {
       this.setPolicySourceRenewal()
-      this.removePrevTpOdInsurance()
       this.setPreviousInsuranceCompany()
     }
   }
@@ -2625,13 +2590,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     });
   }
 
-  removePrevTpOdInsurance() {
-    if (this.policyTermForm.value.policyType === PolicyType.OtherCompanyRetention && (this.policyTermForm.value.packageType === 3 || this.policyTermForm.value.packageType === 4)) {
-      this._insuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this._policyData?.TpPolicy.InsuranceCompany);
-    } else if (this.policyTermForm.value.policyType === PolicyType.OtherCompanyRetention && this.policyTermForm.value.packageType === 1) {
-      this._insuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this._policyData?.TpPolicy.InsuranceCompany);
-    }
-  }
+
 
   genericClearValidator = (args: string[], form: FormGroup) => {
     args.forEach(element => {
@@ -2800,6 +2759,7 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     this._insuranceCustomerPersonDetails.push(data);
     console.log(this._insuranceCustomerPersonDetails)
     this.removeInsuranceCLuster(index)
+    this.sumInsuredCalculation();
   }
   insurancePerson :ICustomerInsuranceDetail = <ICustomerInsuranceDetail>{};
   addInsuracePersondetail(): void {
@@ -2855,6 +2815,13 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     this.insurancePerson.ReferenceId =  this.customerDetails.ReferenceId;
     this.insurancePerson.PosId =  this.customerDetails.PosId;
     //insurancePerson
+    if(this.productPlanForm.value.planTypes  == ProductPlanType.Floater){
+      if(this._selectedinsuranceCustomerPersonDetail.length >= 1){
+        this.insurancePerson.SumInsuredFloater = 0;
+        this.sumInsuredCalculation();
+      }
+    }
+    
     this._selectedinsuranceCustomerPersonDetail.push({...this.insurancePerson})
     this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
     this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
@@ -2965,19 +2932,39 @@ export class HealthPolicyComponent implements OnInit ,AfterViewInit{
     this.noofAdult = 0;
     this.noofchild = 0;
     this.totalSumInsured = 0;
-    this._selectedinsuranceCustomerPersonDetail.filter((x)=>{
-      let DOB =  new Date(x.DateOfBirth)
-      let timeDiff = Math.abs(Date.now() - DOB.getTime());
-      let age = Math.floor((timeDiff / (1000 * 3600 * 24))/365.25);
-      if(age <=18){
-       this.noofchild ++;
-      }else{
-        this.noofAdult ++;
+    if(this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length>0){
+      this._selectedinsuranceCustomerPersonDetail.filter((x)=>{
+        let DOB =  new Date(x.DateOfBirth)
+        let timeDiff = Math.abs(Date.now() - DOB.getTime());
+        let age = Math.floor((timeDiff / (1000 * 3600 * 24))/365.25);
+        if(age <=18){
+        this.noofchild ++;
+        }else{
+          this.noofAdult ++;
+        }
+        this.totalSumInsured = this.totalSumInsured + x.SumInsuredFloater + x.SumInsuredIndividual;
+        this.allAge.push(age);
+      })
+      this.maxAge = Math.max.apply(null,this.allAge);
+    }
+  }
+  
+  sumInsuredCalculation(){
+    
+    if(this.productPlanForm.value.planTypes  == ProductPlanType.Floater){
+      this.insuranceCustomerForm.get("csuminsuredindividual")?.disable();
+      this.insuranceCustomerForm.get("csuminsuredfloater")?.enable();
+      if(this._selectedinsuranceCustomerPersonDetail.length >= 1){
+        this.insuranceCustomerForm.value.csuminsuredfloater =  0;
+        this.insuranceCustomerForm.get("csuminsuredfloater").setValue(0);
+        this.insuranceCustomerForm.get("csuminsuredfloater")?.disable();
       }
-      this.totalSumInsured = this.totalSumInsured + x.SumInsuredFloater + x.SumInsuredIndividual;
-      this.allAge.push(age);
-    })
-    this.maxAge = Math.max.apply(null,this.allAge);
+    }
+
+    if(this.productPlanForm.value.planTypes  == ProductPlanType.Individual){
+      this.insuranceCustomerForm.get("csuminsuredindividual")?.enable();
+      this.insuranceCustomerForm.get("csuminsuredfloater")?.disable();
+    }
   }
 
 

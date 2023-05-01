@@ -39,7 +39,7 @@ export abstract class ICommonService {
     abstract getMakeYears(vehicleClassId: number): Observable<IDropDownDto<number>[]>;
     abstract getUsages(): Observable<any>;
     abstract getNcbs(): Observable<any>;
-    abstract getCommissionPaidOn(): Observable<any>;
+    abstract getCommissionPaidOn(vertical: Vertical): Observable<any>;
     abstract getAddOnRiders(insuranceCompanyId: number, verticalId: number): Observable<IDropDownDto<number>[]>;
     abstract getAddOnPlanOptions(addOnRiderId: number, verticalId: number,policyId:number): Observable<IAddOnPlanOptionDto[]>;
     abstract getRelations(): Observable<any>;

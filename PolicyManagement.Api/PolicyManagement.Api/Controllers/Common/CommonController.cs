@@ -122,9 +122,9 @@ namespace PolicyManagement.Api.Controllers.Common
         [HttpGet]
         public async Task<IHttpActionResult> GetNcbs() => Json(await _commonService.FindAllNcbs());
 
-        [Route("commission-paid-on")]
+        [Route("commission-paid-on/{verticalId}")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetCommissionPaidOn() => Json(await _commonService.FindAllCommissionPaidOn());
+        public async Task<IHttpActionResult> GetCommissionPaidOn(int verticalId) => Json(await _commonService.FindAllCommissionPaidOn(verticalId));
 
         [Route("add-on-riders")]
         [HttpGet]

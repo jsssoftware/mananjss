@@ -19,6 +19,7 @@ namespace PolicyManagement.Models.Customer
         public string Gender { get; set; }
         public DateTime? DateOfBirth { get; set; }
         public string PassportNumber { get; set; }
+        public int? ClusterId { get; set; }
 
     }
 }
