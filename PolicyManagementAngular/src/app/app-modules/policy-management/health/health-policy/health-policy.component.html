@@ -446,82 +446,6 @@
                   </mat-form-field>
                 </div>
               </div>
-              <section *ngIf="_isOdPolicyEnable">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <h4>OD Policy Details</h4>
-                  </div>
-                </div>
-                <hr style="margin-top: 0px;" />
-                <div class="row">
-                  <div class="col-lg-12">
-  
-  
-                    <mat-form-field appearance="fill" [ngClass]="{disabledDiv: _isDisableOdPolicyDetails}">
-                      <mat-label>OD Insurance Company</mat-label>
-                      <input type="text" placeholder="OD Insurance Company" aria-label="OD Insurance Company" matInput
-                        required formControlName="odInsuranceCompany" [matAutocomplete]="autoInsuranceCompanyOd">
-                      <mat-autocomplete autoActiveFirstOption #autoInsuranceCompanyOd="matAutocomplete"
-                        [displayWith]="getInsuranceCompanyOd.bind(this)" (optionSelected)='getInsuranceCompanyBranches()'>
-                        <mat-option *ngFor="let insuranceCompany of _filteredInsuranceCompaniesOdOptions"
-                          [value]="insuranceCompany.Value">
-                          {{insuranceCompany.Name}}
-                        </mat-option>
-                      </mat-autocomplete>
-  
-                      <mat-error *ngIf="policyForm.controls.lastYearInsuranceCompany">Please choose OD Insurance Company
-                      </mat-error>
-                    </mat-form-field>
-  
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-12">
-                    <mat-form-field>
-                      <mat-label>OD Policy Number <span style="color:red">*</span></mat-label>
-                      <input type="text" matInput formControlName="odPolicyNumber" [errorStateMatcher]="matcher"
-                        placeholder="OD Policy Number" maxlength="30" [readonly]="_isDisableOdPolicyDetails" />
-                      <mat-error *ngIf="policyForm.controls.odPolicyNumber">
-                        OD Policy Number is <strong>required</strong>
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-lg-4">
-                    <mat-form-field appearance="fill" [ngClass]="{disabledDiv: _isDisableOdPolicyDetails}">
-                      <mat-label>OD Start Date</mat-label>
-                      <input matInput [matDatepicker]="ODStartDate" formControlName="odStartDate"
-                        (dateChange)="setExpiryDate('od')">
-                      <mat-datepicker-toggle matSuffix [for]="ODStartDate">
-                      </mat-datepicker-toggle>
-                      <mat-datepicker #ODStartDate></mat-datepicker>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-lg-4">
-                    <mat-form-field appearance="fill">
-                      <mat-label>Number of Year</mat-label>
-                      <mat-select formControlName="odNumberOfYear" required (selectionChange)="setExpiryDate('od')"
-                        [ngClass]="{disabledDiv: _isDisableOdPolicyDetails}">
-                        <mat-option>Select</mat-option>
-                        <mat-option *ngFor="let numberofyear of _numberOfYears" [value]="numberofyear.Value">
-                          {{numberofyear.Name}}</mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="policyForm.controls.odNumberOfYear">Please Select Number of Year
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-                  <div class="col-lg-4">
-                    <mat-form-field appearance="fill" [ngClass]="{disabledDiv: _isDisableOdPolicyDetails}">
-                      <mat-label>{{(MenuVertical=='Motor')?'Expiry Date' : 'End Date'}}</mat-label>
-                      <input matInput [matDatepicker]="ExpiryDate2" formControlName="odExpiryDate"
-                        [readonly]="_isDisableOdPolicyDetails">
-                      <mat-datepicker-toggle matSuffix [for]="ExpiryDate2"></mat-datepicker-toggle>
-                      <mat-datepicker #ExpiryDate2></mat-datepicker>
-                    </mat-form-field>
-                  </div>
-                </div>
-              </section>
               <hr />
               <div class="row">
                 <div class="col-lg-4">
@@ -630,14 +554,14 @@
                     <mat-form-field>
                       <mat-label> Previous Policy Plan <span style="color:red">*</span></mat-label>
                       <input type="text" matInput formControlName="previousPolicyPlan" placeholder="Previous Policy Plan"
-                        style="line-height: 30px;" class="uppercase">
+                        style="line-height: 30px;" class="uppercase"  [disabled]="_disableFields">
                     </mat-form-field>
                   </div>
                   <div class="col-lg-6">
                     <mat-form-field>
                       <mat-label> Previous Policy SumInsured <span style="color:red">*</span></mat-label>
                       <input type="text" matInput formControlName="previousPolicySumInsured"
-                        placeholder="Previous Policy SumInsured" style="line-height: 30px;">
+                        placeholder="Previous Policy SumInsured" style="line-height: 30px;"  [disabled]="_disableFields">
                     </mat-form-field>
                     <mat-error
                       *ngIf="policyForm.controls.previousPolicySumInsured.errors && policyForm.controls.previousPolicySumInsured.errors.pattern">
@@ -1113,7 +1037,7 @@
                   <mat-form-field>
                     <mat-label>Family Discount <span style="color:red">*</span></mat-label>
                     <input type="text" matInput formControlName="familyDiscount" [errorStateMatcher]="matcher"
-                      (change)="calculateTotalTp()" placeholder="Please Enter Vehicle IDV" numbersOnlyWithOutDecimal
+                      (change)="calculateTotalTp()" placeholder="Family Discount" numbersOnlyWithOutDecimal
                        maxlength="9" keyUpMaxValue>
                     <mat-error *ngIf="premiumForm.controls.vehicleIdv">
                       Family Discount is <strong>required</strong>
@@ -1124,7 +1048,7 @@
                   <mat-form-field>
                     <mat-label>Long Term Discount</mat-label>
                     <input type="text" matInput formControlName="longtermDiscount" (change)="calculateTotalTp()"
-                      placeholder="Electric Accessories IDV" numbersOnlyWithOutDecimal
+                      placeholder="Long Term Discount" numbersOnlyWithOutDecimal
                        maxlength="9">
                   </mat-form-field>
                 </div>
