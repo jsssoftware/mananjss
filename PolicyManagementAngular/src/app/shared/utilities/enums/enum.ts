@@ -66,3 +66,9 @@ export enum ProductPlanType{
     Floater =2,
     Individual = 1
 }
+
+export enum Portabality{
+    NotApplicable =1,
+    Yes,
+    No
+}

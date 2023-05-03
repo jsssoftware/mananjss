@@ -74,5 +74,5 @@ export interface IHealthPolicyFormDataModel {
     Nomination: INominationFormDataModel;
     ProductPlan : IProductPlanFormDataModel;
     Portabality: number | null;
-    ContinueStartDate : IDateDto | null;
+    ContinueStartDate : any | null;
 }

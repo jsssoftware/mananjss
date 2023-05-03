@@ -167,3 +167,24 @@
   color: #212529;
   background-color: #f7b924;
 }
+table {
+  border-collapse: collapse;
+}
+
+th {
+  /* row border */
+  border: 1px solid ;
+}
+
+td.mat-cell {
+  /* row padding */
+  padding: 20px 0;
+  border:  1px solid ;
+  text-align: center; 
+    vertical-align: middle;
+}
+
+tr.mat-row {
+  /* row border */
+  border: 1px solid ;
+}
