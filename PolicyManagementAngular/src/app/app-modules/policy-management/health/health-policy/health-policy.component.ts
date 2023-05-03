@@ -776,9 +776,11 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
     this.policyForm.reset();
     this.setPortablity();
     if (this._policyType == SearchPolicyType.Motor_Renew) {
-      this.policyForm.patchValue({
-        financeBy: this._policyData?.FinanceBy,
-      });
+
+      if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention) {
+        this.productPlanForm.reset();
+        this.addOnRiderForm.reset();
+      }
     }
     //this.premiumForm.reset();
     this._isTpPremiumDetailsDisabled = false;
@@ -795,6 +797,7 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
 
     this.policyForm.get("numberOfKiloMeterCovered")?.disable();
     this.policyForm.get("extendedKiloMeterCovered")?.disable();
+   
     if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
 
       await this.setPolicySourceRenewal()
@@ -826,7 +829,6 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
     }
     if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention) {
         await this.setDataForOtherCompanyRetentionPolicyTypeTp();
-      
     }
     this.getAddOnRiders();
   }
