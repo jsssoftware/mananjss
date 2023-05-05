@@ -84,6 +84,9 @@ namespace PolicyManagement.Models.Health
         public short? Portabality { get; set; }
         public DateTime? ContinueStartDate { get; set; }
         public DateDto ContinueStartDateDTO { get; set; }
+        public int? NumberOfChild { get; set; }
+        public int? NumberOfAdult { get; set; }
+        public int? TotalSumInsured { get; set; }
 
     }
 }
