@@ -75,4 +75,5 @@ export interface IHealthPolicyFormDataModel {
     ProductPlan : IProductPlanFormDataModel;
     Portabality: number | null;
     ContinueStartDate : any | null;
+    ContinueStartDateDTO? :IDateDto | null;
 }

@@ -706,7 +706,7 @@ namespace PolicyManagement.Services.Health
             motorPolicy.PolicyTerm.AcknowledgementSlipIssueDateDto = _commonService.GetDate(motorPolicy.PolicyTerm.AcknowledgementSlipIssueDate);
             motorPolicy.PreviousPolicy.LastPolicyExpiryDateDto = _commonService.GetDate(motorPolicy.PreviousPolicy.LastPolicyExpiryDate);
             motorPolicy.PaymentData.ForEach(f => f.DatedDto = _commonService.GetDate(f.Dated));
-
+            motorPolicy.ContinueStartDateDTO = _commonService.GetDate(motorPolicy.ContinueStartDate);
             motorPolicy.PolicyStatus = (await _dataContext.tblPolicyStatus.AsNoTracking().FirstOrDefaultAsync(s => s.PolicyStatusId == motorPolicy.PolicyStatusId))?.PolicyStatus;
 
             if (motorPolicy.PreviousPolicyId != null && motorPolicy.PreviousPolicyId > 0)

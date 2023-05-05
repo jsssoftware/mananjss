@@ -1270,54 +1270,6 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
     };
   }
 
-  async setPolicyTermDetails(policyTerm: IPolicyTermDto): Promise<void> {
-
-    if (policyTerm === undefined || policyTerm == null) return;
-    let tpYear = this._numberOfYears.filter(f => f.Year == policyTerm.TpYear)[0];
-    let odYear = this._numberOfYears.filter(f => f.Year == policyTerm.OdYear)[0];
-    this.policyForm.patchValue({
-      tpNumberOfYear: tpYear?.Value,
-      odNumberOfYear: odYear?.Value,
-      tpStartDate: moment(new Date(2022, 3, 1)),
-      odStartDate: moment(new Date(2022, 3, 1)),
-      continutyStartDate: moment(new Date(2021, 3, 1))
-    });
-    if (this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention || this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention) {
-      await this.setPolicySourceRenewal()
-    } else {
-      this.policyForm.patchValue({
-        tpNumberOfYear: tpYear?.Value,
-        odNumberOfYear: odYear?.Value,
-        tpStartDate: moment(new Date(2022, 3, 1)),
-        odStartDate: moment(new Date(2022, 3, 1)),
-        continutyStartDate: moment(new Date(2021, 3, 1))
-      });
-
-      if (policyTerm.OdYear > 0) {
-        this._isOdPolicyEnable = true;
-        this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.odStartDate), odYear?.Year).subscribe((response: IDateDto) => {
-          this.policyForm.patchValue({
-            odExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
-          });
-        });
-      }
-      else {
-        this._isOdPolicyEnable = false;
-      }
-      if (tpYear?.Year) {
-        this.commonService.getDate(this.commonService.getDateInString(this.policyForm.value.tpStartDate), tpYear?.Year).subscribe((response: IDateDto) => {
-          this.policyForm.patchValue({
-            tpExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
-          });
-        });
-      }
-    }
-
-    await this.setPreviousInsuranceCompany();
-
-    //this.getInsuranceCompanyBranches();
-  }
-
 
 
   setExpiryDate(policy: string) {
@@ -1490,6 +1442,7 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
     let reader = new FileReader();
     reader.onload = () => {
       const uniqueId = uuidv4();
+      debugger
       let document: IDocumentModel = {
         DocumentId: 0,
         UniqueId: uniqueId,
@@ -1793,7 +1746,7 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
             bank3: response.PaymentData[i].Bank
           });
         }
-
+        debugger
         this.policyForm.patchValue({
           tpInsuranceCompany: response.TpPolicy.InsuranceCompany,
           coverNoteNumber: response.CoverNoteNumber,
@@ -1806,7 +1759,7 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
           numberOfKiloMeterCovered: response.NumberOfKiloMeterCovered,
           extendedKiloMeterCovered: response.ExtendedKiloMeterCovered,
           isPreviousPolicyApplicable: response.IsPreviousPolicyApplicable,
-          continutyStartDate: response.ContinueStartDate,
+          continutyStartDate: this.commonService.getDateFromIDateDto(response.ContinueStartDateDTO as IDateDto),
           portability: response.Portabality
         });
 
