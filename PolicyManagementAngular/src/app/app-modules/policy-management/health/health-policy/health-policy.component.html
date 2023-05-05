@@ -1023,7 +1023,7 @@
             </mat-expansion-panel-header>
             <form [formGroup]="premiumForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
               <hr style="margin-top: 0px;" />
-             <div class="row" [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
+             <div class="row">
                 <div class="col-lg-3">
                   <mat-form-field>
                     <mat-label>Family Discount <span style="color:red">*</span></mat-label>
@@ -1059,42 +1059,7 @@
                       maxlength="9">
                   </mat-form-field>
                 </div>
-                
               </div>
-             <!--  <div class="row" [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
-                <div class="col-lg-3">
-                  <mat-form-field>
-                    <mat-label>OD <span style="color:red">*</span></mat-label>
-                    <input type="text" matInput formControlName="od" [errorStateMatcher]="matcher" placeholder="OD"
-                      (change)="calculateTotalOd()" appTwoDigitDecimaNumber
-                      [disableControl]="_isTpPremiumDetailsDisabled">
-                    <mat-error *ngIf="premiumForm.controls.od">
-                      OD is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-3">
-                  <mat-form-field>
-                    <mat-label>Add-On Rider OD</mat-label>
-                    <input type="text" matInput formControlName="addOnRiderOd" placeholder="Add-On Rider OD"
-                      (change)="calculateTotalOd()" appTwoDigitDecimaNumber
-                      [disableControl]="_isTpPremiumDetailsDisabled">
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-3">
-                  <mat-form-field>
-                    <mat-label>Endorse OD</mat-label>
-                    <input type="text" matInput formControlName="endorseOd" placeholder="Endorse OD" [readonly]="true">
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-3">
-                  <mat-form-field>
-                    <mat-label>Total OD</mat-label>
-                    <input type="text" matInput formControlName="totalOd" placeholder="Total OD" [readonly]="true"
-                      (change)="calculateNetPremium()">
-                  </mat-form-field>
-                </div>
-              </div> -->
               <div class="row" >
                 <div class="col-lg-2">
                   <mat-form-field>

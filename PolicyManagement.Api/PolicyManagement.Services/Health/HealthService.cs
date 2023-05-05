@@ -171,7 +171,10 @@ namespace PolicyManagement.Services.Health
                         PlanId = (short)(model.ProductPlan != null ? model.ProductPlan.Plan : 0)    ,
                         PlanTypeId = (short)(model.ProductPlan != null ? model.ProductPlan.PlanTypes : 0),
                         PortabilityId = model.Portabality,
-                        CBStartDate = model.ContinueStartDate
+                        CBStartDate = model.ContinueStartDate,
+                        NoAdult = model.NumberOfAdult,
+                        NoChild = model.NumberOfAdult,
+                        TotalSumInsured = model.TotalSumInsured
                     };
 
                     if ( model.PolicyTerm != null && (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4))
@@ -308,7 +311,8 @@ namespace PolicyManagement.Services.Health
                                     FileName = fileName,
                                     OriginalFileName = f.FileName,
                                     PolicyId = motorPolicyData.PolicyId,
-                                    Remarks = f.Remarks
+                                    Remarks = f.Remarks,
+                                    DocumentBase64 = f.DocumentBase64
                                 });
                             }
                         });
@@ -836,6 +840,9 @@ namespace PolicyManagement.Services.Health
             motorPolicyData.PlanTypeId = (short)(model.ProductPlan != null ? model.ProductPlan.PlanTypes : 0);
             motorPolicyData.PortabilityId = model.Portabality;
             motorPolicyData.CBStartDate = model.ContinueStartDate;
+            motorPolicyData.NoAdult = model.NumberOfAdult;
+            motorPolicyData.NoChild = model.NumberOfAdult;
+            motorPolicyData.TotalSumInsured = model.TotalSumInsured;
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;
             else

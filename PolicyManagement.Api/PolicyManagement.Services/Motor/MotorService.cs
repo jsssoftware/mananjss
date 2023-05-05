@@ -309,7 +309,8 @@ namespace PolicyManagement.Services.Motor
                                     FileName = fileName,
                                     OriginalFileName = f.FileName,
                                     PolicyId = motorPolicyData.PolicyId,
-                                    Remarks = f.Remarks
+                                    Remarks = f.Remarks,
+                                    DocumentBase64 = f.DocumentBase64
                                 });
                             }
                         });

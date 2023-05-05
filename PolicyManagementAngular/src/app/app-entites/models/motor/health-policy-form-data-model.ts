@@ -76,4 +76,7 @@ export interface IHealthPolicyFormDataModel {
     Portabality: number | null;
     ContinueStartDate : any | null;
     ContinueStartDateDTO? :IDateDto | null;
+    NumberOfChild:Number;
+    NumberOfAdult:Number;
+    TotalSumInsured:Number;
 }

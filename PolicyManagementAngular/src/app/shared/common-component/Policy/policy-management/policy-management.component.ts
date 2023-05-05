@@ -21,6 +21,10 @@ export class PolicyManagementComponent implements OnInit {
     {
       this.newPolicyContent ="New Motor Policy Data Entry";
     }
+    if(this.MenuVertical=='Health')
+    {
+      this.newPolicyContent ="New Health Policy Data Entry";
+    }
   }
 
   routeWithEnum(enumName: string) {
