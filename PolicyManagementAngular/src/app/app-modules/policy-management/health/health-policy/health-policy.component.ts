@@ -414,6 +414,8 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
   public _paymentTypes: IDropDownDto<number>[] = [];
   public _genders: IDropDownDto<number>[] = [];
   public _riskClass: IDropDownDto<number>[] = [];
+  public _ped: IDropDownDto<number>[] = [];
+  public _ppc: IDropDownDto<number>[] = [];
 
   public _customerId: any;
   public _customerCityId: any;
@@ -504,6 +506,7 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
     this._policyTypeId = Number(this.route.snapshot.paramMap.get('policyTypeId'));//is the id when customer saved
     this._policyId = Number(this.route?.snapshot?.paramMap.get('policyId') || 0);
     this._policyType = Number(this.route?.snapshot?.paramMap.get('policyType') || 0);
+
     switch (this._policyTypeId) {
       case 1:
         this._type = SearchPolicyType.Motor_New;
@@ -587,6 +590,8 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
     await this.getPolicyInspections();
     await this.getGenders();
     await this.getRisksClass();
+    await this.getPed();
+    await this.getPpc();
     //Not calling on edit
     if (this._policyId == 0 || this._policyType == SearchPolicyType.Motor_Renew) {
       //      await this.getAddOnRiders();
@@ -1558,7 +1563,7 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
 
     let sum =
       + parseInt(endroseTp == "" ? 0 : endroseTp) + parseInt(passengerCover == "" ? 0 : passengerCover)
-      + parseInt(nonCommissionComponentPremium == "" ? 0 : nonCommissionComponentPremium);
+      + parseInt(nonCommissionComponentPremium == "" ? 0 : nonCommissionComponentPremium) + parseInt(basictp == "" ? 0 : basictp);
 
     let sum2 = parseInt(basictp == "" ? 0 : basictp)
     gstValue = ((gst / 100) * sum);
@@ -2719,6 +2724,18 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
       this.insuranceCustomerForm.get("csuminsuredindividual")?.enable();
       this.insuranceCustomerForm.get("csuminsuredfloater")?.disable();
     }
+  }
+
+  getPed(): any {
+    this.commonService.getPed().subscribe((response: IDropDownDto<number>[]) => {
+      this._ped  = response;
+    });
+  }
+
+  getPpc(): any {
+    this.commonService.getPpc().subscribe((response: IDropDownDto<number>[]) => {
+      this._ppc  = response;
+    });
   }
 
 

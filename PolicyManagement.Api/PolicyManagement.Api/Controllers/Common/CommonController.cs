@@ -264,5 +264,14 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("riskclass")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAllRiskMaster() => Json(await _commonService.FindAllRisks());
+
+        [Route("ppc")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllPpc() => Json(await _commonService.FindAllPpcData());
+
+        [Route("ped")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllPed() => Json(await _commonService.FindAllPedData());
+
     }
 }

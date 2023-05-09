@@ -263,7 +263,15 @@ namespace PolicyManagement.Services.Common
                     })
                     .OrderBy(o => o.Name)
                     .ToListAsync();
-
+                case Vertical.Health:
+                    return await _dataContext.tblInsuranceCompany.Where(w => w.IsHealth.HasValue && w.IsHealth.Value && w.IsActive.HasValue && w.IsActive.Value)
+                    .Select(s => new DropDownDto<int>
+                    {
+                        Name = s.InsuranceCompanyName,
+                        Value = s.InsuranceCompanyId
+                    })
+                    .OrderBy(o => o.Name)
+                    .ToListAsync();
                 default:
                     return await _dataContext.tblInsuranceCompany.Where(w => w.IsActive.HasValue && w.IsActive.Value)
                    .Select(s => new DropDownDto<int>
@@ -1340,7 +1348,25 @@ namespace PolicyManagement.Services.Common
                                                                                           })
                                                                                           .OrderBy(o => o.Name)
                                                                                           .ToListAsync();
+        public async Task<List<DropDownDto<int>>> FindAllPpcData()
+        {
+            List<DropDownDto<int>> result = await _dataContext.tblPPC.Select(s => new DropDownDto<int>
+            {
+                Name = s.PPC,
+                Value = s.PPCId
+            }).OrderBy(o => o.Value).ToListAsync();
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
 
-
+                                                                                          
+        public async Task<List<DropDownDto<int>>> FindAllPedData()
+        {
+            List<DropDownDto<int>> result = await _dataContext.tblPED.Select(s => new DropDownDto<int>
+            {
+                Name = s.PED,
+                Value = s.PEDId
+            }).OrderBy(o =>o.Value).ToListAsync();
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
     }
 }

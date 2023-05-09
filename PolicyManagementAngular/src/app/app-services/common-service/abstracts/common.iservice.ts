@@ -81,4 +81,7 @@ export abstract class ICommonService {
     abstract getPlanType(): Observable<any>;
     abstract getPortability(): Observable<any>; 
     abstract getRiskClass(): Observable<any>; 
+    abstract getPed(): Observable<IDropDownDto<number>[]>;
+    abstract getPpc(): Observable<IDropDownDto<number>[]>;
+
 }

@@ -2,7 +2,7 @@
     <mat-card class="mat-elevation-z2">
       <mat-card-header>
         <div mat-card-avatar class="header-image"
-          style="background-image: url('../../../../Policy/assets/images/motor.png');">
+          style="background-image: url('Policy/assets/images/health.png');">
         </div> <!-- to do dynamic -->
         <mat-card-title>{{MenuVertical}} Policy</mat-card-title> <!-- to do dynamic -->
         <mat-card-subtitle>Insurance</mat-card-subtitle>
@@ -810,7 +810,10 @@
                   <div class="col-lg-4">
                     <mat-form-field>
                       <mat-label>PED</mat-label>
-                      <input type="text" matInput formControlName="cped" placeholder="PED" style="line-height: 28px;">
+                      <mat-select formControlName="cped">
+                        <mat-option>Select</mat-option>
+                        <mat-option *ngFor="let ped of _ped" [value]="ped.Value">{{ped.Name}}</mat-option>
+                      </mat-select>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-4">
@@ -823,8 +826,10 @@
                   <div class="col-lg-4">
                     <mat-form-field>
                       <mat-label>PPC</mat-label>
-                      <input type="text" matInput formControlName="cppc" placeholder="PPC"
-                        style="line-height: 28px;">
+                        <mat-select formControlName="cppc">
+                          <mat-option>Select</mat-option>
+                          <mat-option *ngFor="let ppc of _ppc" [value]="ppc.Value">{{ppc.Name}}</mat-option>
+                        </mat-select>
                     </mat-form-field>
                   </div>
                 </div>
