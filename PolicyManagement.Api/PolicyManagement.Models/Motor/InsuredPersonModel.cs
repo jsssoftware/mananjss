@@ -12,7 +12,7 @@ namespace PolicyManagement.Models.Motor
         public int PolicyId { get; set; }
         public string Name { get; set; }
         public string PassportNumber { get; set; }
-        public short? Gender { get; set; }
+        public string Gender { get; set; }
         public string RelationProposer { get; set; }
         public int? SumInsuredIndividual { get; set; }
         public int? SumInsuredFloater { get; set; }

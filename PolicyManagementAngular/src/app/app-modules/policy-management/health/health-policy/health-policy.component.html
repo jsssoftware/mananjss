@@ -35,7 +35,7 @@
               </div>
               <div class="col-lg-4">
                 <mat-list>
-                  <mat-list-item *ngIf="_type != SearchPolicyType.Motor_Renew">
+                  <mat-list-item *ngIf="_policyType != SearchPolicyType.Motor_Renew">
                     <div mat-line>Vertical</div>
                     <div mat-line>
                       <button mat-flat-button color="primary" [ngStyle]="{'background-color':  '#fdcb6e'}">
@@ -540,14 +540,14 @@
                 <div class="row" *ngIf="MenuVertical!='Motor'">
                   <div class="col-lg-6">
                     <mat-form-field>
-                      <mat-label> Previous Policy Plan <span style="color:red">*</span></mat-label>
+                      <mat-label> Previous Policy Plan <span style="color:red" *ngIf="_type !== SearchPolicyType.Motor_Renew">*</span></mat-label>
                       <input type="text" matInput formControlName="previousPolicyPlan" placeholder="Previous Policy Plan"
                         style="line-height: 30px;" class="uppercase"  [disabled]="_disableFields">
                     </mat-form-field>
                   </div>
                   <div class="col-lg-6">
                     <mat-form-field>
-                      <mat-label> Previous Policy SumInsured <span style="color:red">*</span></mat-label>
+                      <mat-label> Previous Policy SumInsured <span style="color:red"  *ngIf="_type !== SearchPolicyType.Motor_Renew">*</span></mat-label>
                       <input type="text" matInput formControlName="previousPolicySumInsured"
                         placeholder="Previous Policy SumInsured" style="line-height: 30px;"  [disabled]="_disableFields">
                     </mat-form-field>
@@ -757,8 +757,10 @@
                   <div class="col-lg-4">
                     <mat-form-field>
                       <mat-label>Relation With Proposer</mat-label>
-                      <input type="text" matInput formControlName="crelprposer" placeholder="Relation With Proposer"
-                        style="line-height: 28px;">
+                        <mat-select formControlName="crelprposer">
+                          <mat-option>Select</mat-option>
+                          <mat-option *ngFor="let relation of _relations" [value]="relation.Value">{{relation.Name}}</mat-option>
+                        </mat-select>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-4">
@@ -1031,7 +1033,7 @@
              <div class="row">
                 <div class="col-lg-3">
                   <mat-form-field>
-                    <mat-label>Family Discount <span style="color:red">*</span></mat-label>
+                    <mat-label>Family Discount</mat-label>
                     <input type="text" matInput formControlName="familyDiscount" [errorStateMatcher]="matcher"
                       (change)="calculateTotalTp()" placeholder="Family Discount" numbersOnlyWithOutDecimal
                        maxlength="9" keyUpMaxValue>

@@ -1298,7 +1298,7 @@ namespace PolicyManagement.Services.Motor
                 tblCustomers  = await _dataContext.tblCustomer.FirstOrDefaultAsync(f => f.CustomerId == insuredPersonModel.CustomerId);
                 tblCustomers.CustomerId = insuredPersonModel.CustomerId;
                 tblCustomers.CustomerName = insuredPersonModel.Name;
-                tblCustomers.GenderId = insuredPersonModel.Gender;
+                tblCustomers.GenderId = insuredPersonModel.GenderId;
                 tblCustomers.CustomerDOB = insuredPersonModel.DateOfBirth;
                 tblCustomers.CustomerMobile1 = insuredPersonModel.Mobile;
                 tblCustomers.CustomerEmail1 = insuredPersonModel.Email;

@@ -594,39 +594,42 @@ namespace PolicyManagement.Services.Health
             try
             {
                 var data = await _dataContext.tblPolicyPaymentData.Where(w => w.PolicyId == policyId).ToListAsync();
-                var insuredPersons = await _dataContext.tblInsuredPerson.Where(x => x.PolicyId == policyId && x.IsActive ==  true).ToListAsync();
+                var insuredPersons = await _dataContext.tblInsuredPerson.Join(_dataContext.tblGender, insuredPerson => insuredPerson.InsuredGenderId, gender => gender.GenderId, (insuredPerson, gender) => new {insuredPerson, gender })
+                    .Where(x => x.insuredPerson.PolicyId == policyId && x.insuredPerson.IsActive ==  true)
+                    .ToListAsync();
                 List<InsuredPersonModel> tblInsuredPersons = new List<InsuredPersonModel>();
                 foreach (var f in insuredPersons)
                 {
 
                     tblInsuredPersons.Add(new InsuredPersonModel
                     {
-                        PolicyId = f.PolicyId,
-                        CustomerId = f.CustomerId.GetValueOrDefault(),
-                        Name = f.InsuredPersonName,
-                        GenderId = f.InsuredGenderId.GetValueOrDefault(),
-                        DateOfBirth = f.InsuredDOB,
-                        Age = f.InsuredAge,
-                        SumInsuredIndividual = f.SumInsuredIndividual,
-                        SumInsuredFloater = f.SumInsuredFloater,
-                        PassportNumber = f.PassportNo,
-                        CumulativeBonus = f.CummulativeBonus,
-                        Deductable = f.Deductable,
-                        Loading = f.Loading,
-                        LoadingReason = f.LoadingReason,
-                        NomineeName = f.NomineeName,
-                        NomineeRelationship = f.NomineeRelationId,
-                        Ped = f.PEDId,
-                        PedExclusion = f.PEDExclusion,
-                        AnualIncome = f.AnnualIncome,
-                        RiskClass = f.RiskClassId,
-                        BranchId = f.BranchId,
+                        PolicyId = f.insuredPerson.PolicyId,
+                        CustomerId = f.insuredPerson.CustomerId.GetValueOrDefault(),
+                        Name = f.insuredPerson.InsuredPersonName,
+                        GenderId = f.insuredPerson.InsuredGenderId.GetValueOrDefault(),
+                        DateOfBirth = f.insuredPerson.InsuredDOB,
+                        Age = f.insuredPerson.InsuredAge,
+                        SumInsuredIndividual = f.insuredPerson.SumInsuredIndividual,
+                        SumInsuredFloater = f.insuredPerson.SumInsuredFloater,
+                        PassportNumber = f.insuredPerson.PassportNo,
+                        CumulativeBonus = f.insuredPerson.CummulativeBonus,
+                        Deductable = f.insuredPerson.Deductable,
+                        Loading = f.insuredPerson.SumInsuredIndividual,
+                        LoadingReason = f.insuredPerson.LoadingReason,
+                        NomineeName = f.insuredPerson.NomineeName,
+                        NomineeRelationship = f.insuredPerson.NomineeRelationId,
+                        Ped = f.insuredPerson.PEDId,
+                        PedExclusion = f.insuredPerson.PEDExclusion,
+                        AnualIncome = f.insuredPerson.AnnualIncome,
+                        RiskClass = f.insuredPerson.RiskClassId,
+                        BranchId = f.insuredPerson.BranchId,
                         Mobile=  motorPolicy.Customer.ContactNumber,
                         Email = motorPolicy.Customer.Email,
                         Address = motorPolicy.Customer.AddressInPolicy,
                         Pan = motorPolicy.Customer.Pan,
-                        Aadhar = ""
-                });
+                        Aadhar = "",
+                        Gender = f.gender.Gender,
+                    });
                 }
                 if (insuredPersons != null && insuredPersons.Count > 0)
                 {
@@ -1061,7 +1064,7 @@ namespace PolicyManagement.Services.Health
         private bool IsFlag2True(HealthPolicyFormDataModel model)
         {
                 if( ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model) 
-                ) { 
+                 && ValidateInsuredPersonDetail(model)) { 
                 return true; 
             } 
             return false;
@@ -1073,7 +1076,7 @@ namespace PolicyManagement.Services.Health
             if (model.PolicyTerm.PackageTypeId == (short)PackageType.TP_ONLY)
             {
                 //22 IS ZERO YEAR IN TP
-                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || (model.TpPolicy.ExpiryDateString == null && model.TpPolicy.NumberOfYear != 22) || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null)
+                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || (model.TpPolicy.ExpiryDateString == null && model.TpPolicy.NumberOfYear != 22) || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null || model.TpPolicy.InsuranceCompany == 0)
                 {
                     return false;
                 }
@@ -1085,6 +1088,15 @@ namespace PolicyManagement.Services.Health
         private bool ValidatePremiumDetail(HealthPolicyFormDataModel model)
         {
             if (model.Premium.Tp == 0 || model.Premium.GstPercentage == 0 )
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidateInsuredPersonDetail(HealthPolicyFormDataModel model)
+        {
+            if (model.InsuredPersonData.Count == 0)
             {
                 return false;
             }
@@ -1166,7 +1178,7 @@ namespace PolicyManagement.Services.Health
                 tblCustomers  = await _dataContext.tblCustomer.FirstOrDefaultAsync(f => f.CustomerId == insuredPersonModel.CustomerId);
                 tblCustomers.CustomerId = insuredPersonModel.CustomerId;
                 tblCustomers.CustomerName = insuredPersonModel.Name;
-                tblCustomers.GenderId = insuredPersonModel.Gender;
+                tblCustomers.GenderId = insuredPersonModel.GenderId;
                 tblCustomers.CustomerDOB = insuredPersonModel.DateOfBirth;
                 tblCustomers.CustomerMobile1 = insuredPersonModel.Mobile;
                 tblCustomers.CustomerEmail1 = insuredPersonModel.Email;

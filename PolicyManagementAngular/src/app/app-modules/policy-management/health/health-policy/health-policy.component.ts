@@ -700,7 +700,7 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
   }
 
   setvalues() {
-
+    debugger
     this._verticalName = this._policyData != undefined ? this._policyData.Vertical : "MOTOR";
     this._policyStatus = this._policyData != undefined ? this._policyData.PolicyStatus : "Active";
     this._policyStatusColor = this._policyData != undefined ? this._policyData.PolicyStatusColor : '#fdcb6e'
@@ -2382,13 +2382,13 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
     this.validatePremiumDetail(response)
     this.validatePolicySourceDetail(response)
     this.validatePaymentData(response)
+    this.validateInsuredPersonDetail(response)
   };
   erorr: string = "This Field is Required";
   errorList: any = [];
 
 
   validatePolicyDetail(response: IHealthPolicyFormDataModel) {
-    if (response.PolicyTerm.PackageTypeId === PackageType.TP_ONLY) {
       if (!response.TpPolicy.PolicyNumber) {
         this.errorList.push("Policy Number" + this.erorr)
       }
@@ -2401,8 +2401,12 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
       if (!response.TpPolicy.StartDateDto) {
         this.errorList.push("Risk Policy start date" + this.erorr)
       }
-
-    }
+      if (response.TpPolicy.InsuranceCompany == 0) {
+        this.errorList.push("Insurance company " + this.erorr)
+      }
+      if (!response.InsuranceBranch) {
+        this.errorList.push("Insurance Branch " + this.erorr)
+      }
   }
 
   validatePolicyType(response: IHealthPolicyFormDataModel) {
@@ -2450,6 +2454,14 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
 
     if (!response.PaymentData || response.PaymentData.length == 0) {
       this.errorList.push("Atleast one Payment mode should be selected")
+
+    }
+  }
+
+
+  validateInsuredPersonDetail(response: IHealthPolicyFormDataModel) {
+    if (!response.InsuredPersonData || response.InsuredPersonData.length == 0) {
+      this.errorList.push("Atleast one Insured Person detail should be selected")
 
     }
   }
