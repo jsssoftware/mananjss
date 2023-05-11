@@ -11,8 +11,8 @@ import { DialogBoxComponent } from 'src/app/shared/common-component/Policy/dialo
 import { PolicyDataComponent } from 'src/app/shared/common-component/Policy/policy-data/policy-data.component';
 import { PolicyManagementComponent } from 'src/app/shared/common-component/Policy/policy-management/policy-management.component'; 
 import { MotorPolicyManagementComponent } from './motor/motor-policy-management/motor-policy-management.component';
-import { HealthPolicyComponent } from './health/health-policy/health-policy.component';
-import { HealthPolicyManagementComponent } from './health/health-policy-management/health-policy-management.component';
+import { RetailPolicyComponent } from './retail/retail-policy/retail-policy.component';
+import { HealthPolicyManagementComponent } from './retail/health-policy-management/health-policy-management.component';
 import { MotorPolicyComponent } from './motor/motor-policy/motor-policy.component';
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
@@ -21,7 +21,9 @@ import { NumbersOnlyDirective } from 'src/app/shared/utilities/directive/numbero
 import { PrintErrorComponent } from 'src/app/shared/common-component/print-error/print-error.component';
 import { PreviewDialogComponent } from 'src/app/shared/utilities/dialog/preview-dialog/preview-dialog.component';
 import { DisableControlDirective } from 'src/app/shared/utilities/directive/disabledcontrol.directive';
-import { HealthService } from 'src/app/app-services/health-service/health.service';
+import { RetailService } from 'src/app/app-services/health-service/retail.service';
+import { PaPolicyManagementComponent } from './retail/pa-policy-management/pa-policy-management.component';
+import { TravelPolicyManagementComponent } from './retail/travel-policy-management/travel-policy-management.component';
 
 @NgModule({
   declarations: [  
@@ -32,13 +34,15 @@ import { HealthService } from 'src/app/app-services/health-service/health.servic
     PolicyManagementComponent,
     MotorPolicyComponent,
     MotorPolicyManagementComponent,
-    HealthPolicyComponent,
+    RetailPolicyComponent,
     HealthPolicyManagementComponent,
     TwoDigitDecimaNumberDirective,
     NumbersOnlyDirective,
     PrintErrorComponent,
     PreviewDialogComponent,
-    DisableControlDirective
+    DisableControlDirective,
+    PaPolicyManagementComponent,
+    TravelPolicyManagementComponent
   ],
   imports: [
     CommonModule,
@@ -49,11 +53,7 @@ import { HealthService } from 'src/app/app-services/health-service/health.servic
     ReactiveFormsModule,
     MaterialFileInputModule,
     NgxDocViewerModule,
-    
-
-    
-    
   ],
-  providers:[MotorService,HealthService]
+  providers:[MotorService,RetailService]
 })
 export class PolicyManagementModule { }

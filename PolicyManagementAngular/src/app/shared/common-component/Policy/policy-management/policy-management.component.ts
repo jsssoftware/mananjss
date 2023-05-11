@@ -25,6 +25,14 @@ export class PolicyManagementComponent implements OnInit {
     {
       this.newPolicyContent ="New Health Policy Data Entry";
     }
+    if(this.MenuVertical=='Personal Accident')
+    {
+      this.newPolicyContent ="New Personal Accident Policy Data Entry";
+    }
+    if(this.MenuVertical=='Travel')
+    {
+      this.newPolicyContent ="New Travel Policy Data Entry";
+    }
   }
 
   routeWithEnum(enumName: string) {
@@ -34,10 +42,20 @@ export class PolicyManagementComponent implements OnInit {
       this.verticalData = Vertical.Motor;
       this.motorservice.vertical$.next("MOTOR")
     }
-    else if(this.MenuVertical=='Health')
+    if(this.MenuVertical=='Health')
     {
       this.verticalData = Vertical.Health; 
       this.motorservice.vertical$.next("HEALTH")
+    }
+    if(this.MenuVertical=='Personal Accident')
+    {
+      this.verticalData = Vertical.Pesonal_Accident; 
+      this.motorservice.vertical$.next("Pesonal_Accident")
+    }
+    if(this.MenuVertical=='Travel')
+    {
+      this.verticalData = Vertical.Travel; 
+      this.motorservice.vertical$.next("Travel")
     }
 
     switch (enumName) {

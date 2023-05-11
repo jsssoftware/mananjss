@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-health-policy-management',
@@ -6,8 +7,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./health-policy-management.component.css']
 })
 export class HealthPolicyManagementComponent implements OnInit {
-  public Vertical ='Health'
-  constructor() { }
+  public Vertical:string="Health";
+  constructor( 
+    ) { 
+
+  }
 
   ngOnInit(): void {
   }

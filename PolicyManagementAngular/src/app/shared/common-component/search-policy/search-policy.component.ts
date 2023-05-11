@@ -19,7 +19,7 @@ import * as XLSX from 'xlsx';
 import { Console } from 'console';
 import {CommonFunction} from 'src/app/shared/utilities/helpers/common-function';
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
-import { HealthService } from 'src/app/app-services/health-service/health.service';
+import { RetailService } from 'src/app/app-services/health-service/retail.service';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
@@ -142,7 +142,7 @@ export class SearchPolicyComponent implements OnInit {
     private route: ActivatedRoute,
     private _commonFunction:CommonFunction,
     private _motorService:MotorService,
-    private _healthService:HealthService,
+    private _healthService:RetailService,
   ) {
     this._branchId = sessionStorage.getItem("branchId");   
     this.searchPolicyForm.patchValue({
@@ -158,6 +158,7 @@ export class SearchPolicyComponent implements OnInit {
     if(this._policyType == SearchPolicyType.Motor_Incomplete){
       this._showAll = true
     }
+    debugger
     this._verticalTypeId = this.route.snapshot.paramMap.get('verticalType'); 
      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType));
     // #region set automoplete 
@@ -227,7 +228,6 @@ export class SearchPolicyComponent implements OnInit {
       this._healthService._headerTitle$.next(this._headerTitle);
       this._healthService.vertical$.next("HEALTH");
       this.router.navigate(["/pms/health", { policyId, policyTypeId: policyTypeId,policyType :this._policyType }]);
-    
     }
   }
 
@@ -397,6 +397,8 @@ export class SearchPolicyComponent implements OnInit {
     if(this._verticalTypeId==Vertical.Motor)
       this.router.navigate(['./pms/motor/motor-policy-management']);
     if(this._verticalTypeId==Vertical.Health)
+      this.router.navigate(['./pms/health/health-policy-management']);
+    if(this._verticalTypeId==Vertical.Pesonal_Accident)
       this.router.navigate(['./pms/health/health-policy-management']);
 
   }  

@@ -32,18 +32,18 @@ using System.Numerics;
 
 namespace PolicyManagement.Services.Health
 {
-    public class HealthService : BaseService, IHealthService
+    public class RetailService : BaseService, IRetailService
     {
         private readonly ICommonService _commonService;
         private readonly ILog log = LogManager.GetLogger("API Logger");
 
-        public HealthService(DataContext dataContext,
+        public RetailService(DataContext dataContext,
                             ICommonService commonService,
                             IMapper mapper) : base(dataContext, mapper)
         {
             _commonService = commonService;
         }
-        public async Task<CommonDto<object>> CreateHealthPolicy(HealthPolicyFormDataModel model, BaseModel baseModel)
+        public async Task<CommonDto<object>> CreateHealthPolicy(RetailPolicyFormDataModel model, BaseModel baseModel)
         {
             short DefaultRToZoneId = 1;
             using (var dbContextTransaction = _dataContext.Database.BeginTransaction())
@@ -423,14 +423,14 @@ namespace PolicyManagement.Services.Health
             return age;
         }
 
-        public async Task<HealthPolicyFormDataModel> FindHealthPolicyByPolicyId(int policyId)
+        public async Task<RetailPolicyFormDataModel> FindHealthPolicyByPolicyId(int policyId)
         {
-            HealthPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
+            RetailPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
                                                   .Join(_dataContext.tblRTOZone, T3 => T3.T1.RTOZoneId, T4 => T4.RTOZoneId, (T3, T4) => new { T3, T4 })
                                                     .GroupJoin(_dataContext.tblCluster, T5 => T5.T3.T2.ClusterId, T6 => T6.ClusterId, (T5, T6) => new { T5, T6 })
                                                   .SelectMany(s => s.T6.DefaultIfEmpty(), (policyWithCustomer, cluster) => new { policyWithCustomer.T5, T6 = cluster })
                                                   .Where(w => w.T5.T3.T1.PolicyId == policyId)
-                                                  .Select(s => new HealthPolicyFormDataModel
+                                                  .Select(s => new RetailPolicyFormDataModel
                                                   {
                                                       PolicyId = s.T5.T3.T1.PolicyId,
                                                       BranchId = s.T5.T3.T1.BranchId.ToString(),
@@ -594,9 +594,10 @@ namespace PolicyManagement.Services.Health
             try
             {
                 var data = await _dataContext.tblPolicyPaymentData.Where(w => w.PolicyId == policyId).ToListAsync();
-                var insuredPersons = await _dataContext.tblInsuredPerson.Join(_dataContext.tblGender, insuredPerson => insuredPerson.InsuredGenderId, gender => gender.GenderId, (insuredPerson, gender) => new {insuredPerson, gender })
-                    .Where(x => x.insuredPerson.PolicyId == policyId && x.insuredPerson.IsActive ==  true)
-                    .ToListAsync();
+                var insuredPersons = await _dataContext.tblInsuredPerson
+                                    .Join(_dataContext.tblGender, insuredPerson => insuredPerson.InsuredGenderId, gender => gender.GenderId, (insuredPerson, gender) => new {insuredPerson, gender })
+                                    .Where(x => x.insuredPerson.PolicyId == policyId && x.insuredPerson.IsActive ==  true)
+                                    .AsNoTracking().ToListAsync();
                 List<InsuredPersonModel> tblInsuredPersons = new List<InsuredPersonModel>();
                 foreach (var f in insuredPersons)
                 {
@@ -752,7 +753,7 @@ namespace PolicyManagement.Services.Health
             return motorPolicy;
         }
 
-        public async Task<CommonDto<object>> UpdateHealthPolicy(int policyId, HealthPolicyFormDataModel model, BaseModel baseModel)
+        public async Task<CommonDto<object>> UpdateHealthPolicy(int policyId, RetailPolicyFormDataModel model, BaseModel baseModel)
         {
 
             tblMotorPolicyData motorPolicyData = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => f.PolicyId == policyId);
@@ -1061,7 +1062,7 @@ namespace PolicyManagement.Services.Health
             };
         }
 
-        private bool IsFlag2True(HealthPolicyFormDataModel model)
+        private bool IsFlag2True(RetailPolicyFormDataModel model)
         {
                 if( ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model) 
                  && ValidateInsuredPersonDetail(model)) { 
@@ -1071,7 +1072,7 @@ namespace PolicyManagement.Services.Health
         }
        
    
-        private bool ValidatePolicyDetail(HealthPolicyFormDataModel model)
+        private bool ValidatePolicyDetail(RetailPolicyFormDataModel model)
         {
             if (model.PolicyTerm.PackageTypeId == (short)PackageType.TP_ONLY)
             {
@@ -1085,7 +1086,7 @@ namespace PolicyManagement.Services.Health
             return true;
         }
 
-        private bool ValidatePremiumDetail(HealthPolicyFormDataModel model)
+        private bool ValidatePremiumDetail(RetailPolicyFormDataModel model)
         {
             if (model.Premium.Tp == 0 || model.Premium.GstPercentage == 0 )
             {
@@ -1094,7 +1095,7 @@ namespace PolicyManagement.Services.Health
             return true;
         }
 
-        private bool ValidateInsuredPersonDetail(HealthPolicyFormDataModel model)
+        private bool ValidateInsuredPersonDetail(RetailPolicyFormDataModel model)
         {
             if (model.InsuredPersonData.Count == 0)
             {
@@ -1103,7 +1104,7 @@ namespace PolicyManagement.Services.Health
             return true;
         }
 
-        private bool ValidatePolicySourceDetail(HealthPolicyFormDataModel model)
+        private bool ValidatePolicySourceDetail(RetailPolicyFormDataModel model)
         {
             if (model.PolicySource.TeleCaller == 0 && model.PolicySource.Fos == 0 && model.PolicySource.Pos == 0 && model.PolicySource.Reference == 0 )
             {
@@ -1112,7 +1113,7 @@ namespace PolicyManagement.Services.Health
             return true;
         }
 
-        private bool ValidatePaymentData(HealthPolicyFormDataModel model)
+        private bool ValidatePaymentData(RetailPolicyFormDataModel model)
         {
 
             if ( model.PaymentData.Count == 0)
@@ -1123,7 +1124,7 @@ namespace PolicyManagement.Services.Health
         }
 
 
-        private async Task<CommonDto<object>> ValidateData(HealthPolicyFormDataModel model)
+        private async Task<CommonDto<object>> ValidateData(RetailPolicyFormDataModel model)
         {
             //Check Amount
             if (model.Premium != null && model.PaymentData.Sum(s => s.Amount) < model.Premium.TotalGrossPremium && model.PaymentData != null && model.PaymentData.Count>0)

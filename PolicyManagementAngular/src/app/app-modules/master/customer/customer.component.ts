@@ -8,8 +8,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
 import { CommonFunction } from 'src/app/shared/utilities/helpers/common-function';
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
-import { SearchPolicyType } from 'src/app/shared/utilities/enums/enum';
-import { HealthService } from 'src/app/app-services/health-service/health.service';
+import { SearchPolicyType, Vertical } from 'src/app/shared/utilities/enums/enum';
+import { RetailService } from 'src/app/app-services/health-service/retail.service';
 
 @Component({
   selector: 'app-customer',
@@ -23,6 +23,7 @@ export class CustomerComponent implements OnInit {
   public _pageSize: number = 20;
   public _input: string = "";
   public _headerTitle:any;
+  public Verticaltype:number;
 
   @ViewChild(MatPaginator) _paginator!: MatPaginator;
   @ViewChild(MatSort) _sort!: MatSort;
@@ -34,7 +35,7 @@ export class CustomerComponent implements OnInit {
     private route: ActivatedRoute,
     private _commonFunction:CommonFunction,
     private _motorService:MotorService,
-    private _healthService:HealthService
+    private _healthService:RetailService
   ) {
   }
 
@@ -43,9 +44,9 @@ export class CustomerComponent implements OnInit {
     this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyTypeId)); 
     this._motorService._headerTitle$.next(this._headerTitle);
     this._healthService._headerTitle$.next(this._headerTitle);
-    let VType  = this.route.snapshot.paramMap.get('verticalType');
-    this._motorService._verticalId$.next(VType);
-    this._healthService._verticalId$.next(VType);
+    this.Verticaltype  = Number(this.route.snapshot.paramMap.get('verticalType'));
+    this._motorService._verticalId$.next( this.Verticaltype );
+    this._healthService._verticalId$.next( this.Verticaltype );
   }
 
   pageChanged(event: PageEvent): void {
@@ -89,16 +90,21 @@ export class CustomerComponent implements OnInit {
 
 
   routeToMotorPolicy(customerId: number) {
-    let VType  = this.route.snapshot.paramMap.get('verticalType');
-    if(VType=='1'){
-    this._motorService._verticalId$.next(VType);
+    if( this.Verticaltype  == Vertical.Motor){
     this._motorService.vertical$.next("MOTOR");
       this.router.navigate(["/pms/motor", { customerId, policyTypeId: this._policyTypeId }]);
     }
-    if(VType=='2'){
-      this._healthService._verticalId$.next(VType);
+    if( this.Verticaltype == Vertical.Health){
       this._healthService.vertical$.next("HEALTH");
-      this.router.navigate(["/pms/health", { customerId, policyTypeId: this._policyTypeId }]);
+      this.router.navigate(["/pms/health",  this.Verticaltype ,this._policyTypeId  ,{ customerId, policyTypeId: this._policyTypeId }]);
+    }
+    if( this.Verticaltype == Vertical.Pesonal_Accident){
+      this._healthService.vertical$.next("PERSONAL ACCIDENT");
+      this.router.navigate(["/pms/pa/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
+    }
+    if( this.Verticaltype == Vertical.Travel){
+      this._healthService.vertical$.next("Travel");
+      this.router.navigate(["/pms/pa/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
 
   }

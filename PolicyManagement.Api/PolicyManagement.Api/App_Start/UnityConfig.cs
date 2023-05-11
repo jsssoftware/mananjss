@@ -40,7 +40,7 @@ namespace PolicyManagement.Api
             container.RegisterType<ICommonService, CommonService>(new HierarchicalLifetimeManager());
             container.RegisterType<ICustomerService, CustomerService>(new HierarchicalLifetimeManager());
             container.RegisterType<IMotorService, MotorService>(new HierarchicalLifetimeManager());
-            container.RegisterType<IHealthService, HealthService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IRetailService, RetailService>(new HierarchicalLifetimeManager());
             container.RegisterType<IVoucherService, VoucherService>(new HierarchicalLifetimeManager());
             container.RegisterType<IClaimsService, ClaimsService>(new HierarchicalLifetimeManager());
             container.RegisterType<IInspectionService, InspectionService>(new HierarchicalLifetimeManager());

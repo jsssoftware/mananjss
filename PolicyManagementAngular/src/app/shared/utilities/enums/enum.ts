@@ -1,7 +1,9 @@
 export enum Vertical {
     All,
     Motor,
-    Health
+    Health,
+    Pesonal_Accident = 6,
+    Travel = 3,
 }
 
 export enum PolicyManagement {

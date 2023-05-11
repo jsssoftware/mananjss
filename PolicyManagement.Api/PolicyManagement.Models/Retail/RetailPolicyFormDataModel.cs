@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 namespace PolicyManagement.Models.Health
 {
-    public class HealthPolicyFormDataModel
+    public class RetailPolicyFormDataModel
     {
-        public HealthPolicyFormDataModel()
+        public RetailPolicyFormDataModel()
         {
             PaymentData = new List<PaymentFormDataModel>();
             Document = new List<DocumentModel>();

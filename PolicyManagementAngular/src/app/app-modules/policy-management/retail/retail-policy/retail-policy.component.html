@@ -395,7 +395,7 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <div class="col-lg-4" *ngIf="MenuVertical!='Motor'">
+                <div class="col-lg-4" *ngIf="isHeath">
                   <mat-form-field appearance="fill">
                     <mat-label>Continuty Start Date</mat-label>
                     <input matInput [matDatepicker]="continutyStartDate" formControlName="continutyStartDate" (dateChange)="setExpiryDate('tp')">
@@ -713,8 +713,8 @@
                   <div class="col-lg-4">
                     <mat-form-field>
                       <mat-label>Mobile</mat-label>
-                      <input type="text" matInput formControlName="cmobile" placeholder="Mobile"
-                        style="line-height: 28px;">
+                      <input type="number" matInput formControlName="cmobile" placeholder="Mobile"
+                        style="line-height: 28px;" numbersOnlyWithOutDecimal>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-4">
@@ -766,15 +766,15 @@
                   <div class="col-lg-4">
                     <mat-form-field>
                       <mat-label>Sum Insured(Individual)</mat-label>
-                      <input type="number" matInput formControlName="csuminsuredindividual" placeholder="Sum Insured(Individual)"
-                        style="line-height: 28px;">
+                      <input type="text" matInput formControlName="csuminsuredindividual" placeholder="Sum Insured(Individual)"
+                        style="line-height: 28px;"  maxlength="10" numbersOnlyWithOutDecimal>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-4">
                     <mat-form-field>
                       <mat-label>Sum Insured (Floater)</mat-label>
-                      <input type="number" matInput formControlName="csuminsuredfloater" placeholder="Sum Insured (Floater)"
-                        style="line-height: 28px;">
+                      <input type="text" matInput formControlName="csuminsuredfloater" placeholder="Sum Insured (Floater)"
+                        style="line-height: 28px;" numbersOnlyWithOutDecimal maxlength="10">
                     </mat-form-field>
                   </div>
                 </div>
@@ -863,8 +863,10 @@
                   <div class="col-lg-3">
                     <mat-form-field>
                       <mat-label>Nominee Relationship </mat-label>
-                      <input type="text" matInput formControlName="cnomineerelation" placeholder="Nominee Relationship"
-                        style="line-height: 28px;">
+                        <mat-select formControlName="cnomineerelation">
+                          <mat-option>Select</mat-option>
+                          <mat-option *ngFor="let relation of _relations" [value]="relation.Value">{{relation.Name}}</mat-option>
+                        </mat-select>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-1">

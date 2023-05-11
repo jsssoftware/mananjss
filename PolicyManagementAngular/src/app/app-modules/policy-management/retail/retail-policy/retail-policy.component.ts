@@ -9,7 +9,6 @@ import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
 import { IAddOnPlanOptionDto } from 'src/app/app-entites/dtos/motor/add-on-plan-option-dto';
 import { IRtoZoneDto } from 'src/app/app-entites/dtos/motor/rto-zone-dto';
 import { IVarientDto } from 'src/app/app-entites/dtos/motor/varient-dto';
-import { IVehicleDto } from 'src/app/app-entites/dtos/motor/vehicle-dto';
 import { IYearDto } from 'src/app/app-entites/dtos/motor/year-dto';
 import { IDocumentModel } from 'src/app/app-entites/models/common/document-model';
 import { ICustomerService } from 'src/app/app-services/customer-service/abstracts/customer.iservice';
@@ -17,7 +16,7 @@ import { IPaymentFormDataModel } from 'src/app/app-entites/models/motor/payment-
 import { PolicyType, SearchPolicyType, Vertical, PackageType, Common, ProductPlanType, Portabality } from 'src/app/shared/utilities/enums/enum';
 import { IPolicyTermDto } from '../../../../app-entites/dtos/motor/policy-term-dto';
 import { ICommonService } from '../../../../app-services/common-service/abstracts/common.iservice';
-import { IHealthService } from '../../../../app-services/health-service/abstracts/health.iservice';
+import { IRetailService } from '../../../../app-services/health-service/abstracts/retail.iservice';
 import { ICustomerInsuranceDetail, ICustomerShortDetailDto } from 'src/app/app-entites/dtos/customer/customer-short-detail-dto';
 import { MatDialog } from '@angular/material/dialog';
 import { IAddOnRiderModel } from 'src/app/app-entites/models/motor/add-on-rider-model';
@@ -30,7 +29,7 @@ import { IPolicyInspectionDto } from 'src/app/app-entites/dtos/common/policy-ins
 import { IPolicyDocumentDto } from 'src/app/app-entites/dtos/common/policy-document-dto';
 import { v4 as uuidv4 } from 'uuid';
 import { ViewClaimsComponent } from 'src/app/app-modules/sub-system/claims/view-claims/view-claims.component';
-import { HealthService } from 'src/app/app-services/health-service/health.service';
+import { RetailService } from 'src/app/app-services/health-service/retail.service';
 import { TwoDigitDecimaNumberDirective } from 'src/app/shared/utilities/directive/twodecimal.directive';
 import { Observable, ReplaySubject } from 'rxjs';
 import { saveAs } from 'file-saver';
@@ -110,11 +109,11 @@ const ELEMENT_DATA_InspectionDetail: PeriodicElementForInspectionDetail[] = [
   },
 ];
 @Component({
-  selector: 'app-health-policy',
-  templateUrl: './health-policy.component.html',
-  styleUrls: ['./health-policy.component.scss']
+  selector: 'app-retail-policy',
+  templateUrl: './retail-policy.component.html',
+  styleUrls: ['./retail-policy.component.scss']
 })
-export class HealthPolicyComponent implements OnInit, AfterViewInit {
+export class RetailPolicyComponent implements OnInit, AfterViewInit {
   public Vertical = 'Health'
   @Input('MenuVertical') public MenuVertical: string = '';
   @Output() tableNameToDialogBox = new EventEmitter<string>();
@@ -472,6 +471,10 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
     ".png,.jpg,.jpeg,.pdf";
 
   public rtoNotAvailable: number = 1;
+  public _verticalId: number;
+  public isRetail: boolean = false;
+  public isHeath: boolean = false;
+  public isTravel: boolean = false;
   public get SearchPolicyType(): typeof SearchPolicyType {
     return SearchPolicyType;
   }
@@ -480,13 +483,13 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
   }
   constructor(
     private commonService: ICommonService,
-    private healthService: IHealthService,
+    private retailService: IRetailService,
     private customerService: ICustomerService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,
     public dialog: MatDialog,
-    public mainhealthService: HealthService,
+    public mainhealthService: RetailService,
     public _sanitizer: DomSanitizer,
     public _commonFunction: CommonFunction
   ) {
@@ -506,7 +509,8 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
     this._policyTypeId = Number(this.route.snapshot.paramMap.get('policyTypeId'));//is the id when customer saved
     this._policyId = Number(this.route?.snapshot?.paramMap.get('policyId') || 0);
     this._policyType = Number(this.route?.snapshot?.paramMap.get('policyType') || 0);
-
+    this._verticalId = Number(this.route?.snapshot?.paramMap.get('verticalId') || 0);
+    this.setActivateVertical(this._verticalId);
     switch (this._policyTypeId) {
       case 1:
         this._type = SearchPolicyType.Motor_New;
@@ -1138,7 +1142,7 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
 
     if (this._policyId == 0 || this._policyType == SearchPolicyType.Motor_Renew) {
       console.log(model, 'model')
-      this.healthService.createPolicy(model).subscribe((response: ICommonDto<any>) => {
+      this.retailService.createPolicy(model).subscribe((response: ICommonDto<any>) => {
         if (response.IsSuccess) {
           Swal.fire({
             icon: 'success',
@@ -1188,7 +1192,7 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
       });
     }
     else {
-      this.healthService.updatePolicy(this._policyId, model).subscribe((response: ICommonDto<any>) => {
+      this.retailService.updatePolicy(this._policyId, model).subscribe((response: ICommonDto<any>) => {
 
         if (response.IsSuccess) {
           Swal.fire({
@@ -1610,7 +1614,7 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
   }
 
   getHealthPolicyById(policyId: number) {
-    this.healthService.getHealthPolicyById(policyId).subscribe((response: IHealthPolicyFormDataModel) => {
+    this.retailService.getReatilPolicyById(policyId).subscribe((response: IHealthPolicyFormDataModel) => {
       this._policyData = response;
       this.setHealthPolicyData(response);
       this.getPolicyDocuments();
@@ -2749,6 +2753,9 @@ export class HealthPolicyComponent implements OnInit, AfterViewInit {
       this._ppc  = response;
     });
   }
-
+  setActivateVertical(verticalId:number){
+    if(verticalId == Vertical.Health) this.isHeath = true
+    if(verticalId == Vertical.Health) this.isRetail = true
+  }
 
 }

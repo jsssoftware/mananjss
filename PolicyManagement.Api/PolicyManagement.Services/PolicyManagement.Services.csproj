@@ -111,8 +111,8 @@
     <Compile Include="Customer\Interface\ICustomerService.cs" />
     <Compile Include="Inspection\InspectionService.cs" />
     <Compile Include="Inspection\Interface\IInspectionService.cs" />
-    <Compile Include="Health\Interface\IHealthService.cs" />
-    <Compile Include="Health\HealthService.cs" />
+    <Compile Include="Health\Interface\IRetailService.cs" />
+    <Compile Include="Health\RetailService.cs" />
     <Compile Include="Motor\Interface\IMotorService.cs" />
     <Compile Include="Motor\MotorService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
