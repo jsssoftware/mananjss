@@ -704,7 +704,6 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   setvalues() {
-    debugger
     this._verticalName = this._policyData != undefined ? this._policyData.Vertical : "MOTOR";
     this._policyStatus = this._policyData != undefined ? this._policyData.PolicyStatus : "Active";
     this._policyStatusColor = this._policyData != undefined ? this._policyData.PolicyStatusColor : '#fdcb6e'
@@ -1624,7 +1623,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
 
   async setHealthPolicyData(response: IHealthPolicyFormDataModel): Promise<void> {
-
+ 
     this.setCompanyInsuranceBranch(response)
     this.setCustomerDetail(<ICustomerShortDetailDto>{
       AddressInPolicy: response.Customer.AddressInPolicy,
@@ -1682,7 +1681,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       previousPolicySumInsured: response.PreviousPolicy.PreviousPolicySumInsured
     });
 
-    
+    debugger
     if (this._policyType !== SearchPolicyType.Motor_Renew) {
 
       this._renewalCounter = response.RenewalCounter;
@@ -1715,6 +1714,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
             bank3: response.PaymentData[i].Bank
           });
         }
+      }
         
         this.policyForm.patchValue({
           tpInsuranceCompany: response.TpPolicy.InsuranceCompany,
@@ -1789,7 +1789,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
           this._addOnPlanOptions = addOnResponse;
           this.UpdateAddonPlanValue(response)
         });
-      }
+      
     }
 
 
@@ -1823,6 +1823,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       this.previousPolicyChecked(response.IsPreviousPolicyApplicable);
       this.getAddOnRiders();
       this.setPortablity();
+      this.changePortabality();
     }, 3000);
     this.setvalues();
   }
