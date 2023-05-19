@@ -2362,7 +2362,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     if (response.PolicyTerm.PackageTypeId == PackageType.TP_ONLY) {
       insuranceCompanyId = response.TpPolicy.InsuranceCompany
     }
-    this.commonService.getInsuranceCompanyBranches(this.verticalData, insuranceCompanyId, this._branchId).subscribe((data: IDropDownDto<number>[]) => {
+    this.commonService.getInsuranceCompanyBranches(this._verticalId, insuranceCompanyId, this._branchId).subscribe((data: IDropDownDto<number>[]) => {
       this._insuranceCompanyBranches = data;
       this.policyForm.patchValue({
         insuranceBranch: response.InsuranceBranch,
