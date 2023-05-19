@@ -273,5 +273,9 @@ namespace PolicyManagement.Api.Controllers.Common
         [HttpGet]
         public async Task<IHttpActionResult> GetAllPed() => Json(await _commonService.FindAllPedData());
 
+        [Route("coverage")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllCoverage() => Json(await _commonService.FindAllCoverage());
+
     }
 }

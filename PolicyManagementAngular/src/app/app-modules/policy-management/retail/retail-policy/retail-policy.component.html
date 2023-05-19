@@ -369,7 +369,7 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <div class="col-lg-4" *ngIf="MenuVertical!='Motor'">
+                <div class="col-lg-4" *ngIf="isHeath || isPA">
                   <mat-form-field appearance="fill">
                     <mat-label>Portability</mat-label>
                     <mat-select formControlName="portability" required (selectionChange)="changePortabality()">
@@ -382,7 +382,19 @@
                   </mat-form-field>
                 </div>
   
-  
+                <div class="col-lg-4" *ngIf="isTravel">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Coverage</mat-label>
+                    <mat-select formControlName="coverage" required >
+                      <mat-option>Select</mat-option>
+                      <mat-option *ngFor="let coverage of _coverage" [value]="coverage.Value">
+                        {{coverage.Name}}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="policyForm.controls.coverage">Please Select Coverage</mat-error>
+                  </mat-form-field>
+                </div>
+
               </div>
               <div class="row">
                 <div class="col-lg-8">
@@ -395,9 +407,9 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <div class="col-lg-4" *ngIf="isHeath">
+                <div class="col-lg-4" *ngIf="isHeath || isTravel">
                   <mat-form-field appearance="fill">
-                    <mat-label>Continuty Start Date</mat-label>
+                    <mat-label>{{isTravel ? 'Issue Date' : 'Continuty Start Date'}}</mat-label>
                     <input matInput [matDatepicker]="continutyStartDate" formControlName="continutyStartDate" (dateChange)="setExpiryDate('tp')">
                     <mat-datepicker-toggle matSuffix [for]="continutyStartDate"></mat-datepicker-toggle>
                     <mat-datepicker #continutyStartDate></mat-datepicker>
@@ -405,16 +417,16 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-4" *ngIf="isHeath || isTravel">
                   <mat-form-field appearance="fill">
-                    <mat-label>{{(MenuVertical=='Motor')?'TP Start Date' : 'Risk Start Date'}}</mat-label>
+                    <mat-label>{{(MenuVertical=='Motor')?'TP Start Date' :  isTravel ? 'Date of Departure': 'Risk Start Date'}}</mat-label>
                     <input matInput [matDatepicker]="StartDate" formControlName="tpStartDate"
                       (dateChange)="setExpiryDate('tp')">
                     <mat-datepicker-toggle matSuffix [for]="StartDate"></mat-datepicker-toggle>
                     <mat-datepicker #StartDate></mat-datepicker>
                   </mat-form-field>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-4" *ngIf="isHeath || isPA">
                   <mat-form-field appearance="fill">
                     <mat-label>Number of Year</mat-label>
                     <mat-select formControlName="tpNumberOfYear" required (selectionChange)="setExpiryDate('tp')">
@@ -425,9 +437,18 @@
                     <mat-error *ngIf="policyForm.controls.tpNumberOfYear">Please Select Number of Year</mat-error>
                   </mat-form-field>
                 </div>
+                <div class="col-lg-4" *ngIf="isTravel">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Number of Days</mat-label>
+                    
+                    <input type="text" matInput formControlName="numberOfDays" placeholder="Number of Days"
+                    style="line-height: 30px;" class="uppercase" maxlength="4" max="4">
+                    <mat-error *ngIf="policyForm.controls.numberOfDays">Please select Number of Days</mat-error>
+                  </mat-form-field>
+                </div>
                 <div class="col-lg-4">
                   <mat-form-field appearance="fill">
-                    <mat-label>{{(MenuVertical=='Motor')?'Expiry Date' : 'Risk End Date'}}</mat-label>
+                    <mat-label>{{(MenuVertical=='Motor')?'Expiry Date':  isTravel ? 'Date of Return' : 'Risk End Date'}}</mat-label>
                     <input matInput [matDatepicker]="ExpiryDate" formControlName="tpExpiryDate" />
                     <mat-datepicker-toggle matSuffix [for]="ExpiryDate"></mat-datepicker-toggle>
                     <mat-datepicker #ExpiryDate></mat-datepicker>
@@ -688,15 +709,22 @@
                       <mat-label>Name of Insured Person</mat-label>
                       <input type="text" matInput formControlName="cnameInsuredPerson"
                         placeholder="Name of Insured Person" style="line-height: 28px;">
+                        <mat-error
+                        *ngIf="insuranceCustomerForm.controls.cnameInsuredPerson">
+                         Name is <strong>required</strong>
+                      </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-4">
                   
                         <mat-form-field appearance="fill">
                           <mat-label>Date of Birth</mat-label>
+                          <mat-error *ngIf="insuranceCustomerForm.controls.dateofbirth">Date of birth is <strong>required</strong>
+                          </mat-error>
                           <input matInput [matDatepicker]="dateofbirth" formControlName="cdob">
                           <mat-datepicker-toggle matSuffix [for]="dateofbirth"></mat-datepicker-toggle>
                           <mat-datepicker #dateofbirth></mat-datepicker>
+                        
                         </mat-form-field>
                   </div>
                   <div class="col-lg-4">
@@ -706,6 +734,8 @@
                           <mat-option>Select</mat-option>
                           <mat-option *ngFor="let gender of _genders" [value]="gender.Value">{{gender.Name}}</mat-option>
                         </mat-select>
+                        <mat-error *ngIf="insuranceCustomerForm.controls.cgender">Gender is <strong>required</strong>
+                        </mat-error>
                     </mat-form-field>
                   </div>
                 </div>
@@ -715,12 +745,16 @@
                       <mat-label>Mobile</mat-label>
                       <input type="number" matInput formControlName="cmobile" placeholder="Mobile"
                         style="line-height: 28px;" numbersOnlyWithOutDecimal>
+                      <mat-error *ngIf="insuranceCustomerForm.controls.cmobile">Mobile is <strong>required</strong>
+                      </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-4">
                     <mat-form-field>
                       <mat-label>Email</mat-label>
                       <input type="text" matInput formControlName="cemail" placeholder="Email" style="line-height: 28px;">
+                      <mat-error *ngIf="insuranceCustomerForm.controls.cemail">Email is <strong>required</strong>
+                      </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-4">
@@ -779,7 +813,7 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-lg-3">
+                  <div class="col-lg-3"  *ngIf="isPA || isHeath">
                     <mat-form-field>
                       <mat-label>Cumulative Bonus</mat-label>
                       <input type="text" matInput formControlName="ccummbonus" placeholder="Cumulative Bonus"
@@ -808,7 +842,7 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <div class="row">
+                <div class="row" *ngIf="isHeath || isTravel">
                   <div class="col-lg-4">
                     <mat-form-field>
                       <mat-label>PED</mat-label>
@@ -843,7 +877,7 @@
                         style="line-height: 28px;">
                     </mat-form-field>
                   </div>
-                  <div class="col-lg-3">
+                  <div class="col-lg-3" *ngIf="isPA">
                     
                     <mat-form-field>
                       <mat-label>Risk Class</mat-label>
@@ -928,7 +962,7 @@
   
                       <ng-container matColumnDef="RelationProposer">
                         <th mat-header-cell *matHeaderCellDef> Realtion With Proposer</th>
-                        <td mat-cell *matCellDef="let element"> {{element.RelationProposer}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.RelationProposerName}} </td>
                       </ng-container>
                       <ng-container matColumnDef="SumInsuredIndividual">
                         <th mat-header-cell *matHeaderCellDef>Sum Insured Individual </th>
@@ -957,7 +991,7 @@
                       </ng-container>
                       <ng-container matColumnDef="Ped">
                         <th mat-header-cell *matHeaderCellDef>Ped </th>
-                        <td mat-cell *matCellDef="let element"> {{element.Ped}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.PedName}} </td>
                       </ng-container>
                       <ng-container matColumnDef="PedExclusion">
                         <th mat-header-cell *matHeaderCellDef>Ped Exclusion</th>
@@ -977,7 +1011,7 @@
                       </ng-container>
                       <ng-container matColumnDef="NomineeRelationship">
                         <th mat-header-cell *matHeaderCellDef> Nominee Relationship</th>
-                        <td mat-cell *matCellDef="let element"> {{element.NomineeRelationship}} </td>
+                        <td mat-cell *matCellDef="let element"> {{element.NomineeRelationShipName}} </td>
                       </ng-container>
   
                    
@@ -1044,11 +1078,19 @@
                     </mat-error>
                   </mat-form-field>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-2" *ngIf="isHeath || isPA">
                   <mat-form-field>
                     <mat-label>Long Term Discount</mat-label>
                     <input type="text" matInput formControlName="longtermDiscount" (change)="calculateTotalTp()"
                       placeholder="Long Term Discount" numbersOnlyWithOutDecimal
+                       maxlength="9">
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-2" *ngIf="isTravel">
+                  <mat-form-field>
+                    <mat-label>Max Trip Days(Multi Trip)</mat-label>
+                    <input type="text" matInput formControlName="maxTripDays" 
+                      placeholder="Max Trip Days" numbersOnlyWithOutDecimal
                        maxlength="9">
                   </mat-form-field>
                 </div>

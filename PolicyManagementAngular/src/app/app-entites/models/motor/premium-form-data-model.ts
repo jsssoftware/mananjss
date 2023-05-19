@@ -29,4 +29,5 @@ export interface IPremiumFormDataModel {
     AdditionalDiscount?:number;
     LongtermDiscount?:number;
     SectionDiscount?:number;
+    MaxDaysSingleTrip?:number;
 }

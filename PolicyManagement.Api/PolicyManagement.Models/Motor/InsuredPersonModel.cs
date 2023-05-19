@@ -13,7 +13,7 @@ namespace PolicyManagement.Models.Motor
         public string Name { get; set; }
         public string PassportNumber { get; set; }
         public string Gender { get; set; }
-        public string RelationProposer { get; set; }
+        public short? RelationProposer { get; set; }
         public int? SumInsuredIndividual { get; set; }
         public int? SumInsuredFloater { get; set; }
         public int? CumulativeBonus { get; set; }
@@ -41,6 +41,11 @@ namespace PolicyManagement.Models.Motor
         public int? TeamMemberId { get; set; }
         public string Aadhar { get; set; }
         public int? Age { get; set; }
+        public string NomineeRelationShipName { get; set; }
+        public string PedName { get; set; }
+        public string RelationProposerName { get; set; }
+        public string CustomerCode { get; set; }
+
 
     }
 }

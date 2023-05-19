@@ -14,5 +14,7 @@ namespace PolicyManagement.Models.Motor
         public string ExpiryDateString { get; set; }
         public DateTime? ExpiryDate { get; set; }
         public DateDto ExpiryDateDto { get; set; }
+        public short? NumberOfDays { get; set; }
+
     }
 }

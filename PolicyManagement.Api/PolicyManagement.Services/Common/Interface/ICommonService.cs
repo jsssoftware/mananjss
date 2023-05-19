@@ -76,6 +76,8 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindAllRisks();
         Task<List<DropDownDto<int>>> FindAllPpcData();
         Task<List<DropDownDto<int>>> FindAllPedData();
+        Task<List<DropDownDto<int>>> FindAllCoverage();
+
 
     }
 }

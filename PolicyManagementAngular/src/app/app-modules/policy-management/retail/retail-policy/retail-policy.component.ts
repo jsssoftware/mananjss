@@ -230,9 +230,12 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     // inspectionTime: new FormControl(''),
     // inspectionRemarks: new FormControl('')
     portability: new FormControl(''),
+    coverage: new FormControl(''),
     continutyStartDate: new FormControl(''),
     previousPolicyPlan: new FormControl(''),
     previousPolicySumInsured: new FormControl('', [Validators.pattern('^[0-9]+$')]),
+    numberOfDays: new FormControl('', [Validators.required]),
+
   });
   //#endregion
 
@@ -261,6 +264,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     commissionablePremium: new FormControl(''),
     basicTPgstPercent: new FormControl('', [Validators.required]),
     netpremium: new FormControl(0),
+    maxTripDays: new FormControl(''),
   });
   //#endregion
 
@@ -345,10 +349,10 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   // product plan form
   //#region 
   insuranceCustomerForm = new FormGroup({
-    cnameInsuredPerson: new FormControl(''),
-    cdob: new FormControl(''),
-    cgender: new FormControl(''),
-    cmobile: new FormControl(''),
+    cnameInsuredPerson: new FormControl('',[Validators.required]),
+    cdob: new FormControl('',[Validators.required]),
+    cgender: new FormControl('',[Validators.required]),
+    cmobile: new FormControl('',[Validators.required]),
     cemail: new FormControl(''),
     cpassport: new FormControl(''),
     cpan: new FormControl(''),
@@ -465,6 +469,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   public _planTypes: IDropDownDto<number>[] = [];
   public _selectedProductId: number = 0;
   public _portability: IDropDownDto<number>[] = [];
+  public _coverage: IDropDownDto<number>[] = [];
   public maxValueAllowedNumber: number = 99999999.99
   public maxValueAllowedPercentage: number = 999.99;
   public listAccepts: string =
@@ -472,7 +477,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
   public rtoNotAvailable: number = 1;
   public _verticalId: number;
-  public isRetail: boolean = false;
+  public isPA: boolean = false;
   public isHeath: boolean = false;
   public isTravel: boolean = false;
   public get SearchPolicyType(): typeof SearchPolicyType {
@@ -502,7 +507,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     };
   }
   ngOnInit(): void {
-
+    this.setVertical();
     this._verticalName = this.mainhealthService.vertical$.getValue();
     this._headerTitle = this.mainhealthService._headerTitle$.getValue();
     this._customerId = this.route.snapshot.paramMap.get('customerId');
@@ -547,15 +552,6 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       this._isViewPolicyActive = true
     }
 
-
-
-    this.policyForm.get("numberOfKiloMeterCovered")?.disable();
-    this.policyForm.get("extendedKiloMeterCovered")?.disable();
-    /*  this.policyForm.valueChanges.subscribe(change => {
-       console.log(this.policyForm)
-       this.policyForm = this.policyForm
-     })
-  */
   }
 
 
@@ -596,6 +592,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     await this.getRisksClass();
     await this.getPed();
     await this.getPpc();
+    await this.getCoverage();
     //Not calling on edit
     if (this._policyId == 0 || this._policyType == SearchPolicyType.Motor_Renew) {
       //      await this.getAddOnRiders();
@@ -635,6 +632,11 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
         this.filterPosdData(input.Name);
     });
 
+    this.paymentUpdateValue();
+
+  }
+
+  paymentUpdateValue(){
 
     const CHEQUE = "1";
     const AGENTCHEQUE = "3"
@@ -726,7 +728,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   getVerticalDetail(): void {
-    this.commonService.getVerticalById(Vertical.Health).subscribe((response: any) => {
+    this.commonService.getVerticalById(this._verticalId).subscribe((response: any) => {
       this._verticalDetail = response;
     });
   }
@@ -813,7 +815,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   getInsuranceCompanies(): any {
-    this.commonService.getInsuranceCompanies(Vertical.Health).subscribe((response: IDropDownDto<number>[]) => {
+    this.commonService.getInsuranceCompanies(this._verticalId).subscribe((response: IDropDownDto<number>[]) => {
       this._insuranceCompanies = this._tpInsuranceCompanies = this._odInsuranceCompanies = this._lastInsuranceCompanies = this._savedinsuranceCompanies = response;
     });
   }
@@ -847,7 +849,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
     let branchId: number = this.PolicyForm.isAll ? -1 : this._branchId;
 
-    this.commonService.getInsuranceCompanyBranches(Vertical.Health, insuranceCompanyId, branchId).subscribe((response: IDropDownDto<number>[]) => {
+    this.commonService.getInsuranceCompanyBranches(this._verticalId, insuranceCompanyId, branchId).subscribe((response: IDropDownDto<number>[]) => {
       this._insuranceCompanyBranches = response;
     });
     this.getAddOnRiders();
@@ -899,7 +901,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   getCommissionPaidOn(): any {
-    this.commonService.getCommissionPaidOn(Vertical.Health).subscribe((response: any) => {
+    this.commonService.getCommissionPaidOn(this._verticalId).subscribe((response: any) => {
       this._commissionPaidOn = response;
     });
   }
@@ -910,14 +912,14 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     insuranceCompanyId = this.policyForm.controls['tpInsuranceCompany'].value;
 
     if (insuranceCompanyId) {
-      this.commonService.getAddOnRiders(insuranceCompanyId, Vertical.Health).subscribe((response: IDropDownDto<number>[]) => {
+      this.commonService.getAddOnRiders(insuranceCompanyId, this._verticalId).subscribe((response: IDropDownDto<number>[]) => {
         this._addOnRiders = response;
       });
     }
   }
 
   getAddOnPlanOptions(addOnRiderId: number): void {
-    this.commonService.getAddOnPlanOptions(addOnRiderId, Vertical.Health, 0).subscribe((response: IAddOnPlanOptionDto[]) => {
+    this.commonService.getAddOnPlanOptions(addOnRiderId, this._verticalId, 0).subscribe((response: IAddOnPlanOptionDto[]) => {
       response.forEach((value, index) => {
         value.IsDisabled = value.IsPlanAvailable;
         if (value.IsPlanAvailable) {
@@ -936,7 +938,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   getTeleCallers(branchId: number): any {
-    this.commonService.getTeleCallers(Vertical.Health, branchId).subscribe((response: any) => {
+    this.commonService.getTeleCallers(this._verticalId, branchId).subscribe((response: any) => {
       this._teleCallers = response;
     });
   }
@@ -948,7 +950,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   getFosNames(branchId: number): any {
-    this.commonService.getFosNames(Vertical.Health, branchId).subscribe((response: any) => {
+    this.commonService.getFosNames(this._verticalId, branchId).subscribe((response: any) => {
       this._fosNames = response;
     });
   }
@@ -1015,7 +1017,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
         NumberOfYear: this.PolicyForm.tpNumberOfYear,
         PolicyNumber: this.PolicyForm.policyNumber,
         StartDateString: this.commonService.getDateInString(this.PolicyForm.tpStartDate),
-        StartDateDto: null
+        StartDateDto: null,
+        NumberOfDays: this.PolicyForm.numberOfDays
       },
       OdPolicy: {
         StartDateString: this.commonService.getDateInString(this.PolicyForm.odStartDate),
@@ -1096,7 +1099,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
         FamilyDiscount: Number(this.PremiumForm.familyDiscount),
         LongtermDiscount: Number(this.PremiumForm.longtermDiscount),
         AdditionalDiscount: Number(this.PremiumForm.additionalDiscount),
-        SectionDiscount: Number(this.PremiumForm.sectionDiscount)
+        SectionDiscount: Number(this.PremiumForm.sectionDiscount),
+        MaxDaysSingleTrip :  Number(this.PremiumForm.maxTripDays)
       },
       Vehicle: <IVehicleFormDataModel>{},
       Nomination: <INominationFormDataModel>{},
@@ -1385,7 +1389,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
 
   getPos(branchId: number): void {
-    this.commonService.getPos(Vertical.Health, branchId).subscribe((response: IDropDownDto<number>[]) => {
+    this.commonService.getPos(this._verticalId, branchId).subscribe((response: IDropDownDto<number>[]) => {
       this._posDatas = response;
     })
   }
@@ -1661,6 +1665,12 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
 
     this._selectedinsuranceCustomerPersonDetail = JSON.parse(JSON.stringify(response.InsuredPersonData));
+    await this._selectedinsuranceCustomerPersonDetail.filter(y=>{
+      debugger
+      y.NomineeRelationShipName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
+      y.RelationProposerName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
+      y.PedName = this._ped.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cped)?.Name
+    })
     this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
     this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
 
@@ -1681,7 +1691,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       previousPolicySumInsured: response.PreviousPolicy.PreviousPolicySumInsured
     });
 
-    debugger
+    
     if (this._policyType !== SearchPolicyType.Motor_Renew) {
 
       this._renewalCounter = response.RenewalCounter;
@@ -1782,7 +1792,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
         //Updating add on rider value
         if (response?.AddOnRider?.AddOnRiderId) await this.getAddOnRiders()
         this._addOnRiderModel.AddOnRiderId = response?.AddOnRider?.AddOnRiderId;
-        this.commonService.getAddOnPlanOptions(this._addOnRiderModel.AddOnRiderId, Vertical.Health, 0).subscribe((addOnResponse: IAddOnPlanOptionDto[]) => {
+        this.commonService.getAddOnPlanOptions(this._addOnRiderModel.AddOnRiderId, this._verticalId, 0).subscribe((addOnResponse: IAddOnPlanOptionDto[]) => {
           addOnResponse.forEach((value, index) => {
             value.IsDisabled = value.IsPlanAvailable;
           });
@@ -1842,7 +1852,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   searchCustomer() {
-    this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_New + "/" + Vertical.Health + ""]);
+    this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_New + "/" + this._verticalId + ""]);
     // this.router.navigate(["/master/customer", 1]);
   }
 
@@ -1898,21 +1908,21 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   openClaimsDialog(data: IPreviousClaimDto) {
     const dialogRef = this.dialog.open(ViewClaimsComponent, {
       width: '50%',
-      data: { claimsId: data.ClaimId, verticalId: Vertical.Health }
+      data: { claimsId: data.ClaimId, verticalId: this._verticalId }
     });
   }
 
   openVoucherDialog(data: IPolicyVoucherDto): void {
     const dialogRef = this.dialog.open(VoucherDetailComponent, {
       width: '50%',
-      data: { voucherId: data.VoucherId, verticalId: Vertical.Health }
+      data: { voucherId: data.VoucherId, verticalId: this._verticalId }
     });
   }
 
   openInspectionDialog(data: IPolicyInspectionDto): void {
     const dialogRef = this.dialog.open(InspectionDetailComponent, {
       width: '50%',
-      data: { inspectionId: data.Id, verticalId: Vertical.Health }
+      data: { inspectionId: data.Id, verticalId: this._verticalId }
     });
   }
 
@@ -2245,7 +2255,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   getProduct() {
-    this.commonService.getProducts(Vertical.Health).subscribe((response: any) => {
+    this.commonService.getProducts(this._verticalId).subscribe((response: any) => {
       this._products = response;
     });
   }
@@ -2269,6 +2279,11 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       this.setPortablity();
     });
   }
+  getCoverage() {
+    this.commonService.getCoverage().subscribe((response: any) => {
+      this._coverage = response;
+    });
+  }
 
   calculateChanges() {
 
@@ -2281,10 +2296,16 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   verticalData: any;
-  routeWithEnum(enumName: string) {
+  setVertical() {
 
     if (this.MenuVertical == 'Motor') {
-      this.verticalData = Vertical.Health;
+      this.verticalData = Vertical.Motor;
+    }
+    else if (this.MenuVertical == 'Travel') {
+      this.verticalData = Vertical.Travel;
+    }
+    else if (this.MenuVertical == 'Personal Accident') {
+      this.verticalData = Vertical.Pesonal_Accident;
     }
     else if (this.MenuVertical == 'Health') {
       this.verticalData = Vertical.Health;
@@ -2306,7 +2327,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   redirectRoute() {
-    this.verticalData = Vertical.Health;
+    this.verticalData = this.verticalData;
     this.router.navigate(["../pms/health/health-policy-management"]);
   }
 
@@ -2341,7 +2362,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     if (response.PolicyTerm.PackageTypeId == PackageType.TP_ONLY) {
       insuranceCompanyId = response.TpPolicy.InsuranceCompany
     }
-    this.commonService.getInsuranceCompanyBranches(Vertical.Health, insuranceCompanyId, this._branchId).subscribe((data: IDropDownDto<number>[]) => {
+    this.commonService.getInsuranceCompanyBranches(this.verticalData, insuranceCompanyId, this._branchId).subscribe((data: IDropDownDto<number>[]) => {
       this._insuranceCompanyBranches = data;
       this.policyForm.patchValue({
         insuranceBranch: response.InsuranceBranch,
@@ -2513,6 +2534,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   _isInsurancePersoneEdit: boolean = false;
   _incrementalUid: number = 0;
   addCustomerClusterData(data: ICustomerInsuranceDetail, index: number) {
+    if(this.insuranceCustomerForm.valid){}
     this.reverseInsurcanceDataifExist()
     this._incrementalUid = this._incrementalUid + 1;
     data.uid = this._incrementalUid + 1;
@@ -2535,6 +2557,10 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
   insurancePerson: ICustomerInsuranceDetail = <ICustomerInsuranceDetail>{};
   addInsuracePersondetail(): void {
+    if(!this.insuranceCustomerForm.valid) {
+      this.insuranceCustomerForm.markAllAsTouched();
+      return;
+    }
     console.log(this.insuranceCustomerForm.value)
     if (!this.InsurancePersonForm.cnameInsuredPerson) {
       alert("Customer name is required");
@@ -2571,6 +2597,9 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this.insurancePerson.RiskClass = this.InsurancePersonForm.criskclass
     this.insurancePerson.NomineeName = this.InsurancePersonForm.cnomineename
     this.insurancePerson.NomineeRelationship = this.InsurancePersonForm.cnomineerelation,
+    this.insurancePerson.NomineeRelationShipName = this._relations.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cnomineerelation)?.Name
+    this.insurancePerson.RelationProposerName = this._relations.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.crelprposer)?.Name
+    this.insurancePerson.PedName = this._ped.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cped)?.Name
       this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
     this.insurancePerson.GenderId = this.InsurancePersonForm.cgender;
     let ss =
@@ -2756,7 +2785,9 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
   setActivateVertical(verticalId:number){
     if(verticalId == Vertical.Health) this.isHeath = true
-    if(verticalId == Vertical.Health) this.isRetail = true
+    if(verticalId == Vertical.Pesonal_Accident) this.isPA = true
+    if(verticalId == Vertical.Travel) this.isTravel = true
   }
+
 
 }

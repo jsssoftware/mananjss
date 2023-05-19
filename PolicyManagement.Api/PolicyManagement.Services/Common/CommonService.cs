@@ -1368,5 +1368,15 @@ namespace PolicyManagement.Services.Common
             }).OrderBy(o =>o.Value).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
+
+        public async Task<List<DropDownDto<int>>> FindAllCoverage()
+        {
+            List<DropDownDto<int>> result = await _dataContext.tblCoverage.Select(s => new DropDownDto<int>
+            {
+                Name = s.CoverageName,
+                Value = s.CoverageId
+            }).OrderBy(o => o.Value).ToListAsync();
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
     }
 }

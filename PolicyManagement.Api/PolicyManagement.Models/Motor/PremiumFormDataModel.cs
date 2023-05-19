@@ -32,5 +32,6 @@
         public decimal? AdditionalDiscount { get; set; }
         public decimal? LongtermDiscount { get; set; }
         public decimal? SectionDiscount { get; set; }
+        public int? MaxDaysSingleTrip { get; set; }
     }
 }

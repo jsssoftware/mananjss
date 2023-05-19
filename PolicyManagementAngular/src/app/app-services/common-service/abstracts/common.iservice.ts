@@ -83,5 +83,7 @@ export abstract class ICommonService {
     abstract getRiskClass(): Observable<any>; 
     abstract getPed(): Observable<IDropDownDto<number>[]>;
     abstract getPpc(): Observable<IDropDownDto<number>[]>;
+    abstract getCoverage(): Observable<any>; 
+
 
 }

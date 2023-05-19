@@ -45,7 +45,7 @@ export interface ICustomerInsuranceDetail{
     CustomerId: number;
     ClusterId?:number
     Profession :  string;
-    RelationProposer?: string;
+    RelationProposer?: number;
     SumInsuredIndividual?: number;
     SumInsuredFloater?: number;
     CumulativeBonus?: string;
@@ -68,6 +68,9 @@ export interface ICustomerInsuranceDetail{
     PosId? :  number;
     TeamMemebrId? :  number;
     ReferenceId? :  number;
+    NomineeRelationShipName? :  string;
+    PedName? :  string;
+    RelationProposerName?: string;
 
 
 }

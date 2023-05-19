@@ -8,4 +8,5 @@ export interface ITpOdPolicyFormDataModel {
     NumberOfYear: number;
     ExpiryDateString: string;
     ExpiryDateDto: IDateDto | null;
+    NumberOfDays?: string
 }

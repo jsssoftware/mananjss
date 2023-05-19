@@ -174,7 +174,10 @@ namespace PolicyManagement.Services.Health
                         CBStartDate = model.ContinueStartDate,
                         NoAdult = model.NumberOfAdult,
                         NoChild = model.NumberOfAdult,
-                        TotalSumInsured = model.TotalSumInsured
+                        TotalSumInsured = model.TotalSumInsured,
+                        NoofDays = model.TpPolicy.NumberOfDays,
+                        MaxDaysSingleTrip = model.Premium.MaxDaysSingleTrip
+
                     };
 
                     if ( model.PolicyTerm != null && (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4))
@@ -370,7 +373,7 @@ namespace PolicyManagement.Services.Health
                                 Loading = f.Loading,
                                 LoadingReason = f.LoadingReason,
                                 NomineeName = f.NomineeName,
-                                NomineeRelationId = 0,
+                                NomineeRelationId = f.NomineeRelationship,
                                 PEDId = f.Ped,
                                 PEDExclusion = f.PedExclusion,
                                 AnnualIncome = f.AnualIncome,
@@ -379,7 +382,9 @@ namespace PolicyManagement.Services.Health
                                 CreatedTime = DateTime.Now,
                                 PassportNo = f.PassportNumber,
                                 BranchId= f.BranchId,
-                                IsActive = true
+                                IsActive = true,
+                                PPCId = f.Ped,
+                                InsuredRelationId = f.RelationProposer
 
                             });
                         }
@@ -596,7 +601,8 @@ namespace PolicyManagement.Services.Health
                 var data = await _dataContext.tblPolicyPaymentData.Where(w => w.PolicyId == policyId).ToListAsync();
                 var insuredPersons = await _dataContext.tblInsuredPerson
                                     .Join(_dataContext.tblGender, insuredPerson => insuredPerson.InsuredGenderId, gender => gender.GenderId, (insuredPerson, gender) => new {insuredPerson, gender })
-                                    .Where(x => x.insuredPerson.PolicyId == policyId && x.insuredPerson.IsActive ==  true)
+                                    .Join(_dataContext.tblCustomer, T1 => T1.insuredPerson.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
+                                    .Where(x => x.T1.insuredPerson.PolicyId == policyId && x.T1.insuredPerson.IsActive ==  true)
                                     .AsNoTracking().ToListAsync();
                 List<InsuredPersonModel> tblInsuredPersons = new List<InsuredPersonModel>();
                 foreach (var f in insuredPersons)
@@ -604,32 +610,34 @@ namespace PolicyManagement.Services.Health
 
                     tblInsuredPersons.Add(new InsuredPersonModel
                     {
-                        PolicyId = f.insuredPerson.PolicyId,
-                        CustomerId = f.insuredPerson.CustomerId.GetValueOrDefault(),
-                        Name = f.insuredPerson.InsuredPersonName,
-                        GenderId = f.insuredPerson.InsuredGenderId.GetValueOrDefault(),
-                        DateOfBirth = f.insuredPerson.InsuredDOB,
-                        Age = f.insuredPerson.InsuredAge,
-                        SumInsuredIndividual = f.insuredPerson.SumInsuredIndividual,
-                        SumInsuredFloater = f.insuredPerson.SumInsuredFloater,
-                        PassportNumber = f.insuredPerson.PassportNo,
-                        CumulativeBonus = f.insuredPerson.CummulativeBonus,
-                        Deductable = f.insuredPerson.Deductable,
-                        Loading = f.insuredPerson.SumInsuredIndividual,
-                        LoadingReason = f.insuredPerson.LoadingReason,
-                        NomineeName = f.insuredPerson.NomineeName,
-                        NomineeRelationship = f.insuredPerson.NomineeRelationId,
-                        Ped = f.insuredPerson.PEDId,
-                        PedExclusion = f.insuredPerson.PEDExclusion,
-                        AnualIncome = f.insuredPerson.AnnualIncome,
-                        RiskClass = f.insuredPerson.RiskClassId,
-                        BranchId = f.insuredPerson.BranchId,
-                        Mobile=  motorPolicy.Customer.ContactNumber,
-                        Email = motorPolicy.Customer.Email,
-                        Address = motorPolicy.Customer.AddressInPolicy,
-                        Pan = motorPolicy.Customer.Pan,
-                        Aadhar = "",
-                        Gender = f.gender.Gender,
+                        PolicyId = f.T1.insuredPerson.PolicyId,
+                        CustomerId = f.T1.insuredPerson.CustomerId.GetValueOrDefault(),
+                        Name = f.T1.insuredPerson.InsuredPersonName,
+                        GenderId = f.T1.insuredPerson.InsuredGenderId.GetValueOrDefault(),
+                        DateOfBirth = f.T1.insuredPerson.InsuredDOB,
+                        Age = f.T1.insuredPerson.InsuredAge,
+                        SumInsuredIndividual = f.T1.insuredPerson.SumInsuredIndividual,
+                        SumInsuredFloater = f.T1.insuredPerson.SumInsuredFloater,
+                        PassportNumber = f.T1.insuredPerson.PassportNo,
+                        CumulativeBonus = f.T1.insuredPerson.CummulativeBonus,
+                        Deductable = f.T1.insuredPerson.Deductable,
+                        Loading = f.T1.insuredPerson.SumInsuredIndividual,
+                        LoadingReason = f.T1.insuredPerson.LoadingReason,
+                        NomineeName = f.T1.insuredPerson.NomineeName,
+                        NomineeRelationship = f.T1.insuredPerson.NomineeRelationId,
+                        Ped = f.T1.insuredPerson.PEDId,
+                        PedExclusion = f.T1.insuredPerson.PEDExclusion,
+                        AnualIncome = f.T1.insuredPerson.AnnualIncome,
+                        RiskClass = f.T1.insuredPerson.RiskClassId,
+                        BranchId = f.T1.insuredPerson.BranchId,
+                        Mobile= f.T2.CustomerContact,
+                        Email = f.T2.CustomerEmail1,
+                        Address = f.T2.CustomerAddress1,
+                        Pan = f.T2.PAN,
+                        Aadhar = f.T2.AadhaarNo,
+                        Gender = f.T1.gender.Gender,
+                        CustomerCode = f.T2.CustomerCode,
+                        RelationProposer = f.T1.insuredPerson.InsuredRelationId
                     });
                 }
                 if (insuredPersons != null && insuredPersons.Count > 0)
@@ -847,6 +855,9 @@ namespace PolicyManagement.Services.Health
             motorPolicyData.NoAdult = model.NumberOfAdult;
             motorPolicyData.NoChild = model.NumberOfAdult;
             motorPolicyData.TotalSumInsured = model.TotalSumInsured;
+            motorPolicyData.NoofDays = model.TpPolicy.NumberOfDays;
+            motorPolicyData.MaxDaysSingleTrip = model.Premium.MaxDaysSingleTrip;
+
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;
             else
@@ -1033,7 +1044,7 @@ namespace PolicyManagement.Services.Health
                         Loading = f.Loading,
                         LoadingReason = f.LoadingReason,
                         NomineeName = f.NomineeName,
-                        NomineeRelationId = 0,
+                        NomineeRelationId = f.NomineeRelationship,
                         PEDId = f.Ped,
                         PEDExclusion = f.PedExclusion,
                         AnnualIncome = f.AnualIncome,
@@ -1042,7 +1053,9 @@ namespace PolicyManagement.Services.Health
                         CreatedTime = DateTime.Now,
                         PassportNo = f.PassportNumber,
                         BranchId = f.BranchId,
-                        IsActive = true
+                        IsActive = true,
+                        PPCId = f.Ped,
+                        InsuredRelationId = f.RelationProposer
 
                     });
                 }
@@ -1193,7 +1206,14 @@ namespace PolicyManagement.Services.Health
 
             }
             _dataContext.tblCustomer.AddOrUpdate(tblCustomers);
-            await _dataContext.SaveChangesAsync();
+            try
+            {
+                await _dataContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
             return  tblCustomers;
         }
 

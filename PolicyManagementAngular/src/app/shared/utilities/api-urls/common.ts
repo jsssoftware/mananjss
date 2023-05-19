@@ -61,4 +61,6 @@ export class Common {
     public static readonly RIskClass = "api/common/riskclass";
     public static readonly Ped = "api/common/ped";
     public static readonly Ppc = "api/common/ppc";
+    public static readonly Coverage = "api/common/coverage";
+
 }

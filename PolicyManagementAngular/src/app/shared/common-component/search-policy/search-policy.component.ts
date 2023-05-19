@@ -220,14 +220,24 @@ export class SearchPolicyComponent implements OnInit {
   routeToMotorPolicy(policyId: number,policyTypeId:number) {
     if(this._verticalTypeId==Vertical.Motor){
       this._motorService.vertical$.next("MOTOR");
-      this.router.navigate(["/pms/motor", { policyId, policyTypeId: policyTypeId,policyType :this._policyType }]);
+      this.router.navigate(["/pms/motor", { policyId, policyTypeId: policyTypeId,policyType :this._policyType ,verticalId: Vertical.Motor}]);
       this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
       this._motorService._headerTitle$.next(this._headerTitle);
     }else if(this._verticalTypeId==Vertical.Health){
       this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
       this._healthService._headerTitle$.next(this._headerTitle);
       this._healthService.vertical$.next("HEALTH");
-      this.router.navigate(["/pms/health", { policyId, policyTypeId: policyTypeId,policyType :this._policyType }]);
+      this.router.navigate(["/pms/health", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Health}]);
+    }else if(this._verticalTypeId==Vertical.Pesonal_Accident){
+      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
+      this._healthService._headerTitle$.next(this._headerTitle);
+      this._healthService.vertical$.next("Pesonal Accident");
+      this.router.navigate(["/pms/pa", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Pesonal_Accident}]);
+    }else if(this._verticalTypeId==Vertical.Travel){
+      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
+      this._healthService._headerTitle$.next(this._headerTitle);
+      this._healthService.vertical$.next("Travel");
+      this.router.navigate(["/pms/travel", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Travel}]);
     }
   }
 
@@ -399,7 +409,7 @@ export class SearchPolicyComponent implements OnInit {
     if(this._verticalTypeId==Vertical.Health)
       this.router.navigate(['./pms/health/health-policy-management']);
     if(this._verticalTypeId==Vertical.Pesonal_Accident)
-      this.router.navigate(['./pms/health/health-policy-management']);
+      this.router.navigate(['./pms/pa/pa-policy-management']);
 
   }  
 }  
