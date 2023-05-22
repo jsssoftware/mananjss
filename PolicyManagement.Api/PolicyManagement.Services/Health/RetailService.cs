@@ -176,7 +176,8 @@ namespace PolicyManagement.Services.Health
                         NoChild = model.NumberOfAdult,
                         TotalSumInsured = model.TotalSumInsured,
                         NoofDays = model.TpPolicy.NumberOfDays,
-                        MaxDaysSingleTrip = model.Premium.MaxDaysSingleTrip
+                        MaxDaysSingleTrip = model.Premium.MaxDaysSingleTrip,
+                        CoverageId =  model.TpPolicy.Coverage
 
                     };
 
@@ -542,7 +543,8 @@ namespace PolicyManagement.Services.Health
                                                           FamilyDiscount = s.T5.T3.T1.FamilyDiscount ?? 0,
                                                           LongtermDiscount = s.T5.T3.T1.LongTermDiscount?? 0,
                                                           AdditionalDiscount = s.T5.T3.T1.AdditionalDiscount ?? 0,
-                                                          SectionDiscount = s.T5.T3.T1.SectionDiscount ?? 0
+                                                          SectionDiscount = s.T5.T3.T1.SectionDiscount ?? 0,
+                                                          MaxDaysSingleTrip  = s.T5.T3.T1.MaxDaysSingleTrip?? 0
                                                       },
                                                       PreviousPolicy = new PreviousPolicyFormDataModel
                                                       {
@@ -560,6 +562,8 @@ namespace PolicyManagement.Services.Health
                                                           NumberOfYear = s.T5.T3.T1.NoofYearId ?? 0,
                                                           PolicyNumber = s.T5.T3.T1.PolicyNo,
                                                           StartDate = s.T5.T3.T1.PolicyStartDate,
+                                                          NumberOfDays = s.T5.T3.T1.NoofDays,
+                                                          Coverage = s.T5.T3.T1.CoverageId?? 0,
                                                       },
                                                       ProductPlan = new ProductPlanModel
                                                       {
@@ -630,7 +634,7 @@ namespace PolicyManagement.Services.Health
                         AnualIncome = f.T1.insuredPerson.AnnualIncome,
                         RiskClass = f.T1.insuredPerson.RiskClassId,
                         BranchId = f.T1.insuredPerson.BranchId,
-                        Mobile= f.T2.CustomerContact,
+                        Mobile= f.T2.CustomerMobile1,
                         Email = f.T2.CustomerEmail1,
                         Address = f.T2.CustomerAddress1,
                         Pan = f.T2.PAN,
@@ -857,6 +861,8 @@ namespace PolicyManagement.Services.Health
             motorPolicyData.TotalSumInsured = model.TotalSumInsured;
             motorPolicyData.NoofDays = model.TpPolicy.NumberOfDays;
             motorPolicyData.MaxDaysSingleTrip = model.Premium.MaxDaysSingleTrip;
+            motorPolicyData.CoverageId = model.TpPolicy.Coverage;
+
 
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;

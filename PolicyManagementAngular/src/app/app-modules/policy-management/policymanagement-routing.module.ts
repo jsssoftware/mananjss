@@ -40,7 +40,7 @@ const routes: Routes = [
         component: HealthPolicyManagementComponent,
       },
       {
-        path: 'pa:',
+        path: 'pa',
         component: RetailPolicyComponent,
       },
       {
@@ -52,7 +52,7 @@ const routes: Routes = [
         component: PaPolicyManagementComponent,
       },
       {
-        path: 'travel:',
+        path: 'travel',
         component: RetailPolicyComponent,
       },
       {

@@ -182,5 +182,5 @@ export class CommonService extends ICommonService {
     getPed = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Common.Ped);
     getPpc = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Common.Ppc);
     getCoverage = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Common.Coverage);
-
+    getDateDays = (date: string, year: number, days : number): Observable<IDateDto> => this.apiManagerService.getRequest<IDateDto>(`${Common.Date}?date=${date}&year=${year}&days=${days}`);
 }

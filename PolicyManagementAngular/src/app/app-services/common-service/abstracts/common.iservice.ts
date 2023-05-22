@@ -84,6 +84,6 @@ export abstract class ICommonService {
     abstract getPed(): Observable<IDropDownDto<number>[]>;
     abstract getPpc(): Observable<IDropDownDto<number>[]>;
     abstract getCoverage(): Observable<any>; 
-
+    abstract getDateDays(date: string, year: number, days:number): Observable<IDateDto>;
 
 }

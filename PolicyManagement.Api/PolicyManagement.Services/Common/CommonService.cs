@@ -272,6 +272,24 @@ namespace PolicyManagement.Services.Common
                     })
                     .OrderBy(o => o.Name)
                     .ToListAsync();
+                case Vertical.Travel:
+                    return await _dataContext.tblInsuranceCompany.Where(w => w.IsHealth.HasValue && w.IsHealth.Value && w.IsActive.HasValue && w.IsActive.Value)
+                    .Select(s => new DropDownDto<int>
+                    {
+                        Name = s.InsuranceCompanyName,
+                        Value = s.InsuranceCompanyId
+                    })
+                    .OrderBy(o => o.Name)
+                    .ToListAsync();
+                case Vertical.PersonalAccident:
+                    return await _dataContext.tblInsuranceCompany.Where(w => w.IsHealth.HasValue && w.IsHealth.Value && w.IsActive.HasValue && w.IsActive.Value)
+                    .Select(s => new DropDownDto<int>
+                    {
+                        Name = s.InsuranceCompanyName,
+                        Value = s.InsuranceCompanyId
+                    })
+                    .OrderBy(o => o.Name)
+                    .ToListAsync();
                 default:
                     return await _dataContext.tblInsuranceCompany.Where(w => w.IsActive.HasValue && w.IsActive.Value)
                    .Select(s => new DropDownDto<int>
@@ -518,7 +536,45 @@ namespace PolicyManagement.Services.Common
                                                             })
                                                             .OrderBy(o => o.Name)
                                                             .ToListAsync();
-                case Vertical.Health:
+                case Vertical.Health :
+                    if (branchId > 0)
+                        return await _dataContext.tblTeamMember.Where(w => w.BranchId == branchId && w.IsHealth.HasValue && w.IsHealth.Value && w.ISTelecaller.HasValue && w.ISTelecaller.Value)
+                                                                .Select(s => new DropDownDto<int>
+                                                                {
+                                                                    Name = s.TeamMemberName,
+                                                                    Value = s.TeamMemberId
+                                                                })
+                                                                .OrderBy(o => o.Name)
+                                                                .ToListAsync();
+
+                    return await _dataContext.tblTeamMember.Where(w => w.IsHealth.HasValue && w.IsHealth.Value && w.ISTelecaller.HasValue && w.ISTelecaller.Value)
+                                                            .Select(s => new DropDownDto<int>
+                                                            {
+                                                                Name = s.TeamMemberName,
+                                                                Value = s.TeamMemberId
+                                                            })
+                                                            .OrderBy(o => o.Name)
+                                                            .ToListAsync();
+                case Vertical.Travel:
+                    if (branchId > 0)
+                        return await _dataContext.tblTeamMember.Where(w => w.BranchId == branchId && w.IsHealth.HasValue && w.IsHealth.Value && w.ISTelecaller.HasValue && w.ISTelecaller.Value)
+                                                                .Select(s => new DropDownDto<int>
+                                                                {
+                                                                    Name = s.TeamMemberName,
+                                                                    Value = s.TeamMemberId
+                                                                })
+                                                                .OrderBy(o => o.Name)
+                                                                .ToListAsync();
+
+                    return await _dataContext.tblTeamMember.Where(w => w.IsHealth.HasValue && w.IsHealth.Value && w.ISTelecaller.HasValue && w.ISTelecaller.Value)
+                                                            .Select(s => new DropDownDto<int>
+                                                            {
+                                                                Name = s.TeamMemberName,
+                                                                Value = s.TeamMemberId
+                                                            })
+                                                            .OrderBy(o => o.Name)
+                                                            .ToListAsync();
+                case Vertical.PersonalAccident:
                     if (branchId > 0)
                         return await _dataContext.tblTeamMember.Where(w => w.BranchId == branchId && w.IsHealth.HasValue && w.IsHealth.Value && w.ISTelecaller.HasValue && w.ISTelecaller.Value)
                                                                 .Select(s => new DropDownDto<int>
@@ -574,6 +630,44 @@ namespace PolicyManagement.Services.Common
                                                             .OrderBy(o => o.Name)
                                                             .ToListAsync();
                 case Vertical.Health:
+                    if (branchId > 0)
+                        return await _dataContext.tblTeamMember.Where(w => w.BranchId == branchId && w.IsHealth.HasValue && w.IsHealth.Value && w.ISFOS.HasValue && w.ISFOS.Value && w.IsActive)
+                                                                .Select(s => new DropDownDto<int>
+                                                                {
+                                                                    Name = s.TeamMemberName,
+                                                                    Value = s.TeamMemberId
+                                                                })
+                                                                .OrderBy(o => o.Name)
+                                                                .ToListAsync();
+
+                    return await _dataContext.tblTeamMember.Where(w => w.IsHealth.HasValue && w.IsHealth.Value && w.ISFOS.HasValue && w.ISFOS.Value && w.IsActive)
+                                                            .Select(s => new DropDownDto<int>
+                                                            {
+                                                                Name = s.TeamMemberName,
+                                                                Value = s.TeamMemberId
+                                                            })
+                                                            .OrderBy(o => o.Name)
+                                                            .ToListAsync();
+                case Vertical.Travel:
+                    if (branchId > 0)
+                        return await _dataContext.tblTeamMember.Where(w => w.BranchId == branchId && w.IsHealth.HasValue && w.IsHealth.Value && w.ISFOS.HasValue && w.ISFOS.Value && w.IsActive)
+                                                                .Select(s => new DropDownDto<int>
+                                                                {
+                                                                    Name = s.TeamMemberName,
+                                                                    Value = s.TeamMemberId
+                                                                })
+                                                                .OrderBy(o => o.Name)
+                                                                .ToListAsync();
+
+                    return await _dataContext.tblTeamMember.Where(w => w.IsHealth.HasValue && w.IsHealth.Value && w.ISFOS.HasValue && w.ISFOS.Value && w.IsActive)
+                                                            .Select(s => new DropDownDto<int>
+                                                            {
+                                                                Name = s.TeamMemberName,
+                                                                Value = s.TeamMemberId
+                                                            })
+                                                            .OrderBy(o => o.Name)
+                                                            .ToListAsync();
+                case Vertical.PersonalAccident:
                     if (branchId > 0)
                         return await _dataContext.tblTeamMember.Where(w => w.BranchId == branchId && w.IsHealth.HasValue && w.IsHealth.Value && w.ISFOS.HasValue && w.ISFOS.Value && w.IsActive)
                                                                 .Select(s => new DropDownDto<int>
@@ -726,13 +820,13 @@ namespace PolicyManagement.Services.Common
        .OrderBy(o => o.Name)
        .ToListAsync();
 
-        public DateDto CalculateDate(string dateString, int year)
+        public DateDto CalculateDate(string dateString, int year, int days)
         {
             DateTime? date = null;
             if (!string.IsNullOrEmpty(dateString)){
                 date =  DateTime.ParseExact(dateString, "MM/dd/yyyy", CultureInfo.InvariantCulture) ;
                 date = date.Value.AddYears(year);
-                date = date.Value.AddDays(-1);
+                date = date.Value.AddDays(days);
             }
           
             return new DateDto
@@ -865,7 +959,37 @@ namespace PolicyManagement.Services.Common
                     .OrderBy(o => o.Name)
                     .ToListAsync();
                 case Vertical.Travel:
+                    if (branchId > 0)
+                        return await _dataContext.tblPOS.Where(w => w.BranchId == branchId && w.IsHealth.HasValue && w.IsHealth.Value && w.IsActive).Select(s => new DropDownDto<int>
+                        {
+                            Name = s.POSName,
+                            Value = s.POSId
+                        })
+                        .OrderBy(o => o.Name)
+                        .ToListAsync();
+                    return await _dataContext.tblPOS.Where(w => w.IsHealth.HasValue && w.IsHealth.Value && w.IsActive).Select(s => new DropDownDto<int>
+                    {
+                        Name = s.POSName,
+                        Value = s.POSId
+                    })
+                    .OrderBy(o => o.Name)
+                    .ToListAsync();
                 case Vertical.PersonalAccident:
+                    if (branchId > 0)
+                        return await _dataContext.tblPOS.Where(w => w.BranchId == branchId && w.IsHealth.HasValue && w.IsHealth.Value && w.IsActive).Select(s => new DropDownDto<int>
+                        {
+                            Name = s.POSName,
+                            Value = s.POSId
+                        })
+                        .OrderBy(o => o.Name)
+                        .ToListAsync();
+                    return await _dataContext.tblPOS.Where(w => w.IsHealth.HasValue && w.IsHealth.Value && w.IsActive).Select(s => new DropDownDto<int>
+                    {
+                        Name = s.POSName,
+                        Value = s.POSId
+                    })
+                    .OrderBy(o => o.Name)
+                    .ToListAsync();
                 case Vertical.GroupHealth:
                     if (branchId > 0)
                         return await _dataContext.tblPOS.Where(w => w.BranchId == branchId && w.IsHealth.HasValue && w.IsHealth.Value && w.IsActive).Select(s => new DropDownDto<int>

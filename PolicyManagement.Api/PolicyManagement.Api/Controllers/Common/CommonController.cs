@@ -165,10 +165,10 @@ namespace PolicyManagement.Api.Controllers.Common
 
         [Route("date")]
         [HttpGet]
-        public IHttpActionResult GetDate(string date, int year) => Json(_commonService.CalculateDate(date, year));
+        public IHttpActionResult GetDate(string date, int year, int days = -1) => Json(_commonService.CalculateDate(date, year , days));
 
         [Route("document-types/{code}")]
-        [HttpGet]
+        [HttpGet ]
         public async Task<IHttpActionResult> GetDocumentTypes(string code) => Json(await _commonService.FindAllDocumentTypes(code));
 
         [Route("pos")]

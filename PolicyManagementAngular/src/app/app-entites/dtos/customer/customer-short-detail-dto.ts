@@ -31,7 +31,7 @@ export interface ICustomerInsuranceDetail{
     Name: string;
     Address: string;
     CustomerCode: string;
-    ClusterCode: string;
+    Code: string;
     Email: string;
     Cluster: string;
     CustomerType: string;
@@ -71,6 +71,4 @@ export interface ICustomerInsuranceDetail{
     NomineeRelationShipName? :  string;
     PedName? :  string;
     RelationProposerName?: string;
-
-
 }

@@ -1,6 +1,6 @@
 import { ActivatedRoute, Router } from '@angular/router';
 import { AfterViewInit, Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, ValidationErrors, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { ICommonDto } from 'src/app/app-entites/dtos/common/common-dto';
@@ -121,7 +121,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   displayedColumnsCustomerCluster: string[] = ["Sno", "NameInPolicy", "DateOfBirth", "Gender", "Mobile", "Code", "Action"];
   displayedColumnsInsuranceCluster: string[] = ["Action", "Sno", "NameInPolicy", "DateOfBirth", "Gender", "Mobile", "Code", "RelationProposer"
     , "SumInsuredIndividual", "SumInsuredFloater", "CumulativeBonus", "Deductable", "Loading", "LoadingReason", "Ped", "PedExclusion"
-    , "AnualIncome", "RiskClass", "NomineeName", "NomineeRelationship"];
+    , "AnualIncome", "NomineeName", "NomineeRelationship"];
   displayedColumns: string[] = [
     'endorsementReason',
     'entryDate',
@@ -593,6 +593,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     await this.getPed();
     await this.getPpc();
     await this.getCoverage();
+    this.setValidatoronVertical()
+
     //Not calling on edit
     if (this._policyId == 0 || this._policyType == SearchPolicyType.Motor_Renew) {
       //      await this.getAddOnRiders();
@@ -851,8 +853,10 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
     this.commonService.getInsuranceCompanyBranches(this._verticalId, insuranceCompanyId, branchId).subscribe((response: IDropDownDto<number>[]) => {
       this._insuranceCompanyBranches = response;
-    });
+    }); 
     this.getAddOnRiders();
+    this.setVerticalFunction();
+
     if (this._policyId == 0) {
       this.setPreviousInsuranceCompany();
 
@@ -1018,7 +1022,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
         PolicyNumber: this.PolicyForm.policyNumber,
         StartDateString: this.commonService.getDateInString(this.PolicyForm.tpStartDate),
         StartDateDto: null,
-        NumberOfDays: this.PolicyForm.numberOfDays
+        NumberOfDays: this.PolicyForm.numberOfDays,
+        Coverage: this.PolicyForm.coverage
       },
       OdPolicy: {
         StartDateString: this.commonService.getDateInString(this.PolicyForm.odStartDate),
@@ -1261,7 +1266,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
   setExpiryDate(policy: string) {
     let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
-
+    const days = -1;
     if (this.policyForm.value.tpNumberOfYear == undefined
       || this.policyForm.value.tpNumberOfYear === "") return;
     let tpYear = this._numberOfYears.filter(f => f.Value == this.policyForm.getRawValue().tpNumberOfYear)[0];
@@ -1338,6 +1343,17 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
         });
       });
     }
+  }
+
+  setExpiryDateDays() {
+    if (this.policyForm.value.numberOfDays == undefined
+      || this.policyForm.value.numberOfDays === "") return;
+    let numberofDays = this.policyForm.getRawValue().numberOfDays;
+    this.commonService.getDateDays(this.commonService.getDateInString(this.policyForm.getRawValue().tpStartDate), 0 , numberofDays).subscribe((response: IDateDto) => {
+      this.policyForm.patchValue({
+        tpExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
+      });
+    });
   }
 
 
@@ -1666,7 +1682,6 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
     this._selectedinsuranceCustomerPersonDetail = JSON.parse(JSON.stringify(response.InsuredPersonData));
     await this._selectedinsuranceCustomerPersonDetail.filter(y=>{
-      debugger
       y.NomineeRelationShipName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
       y.RelationProposerName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
       y.PedName = this._ped.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cped)?.Name
@@ -1739,7 +1754,9 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
           extendedKiloMeterCovered: response.ExtendedKiloMeterCovered,
           isPreviousPolicyApplicable: response.IsPreviousPolicyApplicable,
           continutyStartDate: this.commonService.getDateFromIDateDto(response.ContinueStartDateDTO as IDateDto),
-          portability: response.Portabality
+          portability: response.Portabality,
+          coverage : response.TpPolicy.Coverage,
+          numberOfDays : response.TpPolicy.NumberOfDays
         });
 
         this.premiumForm.patchValue({
@@ -1762,7 +1779,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
           longtermDiscount: response.Premium.LongtermDiscount,
           sectionDiscount: response.Premium.SectionDiscount,
           additionalDiscount: response.Premium.AdditionalDiscount,
-          totalGrossPremium: response.Premium.TotalGrossPremium
+          totalGrossPremium: response.Premium.TotalGrossPremium,
+          maxTripDays : response.Premium.MaxDaysSingleTrip
         });
 
         this.policySourceForm.patchValue({
@@ -1938,6 +1956,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
 
     this.setPreviousInsuranceCompany();
+    this.setVerticalFunction();
   }
 
   setPreviousInsuranceCompany() {
@@ -2025,11 +2044,19 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   changePortabality() {
-  
+    this._lastInsuranceCompanies = this._savedinsuranceCompanies;
+    this.policyForm.patchValue({
+      lastYearInsuranceCompany: ""
+    });
     if (this._type == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.No) {
       this._lastInsuranceCompanies = this._lastInsuranceCompanies.filter(f => f.Value != this.policyForm.value.tpInsuranceCompany);
-    } else {
-      this._lastInsuranceCompanies = this._savedinsuranceCompanies;
+    } else  if (this._type == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.No &&  ( this.policyForm.value.isChangeAgent || this.policyForm.value.isBlockAgent)) {
+      let insuranceCompany = this.policyForm.value.tpInsuranceCompany;
+      this.policyForm.patchValue({
+        lastYearInsuranceCompany: insuranceCompany
+      });
+    } else  if (this._type == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.Yes && ( !this.policyForm.value.isChangeAgent && !this.policyForm.value.isBlockAgent))  {
+      this._lastInsuranceCompanies = this._lastInsuranceCompanies.filter(f => f.Value != this.policyForm.value.tpInsuranceCompany);
     }
 
   }
@@ -2548,7 +2575,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       cpan: data.Pan,
       cprofession: data.Profession,
       ccustomerId: data.CustomerId,
-      ccustomerUid: data.uid
+      ccustomerUid: data.uid,
+      customerCode : data.CustomerCode
     })
     this._insuranceCustomerPersonDetails.push(data);
     console.log(this._insuranceCustomerPersonDetails)
@@ -2557,6 +2585,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
   insurancePerson: ICustomerInsuranceDetail = <ICustomerInsuranceDetail>{};
   addInsuracePersondetail(): void {
+    console.log(this.insuranceCustomerForm)
     if(!this.insuranceCustomerForm.valid) {
       this.insuranceCustomerForm.markAllAsTouched();
       return;
@@ -2606,7 +2635,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId ? this._storeCustomerClusterDetail.find(x => x.CustomerId == this.insuranceCustomerForm.value.ccustomerId).BranchId :
         this._branchId
     this.insurancePerson.uid = this.InsurancePersonForm.ccustomerUid;
-    this.insurancePerson.CustomerCode = this._insuranceCustomerPersonDetails?.find(x => x.uid == this.InsurancePersonForm?.ccustomerUid)?.CustomerCode
+    this.insurancePerson.CustomerCode = this._insuranceCustomerPersonDetails?.find(x => x.uid == this.InsurancePersonForm?.ccustomerUid)?.Code
 
     this.insurancePerson.Address = this.customerForm.getRawValue().addressInPolicy;
     this.insurancePerson.CityId = this._customerCityId
@@ -2788,6 +2817,44 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     if(verticalId == Vertical.Pesonal_Accident) this.isPA = true
     if(verticalId == Vertical.Travel) this.isTravel = true
   }
+
+  setValidatoronVertical() {
+    this.insuranceCustomerForm.controls.cpassport.clearValidators();
+    this.insuranceCustomerForm.controls.criskclass.clearValidators();
+
+
+    if (this._verticalId == Vertical.Travel) {
+      this.insuranceCustomerForm.controls.cpassport.setValidators([Validators.required]);
+    }
+   
+    if (this._verticalId == Vertical.Pesonal_Accident) {
+      this.insuranceCustomerForm.controls.criskclass.setValidators([Validators.required]);
+    }
+    this.insuranceCustomerForm.controls['cpassport'].updateValueAndValidity()
+
+    
+  }
+
+  setVerticalFunction() {
+    if (this._verticalId == Vertical.Health) {
+      this.changePortabality();
+    }
+   
+    if (this._verticalId == Vertical.Pesonal_Accident) {
+      this.changePortabality();
+    }
+    
+  }
+
+  isRequiredField(field: string) {
+    const form_field = this.insuranceCustomerForm.get(field);
+    if (!form_field.validator) {
+        return false;
+    }
+
+    const validator = form_field.validator({} as AbstractControl);
+    return (validator && validator.required);
+}
 
 
 }

@@ -43,7 +43,7 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindAllTeamMembers(Vertical vertical, int branchId);
         Task<List<DropDownDto<string>>> FindAllBranchs();
         Task<List<DropDownDto<short>>> FindAllCities();
-        DateDto CalculateDate(string dateString, int year);
+        DateDto CalculateDate(string dateString, int year, int days);
         Task<string> GenerateCustomerCode();
         Task<string> GenerateControlNumber(string branchCode, string verticalCode);
         Task<List<RtoZoneDto>> FindAllRtoZones();
