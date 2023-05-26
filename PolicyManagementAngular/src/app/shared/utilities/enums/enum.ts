@@ -4,6 +4,13 @@ export enum Vertical {
     Health,
     Pesonal_Accident = 6,
     Travel = 3,
+    Engineering = 13,
+    Fire = 4,
+    Misc = 7,
+    Liabality = 12,
+    Marine = 5,
+    Life = 14,
+
 }
 
 export enum PolicyManagement {

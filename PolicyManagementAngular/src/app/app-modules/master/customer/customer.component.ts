@@ -104,7 +104,27 @@ export class CustomerComponent implements OnInit {
     }
     if( this.Verticaltype == Vertical.Travel){
       this._healthService.vertical$.next("Travel");
-      this.router.navigate(["/pms/pa/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
+      this.router.navigate(["/pms/travel/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
+    }
+    if( this.Verticaltype == Vertical.Fire){
+      this._healthService.vertical$.next("Fire");
+      this.router.navigate(["/pms/fire/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
+    }
+    if( this.Verticaltype == Vertical.Engineering){
+      this._healthService.vertical$.next("Engineering");
+      this.router.navigate(["/pms/engineering/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
+    }
+    if( this.Verticaltype == Vertical.Marine){
+      this._healthService.vertical$.next("Marine");
+      this.router.navigate(["/pms/marine/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
+    }
+    if( this.Verticaltype == Vertical.Misc){
+      this._healthService.vertical$.next("Miscelleneous");
+      this.router.navigate(["/pms/misc/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
+    }
+    if( this.Verticaltype == Vertical.Liabality){
+      this._healthService.vertical$.next("Liabality");
+      this.router.navigate(["/pms/liabality/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
 
   }

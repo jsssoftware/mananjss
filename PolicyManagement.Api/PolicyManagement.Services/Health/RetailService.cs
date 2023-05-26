@@ -1096,7 +1096,11 @@ namespace PolicyManagement.Services.Health
             if (model.PolicyTerm.PackageTypeId == (short)PackageType.TP_ONLY)
             {
                 //22 IS ZERO YEAR IN TP
-                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || (model.TpPolicy.ExpiryDateString == null && model.TpPolicy.NumberOfYear != 22) || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null || model.TpPolicy.InsuranceCompany == 0)
+                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || (model.TpPolicy.ExpiryDateString == null) 
+                    && (model.TpPolicy.NumberOfYear != 22 && model.VerticalId != (short)Vertical.Travel) 
+                    && (model.TpPolicy.NumberOfDays == null && model.VerticalId == (short)Vertical.Travel)  || 
+                    (model.TpPolicy.NumberOfYear == 0 && model.VerticalId != (short)Vertical.Travel) 
+                    || model.TpPolicy.StartDateString == null || model.TpPolicy.InsuranceCompany == 0)
                 {
                     return false;
                 }
@@ -1107,7 +1111,7 @@ namespace PolicyManagement.Services.Health
 
         private bool ValidatePremiumDetail(RetailPolicyFormDataModel model)
         {
-            if (model.Premium.Tp == 0 || model.Premium.GstPercentage == 0 )
+            if (model.Premium.Tp == 0 || model.Premium.GstPercentage == 0 || model.Premium.CommissionPaidOn == 0)
             {
                 return false;
             }

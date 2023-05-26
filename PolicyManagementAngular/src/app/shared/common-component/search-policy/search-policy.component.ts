@@ -158,7 +158,6 @@ export class SearchPolicyComponent implements OnInit {
     if(this._policyType == SearchPolicyType.Motor_Incomplete){
       this._showAll = true
     }
-    debugger
     this._verticalTypeId = this.route.snapshot.paramMap.get('verticalType'); 
      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType));
     // #region set automoplete 

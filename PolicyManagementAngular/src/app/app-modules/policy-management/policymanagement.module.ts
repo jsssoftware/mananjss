@@ -24,6 +24,13 @@ import { DisableControlDirective } from 'src/app/shared/utilities/directive/disa
 import { RetailService } from 'src/app/app-services/health-service/retail.service';
 import { PaPolicyManagementComponent } from './retail/pa-policy-management/pa-policy-management.component';
 import { TravelPolicyManagementComponent } from './retail/travel-policy-management/travel-policy-management.component';
+import { CommercialPolicyManagementComponent } from './commercial/commercial-policy-management/commercial-policy-management.component';
+import { FirePolicyManagementComponent } from './commercial/fire-policy-management/fire-policy-management.component';
+import { MarinePolicyManagementComponent } from './commercial/marine-policy-management/marine-policy-management.component';
+import { LiabalityPolicyManagementComponent } from './commercial/liabality-policy-management/liabality-policy-management.component';
+import { EngineeringPolicyManagementComponent } from './commercial/engineering-policy-management/engineering-policy-management.component';
+import { GmcPolicyManagementComponent } from './commercial/gmc-policy-management/gmc-policy-management.component';
+import { MiscPolicyManagementComponent } from './commercial/misc-policy-management/misc-policy-management.component';
 
 @NgModule({
   declarations: [  
@@ -42,7 +49,14 @@ import { TravelPolicyManagementComponent } from './retail/travel-policy-manageme
     PreviewDialogComponent,
     DisableControlDirective,
     PaPolicyManagementComponent,
-    TravelPolicyManagementComponent
+    TravelPolicyManagementComponent,
+    CommercialPolicyManagementComponent,
+    FirePolicyManagementComponent,
+    MarinePolicyManagementComponent,
+    LiabalityPolicyManagementComponent,
+    EngineeringPolicyManagementComponent,
+    GmcPolicyManagementComponent,
+    MiscPolicyManagementComponent
   ],
   imports: [
     CommonModule,

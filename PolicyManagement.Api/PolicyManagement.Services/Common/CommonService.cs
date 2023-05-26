@@ -325,6 +325,8 @@ namespace PolicyManagement.Services.Common
                         })
                         .OrderBy(o => o.Name)
                         .ToListAsync();
+                case Vertical.Travel:
+                case Vertical.PersonalAccident:
                 case Vertical.Health:
                     if (branchId > 0)
                         return await _dataContext.tblInsuranceCompanyBranch.Where(w => w.InsuranceCompanyId == insuranceCompanyId && w.BranchId == branchId && w.IsHealth.HasValue && w.IsHealth.Value && w.IsActive.HasValue && w.IsActive.Value)

@@ -260,7 +260,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     specialDiscount: new FormControl('', [Validators.required]),
     loading: new FormControl(''),
     ncb: new FormControl('', [Validators.required]),
-    commissionPaidOn: new FormControl(''),
+    commissionPaidOn: new FormControl('',[Validators.required]),
     commissionablePremium: new FormControl(''),
     basicTPgstPercent: new FormControl('', [Validators.required]),
     netpremium: new FormControl(0),
@@ -2355,7 +2355,9 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
   redirectRoute() {
     this.verticalData = this.verticalData;
-    this.router.navigate(["../pms/health/health-policy-management"]);
+   if(this._verticalId == Vertical.Health) this.router.navigate(["../pms/health/health-policy-management"]);
+   if(this._verticalId == Vertical.Travel) this.router.navigate(["../pms/travel/travel-policy-management"]);
+   if(this._verticalId == Vertical.Pesonal_Accident) this.router.navigate(["../pms/pa/pa-policy-management"]);
   }
 
   getCustomerDataByClusterId(clusterId: number) {
@@ -2448,7 +2450,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       if (!response.TpPolicy.ExpiryDateDto && response.TpPolicy.NumberOfYear !== Common.ZERO) {
         this.errorList.push("Risk Expiry Date " + this.erorr)
       }
-      if (!response.TpPolicy.NumberOfYear && response.TpPolicy.NumberOfYear !== Common.ZERO) {
+      if (!response.TpPolicy.NumberOfYear && response.TpPolicy.NumberOfYear !== Common.ZERO && this._verticalId !== Vertical.Travel) {
         this.errorList.push("Number of Year " + this.erorr)
       }
       if (!response.TpPolicy.StartDateDto) {
@@ -2480,7 +2482,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   validatePremiumDetail(response: IHealthPolicyFormDataModel) {
-    if (!response.Premium.CommissionPaidOn) {
+    if (!response.Premium.CommissionPaidOn && response.Premium.CommissionPaidOn == 0 ) {
       this.errorList.push("Commision Paid on  % " + this.erorr)
     }
     if (response.PolicyTerm.PackageTypeId === PackageType.TP_ONLY) {

@@ -40,7 +40,6 @@ export class CommonFunction {
       if (specialKeys.indexOf(event.key) !== -1) {
         return;
       }
-      debugger
       if (parseFloat(event.target.value) > maxValue) {
         event.preventDefault();
     }

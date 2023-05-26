@@ -17,22 +17,9 @@ export class PolicyManagementComponent implements OnInit {
   constructor(private router: Router,private route: ActivatedRoute,private motorservice:MotorService) { }
 
   ngOnInit(): void {
-    if(this.MenuVertical=='Motor')
-    {
-      this.newPolicyContent ="New Motor Policy Data Entry";
-    }
-    if(this.MenuVertical=='Health')
-    {
-      this.newPolicyContent ="New Health Policy Data Entry";
-    }
-    if(this.MenuVertical=='Personal Accident')
-    {
-      this.newPolicyContent ="New Personal Accident Policy Data Entry";
-    }
-    if(this.MenuVertical=='Travel')
-    {
-      this.newPolicyContent ="New Travel Policy Data Entry";
-    }
+   
+    this.newPolicyContent ="New "+ this.MenuVertical +" Policy Data Entry";
+
   }
 
   routeWithEnum(enumName: string) {
@@ -56,6 +43,31 @@ export class PolicyManagementComponent implements OnInit {
     {
       this.verticalData = Vertical.Travel; 
       this.motorservice.vertical$.next("Travel")
+    }
+    if(this.MenuVertical=='Engineering')
+    {
+      this.verticalData = Vertical.Engineering; 
+      this.motorservice.vertical$.next("Engineering")
+    }
+    if(this.MenuVertical=='Fire')
+    {
+      this.verticalData = Vertical.Fire; 
+      this.motorservice.vertical$.next("Fire")
+    }
+    if(this.MenuVertical=='Marine')
+    {
+      this.verticalData = Vertical.Marine; 
+      this.motorservice.vertical$.next("Marine")
+    }
+    if(this.MenuVertical=='Misc')
+    {
+      this.verticalData = Vertical.Misc; 
+      this.motorservice.vertical$.next("Miscellaneous")
+    }
+    if(this.MenuVertical=='Liabality')
+    {
+      this.verticalData = Vertical.Liabality; 
+      this.motorservice.vertical$.next("Liabality")
     }
 
     switch (enumName) {
