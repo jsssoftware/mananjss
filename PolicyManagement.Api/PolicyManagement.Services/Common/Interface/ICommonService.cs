@@ -77,6 +77,10 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindAllPpcData();
         Task<List<DropDownDto<int>>> FindAllPedData();
         Task<List<DropDownDto<int>>> FindAllCoverage();
+        Task<List<DropDownDto<int>>> FindAllOccupancy();
+        Task<List<DropDownDto<int>>> FindAllBasementExposure();
+
+        
 
 
     }

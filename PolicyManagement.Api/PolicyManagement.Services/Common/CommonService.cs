@@ -1504,5 +1504,25 @@ namespace PolicyManagement.Services.Common
             }).OrderBy(o => o.Value).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
+
+        public async Task<List<DropDownDto<int>>> FindAllOccupancy()
+        {
+            List<DropDownDto<int>> result = await _dataContext.tblOccupation.Select(s => new DropDownDto<int>
+            {
+                Name = s.OccupationName,
+                Value = s.OccupationId
+            }).OrderBy(o => o.Value).ToListAsync();
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
+
+        public async Task<List<DropDownDto<int>>> FindAllBasementExposure()
+        {
+            List<DropDownDto<int>> result = await _dataContext.tblBasementExposer.Select(s => new DropDownDto<int>
+            {
+                Name = s.BasementExposer,
+                Value = s.BasementExposerId
+            }).OrderBy(o => o.Value).ToListAsync();
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
     }
 }

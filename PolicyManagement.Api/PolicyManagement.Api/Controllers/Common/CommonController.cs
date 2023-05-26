@@ -277,5 +277,13 @@ namespace PolicyManagement.Api.Controllers.Common
         [HttpGet]
         public async Task<IHttpActionResult> GetAllCoverage() => Json(await _commonService.FindAllCoverage());
 
+        [Route("occupancy")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllOccupancy() => Json(await _commonService.FindAllOccupancy());
+
+        [Route("basementexposure")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllBasementExposure() => Json(await _commonService.FindAllBasementExposure());
+
     }
 }

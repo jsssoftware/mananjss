@@ -3,6 +3,8 @@ using PolicyManagement.Api.Mapper;
 using PolicyManagement.Infrastructures.EntityFramework;
 using PolicyManagement.Services.Claims;
 using PolicyManagement.Services.Claims.Interface;
+using PolicyManagement.Services.Commercial;
+using PolicyManagement.Services.Commercial.Interface;
 using PolicyManagement.Services.Common;
 using PolicyManagement.Services.Common.Interface;
 using PolicyManagement.Services.Customer;
@@ -40,10 +42,11 @@ namespace PolicyManagement.Api
             container.RegisterType<ICommonService, CommonService>(new HierarchicalLifetimeManager());
             container.RegisterType<ICustomerService, CustomerService>(new HierarchicalLifetimeManager());
             container.RegisterType<IMotorService, MotorService>(new HierarchicalLifetimeManager());
-            container.RegisterType<IRetailService, RetailService>(new HierarchicalLifetimeManager());
+            container.RegisterType<ICommercialService, CommercialService>(new HierarchicalLifetimeManager());
             container.RegisterType<IVoucherService, VoucherService>(new HierarchicalLifetimeManager());
             container.RegisterType<IClaimsService, ClaimsService>(new HierarchicalLifetimeManager());
             container.RegisterType<IInspectionService, InspectionService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IRetailService, RetailService>(new HierarchicalLifetimeManager());
 
             //Register Mapper
             IMapper mapper = AutoMapperConfiguration.Register().CreateMapper();

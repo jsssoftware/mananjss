@@ -574,31 +574,14 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-              <div class="col-lg-4" *ngIf="isHeath">
+              <div class="col-lg-4" >
                 <mat-form-field appearance="fill">
-                  <mat-label>Portability</mat-label>
-                  <mat-select formControlName="portability" required (selectionChange)="changePortabality()">
-                    <mat-option>Select</mat-option>
-                    <mat-option *ngFor="let portability of _portability" [value]="portability.Value">
-                      {{portability.Name}}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="policyForm.controls.portability">Please Select Portability</mat-error>
-                </mat-form-field>
+                  <mat-label>Number of location</mat-label>
+                  <input type="text" matInput formControlName="numberofLocation" 
+                    class="uppercase">
+                </mat-form-field>              
               </div>
-
-              <div class="col-lg-4" *ngIf="isTravel">
-                <mat-form-field appearance="fill">
-                  <mat-label>Coverage</mat-label>
-                  <mat-select formControlName="coverage" required>
-                    <mat-option>Select</mat-option>
-                    <mat-option *ngFor="let coverage of _coverage" [value]="coverage.Value">
-                      {{coverage.Name}}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="policyForm.controls.coverage">Please Select Coverage</mat-error>
-                </mat-form-field>
-              </div>
+              
 
             </div>
             <div class="row">
@@ -612,15 +595,7 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-              <div class="col-lg-4" *ngIf="isHeath || isTravel">
-                <mat-form-field appearance="fill">
-                  <mat-label>{{isTravel ? 'Issue Date' : 'Continuty Start Date'}}</mat-label>
-                  <input matInput [matDatepicker]="continutyStartDate" formControlName="continutyStartDate"
-                    (dateChange)="setExpiryDate('tp')">
-                  <mat-datepicker-toggle matSuffix [for]="continutyStartDate"></mat-datepicker-toggle>
-                  <mat-datepicker #continutyStartDate></mat-datepicker>
-                </mat-form-field>
-              </div>
+             
             </div>
             <div class="row">
               <div class="col-lg-4">
@@ -688,7 +663,73 @@
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Risk Location</mat-label>
+                  <input type="text" matInput formControlName="riskLocation" 
+                    class="uppercase">
+                </mat-form-field>
+              </div>
+              <div class="col-lg-8">
+                <div class="row">
+                  
+                  <div class="col-lg-2">
+                    <br>
+                    <mat-label>Location Type</mat-label>
 
+                  </div>
+                  <div class="col-lg-3">
+                    <mat-checkbox color="primary" style="margin-top: 15px;" formControlName="locationTypeSingle"
+                     >
+                      Single
+                    </mat-checkbox>
+                  </div>
+                  <div class="col-lg-3">
+                    <mat-checkbox color="primary" style="margin-top: 15px;" formControlName="locationTypeMultiple"
+                    >Multiple
+                    </mat-checkbox>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            <div class="row">
+
+              <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Occupancy</mat-label>
+                  <mat-select formControlName="occupancy" required>
+                    <mat-option>Select</mat-option>
+                    <mat-option *ngFor="let occupancy of _occupancy" [value]="occupancy.Value">{{occupancy.Name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="policyForm.controls.occupancy">Please Select Occupancy</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Line of Businness</mat-label>
+                  <mat-select formControlName="lineofBusiness" required>
+                    <mat-option>Select</mat-option>
+                    <mat-option [value]="1">Yes</mat-option>
+                    <mat-option [value]="2">No</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="policyForm.controls.lineofBusiness">Please Select Line Business</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Basement Exposure</mat-label>
+                  <mat-select formControlName="insuranceBranch" required>
+                    <mat-option>Select</mat-option>
+                    <mat-option *ngFor="let baseexposure of _baseExposure" [value]="baseexposure.Value">{{baseexposure.Name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="policyForm.controls.insuranceBranch">Please Select Insurance Branch</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
             <div class="row">
 
               <div class="col-lg-4">

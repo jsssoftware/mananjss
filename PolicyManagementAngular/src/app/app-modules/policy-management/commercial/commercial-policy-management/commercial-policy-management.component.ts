@@ -240,7 +240,12 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     previousPolicyPlan: new FormControl(''),
     previousPolicySumInsured: new FormControl('', [Validators.pattern('^[0-9]+$')]),
     numberOfDays: new FormControl('', [Validators.required]),
-
+    riskLocation: new FormControl(''),
+    locationTypeSingle: new FormControl(''),
+    locationTypeMultiple: new FormControl(''),
+    numberofLocation: new FormControl(''),
+    occupancy: new FormControl(''),
+    lineofBusiness: new FormControl(''),
   });
   //#endregion
 
@@ -475,6 +480,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   public _selectedProductId: number = 0;
   public _portability: IDropDownDto<number>[] = [];
   public _coverage: IDropDownDto<number>[] = [];
+  public _baseExposure: IDropDownDto<number>[] = [];
+  public _occupancy: IDropDownDto<number>[] = [];
   public maxValueAllowedNumber: number = 99999999.99
   public maxValueAllowedPercentage: number = 999.99;
   public listAccepts: string =
@@ -598,6 +605,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     await this.getPed();
     await this.getPpc();
     await this.getCoverage();
+    await this.getOccupancy();
+    await this.getBasementExposure();
     this.setValidatoronVertical()
 
     //Not calling on edit
@@ -2314,6 +2323,16 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   getCoverage() {
     this.commonService.getCoverage().subscribe((response: any) => {
       this._coverage = response;
+    });
+  }
+  getOccupancy() {
+    this.commonService.getOccupancy().subscribe((response: any) => {
+      this._occupancy = response;
+    });
+  }
+  getBasementExposure() {
+    this.commonService.getBasementExposure().subscribe((response: any) => {
+      this._baseExposure = response;
     });
   }
 

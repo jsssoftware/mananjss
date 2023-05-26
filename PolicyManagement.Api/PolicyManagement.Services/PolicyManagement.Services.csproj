@@ -109,6 +109,8 @@
     <Compile Include="Common\Interface\ICommonService.cs" />
     <Compile Include="Customer\CustomerService.cs" />
     <Compile Include="Customer\Interface\ICustomerService.cs" />
+    <Compile Include="Commercial\Interface\ICommercialService.cs" />
+    <Compile Include="Commercial\CommercialService.cs" />
     <Compile Include="Inspection\InspectionService.cs" />
     <Compile Include="Inspection\Interface\IInspectionService.cs" />
     <Compile Include="Health\Interface\IRetailService.cs" />
