@@ -1222,6 +1222,7 @@ namespace PolicyManagement.Services.Health
             }
             catch (Exception ex)
             {
+                log.Error("AddorUpdateCustomerDetails -", ex);
                 throw;
             }
             return  tblCustomers;
