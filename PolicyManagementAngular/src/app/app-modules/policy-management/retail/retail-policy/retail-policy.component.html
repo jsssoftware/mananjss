@@ -770,22 +770,31 @@
                 <div class="row">
                   <div class="col-lg-4">
                     <mat-form-field>
-                      <mat-label>Pan</mat-label>
+                      <mat-label>PAN</mat-label>
                       <input type="text" matInput formControlName="cpan" placeholder="Pan" style="line-height: 28px;">
+                      <mat-error *ngIf="insuranceCustomerForm.controls.cpan?.errors && insuranceCustomerForm.controls.cpan?.errors.pattern">
+                        PAN is <strong>invalid</strong>
+                      </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-4">
                     <mat-form-field>
-                      <mat-label>Aadhar</mat-label>
+                      <mat-label>Aadhaar</mat-label>
                       <input type="text" matInput formControlName="caadhar" placeholder="Aadhar"
                         style="line-height: 28px;">
+                        <mat-error
+                        *ngIf="insuranceCustomerForm.controls.caadhar.errors && (insuranceCustomerForm.controls.caadhar.errors.minlength || insuranceCustomerForm.controls.caadhar.errors.pattern || insuranceCustomerForm.controls.caadhar.errors.maxlength )">
+                        Aadhaar is <strong>invalid</strong>
+                      </mat-error>
                     </mat-form-field>
                   </div>
                   <div class="col-lg-4">
                     <mat-form-field>
                       <mat-label>Profession</mat-label>
-                      <input type="text" matInput formControlName="cprofession" placeholder="Profession"
-                        style="line-height: 28px;">
+                        <mat-select formControlName="cprofession">
+                          <mat-option>Select</mat-option>
+                          <mat-option *ngFor="let profession of _profession" [value]="profession.Value">{{profession.Name}}</mat-option>
+                        </mat-select>
                     </mat-form-field>
                   </div>
                 </div>
@@ -818,14 +827,14 @@
                   <div class="col-lg-3"  *ngIf="isPA || isHeath">
                     <mat-form-field>
                       <mat-label>Cumulative Bonus</mat-label>
-                      <input type="text" matInput formControlName="ccummbonus" placeholder="Cumulative Bonus"
+                      <input type="number" matInput formControlName="ccummbonus" placeholder="Cumulative Bonus"
                         style="line-height: 28px;">
                     </mat-form-field>
                   </div>
                   <div class="col-lg-3">
                     <mat-form-field>
                       <mat-label>Deductable</mat-label>
-                      <input type="text" matInput formControlName="cdeductable" placeholder="Deductable"
+                      <input type="number" matInput formControlName="cdeductable" placeholder="Deductable"
                         style="line-height: 28px;">
                     </mat-form-field>
                   </div>
@@ -875,7 +884,7 @@
                   <div class="col-lg-3">
                     <mat-form-field>
                       <mat-label>Annual Income</mat-label>
-                      <input type="text" matInput formControlName="canualincome" placeholder="Annual Income"
+                      <input type="number" matInput formControlName="canualincome" placeholder="Annual Income"
                         style="line-height: 28px;">
                     </mat-form-field>
                   </div>

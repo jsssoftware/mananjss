@@ -1524,5 +1524,15 @@ namespace PolicyManagement.Services.Common
             }).OrderBy(o => o.Value).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
+
+        public async Task<List<DropDownDto<int>>> FindAllProfession()
+        {
+            List<DropDownDto<int>> result = await _dataContext.tblProfession.Select(s => new DropDownDto<int>
+            {
+                Name = s.ProfessionName,
+                Value = s.ProfessionId
+            }).OrderBy(o => o.Value).ToListAsync();
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
     }
 }

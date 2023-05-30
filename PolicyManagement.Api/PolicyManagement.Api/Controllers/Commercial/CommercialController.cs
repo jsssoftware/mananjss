@@ -7,7 +7,7 @@ using System.Web.Http;
 namespace PolicyManagement.Api.Controllers.Commercial
 {
     [Authorize]
-    [RoutePrefix("api/retail")]
+    [RoutePrefix("api/commercial")]
     public class CommercialController : ApiController
     {
         private readonly ICommercialService _healthService;
@@ -23,7 +23,7 @@ namespace PolicyManagement.Api.Controllers.Commercial
 
         [Route("{policyId}")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetMotorPolicyById(int policyId) => Json(await _healthService.FindHealthPolicyByPolicyId(policyId));
+        public async Task<IHttpActionResult> GetPolicyById(int policyId) => Json(await _healthService.FindHealthPolicyByPolicyId(policyId));
 
     }
 }

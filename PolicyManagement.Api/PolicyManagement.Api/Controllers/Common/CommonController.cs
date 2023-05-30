@@ -285,5 +285,9 @@ namespace PolicyManagement.Api.Controllers.Common
         [HttpGet]
         public async Task<IHttpActionResult> GetAllBasementExposure() => Json(await _commonService.FindAllBasementExposure());
 
+        [Route("profession")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllProfession() => Json(await _commonService.FindAllProfession());
+
     }
 }

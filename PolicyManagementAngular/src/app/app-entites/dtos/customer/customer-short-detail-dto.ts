@@ -71,4 +71,5 @@ export interface ICustomerInsuranceDetail{
     NomineeRelationShipName? :  string;
     PedName? :  string;
     RelationProposerName?: string;
+    ProfessionName?: string;
 }

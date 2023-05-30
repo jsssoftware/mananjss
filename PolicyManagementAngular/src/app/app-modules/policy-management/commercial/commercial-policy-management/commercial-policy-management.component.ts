@@ -246,6 +246,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     numberofLocation: new FormControl(''),
     occupancy: new FormControl(''),
     lineofBusiness: new FormControl(''),
+    basementExposure: new FormControl(''),
   });
   //#endregion
 

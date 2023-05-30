@@ -352,11 +352,11 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     cnameInsuredPerson: new FormControl('',[Validators.required]),
     cdob: new FormControl('',[Validators.required]),
     cgender: new FormControl('',[Validators.required]),
-    cmobile: new FormControl('',[Validators.required]),
-    cemail: new FormControl(''),
+    cmobile: new FormControl('',[Validators.required,Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),
+    cemail: new FormControl('',[Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]),
     cpassport: new FormControl(''),
-    cpan: new FormControl(''),
-    caadhar: new FormControl(''),
+    cpan: new FormControl('',[Validators.pattern('^[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}$')]),
+    caadhar: new FormControl('',[Validators.pattern('^[0-9]+$'),Validators.minLength(12), Validators.maxLength(12)]),
     cprofession: new FormControl(''),
     crelprposer: new FormControl(''),
     csuminsuredindividual: new FormControl(''),
@@ -419,6 +419,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   public _riskClass: IDropDownDto<number>[] = [];
   public _ped: IDropDownDto<number>[] = [];
   public _ppc: IDropDownDto<number>[] = [];
+  public _profession: IDropDownDto<number>[] = [];
 
   public _customerId: any;
   public _customerCityId: any;
@@ -593,6 +594,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     await this.getPed();
     await this.getPpc();
     await this.getCoverage();
+    await this.getProfession();
     this.setValidatoronVertical()
 
     //Not calling on edit
@@ -979,6 +981,13 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
         posManagedBy: ""
       });
     }
+  }
+
+  
+  getProfession(): any {
+    this.commonService.getProfession().subscribe((response: IDropDownDto<number>[]) => {
+      this._profession = response;
+    });
   }
 
 
@@ -2612,8 +2621,9 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       this.insurancePerson.Gender = this._genders?.find(x => x.Value == this.InsurancePersonForm.cgender)?.Name
     this.insurancePerson.Mobile = this.InsurancePersonForm.cmobile
     this.insurancePerson.Email = this.InsurancePersonForm.cemail
-    this.insurancePerson.PassportNumber = this.InsurancePersonForm.cpassport
-    this.insurancePerson.Pan = this.InsurancePersonForm.cpan
+    this.insurancePerson.PassportNumber = this.InsurancePersonForm.cpassport;
+    this.insurancePerson.Pan = this.InsurancePersonForm.cpan;
+    this.insurancePerson.ProfessionName = this._profession.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cprofession)?.Name
     this.insurancePerson.Profession = this.InsurancePersonForm.cprofession
     this.insurancePerson.RelationProposer = this.InsurancePersonForm.crelprposer
     this.insurancePerson.SumInsuredIndividual = this.InsurancePersonForm.csuminsuredindividual

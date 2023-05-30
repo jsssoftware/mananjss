@@ -87,6 +87,7 @@ export abstract class ICommonService {
     abstract getDateDays(date: string, year: number, days:number): Observable<IDateDto>;
     abstract getOccupancy(): Observable<IDropDownDto<number>[]>;
     abstract getBasementExposure(): Observable<IDropDownDto<number>[]>;
+    abstract getProfession(): Observable<IDropDownDto<number>[]>;
 
 
 }
