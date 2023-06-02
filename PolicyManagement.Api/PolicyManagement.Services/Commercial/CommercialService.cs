@@ -30,6 +30,7 @@ using System.Reflection;
 using System.Numerics;
 using PolicyManagement.Models.Commercial;
 using PolicyManagement.Services.Commercial.Interface;
+using System.Data.Entity.Infrastructure;
 
 namespace PolicyManagement.Services.Commercial
 {
@@ -87,7 +88,7 @@ namespace PolicyManagement.Services.Commercial
                         PreviousInsuranceCompanyId = model.PreviousPolicy.LastYearInsuranceCompany,
                         PreviousPolicyNo = model.PreviousPolicy.PreviousPolicyNumber,
                         PreviousSumInsured = model.PreviousPolicy.PreviousPolicySumInsured,
-                        PreviousPolicyPlan =  model.PreviousPolicy.PreviousPolicyPlan,
+                        PreviousPolicyPlan = model.PreviousPolicy.PreviousPolicyPlan,
                         NomineeName = model.Nomination.Name,
                         NomineeRelationShipId = model.Nomination.Relation,
                         NomineeAge = model.Nomination.Age,
@@ -164,12 +165,12 @@ namespace PolicyManagement.Services.Commercial
                         VehicleSegment = model.Vehicle.VehicleSegment,
                         Flag1 = true,
                         IsPreviousPolicyApplicable = model.IsPreviousPolicyApplicable,
-                        FamilyDiscount= model.Premium.FamilyDiscount,
-                        SectionDiscount= model.Premium.SectionDiscount,
+                        FamilyDiscount = model.Premium.FamilyDiscount,
+                        SectionDiscount = model.Premium.SectionDiscount,
                         LongTermDiscount = model.Premium.LongtermDiscount,
                         AdditionalDiscount = model.Premium.AdditionalDiscount,
                         ProductId = model.ProductPlan.ProductId,
-                        PlanId = (short)(model.ProductPlan != null ? model.ProductPlan.Plan : 0)    ,
+                        PlanId = (short)(model.ProductPlan != null ? model.ProductPlan.Plan : 0),
                         PlanTypeId = (short)(model.ProductPlan != null ? model.ProductPlan.PlanTypes : 0),
                         PortabilityId = model.Portabality,
                         CBStartDate = model.ContinueStartDate,
@@ -178,8 +179,15 @@ namespace PolicyManagement.Services.Commercial
                         TotalSumInsured = model.TotalSumInsured,
                         NoofDays = model.TpPolicy.NumberOfDays,
                         MaxDaysSingleTrip = model.Premium.MaxDaysSingleTrip,
-                        CoverageId =  model.TpPolicy.Coverage
-
+                        CoverageId = model.TpPolicy.Coverage,
+                        LineofBusiness = model.TpPolicy.LineofBusiness,
+                        Occupancy= model.TpPolicy.Occupancy,
+                        BasementExposerId =  model.TpPolicy.BasementExposure,
+                        RiskLocation= model.TpPolicy.RiskLocation,
+                        NumberofLocation= model.TpPolicy.NumberofLocation, 
+                        LocationType  = model.TpPolicy.LocationType,
+                        TerrorismPremium =  model.Premium.TerrorimsPremium
+                        
                     };
                     
 
@@ -551,7 +559,8 @@ namespace PolicyManagement.Services.Commercial
                                                           LongtermDiscount = s.T5.T3.T1.LongTermDiscount?? 0,
                                                           AdditionalDiscount = s.T5.T3.T1.AdditionalDiscount ?? 0,
                                                           SectionDiscount = s.T5.T3.T1.SectionDiscount ?? 0,
-                                                          MaxDaysSingleTrip  = s.T5.T3.T1.MaxDaysSingleTrip?? 0
+                                                          MaxDaysSingleTrip  = s.T5.T3.T1.MaxDaysSingleTrip?? 0,
+                                                          TerrorimsPremium = s.T5.T3.T1.TerrorismPremium ?? 0
                                                       },
                                                       PreviousPolicy = new PreviousPolicyFormDataModel
                                                       {
@@ -571,6 +580,13 @@ namespace PolicyManagement.Services.Commercial
                                                           StartDate = s.T5.T3.T1.PolicyStartDate,
                                                           NumberOfDays = s.T5.T3.T1.NoofDays,
                                                           Coverage = s.T5.T3.T1.CoverageId?? 0,
+                                                          LineofBusiness = s.T5.T3.T1.LineofBusiness,
+                                                          Occupancy = s.T5.T3.T1.Occupancy,
+                                                          BasementExposure = s.T5.T3.T1.BasementExposerId,
+                                                          RiskLocation = s.T5.T3.T1.RiskLocation,
+                                                          NumberofLocation = s.T5.T3.T1.NumberofLocation,
+                                                          LocationType = s.T5.T3.T1.LocationType,
+
                                                       },
                                                       ProductPlan = new ProductPlanModel
                                                       {
@@ -869,7 +885,13 @@ namespace PolicyManagement.Services.Commercial
             motorPolicyData.NoofDays = model.TpPolicy.NumberOfDays;
             motorPolicyData.MaxDaysSingleTrip = model.Premium.MaxDaysSingleTrip;
             motorPolicyData.CoverageId = model.TpPolicy.Coverage;
-
+            motorPolicyData.LineofBusiness = model.TpPolicy.LineofBusiness;
+            motorPolicyData.Occupancy = model.TpPolicy.Occupancy;
+            motorPolicyData.BasementExposerId = model.TpPolicy.BasementExposure;
+            motorPolicyData.RiskLocation = model.TpPolicy.RiskLocation;
+            motorPolicyData.NumberofLocation = model.TpPolicy.NumberofLocation;
+            motorPolicyData.LocationType = model.TpPolicy.LocationType;
+            motorPolicyData.TerrorismPremium = model.Premium.TerrorimsPremium;
 
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;

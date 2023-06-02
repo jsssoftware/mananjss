@@ -237,6 +237,12 @@ export class SearchPolicyComponent implements OnInit {
       this._healthService._headerTitle$.next(this._headerTitle);
       this._healthService.vertical$.next("Travel");
       this.router.navigate(["/pms/travel", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Travel}]);
+    
+    }else if(this._verticalTypeId==Vertical.Fire){
+      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
+      this._healthService._headerTitle$.next(this._headerTitle);
+      this._healthService.vertical$.next("Fire");
+      this.router.navigate(["/pms/fire", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Fire}]);
     }
   }
 

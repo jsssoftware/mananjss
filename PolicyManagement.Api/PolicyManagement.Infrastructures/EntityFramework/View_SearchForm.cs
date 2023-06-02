@@ -46,11 +46,11 @@ public partial class View_SearchForm
 
     public Nullable<bool> IsActive { get; set; }
 
-    public Nullable<bool> Flag1 { get; set; }
+    public bool Flag1 { get; set; }
 
-    public Nullable<bool> Flag2 { get; set; }
+    public bool Flag2 { get; set; }
 
-    public Nullable<bool> IsVerified { get; set; }
+    public bool IsVerified { get; set; }
 
     public short BranchId { get; set; }
 

@@ -370,6 +370,12 @@ public partial class tblMotorPolicyData
 
     public Nullable<bool> IsPreviousPolicyApplicable { get; set; }
 
+    public string RiskLocation { get; set; }
+
+    public Nullable<int> NumberofLocation { get; set; }
+
+    public Nullable<int> LocationType { get; set; }
+
 }
 
 }

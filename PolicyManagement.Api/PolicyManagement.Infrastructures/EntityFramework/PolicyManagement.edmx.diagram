@@ -4,8 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="926e612bf698436e8b81c4559ae26c46" Name="Diagram1" ZoomLevel="22">
-        <EntityTypeShape EntityType="PolicyManagerModel.sysdiagrams" Width="1.5" PointX="2.75" PointY="0.75" />
+      <Diagram DiagramId="926e612bf698436e8b81c4559ae26c46" Name="Diagram1" ZoomLevel="10">
         <EntityTypeShape EntityType="PolicyManagerModel.tblAddonPlanOption" Width="1.5" PointX="5.75" PointY="4.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblAddonPlanOptionMapping" Width="1.5" PointX="7.75" PointY="4.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblAddonRider" Width="1.5" PointX="5.75" PointY="7.75" />
@@ -115,26 +114,14 @@
         <EntityTypeShape EntityType="PolicyManagerModel.tblVoucherType" Width="1.5" PointX="34.75" PointY="0.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblVoyageOverseasType" Width="1.5" PointX="34.75" PointY="4.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblVoyageType" Width="1.5" PointX="7.75" PointY="34.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.PolicyDataView" Width="1.5" PointX="21.75" PointY="34.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.qryCustomerCarePerformance" Width="1.5" PointX="34.75" PointY="8.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.SearchClaims" Width="1.5" PointX="9.75" PointY="35.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.SearchClaimsPolicy" Width="1.5" PointX="11.75" PointY="35.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.SearchInspection" Width="1.5" PointX="35.75" PointY="14.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.SearchVoucher" Width="1.5" PointX="35.75" PointY="20.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.View_SearchForm" Width="1.5" PointX="23.75" PointY="35.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.View_SearchForm_Policies" Width="1.5" PointX="35.75" PointY="27.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.ViewAllDatatypeInOne" Width="1.5" PointX="35.75" PointY="35.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.viewCustomerCare" Width="1.5" PointX="36.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.ViewCustomerCareCrossSell" Width="1.5" PointX="17.75" PointY="36.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.ViewCustomerEmailID" Width="1.5" PointX="36.75" PointY="9.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.ViewCustomerMobileNo" Width="1.5" PointX="25.75" PointY="36.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.ViewDSAAllEmailId" Width="1.5" PointX="31.75" PointY="36.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.ViewDSAAllMobileNo" Width="1.5" PointX="37.75" PointY="12.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.ViewMasterWithMotorPolicy" Width="1.5" PointX="37.75" PointY="15.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.ViewPendingCommission" Width="1.5" PointX="27.75" PointY="37.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.ViewPersonDataBirthdayWish" Width="1.5" PointX="37.75" PointY="36.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.viewRenewPerformance" Width="1.5" PointX="38.75" PointY="0.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.viewRenewPerformanceNonMotor" Width="1.5" PointX="0.75" PointY="38.75" />
         <AssociationConnector Association="PolicyManagerModel.FK_tblCluster_tblBranch" />
         <AssociationConnector Association="PolicyManagerModel.FK_tblCustomer_tblBranch" />
         <AssociationConnector Association="PolicyManagerModel.FK_tblUser_tblBranch" />

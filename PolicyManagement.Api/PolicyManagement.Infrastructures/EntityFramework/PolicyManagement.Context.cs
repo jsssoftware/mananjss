@@ -35,8 +35,6 @@ public partial class DataContext : DbContext
     }
 
 
-    public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
-
     public virtual DbSet<tblAddonPlanOption> tblAddonPlanOption { get; set; }
 
     public virtual DbSet<tblAddonPlanOptionMapping> tblAddonPlanOptionMapping { get; set; }
@@ -255,10 +253,6 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<tblVoyageType> tblVoyageType { get; set; }
 
-    public virtual DbSet<PolicyDataView> PolicyDataView { get; set; }
-
-    public virtual DbSet<qryCustomerCarePerformance> qryCustomerCarePerformance { get; set; }
-
     public virtual DbSet<SearchClaims> SearchClaims { get; set; }
 
     public virtual DbSet<SearchClaimsPolicy> SearchClaimsPolicy { get; set; }
@@ -271,29 +265,9 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<View_SearchForm_Policies> View_SearchForm_Policies { get; set; }
 
-    public virtual DbSet<ViewAllDatatypeInOne> ViewAllDatatypeInOne { get; set; }
-
-    public virtual DbSet<viewCustomerCare> viewCustomerCare { get; set; }
-
-    public virtual DbSet<ViewCustomerCareCrossSell> ViewCustomerCareCrossSell { get; set; }
-
     public virtual DbSet<ViewCustomerEmailID> ViewCustomerEmailID { get; set; }
 
-    public virtual DbSet<ViewCustomerMobileNo> ViewCustomerMobileNo { get; set; }
-
-    public virtual DbSet<ViewDSAAllEmailId> ViewDSAAllEmailId { get; set; }
-
-    public virtual DbSet<ViewDSAAllMobileNo> ViewDSAAllMobileNo { get; set; }
-
-    public virtual DbSet<ViewMasterWithMotorPolicy> ViewMasterWithMotorPolicy { get; set; }
-
-    public virtual DbSet<ViewPendingCommission> ViewPendingCommission { get; set; }
-
     public virtual DbSet<ViewPersonDataBirthdayWish> ViewPersonDataBirthdayWish { get; set; }
-
-    public virtual DbSet<viewRenewPerformance> viewRenewPerformance { get; set; }
-
-    public virtual DbSet<viewRenewPerformanceNonMotor> viewRenewPerformanceNonMotor { get; set; }
 
     public virtual DbSet<tblMotorPolicyData> tblMotorPolicyData { get; set; }
 

@@ -21,7 +21,7 @@ namespace PolicyManagement.Models.Motor
         public int? NumberofLocation { get; set; }
         public string Occupancy { get; set; }
         public byte? BasementExposure { get; set; }
-        public string LocationType { get; set; }
+        public int? LocationType { get; set; }
 
     }
 }

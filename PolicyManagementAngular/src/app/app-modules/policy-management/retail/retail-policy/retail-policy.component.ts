@@ -1690,16 +1690,19 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
 
     this._selectedinsuranceCustomerPersonDetail = JSON.parse(JSON.stringify(response.InsuredPersonData));
-    await this._selectedinsuranceCustomerPersonDetail.filter(y=>{
-      y.NomineeRelationShipName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
-      y.RelationProposerName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
-      y.PedName = this._ped.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cped)?.Name
-    })
-    this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
-    this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-
+    if(this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length>0){
+      await this._selectedinsuranceCustomerPersonDetail.filter(y=>{
+        y.NomineeRelationShipName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
+        y.RelationProposerName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
+        y.PedName = this._ped.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cped)?.Name
+      })
+      this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
+  
+    }
+    if(this._storeCustomerClusterDetail && this._storeCustomerClusterDetail.length>0){
     this._storeCustomerClusterDetail = this._storeCustomerClusterDetail.filter(x => !this._selectedinsuranceCustomerPersonDetail.filter(y => y.ClusterId === x.ClusterId));
     this._dataSourceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._storeCustomerClusterDetail);
+    }
     this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
 
     this.calculatInsuredData();
@@ -2372,8 +2375,11 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   getCustomerDataByClusterId(clusterId: number) {
     this.customerService.getCustomerDataByClusterId(clusterId).subscribe((response: any) => {
       this._storeCustomerClusterDetail = JSON.parse(JSON.stringify(response?.Data));
+      if( this._storeCustomerClusterDetail &&  this._storeCustomerClusterDetail.length > 0){
+
       this._dataSourceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(response?.Data);
       this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+      }
 
     });
   }
@@ -2382,9 +2388,11 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   getCustomerDataByClusterIdUpdate(clusterId: number, data: ICustomerInsuranceDetail[]) {
     this.customerService.getCustomerDataByClusterId(clusterId).subscribe((response: any) => {
       this._storeCustomerClusterDetail = JSON.parse(JSON.stringify(response?.Data));
-      let customerClusterDetail = this._storeCustomerClusterDetail.filter(x => !data.filter(y => y.CustomerId == x.CustomerId).length)
-      this._dataSourceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(customerClusterDetail);
-      this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+      if( this._storeCustomerClusterDetail &&  this._storeCustomerClusterDetail.length > 0){
+        let customerClusterDetail = this._storeCustomerClusterDetail.filter(x => !data.filter(y => y.CustomerId == x.CustomerId).length)
+        this._dataSourceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(customerClusterDetail);
+        this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
+      }
     });
   }
 

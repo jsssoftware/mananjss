@@ -33,5 +33,7 @@
         public decimal? LongtermDiscount { get; set; }
         public decimal? SectionDiscount { get; set; }
         public int? MaxDaysSingleTrip { get; set; }
+        public int? TerrorimsPremium { get; set; }
+
     }
 }

@@ -56,9 +56,6 @@
     <Compile Include="EntityFramework\GetPolicyFamilyDtl_Result.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityFramework\PolicyDataView.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
     <Compile Include="EntityFramework\PolicyManagement.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -74,9 +71,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PolicyManagement.edmx</DependentUpon>
     </Compile>
-    <Compile Include="EntityFramework\qryCustomerCarePerformance.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
     <Compile Include="EntityFramework\SearchClaims.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
@@ -87,9 +81,6 @@
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\SearchVoucher.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityFramework\sysdiagrams.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\tblAddonPlanOption.cs">
@@ -455,40 +446,10 @@
     <Compile Include="EntityFramework\Usp_UploadedDocuments_Result.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityFramework\ViewAllDatatypeInOne.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityFramework\viewCustomerCare.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityFramework\ViewCustomerCareCrossSell.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
     <Compile Include="EntityFramework\ViewCustomerEmailID.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityFramework\ViewCustomerMobileNo.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityFramework\ViewDSAAllEmailId.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityFramework\ViewDSAAllMobileNo.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityFramework\ViewMasterWithMotorPolicy.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityFramework\ViewPendingCommission.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
     <Compile Include="EntityFramework\ViewPersonDataBirthdayWish.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityFramework\viewRenewPerformance.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityFramework\viewRenewPerformanceNonMotor.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\View_SearchForm.cs">

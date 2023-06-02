@@ -106,6 +106,7 @@ export class CustomerComponent implements OnInit {
       this._healthService.vertical$.next("Travel");
       this.router.navigate(["/pms/travel/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
+    debugger
     if( this.Verticaltype == Vertical.Fire){
       this._healthService.vertical$.next("Fire");
       this.router.navigate(["/pms/fire/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);

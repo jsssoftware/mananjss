@@ -30,4 +30,5 @@ export interface IPremiumFormDataModel {
     LongtermDiscount?:number;
     SectionDiscount?:number;
     MaxDaysSingleTrip?:number;
+    TerrorimsPremium?:number;
 }

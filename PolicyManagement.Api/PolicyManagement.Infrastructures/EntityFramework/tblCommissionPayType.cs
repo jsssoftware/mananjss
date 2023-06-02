@@ -32,7 +32,7 @@ public partial class tblCommissionPayType
 
     public Nullable<System.DateTime> ModifiedTime { get; set; }
 
-    public int VerticalId { get; set; }
+    public Nullable<int> VerticalId { get; set; }
 
 }
 

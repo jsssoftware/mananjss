@@ -570,7 +570,7 @@
               <div class="col-lg-4" >
                 <mat-form-field appearance="fill">
                   <mat-label>Number of location</mat-label>
-                  <input type="text" matInput formControlName="numberofLocation" 
+                  <input type="number" matInput formControlName="numberofLocation" 
                     class="uppercase">
                 </mat-form-field>              
               </div>
@@ -582,7 +582,7 @@
                 <mat-form-field>
                   <mat-label>Policy Number <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="policyNumber" [errorStateMatcher]="matcher"
-                    placeholder="Policy Number" maxlength="30">
+                    placeholder="Policy Number" maxl  ength="30">
                   <mat-error *ngIf="policyForm.controls.policyNumber">
                     Policy Number is <strong>required</strong>
                   </mat-error>
