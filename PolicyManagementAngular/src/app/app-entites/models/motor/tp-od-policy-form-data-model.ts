@@ -9,5 +9,11 @@ export interface ITpOdPolicyFormDataModel {
     ExpiryDateString: string;
     ExpiryDateDto: IDateDto | null;
     NumberOfDays?: string;
-    Coverage?:number
+    Coverage?:number;
+    LineofBusiness?: string;
+    RiskLocation?: string;
+    NumberofLocation?: number;
+    Occupancy?: string;
+    BasementExposure?: string;
+    LocationType?: string
 }

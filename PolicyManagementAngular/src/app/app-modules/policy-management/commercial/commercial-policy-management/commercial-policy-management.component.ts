@@ -2914,8 +2914,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   
 }
 calculatTotalFiredSumInsured() {
-  this.totalFireSumInsured = Number(this.fireTermForm.value.fireRate || 0) + Number(this.fireTermForm.value.earthQuakeRate || 0) + Number(this.fireTermForm.value.sTFIRate || 0)
-  + Number(this.fireTermForm.value.terrorismRate || 0)+ Number(this.fireTermForm.value.burglaryRate || 0) + Number(this.fireTermForm.value.moneyRate || 0) ;
+  this.totalFireSumInsured = Number(this.fireTermForm.value.fireSA || 0) + Number(this.fireTermForm.value.earthQuakeSA || 0) + Number(this.fireTermForm.value.sTFISA || 0)
+  + Number(this.fireTermForm.value.terrorismSA || 0)+ Number(this.fireTermForm.value.burglarySA || 0) + Number(this.fireTermForm.value.moneySA || 0) ;
   this.fireTermForm.patchValue({
     sumInsured : this.totalFireSumInsured
   })

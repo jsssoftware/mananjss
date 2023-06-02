@@ -16,7 +16,12 @@ namespace PolicyManagement.Models.Motor
         public DateDto ExpiryDateDto { get; set; }
         public int? NumberOfDays { get; set; }
         public int? Coverage { get; set; }
-
+        public string LineofBusiness { get; set; }
+        public string RiskLocation { get; set; }
+        public int? NumberofLocation { get; set; }
+        public string Occupancy { get; set; }
+        public byte? BasementExposure { get; set; }
+        public string LocationType { get; set; }
 
     }
 }
