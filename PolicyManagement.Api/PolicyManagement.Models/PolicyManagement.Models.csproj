@@ -83,6 +83,10 @@
       <Project>{4B341FE7-C588-4E37-BE5C-BC21DB1A41FE}</Project>
       <Name>PolicyManagement.Dtos</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PolicyManagement.Infrastructures\PolicyManagement.Infrastructures.csproj">
+      <Project>{9B103EC3-E7D7-422B-9382-54C1BFD2DF09}</Project>
+      <Name>PolicyManagement.Infrastructures</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PolicyManagement.Utilities\PolicyManagement.Utilities.csproj">
       <Project>{3E8251E6-896E-42DB-A265-1CE650465858}</Project>
       <Name>PolicyManagement.Utilities</Name>

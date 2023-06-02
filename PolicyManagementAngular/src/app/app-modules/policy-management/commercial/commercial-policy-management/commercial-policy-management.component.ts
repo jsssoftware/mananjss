@@ -29,9 +29,7 @@ import { IPolicyInspectionDto } from 'src/app/app-entites/dtos/common/policy-ins
 import { IPolicyDocumentDto } from 'src/app/app-entites/dtos/common/policy-document-dto';
 import { v4 as uuidv4 } from 'uuid';
 import { ViewClaimsComponent } from 'src/app/app-modules/sub-system/claims/view-claims/view-claims.component';
-import { RetailService } from 'src/app/app-services/health-service/retail.service';
-import { TwoDigitDecimaNumberDirective } from 'src/app/shared/utilities/directive/twodecimal.directive';
-import { Observable, ReplaySubject } from 'rxjs';
+
 import { saveAs } from 'file-saver';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
@@ -41,9 +39,11 @@ import { CommonFunction } from 'src/app/shared/utilities/helpers/common-function
 import { DialogBoxComponent } from 'src/app/shared/common-component/Policy/dialog-box/dialog-box.component';
 import { InspectionDetailComponent } from 'src/app/shared/common-component/Policy/detail/inspection-detail/inspection-detail.component';
 import { VoucherDetailComponent } from 'src/app/shared/common-component/Policy/detail/voucher-detail/voucher-detail.component';
-import { IHealthPolicyFormDataModel } from 'src/app/app-entites/models/motor/health-policy-form-data-model';
+import { ICommercialPolicyFormDataModel } from 'src/app/app-entites/models/motor/commercial-policy-form-data-model';
 import { IVehicleFormDataModel } from 'src/app/app-entites/models/motor/vehicle-form-data-model';
 import { INominationFormDataModel } from 'src/app/app-entites/models/motor/nomination-form-data-model';
+import { CommercialService } from 'src/app/app-services/commercial-service/commercial.service';
+import { ICommercialService } from 'src/app/app-services/commercial-service/abstracts/commercial.iservice';
 
 
 export interface PeriodicElement {
@@ -115,7 +115,7 @@ const ELEMENT_DATA_InspectionDetail: PeriodicElementForInspectionDetail[] = [
   styleUrls: ['./commercial-policy-management.component.css']
 })
 export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit {
-  public Vertical = 'Commercial'
+  public VerticalData = 'Commercial'
   @Input('MenuVertical') public MenuVertical: string = '';
   @Output() tableNameToDialogBox = new EventEmitter<string>();
   displayedColumnsDocumentTable: string[] = ["Sno", "DocumentTypeName", "FileName", "Remarks", "DocumentTypeId"];
@@ -201,8 +201,25 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     acknowledgementSlipIssueDate: new FormControl('')
   });
   fireTermForm = new FormGroup({
-    sumInsured: new FormControl('', [Validators.required]),
-   
+    sumInsured: new FormControl(''),
+    fireCoverageId: new FormControl(''),
+    fireSA: new FormControl(''),
+    fireRate: new FormControl(''),
+    earthQuakeSA: new FormControl(''),
+    earthQuakeRate: new FormControl(''),
+    sTFISA: new FormControl(''),
+    sTFIRate: new FormControl(''),
+    terrorismSA: new FormControl(''),
+    terrorismRate: new FormControl(''),
+    burglarySA: new FormControl(''),
+    burglaryRate: new FormControl(''),
+    moneySA: new FormControl(''),
+    moneyRate: new FormControl(''),
+    breakDownSA: new FormControl(''),
+    breakDownRate: new FormControl(''),
+    plateGlassSA: new FormControl(''),
+    plateGlassRate: new FormControl(''),
+    branchId: new FormControl('')
   });
   //#endregion
 
@@ -276,6 +293,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     basicTPgstPercent: new FormControl('', [Validators.required]),
     netpremium: new FormControl(0),
     maxTripDays: new FormControl(''),
+    terrorimsPremium: new FormControl(''),
   });
   //#endregion
 
@@ -460,7 +478,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   public _isOdPremiumDetailsDisabled: boolean = false;
   public _isDisableOdPolicyDetails: boolean = false;
   public _showErrors: boolean = false;
-  public _policyData?: IHealthPolicyFormDataModel;
+  public _policyData?: ICommercialPolicyFormDataModel;
   public _verticalName: any = "";
   public _policyStatus: string = "";
   public _policyStatusColor: string = "";
@@ -483,6 +501,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   public _coverage: IDropDownDto<number>[] = [];
   public _baseExposure: IDropDownDto<number>[] = [];
   public _occupancy: IDropDownDto<number>[] = [];
+  public _profession: IDropDownDto<number>[] = [];
   public maxValueAllowedNumber: number = 99999999.99
   public maxValueAllowedPercentage: number = 999.99;
   public listAccepts: string =
@@ -493,21 +512,26 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   public isPA: boolean = false;
   public isHeath: boolean = false;
   public isTravel: boolean = false;
+  public totalFireSumInsured : number = 0;
   public get SearchPolicyType(): typeof SearchPolicyType {
     return SearchPolicyType;
   }
   public get PackageType(): typeof PackageType {
     return PackageType;
   }
+
+  public get Vertical(): typeof Vertical {
+    return Vertical;
+  }
   constructor(
     private commonService: ICommonService,
-    private retailService: IRetailService,
+    private commercialService: ICommercialService,
     private customerService: ICustomerService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private router: Router,
     public dialog: MatDialog,
-    public mainhealthService: RetailService,
+    public mainCommercialService: CommercialService,
     public _sanitizer: DomSanitizer,
     public _commonFunction: CommonFunction
   ) {
@@ -521,8 +545,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   }
   ngOnInit(): void {
     this.setVertical();
-    this._verticalName = this.mainhealthService.vertical$.getValue();
-    this._headerTitle = this.mainhealthService._headerTitle$.getValue();
+    this._verticalName = this.mainCommercialService.vertical$.getValue();
+    this._headerTitle = this.mainCommercialService._headerTitle$.getValue();
     this._customerId = this.route.snapshot.paramMap.get('customerId');
     this._policyTypeId = Number(this.route.snapshot.paramMap.get('policyTypeId'));//is the id when customer saved
     this._policyId = Number(this.route?.snapshot?.paramMap.get('policyId') || 0);
@@ -893,8 +917,11 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     });
   }
 
-
-
+  getProfession(): any {
+    this.commonService.getProfession().subscribe((response: IDropDownDto<number>[]) => {
+      this._profession = response;
+    });
+  }
   getMakeYears(): any {
     this.commonService.getMakeYears(this._type).subscribe((response: IDropDownDto<number>[]) => {
       this._makeYears = response;
@@ -1003,7 +1030,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       this.IsVerified = true
     }
     this.validationPolicyData
-    let model: IHealthPolicyFormDataModel = {
+    let model: ICommercialPolicyFormDataModel = {
       PolicyId: this._policyId,
       BranchId: this._branchId,
       VerticalCode: this._verticalDetail.VerticalCode,
@@ -1160,12 +1187,13 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       ContinueStartDate: this.PolicyForm.continutyStartDate,
       NumberOfChild: this.noofchild,
       NumberOfAdult : this.noofAdult,
-      TotalSumInsured: this.totalSumInsured
+      TotalSumInsured: this.totalSumInsuredInsurance,
+      FireCoverage : this.fireTermForm.value
     }
 
     if (this._policyId == 0 || this._policyType == SearchPolicyType.Motor_Renew) {
       console.log(model, 'model')
-      this.retailService.createPolicy(model).subscribe((response: ICommonDto<any>) => {
+      this.commercialService.createPolicy(model).subscribe((response: ICommonDto<any>) => {
         if (response.IsSuccess) {
           Swal.fire({
             icon: 'success',
@@ -1215,7 +1243,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       });
     }
     else {
-      this.retailService.updatePolicy(this._policyId, model).subscribe((response: ICommonDto<any>) => {
+      this.commercialService.updatePolicy(this._policyId, model).subscribe((response: ICommonDto<any>) => {
 
         if (response.IsSuccess) {
           Swal.fire({
@@ -1648,7 +1676,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   }
 
   getHealthPolicyById(policyId: number) {
-    this.retailService.getReatilPolicyById(policyId).subscribe((response: IHealthPolicyFormDataModel) => {
+    this.commercialService.getCommercialPolicyById(policyId).subscribe((response: ICommercialPolicyFormDataModel) => {
       this._policyData = response;
       this.setHealthPolicyData(response);
       this.getPolicyDocuments();
@@ -1657,7 +1685,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   }
 
 
-  async setHealthPolicyData(response: IHealthPolicyFormDataModel): Promise<void> {
+  async setHealthPolicyData(response: ICommercialPolicyFormDataModel): Promise<void> {
  
     this.setCompanyInsuranceBranch(response)
     this.setCustomerDetail(<ICustomerShortDetailDto>{
@@ -2134,13 +2162,13 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   calculateCommissionablePremium(commissionPaidOnId: number) {
     this._commissionPaidOnId = commissionPaidOnId;
     switch (commissionPaidOnId) {
-      case 6:
+      case 9:
         this.calculateCommissionablePremiumTp();
         break;
-      case 7:
+      case 10:
         this.calculateCommissionablePremiumAddonCover();
         break;
-      case 8:
+      case 11:
         this.calculateCommissionablePremiumNoCommission();
         break;
     }
@@ -2454,7 +2482,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   }
 
 
-  validationPolicyData(response: IHealthPolicyFormDataModel) {
+  validationPolicyData(response: ICommercialPolicyFormDataModel) {
     this.validatePolicyDetail(response)
     this.validatePolicyType(response)
     this.validatePremiumDetail(response)
@@ -2466,7 +2494,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   errorList: any = [];
 
 
-  validatePolicyDetail(response: IHealthPolicyFormDataModel) {
+  validatePolicyDetail(response: ICommercialPolicyFormDataModel) {
       if (!response.TpPolicy.PolicyNumber) {
         this.errorList.push("Policy Number" + this.erorr)
       }
@@ -2487,7 +2515,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       }
   }
 
-  validatePolicyType(response: IHealthPolicyFormDataModel) {
+  validatePolicyType(response: ICommercialPolicyFormDataModel) {
     if (this._type !== SearchPolicyType.Motor_New && !response.IsPreviousPolicyApplicable && this._type !== SearchPolicyType.Motor_Renew) {
       if (!response.PreviousPolicy.LastPolicyExpiryDateDto) {
         this.errorList.push("Previous Policy Expiry Date" + this.erorr)
@@ -2504,7 +2532,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     }
   }
 
-  validatePremiumDetail(response: IHealthPolicyFormDataModel) {
+  validatePremiumDetail(response: ICommercialPolicyFormDataModel) {
     if (!response.Premium.CommissionPaidOn) {
       this.errorList.push("Commision Paid on  % " + this.erorr)
     }
@@ -2521,14 +2549,14 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     }
   }
 
-  validatePolicySourceDetail(response: IHealthPolicyFormDataModel) {
+  validatePolicySourceDetail(response: ICommercialPolicyFormDataModel) {
     if (response.PolicySource.TeleCaller == 0 && response.PolicySource.Fos == 0 && response.PolicySource.Pos == 0 && response.PolicySource.Reference == 0) {
       this.errorList.push("Atleast one policy source should selected ")
     }
 
   }
 
-  validatePaymentData(response: IHealthPolicyFormDataModel) {
+  validatePaymentData(response: ICommercialPolicyFormDataModel) {
 
     if (!response.PaymentData || response.PaymentData.length == 0) {
       this.errorList.push("Atleast one Payment mode should be selected")
@@ -2537,7 +2565,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   }
 
 
-  validateInsuredPersonDetail(response: IHealthPolicyFormDataModel) {
+  validateInsuredPersonDetail(response: ICommercialPolicyFormDataModel) {
     if (!response.InsuredPersonData || response.InsuredPersonData.length == 0) {
       this.errorList.push("Atleast one Insured Person detail should be selected")
 
@@ -2779,14 +2807,14 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   }
   noofchild: number = 0
   noofAdult: number = 0;
-  totalSumInsured: number = 0
+  totalSumInsuredInsurance: number = 0
   allAge: any = [];
   maxAge: number = 0;
   calculatInsuredData() {
     this.allAge = [];
     this.noofAdult = 0;
     this.noofchild = 0;
-    this.totalSumInsured = 0;
+    this.totalSumInsuredInsurance = 0;
     if (this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length > 0) {
       this._selectedinsuranceCustomerPersonDetail.filter((x) => {
         let DOB = new Date(x.DateOfBirth)
@@ -2797,7 +2825,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
         } else {
           this.noofAdult++;
         }
-        this.totalSumInsured = Number(this.totalSumInsured) + Number(x.SumInsuredFloater) + Number(x.SumInsuredIndividual);
+        this.totalSumInsuredInsurance = Number(this.totalSumInsuredInsurance) + Number(x.SumInsuredFloater) + Number(x.SumInsuredIndividual);
         this.allAge.push(age);
       })
       this.maxAge = Math.max.apply(null, this.allAge);
@@ -2838,9 +2866,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     });
   }
   setActivateVertical(verticalId:number){
-    if(verticalId == Vertical.Health) this.isHeath = true
-    if(verticalId == Vertical.Pesonal_Accident) this.isPA = true
-    if(verticalId == Vertical.Travel) this.isTravel = true
+    if(verticalId == Vertical.Fire) this.isHeath = true
+    if(verticalId == Vertical.Engineering) this.isPA = true
+    if(verticalId == Vertical.Life) this.isTravel = true
     if(verticalId == Vertical.Engineering) this.isTravel = true
     if(verticalId == Vertical.Liabality) this.isTravel = true
     if(verticalId == Vertical.Misc) this.isTravel = true
@@ -2884,6 +2912,13 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     const validator = form_field.validator({} as AbstractControl);
     return (validator && validator.required);
   
+}
+calculatTotalFiredSumInsured() {
+  this.totalFireSumInsured = Number(this.fireTermForm.value.fireRate || 0) + Number(this.fireTermForm.value.earthQuakeRate || 0) + Number(this.fireTermForm.value.sTFIRate || 0)
+  + Number(this.fireTermForm.value.terrorismRate || 0)+ Number(this.fireTermForm.value.burglaryRate || 0) + Number(this.fireTermForm.value.moneyRate || 0) ;
+  this.fireTermForm.patchValue({
+    sumInsured : this.totalFireSumInsured
+  })
 }
 
 }

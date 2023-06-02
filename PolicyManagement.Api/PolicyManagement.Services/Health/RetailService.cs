@@ -641,7 +641,8 @@ namespace PolicyManagement.Services.Health
                         Aadhar = f.T2.AadhaarNo,
                         Gender = f.T1.gender.Gender,
                         CustomerCode = f.T2.CustomerCode,
-                        RelationProposer = f.T1.insuredPerson.InsuredRelationId
+                        RelationProposer = f.T1.insuredPerson.InsuredRelationId,
+                        Profession = f.T2.ProfessionId
                     });
                 }
                 if (insuredPersons != null && insuredPersons.Count > 0)
@@ -1195,6 +1196,7 @@ namespace PolicyManagement.Services.Health
                 tblCustomers.POSId = insuredPersonModel.PosId;
                 tblCustomers.TeamMemberId = insuredPersonModel.TeamMemberId;
                 tblCustomers.AadhaarNo = insuredPersonModel.Aadhar;
+                tblCustomers.ProfessionId = insuredPersonModel.Profession;
 
             }
             else
@@ -1212,8 +1214,7 @@ namespace PolicyManagement.Services.Health
                 tblCustomers.PassportNo = insuredPersonModel.PassportNumber;
                 tblCustomers.PAN = insuredPersonModel.Pan;
                 tblCustomers.AadhaarNo = insuredPersonModel.Aadhar;
-
-
+                tblCustomers.ProfessionId = insuredPersonModel.Profession;
             }
             _dataContext.tblCustomer.AddOrUpdate(tblCustomers);
             try

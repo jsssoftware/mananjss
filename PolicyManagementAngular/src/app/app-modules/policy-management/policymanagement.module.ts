@@ -31,6 +31,7 @@ import { LiabalityPolicyManagementComponent } from './commercial/liabality-polic
 import { EngineeringPolicyManagementComponent } from './commercial/engineering-policy-management/engineering-policy-management.component';
 import { GmcPolicyManagementComponent } from './commercial/gmc-policy-management/gmc-policy-management.component';
 import { MiscPolicyManagementComponent } from './commercial/misc-policy-management/misc-policy-management.component';
+import { CommercialService } from 'src/app/app-services/commercial-service/commercial.service';
 
 @NgModule({
   declarations: [  
@@ -68,6 +69,6 @@ import { MiscPolicyManagementComponent } from './commercial/misc-policy-manageme
     MaterialFileInputModule,
     NgxDocViewerModule,
   ],
-  providers:[MotorService,RetailService]
+  providers:[MotorService,RetailService,CommercialService]
 })
 export class PolicyManagementModule { }

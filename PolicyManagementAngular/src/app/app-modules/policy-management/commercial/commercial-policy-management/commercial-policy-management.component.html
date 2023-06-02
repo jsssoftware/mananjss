@@ -256,7 +256,7 @@
                 <table class="table-responsive" style="overflow: hidden;">
                   <thead style="border-style:hidden;">
                     <th style="width: 30%;" ></th>
-                    <th style="border-style:hidden;">Sum insured</th>
+                    <th style="border-style:hidden;">Sum Insured</th>
                     <th style="border-style:hidden;">Rate</th>
                   </thead>
                   <tbody>
@@ -266,14 +266,14 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
+                          <input type="text" matInput formControlName="fireSA"
                             [ngStyle]="{'line-height':'30px'}" class="uppercase">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
+                          <input type="text" matInput formControlName="fireRate"
+                            [ngStyle]="{'line-height':'30px'}" class="uppercase"  (change)="calculatTotalFiredSumInsured()" >
                         </mat-form-field>
                       </td>
                     </tr>
@@ -283,13 +283,13 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
+                          <input type="text" matInput formControlName="earthQuakeSA"
                             [ngStyle]="{'line-height':'30px'}" class="uppercase">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
+                          <input type="text" matInput formControlName="earthQuakeRate"
                             [ngStyle]="{'line-height':'30px'}" class="uppercase">
                         </mat-form-field>
                       </td>
@@ -300,14 +300,14 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
+                          <input type="text" matInput formControlName="sTFISA"
                             [ngStyle]="{'line-height':'30px'}" class="uppercase">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
+                          <input type="text" matInput formControlName="sTFIRate"
+                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" >
                         </mat-form-field>
                       </td>
                     </tr>
@@ -318,7 +318,7 @@
                 <table class="table-responsive" style="overflow: hidden;">
                   <thead style="border-style:hidden;">
                     <th style="width: 30%;" ></th>
-                    <th style="border-style:hidden;">Sum insured</th>
+                    <th style="border-style:hidden;">Sum Insured</th>
                     <th style="border-style:hidden;">Rate</th>
                   </thead>
                   <tbody>
@@ -328,14 +328,14 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
+                          <input type="text" matInput formControlName="terrorismSA"
                             [ngStyle]="{'line-height':'30px'}" class="uppercase">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
+                          <input type="text" matInput formControlName="terrorismRate"
+                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" >
                         </mat-form-field>
                       </td>
                     </tr>
@@ -345,14 +345,14 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
+                          <input type="text" matInput formControlName="burglarySA"
                             [ngStyle]="{'line-height':'30px'}" class="uppercase">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
+                          <input type="text" matInput formControlName="burglaryRate"
+                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" >
                         </mat-form-field>
                       </td>
                     </tr>
@@ -362,14 +362,14 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
+                          <input type="text" matInput formControlName="moneySA"
                             [ngStyle]="{'line-height':'30px'}" class="uppercase">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
+                          <input type="text" matInput formControlName="moneyRate"
+                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" >
                         </mat-form-field>
                       </td>
                     </tr>
@@ -380,7 +380,7 @@
                 <table class="table-responsive" style="overflow: hidden;">
                   <thead style="border-style:hidden;">
                     <th style="width: 30%;" ></th>
-                    <th style="border-style:hidden;">Sum insured</th>
+                    <th style="border-style:hidden;">Sum Insured</th>
                     <th style="border-style:hidden;">Rate</th>
                   </thead>
                   <tbody>
@@ -390,14 +390,14 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
+                          <input type="text" matInput formControlName="breakDownSA"
                             [ngStyle]="{'line-height':'30px'}" class="uppercase">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
+                          <input type="text" matInput formControlName="breakDownRate"
+                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" > 
                         </mat-form-field>
                       </td>
                     </tr>
@@ -407,14 +407,14 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
+                          <input type="text" matInput formControlName="plateGlassSA"
                             [ngStyle]="{'line-height':'30px'}" class="uppercase">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sumInsured"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
+                          <input type="text" matInput formControlName="plateGlassRate"
+                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" >
                         </mat-form-field>
                       </td>
                     </tr>
@@ -428,17 +428,10 @@
                 <div class="col-md-4">
                   
                 </div>
+               
                 <div class="col-md-4">
                   <mat-form-field>
-                    <mat-label>Terrorism Premium</mat-label>
-
-                    <input type="text" matInput formControlName="sumInsured"
-                      [ngStyle]="{'line-height':'30px'}" class="uppercase">
-                  </mat-form-field>
-                </div>
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Total Suminsured</mat-label>
+                    <mat-label>Total Sum Insured</mat-label>
 
                     <input type="text" matInput formControlName="sumInsured"
                       [ngStyle]="{'line-height':'30px'}" class="uppercase">
@@ -1311,7 +1304,7 @@
             <div class="col-lg-3">
               <mat-form-field>
                 <mat-label>Total Sum Insured</mat-label>
-                <input type="number" matInput placeholder="PPC" [(ngModel)]="totalSumInsured" style="line-height: 28px;"
+                <input type="number" matInput placeholder="PPC" [(ngModel)]="totalSumInsuredInsurance" style="line-height: 28px;"
                   readonly>
               </mat-form-field>
             </div>
@@ -1329,7 +1322,7 @@
           <form [formGroup]="premiumForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
             <hr style="margin-top: 0px;" />
             <div class="row">
-              <div class="col-lg-3">
+              <div class="col-lg-3" *ngIf="this._verticalId !==  Vertical.Fire">
                 <mat-form-field>
                   <mat-label>Family Discount</mat-label>
                   <input type="text" matInput formControlName="familyDiscount" [errorStateMatcher]="matcher"
@@ -1340,6 +1333,16 @@
                   </mat-error>
                 </mat-form-field>
               </div>
+              <div class="col-lg-3">
+                <mat-form-field>
+                  <mat-form-field>
+                    <mat-label>Terrorism Premium</mat-label>
+                    <input type="text" matInput formControlName="terrorimsPremium"
+                       class="uppercase">
+                  </mat-form-field>
+                </mat-form-field>
+              </div>
+             
               <div class="col-lg-2" *ngIf="isHeath || isPA">
                 <mat-form-field>
                   <mat-label>Long Term Discount</mat-label>

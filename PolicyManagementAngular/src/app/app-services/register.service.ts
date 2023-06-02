@@ -20,6 +20,8 @@ import { VoucherService } from "./voucher/voucher.service";
 import { CUSTOM_DATE_FORMAT } from "../shared/utilities/helpers/helper";
 import { IRetailService } from "./health-service/abstracts/retail.iservice";
 import { RetailService } from "./health-service/retail.service";
+import { ICommercialService } from "./commercial-service/abstracts/commercial.iservice";
+import { CommercialService } from "./commercial-service/commercial.service";
 
 export const Services = [
   { provide: IApiManagerService, useClass: ApiManagerService },
@@ -31,6 +33,7 @@ export const Services = [
   { provide: IClaimsService, useClass: ClaimsService },
   { provide: IInspectionService, useClass: InspectionService },
   { provide: IRetailService, useClass: RetailService },
+  { provide: ICommercialService, useClass: CommercialService },
   { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT },
   { provide: HTTP_INTERCEPTORS, useClass: OAuthTokenInterceptor, multi: true }
 ];

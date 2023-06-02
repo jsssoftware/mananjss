@@ -5,6 +5,7 @@ using PolicyManagement.Models.Health;
 using PolicyManagement.Models.Motor;
 using System;
 using System.Collections.Generic;
+using PolicyManagement.Infrastructures.EntityFramework;
 
 namespace PolicyManagement.Models.Commercial
 {
@@ -88,6 +89,8 @@ namespace PolicyManagement.Models.Commercial
         public int? NumberOfChild { get; set; }
         public int? NumberOfAdult { get; set; }
         public int? TotalSumInsured { get; set; }
+        public tblFireCoverage fireCoverage { get; set; }
+
 
     }
 }

@@ -181,6 +181,7 @@ namespace PolicyManagement.Services.Commercial
                         CoverageId =  model.TpPolicy.Coverage
 
                     };
+                    
 
                     if ( model.PolicyTerm != null && (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4))
                     {
@@ -397,7 +398,12 @@ namespace PolicyManagement.Services.Commercial
                     }
                     #endregion
 
-
+                    #region Insert FireDetail
+                        model.fireCoverage.PolicyId = motorPolicyData.PolicyId;
+                        model.fireCoverage.BranchId = motorPolicyData.BranchId;
+                        _dataContext.tblFireCoverage.Add(model.fireCoverage);
+                        await _dataContext.SaveChangesAsync();
+                    #endregion
 
                     dbContextTransaction.Commit();
 
