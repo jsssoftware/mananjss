@@ -89,7 +89,7 @@ namespace PolicyManagement.Models.Commercial
         public int? NumberOfChild { get; set; }
         public int? NumberOfAdult { get; set; }
         public int? TotalSumInsured { get; set; }
-        public tblFireCoverage fireCoverage { get; set; }
+        public tblFireCoverage FireCoverage { get; set; }
 
 
     }

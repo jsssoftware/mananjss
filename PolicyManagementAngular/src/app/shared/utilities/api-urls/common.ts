@@ -65,5 +65,7 @@ export class Common {
     public static readonly Occupancy = "api/common/occupancy";
     public static readonly BasementExposure = "api/common/basementexposure";
     public static readonly Profession = "api/common/profession";
+    public static readonly VoyageType = "api/common/voyageType";
+    public static readonly CoverageInland = "api/common/coverageInland";
 
 }

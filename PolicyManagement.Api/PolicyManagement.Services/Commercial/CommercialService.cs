@@ -45,7 +45,7 @@ namespace PolicyManagement.Services.Commercial
         {
             _commonService = commonService;
         }
-        public async Task<CommonDto<object>> CreateHealthPolicy(CommercialPolicyFormDataModel model, BaseModel baseModel)
+        public async Task<CommonDto<object>> CreateCommercialPolicy(CommercialPolicyFormDataModel model, BaseModel baseModel)
         {
             short DefaultRToZoneId = 1;
             using (var dbContextTransaction = _dataContext.Database.BeginTransaction())
@@ -407,9 +407,9 @@ namespace PolicyManagement.Services.Commercial
                     #endregion
 
                     #region Insert FireDetail
-                        model.fireCoverage.PolicyId = motorPolicyData.PolicyId;
-                        model.fireCoverage.BranchId = motorPolicyData.BranchId;
-                        _dataContext.tblFireCoverage.Add(model.fireCoverage);
+                        model.FireCoverage.PolicyId = motorPolicyData.PolicyId;
+                        model.FireCoverage.BranchId = motorPolicyData.BranchId;
+                        _dataContext.tblFireCoverage.Add(model.FireCoverage);
                         await _dataContext.SaveChangesAsync();
                     #endregion
 
@@ -444,7 +444,7 @@ namespace PolicyManagement.Services.Commercial
             return age;
         }
 
-        public async Task<CommercialPolicyFormDataModel> FindHealthPolicyByPolicyId(int policyId)
+        public async Task<CommercialPolicyFormDataModel> FindCommercialPolicyByPolicyId(int policyId)
         {
             CommercialPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
                                                   .Join(_dataContext.tblRTOZone, T3 => T3.T1.RTOZoneId, T4 => T4.RTOZoneId, (T3, T4) => new { T3, T4 })
@@ -625,53 +625,17 @@ namespace PolicyManagement.Services.Commercial
 
             try
             {
+                var fireCoverage = await _dataContext.tblFireCoverage.Where(w => w.PolicyId == policyId).FirstOrDefaultAsync();
+                motorPolicy.FireCoverage = fireCoverage;
+            }
+            catch
+            {
+
+            }
+            try
+            {
                 var data = await _dataContext.tblPolicyPaymentData.Where(w => w.PolicyId == policyId).ToListAsync();
-                var insuredPersons = await _dataContext.tblInsuredPerson
-                                    .Join(_dataContext.tblGender, insuredPerson => insuredPerson.InsuredGenderId, gender => gender.GenderId, (insuredPerson, gender) => new {insuredPerson, gender })
-                                    .Join(_dataContext.tblCustomer, T1 => T1.insuredPerson.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
-                                    .Where(x => x.T1.insuredPerson.PolicyId == policyId && x.T1.insuredPerson.IsActive ==  true)
-                                    .AsNoTracking().ToListAsync();
-                List<InsuredPersonModel> tblInsuredPersons = new List<InsuredPersonModel>();
-                foreach (var f in insuredPersons)
-                {
 
-                    tblInsuredPersons.Add(new InsuredPersonModel
-                    {
-                        PolicyId = f.T1.insuredPerson.PolicyId,
-                        CustomerId = f.T1.insuredPerson.CustomerId.GetValueOrDefault(),
-                        Name = f.T1.insuredPerson.InsuredPersonName,
-                        GenderId = f.T1.insuredPerson.InsuredGenderId.GetValueOrDefault(),
-                        DateOfBirth = f.T1.insuredPerson.InsuredDOB,
-                        Age = f.T1.insuredPerson.InsuredAge,
-                        SumInsuredIndividual = f.T1.insuredPerson.SumInsuredIndividual,
-                        SumInsuredFloater = f.T1.insuredPerson.SumInsuredFloater,
-                        PassportNumber = f.T1.insuredPerson.PassportNo,
-                        CumulativeBonus = f.T1.insuredPerson.CummulativeBonus,
-                        Deductable = f.T1.insuredPerson.Deductable,
-                        Loading = f.T1.insuredPerson.SumInsuredIndividual,
-                        LoadingReason = f.T1.insuredPerson.LoadingReason,
-                        NomineeName = f.T1.insuredPerson.NomineeName,
-                        NomineeRelationship = f.T1.insuredPerson.NomineeRelationId,
-                        Ped = f.T1.insuredPerson.PEDId,
-                        PedExclusion = f.T1.insuredPerson.PEDExclusion,
-                        AnualIncome = f.T1.insuredPerson.AnnualIncome,
-                        RiskClass = f.T1.insuredPerson.RiskClassId,
-                        BranchId = f.T1.insuredPerson.BranchId,
-                        Mobile= f.T2.CustomerMobile1,
-                        Email = f.T2.CustomerEmail1,
-                        Address = f.T2.CustomerAddress1,
-                        Pan = f.T2.PAN,
-                        Aadhar = f.T2.AadhaarNo,
-                        Gender = f.T1.gender.Gender,
-                        CustomerCode = f.T2.CustomerCode,
-                        RelationProposer = f.T1.insuredPerson.InsuredRelationId
-                    });
-                }
-                if (insuredPersons != null && insuredPersons.Count > 0)
-                {
-                    motorPolicy.InsuredPersonData = tblInsuredPersons;
-
-                }
                 if (data != null && data.Count > 0)
                 {
                     var dataPaymentFormDataModel = data.Select(s => new PaymentFormDataModel
@@ -788,7 +752,7 @@ namespace PolicyManagement.Services.Commercial
             return motorPolicy;
         }
 
-        public async Task<CommonDto<object>> UpdateHealthPolicy(int policyId, CommercialPolicyFormDataModel model, BaseModel baseModel)
+        public async Task<CommonDto<object>> UpdateCommercialPolicy(int policyId, CommercialPolicyFormDataModel model, BaseModel baseModel)
         {
 
             tblMotorPolicyData motorPolicyData = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => f.PolicyId == policyId);
@@ -1112,8 +1076,7 @@ namespace PolicyManagement.Services.Commercial
 
         private bool IsFlag2True(CommercialPolicyFormDataModel model)
         {
-                if( ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model) 
-                 && ValidateInsuredPersonDetail(model)) { 
+                if( ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model) ) { 
                 return true; 
             } 
             return false;

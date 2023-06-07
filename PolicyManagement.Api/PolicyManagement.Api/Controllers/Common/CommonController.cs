@@ -289,5 +289,15 @@ namespace PolicyManagement.Api.Controllers.Common
         [HttpGet]
         public async Task<IHttpActionResult> GetAllProfession() => Json(await _commonService.FindAllProfession());
 
+        [Route("voyagetype")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllVoyageType() => Json(await _commonService.FindVoyageType());
+
+
+        [Route("coverageInland")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllCoverageInland() => Json(await _commonService.FindCoverageInland());
+
+
     }
 }

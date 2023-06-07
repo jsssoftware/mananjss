@@ -242,206 +242,7 @@
           </form>
         </mat-expansion-panel>
         <!--End Customer Details-->
-        <!--Start Fire Term-->
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Fire Panel
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <form [formGroup]="fireTermForm" >
-            <div class="row">
 
-              <div class="col-lg-4">
-                <table class="table-responsive" style="overflow: hidden;">
-                  <thead style="border-style:hidden;">
-                    <th style="width: 30%;" ></th>
-                    <th style="border-style:hidden;">Sum Insured</th>
-                    <th style="border-style:hidden;">Rate</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <b>Fire</b>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="fireSA"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
-                        </mat-form-field>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="fireRate"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase"  (change)="calculatTotalFiredSumInsured()" >
-                        </mat-form-field>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <b>EarthQuake</b>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="earthQuakeSA"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
-                        </mat-form-field>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="earthQuakeRate"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
-                        </mat-form-field>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <b>STFI</b>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="sTFISA"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
-                        </mat-form-field>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="sTFIRate"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" >
-                        </mat-form-field>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="col-lg-4">
-                <table class="table-responsive" style="overflow: hidden;">
-                  <thead style="border-style:hidden;">
-                    <th style="width: 30%;" ></th>
-                    <th style="border-style:hidden;">Sum Insured</th>
-                    <th style="border-style:hidden;">Rate</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <b>Terrorism</b>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="terrorismSA"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
-                        </mat-form-field>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="terrorismRate"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" >
-                        </mat-form-field>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <b>Bulgary</b>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="burglarySA"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
-                        </mat-form-field>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="burglaryRate"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" >
-                        </mat-form-field>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <b>Money</b>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="moneySA"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
-                        </mat-form-field>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="moneyRate"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" >
-                        </mat-form-field>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="col-lg-4">
-                <table class="table-responsive" style="overflow: hidden;">
-                  <thead style="border-style:hidden;">
-                    <th style="width: 30%;" ></th>
-                    <th style="border-style:hidden;">Sum Insured</th>
-                    <th style="border-style:hidden;">Rate</th>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <b>Breakdown</b>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="breakDownSA"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
-                        </mat-form-field>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="breakDownRate"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" > 
-                        </mat-form-field>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <b>Plateglass</b>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="plateGlassSA"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
-                        </mat-form-field>
-                      </td>
-                      <td>
-                        <mat-form-field>
-                          <input type="text" matInput formControlName="plateGlassRate"
-                            [ngStyle]="{'line-height':'30px'}" class="uppercase" (change)="calculatTotalFiredSumInsured()" >
-                        </mat-form-field>
-                      </td>
-                    </tr>
-                   
-                  </tbody>
-                </table>
-                
-              </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                  
-                </div>
-               
-                <div class="col-md-4">
-                  <mat-form-field>
-                    <mat-label>Total Sum Insured</mat-label>
-
-                    <input type="text" matInput formControlName="sumInsured"
-                      [ngStyle]="{'line-height':'30px'}" class="uppercase">
-                  </mat-form-field>
-                </div>
-            </div>
-          </form>
-        </mat-expansion-panel>
-
-        <!--End Fire term-->
         <!--Start Policy Term-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -567,8 +368,8 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-             
-              
+
+
 
             </div>
             <div class="row">
@@ -576,13 +377,13 @@
                 <mat-form-field>
                   <mat-label>Policy Number <span style="color:red">*</span></mat-label>
                   <input type="text" matInput formControlName="policyNumber" [errorStateMatcher]="matcher"
-                    placeholder="Policy Number" maxl  ength="30">
+                    placeholder="Policy Number" maxl ength="30">
                   <mat-error *ngIf="policyForm.controls.policyNumber">
                     Policy Number is <strong>required</strong>
                   </mat-error>
                 </mat-form-field>
               </div>
-             
+
             </div>
             <div class="row">
               <div class="col-lg-4">
@@ -650,22 +451,20 @@
                 </div>
               </div>
             </div>
-           
+
             <div class="row">
 
               <div class="col-lg-4">
                 <mat-form-field appearance="fill">
                   <mat-label>Occupancy</mat-label>
-                  <input type="text" matInput formControlName="occupancy" 
-                  class="uppercase">
+                  <input type="text" matInput formControlName="occupancy" class="uppercase">
                   <mat-error *ngIf="policyForm.controls.occupancy">Please Select Occupancy</mat-error>
                 </mat-form-field>
               </div>
               <div class="col-lg-4">
                 <mat-form-field appearance="fill">
                   <mat-label>Line of Businness</mat-label>
-                  <input type="text" matInput formControlName="lineofBusiness" 
-                  class="uppercase">
+                  <input type="text" matInput formControlName="lineofBusiness" class="uppercase">
                   <mat-error *ngIf="policyForm.controls.lineofBusiness">Please Select Line Business</mat-error>
                 </mat-form-field>
               </div>
@@ -674,7 +473,8 @@
                   <mat-label>Basement Exposure</mat-label>
                   <mat-select formControlName="basementExposure" required>
                     <mat-option>Select</mat-option>
-                    <mat-option *ngFor="let baseexposure of _baseExposure" [value]="baseexposure.Value">{{baseexposure.Name}}
+                    <mat-option *ngFor="let baseexposure of _baseExposure" [value]="baseexposure.Value">
+                      {{baseexposure.Name}}
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="policyForm.controls.basementExposure">Please Select Basement Exposure</mat-error>
@@ -683,38 +483,45 @@
             </div>
             <div class="row">
               <div class="col-lg-4">
-                <div class="row">
-                  
-                  <div class="col-lg-2">
-                    <br>
-                    <mat-label>Location Type</mat-label>
+                <mat-radio-group formControlName="locationType">
 
+                  <div class="row">
+
+                    <div class="col-lg-2">
+                      <br>
+                      <mat-label>Location Type</mat-label>
+
+                    </div>
+
+                    <div class="col-lg-3">
+
+                      <mat-radio-button [value]="1" color="primary" style="margin-top: 15px;"
+                        [checked]="policyForm?.value.locationType == 1">
+                        Single
+                      </mat-radio-button>
+
+                    </div>
+                    <div class="col-lg-3">
+
+                      <mat-radio-button [value]="2" color="primary" style="margin-top: 15px;"
+                        [checked]="policyForm?.value.locationType == 2">
+                        Multiple
+                      </mat-radio-button>
+                    </div>
                   </div>
-                  <div class="col-lg-3">
-                    <mat-checkbox color="primary" style="margin-top: 15px;" formControlName="locationTypeSingle"
-                     >
-                      Single
-                    </mat-checkbox>
-                  </div>
-                  <div class="col-lg-3">
-                    <mat-checkbox color="primary" style="margin-top: 15px;" formControlName="locationTypeMultiple"
-                    >Multiple
-                    </mat-checkbox>
-                  </div>
-                </div>
+                </mat-radio-group>
+
               </div>
-              <div class="col-lg-4" >
+              <div class="col-lg-4">
                 <mat-form-field appearance="fill">
                   <mat-label>Number of location</mat-label>
-                  <input type="number" matInput formControlName="numberofLocation" 
-                    class="uppercase">
-                </mat-form-field>              
+                  <input type="number" matInput formControlName="numberofLocation" class="uppercase">
+                </mat-form-field>
               </div>
               <div class="col-lg-4">
                 <mat-form-field appearance="fill">
                   <mat-label>Primary Risk Location</mat-label>
-                  <input type="text" matInput formControlName="riskLocation" 
-                    class="uppercase">
+                  <input type="text" matInput formControlName="riskLocation" class="uppercase">
                 </mat-form-field>
               </div>
             </div>
@@ -809,58 +616,326 @@
         </mat-expansion-panel>
         <!--End Policy Details-->
 
-        <div *ngIf="MenuVertical!='Motor'">
-          <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                Product & Plan Type
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <form [formGroup]="productPlanForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
-              <hr style="margin-top: 0px;" />
-              <div class="row">
-                <div class="col-lg-4">
-                  <mat-form-field appearance="fill">
-                    <mat-label>Product</mat-label>
-                    <mat-select formControlName="product" required (selectionChange)="getPlan()">
-                      <mat-option>Select</mat-option>
-                      <mat-option *ngFor="let products of _products" [value]="products.Value">
-                        {{products.Name}}</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="policyTermForm.controls.policyType">Please Select Product</mat-error>
-                  </mat-form-field>
-                </div>
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Product & Plan Type
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form [formGroup]="productPlanForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
+            <hr style="margin-top: 0px;" />
+            <div class="row">
+              <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Product</mat-label>
+                  <mat-select formControlName="product" required (selectionChange)="getPlan()">
+                    <mat-option>Select</mat-option>
+                    <mat-option *ngFor="let products of _products" [value]="products.Value">
+                      {{products.Name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="policyTermForm.controls.policyType">Please Select Product</mat-error>
+                </mat-form-field>
+              </div>
 
-                <div class="col-lg-4">
-                  <mat-form-field appearance="fill">
-                    <mat-label>Plan</mat-label>
-                    <mat-select formControlName="plan" required>
-                      <mat-option>Select</mat-option>
-                      <mat-option *ngFor="let plans of _plans" [value]="plans.Value">
-                        {{plans.Name}}</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="policyTermForm.controls.policyType">Please Select Plan</mat-error>
-                  </mat-form-field>
-                </div>
+              <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Plan</mat-label>
+                  <mat-select formControlName="plan">
+                    <mat-option>Select</mat-option>
+                    <mat-option *ngFor="let plans of _plans" [value]="plans.Value">
+                      {{plans.Name}}</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
-                <div class="col-lg-4">
-                  <mat-form-field appearance="fill">
-                    <mat-label>Plan Type</mat-label>
-                    <mat-select formControlName="planTypes" required (selectionChange)="sumInsuredCalculation()">
-                      <mat-option>Select</mat-option>
-                      <mat-option *ngFor="let planTypes of _planTypes" [value]="planTypes.Value">
-                        {{planTypes.Name}}</mat-option>
-                    </mat-select>
-                    <mat-error *ngIf="policyTermForm.controls.policyType">Please Select PlanType</mat-error>
-                  </mat-form-field>
+
+
+            </div>
+          </form>
+        </mat-expansion-panel>
+
+        <!--Star  Marine -->
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Marine
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form [formGroup]="marineTermForm">
+            <hr style="margin-top: 0px;" />
+            <div class="row">
+
+              <div class="col-lg-3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Voyage Type</mat-label>
+                  <mat-select formControlName="voyageType" required (selectionChange)="getPlan()">
+                    <mat-option>Select</mat-option>
+                    <mat-option *ngFor="let voyageType of _voyageType" [value]="voyageType.Value">
+                      {{voyageType.Name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="policyTermForm.controls.voyageType">Please Select Voyage</mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="col-lg-3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Coverage Inland</mat-label>
+                  <mat-select formControlName="coverageInland">
+                    <mat-option>Select</mat-option>
+                    <mat-option *ngFor="let commisionInland of _commisionInland" [value]="commisionInland.Value">
+                      {{commisionInland.Name}}</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="policyTermForm.controls.coverageInland">Please Select Voyage</mat-error>
+
+                </mat-form-field>
+              </div>
+              <div class="col-lg-6">
+                <div class="row">
+                  <div class="col-lg-2">
+
+                    <div>Transit Required</div>
+                  </div>
+                  <div class="col-lg-2">
+                    <mat-form-field appearance="fill">
+                      <mat-label>From</mat-label>
+                      <input type="text" matInput formControlName="fromTransitDomestic"
+                      class="uppercase" >
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-2">
+                    <mat-form-field appearance="fill">
+                      <mat-label>To</mat-label>
+                      <input type="text" matInput formControlName="toTransitDomestic"
+                      class="uppercase">
+                    </mat-form-field>
+                  </div>
                 </div>
 
               </div>
-            </form>
-          </mat-expansion-panel>
-        </div>
+            </div>
+            <div class="row">
 
+              <div class="col-lg-3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Rate</mat-label>
+                  <input type="text" matInput formControlName="rate" class="uppercase">
+                </mat-form-field>
+              </div>
 
+              <div class="col-lg-3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Total Sum Insured</mat-label>
+                  <input type="text" matInput formControlName="totalSumInsured" class="uppercase">
+                </mat-form-field>
+              </div>
+
+            </div>
+          </form>
+        </mat-expansion-panel>
+        <!--End Marine-->
+
+        <!--Start Fire Term-->
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+          *ngIf="this._verticalId ==  Vertical.Fire">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Fire Panel
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form [formGroup]="fireTermForm">
+            <div class="row">
+
+              <div class="col-lg-4">
+                <table class="table-responsive" style="overflow: hidden;">
+                  <thead style="border-style:hidden;">
+                    <th style="width: 30%;"></th>
+                    <th style="border-style:hidden;">Sum Insured</th>
+                    <th style="border-style:hidden;">Rate</th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <b>Fire</b>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="fireSA" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="fireRate" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                        </mat-form-field>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <b>EarthQuake</b>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="earthQuakeSA" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="earthQuakeRate"
+                            [ngStyle]="{'line-height':'30px'}" class="uppercase">
+                        </mat-form-field>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <b>STFI</b>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="sTFISA" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="sTFIRate" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                        </mat-form-field>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-lg-4">
+                <table class="table-responsive" style="overflow: hidden;">
+                  <thead style="border-style:hidden;">
+                    <th style="width: 30%;"></th>
+                    <th style="border-style:hidden;">Sum Insured</th>
+                    <th style="border-style:hidden;">Rate</th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <b>Terrorism</b>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="terrorismSA" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="terrorismRate" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                        </mat-form-field>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <b>Bulgary</b>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="burglarySA" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="burglaryRate" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                        </mat-form-field>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <b>Money</b>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="moneySA" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="moneyRate" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                        </mat-form-field>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-lg-4">
+                <table class="table-responsive" style="overflow: hidden;">
+                  <thead style="border-style:hidden;">
+                    <th style="width: 30%;"></th>
+                    <th style="border-style:hidden;">Sum Insured</th>
+                    <th style="border-style:hidden;">Rate</th>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <b>Breakdown</b>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="breakDownSA" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="breakDownRate" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                        </mat-form-field>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <b>Plateglass</b>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="plateGlassSA" [ngStyle]="{'line-height':'30px'}"
+                            class="uppercase">
+                        </mat-form-field>
+                      </td>
+                      <td>
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="plateGlassRate"
+                            [ngStyle]="{'line-height':'30px'}" class="uppercase"
+                            (change)="calculatTotalFiredSumInsured()">
+                        </mat-form-field>
+                      </td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4">
+
+              </div>
+
+              <div class="col-md-4">
+                <mat-form-field>
+                  <mat-label>Total Sum Insured</mat-label>
+
+                  <input type="text" matInput formControlName="sumInsured" [ngStyle]="{'line-height':'30px'}"
+                    class="uppercase">
+                </mat-form-field>
+              </div>
+            </div>
+          </form>
+        </mat-expansion-panel>
+
+        <!--End Fire term-->
         <!--Start Premium Details-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -884,12 +959,11 @@
               </div>
               <div class="col-lg-3">
                 <mat-form-field>
-                    <mat-label>Terrorism Premium</mat-label>
-                    <input type="text" matInput formControlName="terrorimsPremium"
-                       class="uppercase">
+                  <mat-label>Terrorism Premium</mat-label>
+                  <input type="text" matInput formControlName="terrorimsPremium" class="uppercase">
                 </mat-form-field>
               </div>
-             
+
               <div class="col-lg-2" *ngIf="isHeath || isPA">
                 <mat-form-field>
                   <mat-label>Long Term Discount</mat-label>

@@ -221,6 +221,15 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     plateGlassRate: new FormControl(''),
     branchId: new FormControl('')
   });
+
+  marineTermForm = new FormGroup({
+    voyageType: new FormControl(''),
+    coverageInland: new FormControl(''),
+    fromTransitDomestic: new FormControl(''),
+    toTransitDomestic: new FormControl(''),
+    rate: new FormControl(''),
+    totalSumInsured: new FormControl(''),
+  });
   //#endregion
 
   //#region Policy Form
@@ -258,8 +267,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     previousPolicySumInsured: new FormControl('', [Validators.pattern('^[0-9]+$')]),
     numberOfDays: new FormControl('', [Validators.required]),
     riskLocation: new FormControl(''),
-    locationTypeSingle: new FormControl(''),
-    locationTypeMultiple: new FormControl(''),
+    locationType: new FormControl(''),
     numberofLocation: new FormControl(''),
     occupancy: new FormControl(''),
     lineofBusiness: new FormControl(''),
@@ -448,6 +456,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   public _riskClass: IDropDownDto<number>[] = [];
   public _ped: IDropDownDto<number>[] = [];
   public _ppc: IDropDownDto<number>[] = [];
+  public _commisionInland: IDropDownDto<number>[] = [];
+  public _voyageType: IDropDownDto<number>[] = [];
 
   public _customerId: any;
   public _customerCityId: any;
@@ -630,8 +640,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     await this.getPed();
     await this.getPpc();
     await this.getCoverage();
-    await this.getOccupancy();
     await this.getBasementExposure();
+    await this.getVoyageType();
+    await this.getCommisionInland();
     this.setValidatoronVertical()
 
     //Not calling on edit
@@ -1713,7 +1724,6 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       Pan: response.Customer.Pan,
     });
     
-    await this.getCustomerDataByClusterIdUpdate(Number(response.Customer.ClusterId), response.InsuredPersonData)
 
     this.IsVerified = response.IsVerified;
     this._controlNumber = response.ControlNumber
@@ -1726,26 +1736,29 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
 
 
     this.businessDoneBy();
-    //Update insurance person
-
-
-
-    this._selectedinsuranceCustomerPersonDetail = JSON.parse(JSON.stringify(response.InsuredPersonData));
-    if(this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length>0){
-      await this._selectedinsuranceCustomerPersonDetail.filter(y=>{
-        y.NomineeRelationShipName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
-        y.RelationProposerName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
-        y.PedName = this._ped.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cped)?.Name
-      })
-      this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
-  
-    }
-    if(this._storeCustomerClusterDetail && this._storeCustomerClusterDetail.length>0){
-    this._storeCustomerClusterDetail = this._storeCustomerClusterDetail.filter(x => !this._selectedinsuranceCustomerPersonDetail.filter(y => y.ClusterId === x.ClusterId));
-    this._dataSourceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._storeCustomerClusterDetail);
-    }
-    this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-    this.calculatInsuredData();
+    //Update fire panel
+    this.fireTermForm.patchValue({
+      sumInsured: response.FireCoverage.SumInsured,
+      fireCoverageId: response.FireCoverage.FireCoverageId,
+      fireSA: response.FireCoverage.FireSA,
+      fireRate: response.FireCoverage.FireRate,
+      earthQuakeSA: response.FireCoverage.EarthQuakeSA,
+      earthQuakeRate: response.FireCoverage.EarthQuakeRate,
+      sTFISA: response.FireCoverage.STFISA,
+      sTFIRate: response.FireCoverage.STFIRate,
+      terrorismSA: response.FireCoverage.TerrorismSA,
+      terrorismRate: response.FireCoverage.TerrorismRate,
+      burglarySA: response.FireCoverage.BurglarySA,
+      burglaryRate: response.FireCoverage.BurglaryRate,
+      moneySA: response.FireCoverage.MoneySA,
+      moneyRate: response.FireCoverage.MoneyRate,
+      breakDownSA: response.FireCoverage.BreakDownSA,
+      breakDownRate: response.FireCoverage.BreakDownRate,
+      plateGlassSA: response.FireCoverage.PlateGlassSA,
+      plateGlassRate: response.FireCoverage.PlateGlassRate,
+      branchId: response.FireCoverage.BranchId
+    });
+    
     //For previous value
 
     this.policyForm.patchValue({
@@ -1792,7 +1805,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
           });
         }
       }
-        debugger
+        
         this.policyForm.patchValue({
           tpInsuranceCompany: response.TpPolicy.InsuranceCompany,
           coverNoteNumber: response.CoverNoteNumber,
@@ -1801,7 +1814,6 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
           tpStartDate: this.commonService.getDateFromIDateDto(response.TpPolicy.StartDateDto as IDateDto),
           tpNumberOfYear: response.TpPolicy.NumberOfYear,
           tpExpiryDate: this.commonService.getDateFromIDateDto(response.TpPolicy.ExpiryDateDto as IDateDto),
-          //        insuranceBranch: response.InsuranceBranch,
           numberOfKiloMeterCovered: response.NumberOfKiloMeterCovered,
           extendedKiloMeterCovered: response.ExtendedKiloMeterCovered,
           isPreviousPolicyApplicable: response.IsPreviousPolicyApplicable,
@@ -2379,6 +2391,16 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       this._baseExposure = response;
     });
   }
+  getVoyageType() {
+    this.commonService.getVoyageType().subscribe((response: any) => {
+      this._voyageType = response;
+    });
+  }
+  getCommisionInland() {
+    this.commonService.getCommisionInland().subscribe((response: any) => {
+      this._commisionInland = response;
+    });
+  }
 
   calculateChanges() {
 
@@ -2423,7 +2445,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
 
   redirectRoute() {
     this.verticalData = this.verticalData;
-    this.router.navigate(["../pms/health/health-policy-management"]);
+    if(this._verticalId == Vertical.Fire) this.router.navigate(["../pms/fire/fire-policy-management"]);
+   if(this._verticalId == Vertical.Marine) this.router.navigate(["../pms/marine/marine-policy-management"]);
   }
 
   getCustomerDataByClusterId(clusterId: number) {
@@ -2505,7 +2528,6 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     this.validatePremiumDetail(response)
     this.validatePolicySourceDetail(response)
     this.validatePaymentData(response)
-    this.validateInsuredPersonDetail(response)
   };
   erorr: string = "This Field is Required";
   errorList: any = [];

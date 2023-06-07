@@ -10,20 +10,20 @@ namespace PolicyManagement.Api.Controllers.Commercial
     [RoutePrefix("api/commercial")]
     public class CommercialController : ApiController
     {
-        private readonly ICommercialService _healthService;
-        public CommercialController(ICommercialService healthService) => _healthService = healthService;
+        private readonly ICommercialService _commercialService;
+        public CommercialController(ICommercialService commercialService) => _commercialService = commercialService;
 
         [Route("")]
         [HttpPost]
-        public async Task<IHttpActionResult> CreatePolicy(CommercialPolicyFormDataModel model) => Json(await _healthService.CreateHealthPolicy(model, new BaseModel()));
+        public async Task<IHttpActionResult> CreatePolicy(CommercialPolicyFormDataModel model) => Json(await _commercialService.CreateCommercialPolicy(model, new BaseModel()));
 
         [Route("{policyId}")]
         [HttpPut]
-        public async Task<IHttpActionResult> UpdatePolicy(int policyId, CommercialPolicyFormDataModel model) => Json(await _healthService.UpdateHealthPolicy(policyId, model, new BaseModel()));
+        public async Task<IHttpActionResult> UpdatePolicy(int policyId, CommercialPolicyFormDataModel model) => Json(await _commercialService.UpdateCommercialPolicy(policyId, model, new BaseModel()));
 
         [Route("{policyId}")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetPolicyById(int policyId) => Json(await _healthService.FindHealthPolicyByPolicyId(policyId));
+        public async Task<IHttpActionResult> GetPolicyById(int policyId) => Json(await _commercialService.FindCommercialPolicyByPolicyId(policyId));
 
     }
 }
