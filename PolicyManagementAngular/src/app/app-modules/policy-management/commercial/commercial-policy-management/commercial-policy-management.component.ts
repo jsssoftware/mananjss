@@ -229,6 +229,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     toTransitDomestic: new FormControl(''),
     rate: new FormControl(''),
     totalSumInsured: new FormControl(''),
+    sumInsured: new FormControl(''),
+    endroseSumInsured: new FormControl(''),
   });
   //#endregion
 
