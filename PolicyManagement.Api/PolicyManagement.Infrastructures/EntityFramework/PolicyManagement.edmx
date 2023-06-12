@@ -1183,6 +1183,9 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="RiskLocation" Type="varchar" MaxLength="50" />
           <Property Name="NumberofLocation" Type="int" />
           <Property Name="LocationType" Type="int" />
+          <Property Name="MarineTotalSumInsured" Type="bigint" />
+          <Property Name="MarineEndroseSumInsured" Type="bigint" />
+          <Property Name="MarineSumInsured" Type="bigint" />
         </EntityType>
         <EntityType Name="tblNCB">
           <Key>
@@ -6840,6 +6843,9 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="RiskLocation" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="NumberofLocation" Type="Int32" />
           <Property Name="LocationType" Type="Int32" />
+          <Property Name="MarineTotalSumInsured" Type="Int64" />
+          <Property Name="MarineEndroseSumInsured" Type="Int64" />
+          <Property Name="MarineSumInsured" Type="Int64" />
         </EntityType>
         <EntityType Name="tblLog">
           <Key>
@@ -9127,6 +9133,9 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblMotorPolicyDatas">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblMotorPolicyData">
               <MappingFragment StoreEntitySet="tblMotorPolicyData">
+                <ScalarProperty Name="MarineSumInsured" ColumnName="MarineSumInsured" />
+                <ScalarProperty Name="MarineEndroseSumInsured" ColumnName="MarineEndroseSumInsured" />
+                <ScalarProperty Name="MarineTotalSumInsured" ColumnName="MarineTotalSumInsured" />
                 <ScalarProperty Name="LocationType" ColumnName="LocationType" />
                 <ScalarProperty Name="NumberofLocation" ColumnName="NumberofLocation" />
                 <ScalarProperty Name="RiskLocation" ColumnName="RiskLocation" />

@@ -89,6 +89,7 @@ export abstract class ICommonService {
     abstract getBasementExposure(): Observable<IDropDownDto<number>[]>;
     abstract getProfession(): Observable<IDropDownDto<number>[]>;
     abstract getCommisionInland(): Observable<IDropDownDto<number>[]>;
+    abstract getStorageRisk(): Observable<IDropDownDto<number>[]>;
     abstract getVoyageType(): Observable<IDropDownDto<number>[]>;
 
 

@@ -368,9 +368,6 @@
                   </mat-error>
                 </mat-form-field>
               </div>
-
-
-
             </div>
             <div class="row">
               <div class="col-lg-8">
@@ -396,7 +393,7 @@
                   <mat-datepicker #StartDate></mat-datepicker>
                 </mat-form-field>
               </div>
-              <div class="col-lg-4" *ngIf="isHeath || isPA">
+              <div class="col-lg-4" >
                 <mat-form-field appearance="fill">
                   <mat-label>Number of Year</mat-label>
                   <mat-select formControlName="tpNumberOfYear" required (selectionChange)="setExpiryDate('tp')">
@@ -407,15 +404,7 @@
                   <mat-error *ngIf="policyForm.controls.tpNumberOfYear">Please Select Number of Year</mat-error>
                 </mat-form-field>
               </div>
-              <div class="col-lg-4" *ngIf="isTravel">
-                <mat-form-field appearance="fill">
-                  <mat-label>Number of Days</mat-label>
-
-                  <input type="text" matInput formControlName="numberOfDays" placeholder="Number of Days"
-                    style="line-height: 30px;" class="uppercase" maxlength="4" max="4" (input)="setExpiryDateDays()">
-                  <mat-error *ngIf="policyForm.controls.numberOfDays">Please select Number of Days</mat-error>
-                </mat-form-field>
-              </div>
+             
               <div class="col-lg-4">
                 <mat-form-field appearance="fill">
                   <mat-label>{{(MenuVertical=='Motor')?'Expiry Date': isTravel ? 'Date of Return' : 'Risk End Date'}}
@@ -427,32 +416,37 @@
               </div>
             </div>
             <hr />
-            <div class="row">
-              <div class="col-lg-4">
-                <mat-form-field appearance="fill">
-                  <mat-label>Insurance Branch</mat-label>
-                  <mat-select formControlName="insuranceBranch" required>
-                    <mat-option>Select</mat-option>
-                    <mat-option *ngFor="let branch of _insuranceCompanyBranches" [value]="branch.Value">{{branch.Name}}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="policyForm.controls.insuranceBranch">Please Select Insurance Branch</mat-error>
-                </mat-form-field>
-              </div>
+            <div class="row" *ngIf="isMarine">
+              
               <div class="col-lg-8">
                 <div class="row">
-                  <div class="col-lg-4" style="margin-top: 15px;">
-                    <mat-checkbox color="primary" formControlName="isAll">Insurance Branch Office - All</mat-checkbox>
+                  <div class="col-lg-4" >
+                    <mat-form-field appearance="fill">
+                      <mat-label>Storage Risk Id</mat-label>
+                      <mat-select formControlName="storageriskid" required>
+                        <mat-option>Select</mat-option>
+                        <mat-option *ngFor="let storageRisk of _storageRisk" [value]="storageRisk.Value">{{storageRisk.Name}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="policyForm.controls.storageriskid">Please Select Storage Risk</mat-error>
+                    </mat-form-field>                  
                   </div>
-                  <div class="col-lg-8" style="margin-top: 5px;">
-                    <button type="button" mat-raised-button color="primary"
-                      (click)="getInsuranceCompanyBranches()">Refresh</button>
+                  <div class="col-lg-4" >
+                    <mat-form-field appearance="fill">
+                      <mat-label>Hypothentication</mat-label>
+                      <mat-select formControlName="hypothentication" required>
+                        <mat-option>Select</mat-option>
+                        <mat-option *ngFor="let financer of _financers" [value]="financer.Value">{{financer.Name}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="policyForm.controls.hypothentication">Please Select Storage Risk</mat-error>
+                    </mat-form-field>     
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="row">
+            <div class="row" *ngIf="isFire">
 
               <div class="col-lg-4">
                 <mat-form-field appearance="fill">
@@ -481,7 +475,7 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row">
+            <div class="row"  *ngIf="isFire">
               <div class="col-lg-4">
                 <mat-radio-group formControlName="locationType">
 
@@ -523,6 +517,15 @@
                   <mat-label>Primary Risk Location</mat-label>
                   <input type="text" matInput formControlName="riskLocation" class="uppercase">
                 </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-4" style="margin-top: 15px;">
+                <mat-checkbox color="primary" formControlName="isAll">Insurance Branch Office - All</mat-checkbox>
+              </div>
+              <div class="col-lg-8" style="margin-top: 5px;">
+                <button type="button" mat-raised-button color="primary"
+                  (click)="getInsuranceCompanyBranches()">Refresh</button>
               </div>
             </div>
             <section *ngIf="_type != 1">
@@ -647,9 +650,6 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-
-
-
             </div>
           </form>
         </mat-expansion-panel>
@@ -725,19 +725,19 @@
               <div class="col-lg-3">
                 <mat-form-field appearance="fill">
                   <mat-label>Sum Insured</mat-label>
-                  <input type="text" matInput formControlName="sumInsured" class="uppercase" required>
+                  <input type="text" matInput formControlName="sumInsured" class="uppercase" required  (change)="calculateMarineSumInsured()">
                 </mat-form-field>
               </div>
               <div class="col-lg-3">
                 <mat-form-field appearance="fill">
                   <mat-label>Endrose Sum Insured</mat-label>
-                  <input type="number" matInput formControlName="endroseSumInsured" class="uppercase" required>
+                  <input type="number" matInput formControlName="endroseSumInsured" class="uppercase" required (change)="calculateMarineSumInsured()">
                 </mat-form-field>
               </div>
               <div class="col-lg-3">
                 <mat-form-field appearance="fill">
                   <mat-label>Total Sum Insured</mat-label>
-                  <input type="number" matInput formControlName="totalSumInsured" class="uppercase" required>
+                  <input type="number" matInput formControlName="totalSumInsured" class="uppercase" required readonly>
                 </mat-form-field>
               </div>
 
@@ -948,6 +948,67 @@
         </mat-expansion-panel>
 
         <!--End Fire term-->
+
+        <!--Start  Misc -->
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"  *ngIf="this._verticalId ==  Vertical.Misc">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Miscellenous
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <form [formGroup]="miscform">
+                    <hr style="margin-top: 0px;" />
+                    <div class="row">
+        
+                      <div class="col-lg-3">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Rate</mat-label>
+                          <input type="text" matInput formControlName="miscrate" class="uppercase">
+                          <mat-error *ngIf="miscform.controls.miscrate">Please Select Rate</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-3">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Miscellenous 1</mat-label>
+                          <input type="text" matInput formControlName="misc1" class="uppercase">
+                          <mat-error *ngIf="miscform.controls.occupancy">Please Select Miscellenous</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-3">
+                          <mat-form-field appearance="fill">
+                            <mat-label>Miscellenous 2</mat-label>
+                            <input type="text" matInput formControlName="misc1" class="uppercase">
+                            <mat-error *ngIf="miscform.controls.misc2">Please Select Miscellenous</mat-error>
+                          </mat-form-field>        
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-3">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Miscellenous 3</mat-label>
+                          <input type="text" matInput formControlName="misc1" class="uppercase">
+                          <mat-error *ngIf="miscform.controls.misc3">Please Select Miscellenous</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-3">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Miscellenous 4</mat-label>
+                          <input type="text" matInput formControlName="misc1" class="uppercase">
+                          <mat-error *ngIf="miscform.controls.misc4">Please Select Miscellenous</mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-lg-3">
+                          <mat-form-field appearance="fill">
+                            <mat-label>Miscellenous 5</mat-label>
+                            <input type="text" matInput formControlName="misc1" class="uppercase">
+                            <mat-error *ngIf="miscform.controls.misc5">Please Select Miscellenous</mat-error>
+                          </mat-form-field>        
+                      </div>
+        
+                    </div>
+                  </form>
+                </mat-expansion-panel>
+        <!--End Misc-->
         <!--Start Premium Details-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
           <mat-expansion-panel-header>
@@ -958,7 +1019,7 @@
           <form [formGroup]="premiumForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
             <hr style="margin-top: 0px;" />
             <div class="row">
-              <div class="col-lg-3" *ngIf="this._verticalId !==  Vertical.Fire">
+              <div class="col-lg-3" *ngIf="isTravel">
                 <mat-form-field>
                   <mat-label>Family Discount</mat-label>
                   <input type="text" matInput formControlName="familyDiscount" [errorStateMatcher]="matcher"

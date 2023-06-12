@@ -10,6 +10,7 @@ import { CommonFunction } from 'src/app/shared/utilities/helpers/common-function
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
 import { SearchPolicyType, Vertical } from 'src/app/shared/utilities/enums/enum';
 import { RetailService } from 'src/app/app-services/health-service/retail.service';
+import { CommercialService } from 'src/app/app-services/commercial-service/commercial.service';
 
 @Component({
   selector: 'app-customer',
@@ -35,7 +36,8 @@ export class CustomerComponent implements OnInit {
     private route: ActivatedRoute,
     private _commonFunction:CommonFunction,
     private _motorService:MotorService,
-    private _healthService:RetailService
+    private _healthService:RetailService,
+    private _commercialService:CommercialService
   ) {
   }
 
@@ -106,25 +108,25 @@ export class CustomerComponent implements OnInit {
       this._healthService.vertical$.next("Travel");
       this.router.navigate(["/pms/travel/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
-    debugger
+    
     if( this.Verticaltype == Vertical.Fire){
-      this._healthService.vertical$.next("Fire");
+      this._commercialService.vertical$.next("Fire");
       this.router.navigate(["/pms/fire/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
     if( this.Verticaltype == Vertical.Engineering){
-      this._healthService.vertical$.next("Engineering");
+      this._commercialService.vertical$.next("Engineering");
       this.router.navigate(["/pms/engineering/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
     if( this.Verticaltype == Vertical.Marine){
-      this._healthService.vertical$.next("Marine");
+      this._commercialService.vertical$.next("Marine");
       this.router.navigate(["/pms/marine/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
     if( this.Verticaltype == Vertical.Misc){
-      this._healthService.vertical$.next("Miscelleneous");
+      this._commercialService.vertical$.next("Miscelleneous");
       this.router.navigate(["/pms/misc/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
     if( this.Verticaltype == Vertical.Liabality){
-      this._healthService.vertical$.next("Liabality");
+      this._commercialService.vertical$.next("Liabality");
       this.router.navigate(["/pms/liabality/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
 

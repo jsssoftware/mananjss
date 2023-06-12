@@ -1554,5 +1554,15 @@ namespace PolicyManagement.Services.Common
             }).OrderBy(o => o.Value).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
+
+        public async Task<List<DropDownDto<int>>> FindStorageRiskId()
+        {
+            List<DropDownDto<int>> result = await _dataContext.tblStorageRisk.Select(s => new DropDownDto<int>
+            {
+                Name = s.StorageRisk,
+                Value = s.StorageRiskId
+            }).OrderBy(o => o.Value).ToListAsync();
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
     }
 }

@@ -22,6 +22,9 @@ namespace PolicyManagement.Models.Motor
         public string Occupancy { get; set; }
         public byte? BasementExposure { get; set; }
         public int? LocationType { get; set; }
+        public byte? StorageRiskId { get; set; }
+        public short? Hypothentication { get; set; }
+
 
     }
 }

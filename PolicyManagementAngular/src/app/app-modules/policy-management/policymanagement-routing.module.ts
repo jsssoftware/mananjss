@@ -146,7 +146,7 @@ const routes: Routes = [
         component: CommercialPolicyManagementComponent,
       },
       {
-        path: 'marine/:verticalId/:policyType',
+        path: 'misc/:verticalId/:policyType',
         component: CommercialPolicyManagementComponent,
       },
       {

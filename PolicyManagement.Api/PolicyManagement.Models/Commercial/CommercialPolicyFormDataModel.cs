@@ -90,7 +90,8 @@ namespace PolicyManagement.Models.Commercial
         public int? NumberOfAdult { get; set; }
         public int? TotalSumInsured { get; set; }
         public tblFireCoverage FireCoverage { get; set; }
-
+        public  MarineFormDataModel Marine { get; set; }
+        public MiscFromDataModel Misc { get; set; }
 
     }
 }

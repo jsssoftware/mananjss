@@ -4,6 +4,7 @@ import { IDocumentModel } from "../common/document-model";
 import { ICustomerFormDataModel } from "../customer/customer-form-data-model";
 import { IAddOnRiderModel } from "./add-on-rider-model";
 import { IInspectionFormDataModel } from "./inspection-form-data-model";
+import { IMarineFormDataModel } from "./marine-policy-form-data-model copy";
 import { INominationFormDataModel } from "./nomination-form-data-model";
 import { IPaymentFormDataModel } from "./payment-form-data-model";
 import { IPolicySourceFormDataModel } from "./policy-source-form-data-model";
@@ -80,4 +81,15 @@ export interface ICommercialPolicyFormDataModel {
     NumberOfAdult:Number;
     TotalSumInsured:Number;
     FireCoverage:any;
+    Marine?: IMarineFormDataModel;
+    Misc?: IMiscFormDataModel
+
+}
+
+export interface IMiscFormDataModel {
+    MiscRate: number
+    Misc1: number,
+    Misc2: number,
+    Misc3: number,
+    Misc4: number,
 }

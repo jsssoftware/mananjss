@@ -187,5 +187,6 @@ export class CommonService extends ICommonService {
     getProfession = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Common.Profession);
     getCommisionInland = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Common.CoverageInland);
     getVoyageType = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Common.VoyageType);
+    getStorageRisk = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Common.StorageRisk);
     getDateDays = (date: string, year: number, days : number): Observable<IDateDto> => this.apiManagerService.getRequest<IDateDto>(`${Common.Date}?date=${date}&year=${year}&days=${days}`);
 }

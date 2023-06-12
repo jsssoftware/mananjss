@@ -16,4 +16,6 @@ export interface ITpOdPolicyFormDataModel {
     Occupancy?: string;
     BasementExposure?: string;
     LocationType?: string
+    StorageRiskId?: string
+    Hypothentication?: string
 }

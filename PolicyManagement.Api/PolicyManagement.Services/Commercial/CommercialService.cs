@@ -145,7 +145,6 @@ namespace PolicyManagement.Services.Commercial
                         BranchId = byte.Parse(model.BranchId),
                         KMCovered = model.NumberOfKiloMeterCovered,
                         ExtendedKMCovered = model.ExtendedKiloMeterCovered,
-                        FinancerId = model.FinanceBy,
                         VerticalCode = model.VerticalCode,
                         AddonRiderId = model.AddOnRider.AddOnRiderId,
                         CreatedBy = baseModel.LoginUserId,
@@ -186,7 +185,22 @@ namespace PolicyManagement.Services.Commercial
                         RiskLocation= model.TpPolicy.RiskLocation,
                         NumberofLocation= model.TpPolicy.NumberofLocation, 
                         LocationType  = model.TpPolicy.LocationType,
-                        TerrorismPremium =  model.Premium.TerrorimsPremium
+                        TerrorismPremium =  model.Premium.TerrorimsPremium.Value,
+                        VoyageTypeId = model.Marine.VoyageType,
+                        CoverageInlandId =  model.Marine.CoverageInland,
+                        TransitFromDomestic = model.Marine.FromTransitDomestic,
+                        TransitToDomestic = model.Marine.ToTransitDomestic,
+                        MarineRate =  model.Marine.Rate,
+                        MarineEndroseSumInsured = model.Marine.EndroseSumInsured,
+                        MarineSumInsured =  model.Marine.SumInsured,
+                        MarineTotalSumInsured= model.Marine.TotalSumInsured,
+                        StorageRiskId = model.TpPolicy.StorageRiskId,
+                        FinancerId = model.TpPolicy.Hypothentication,
+                        MiscRate = model.Misc.MiscRate,
+                        MiscInfo1 = model.Misc.Misc1,
+                        MiscInfo2 = model.Misc.Misc2,
+                        MiscInfo3 = model.Misc.Misc3,   
+                        MiscInfo4 = model.Misc.Misc4,
                         
                     };
                     
@@ -586,6 +600,8 @@ namespace PolicyManagement.Services.Commercial
                                                           RiskLocation = s.T5.T3.T1.RiskLocation,
                                                           NumberofLocation = s.T5.T3.T1.NumberofLocation,
                                                           LocationType = s.T5.T3.T1.LocationType,
+                                                          StorageRiskId = s.T5.T3.T1.StorageRiskId,
+                                                          Hypothentication = s.T5.T3.T1.FinancerId?? 0,
 
                                                       },
                                                       ProductPlan = new ProductPlanModel
@@ -593,6 +609,25 @@ namespace PolicyManagement.Services.Commercial
                                                           ProductId = s.T5.T3.T1.ProductId,
                                                           Plan = s.T5.T3.T1.PlanId,
                                                           PlanTypes = s.T5.T3.T1.PlanTypeId
+                                                      },
+                                                      Marine = new MarineFormDataModel
+                                                      {
+                                                          CoverageInland = s.T5.T3.T1.CoverageInlandId,
+                                                          EndroseSumInsured = s.T5.T3.T1.MarineEndroseSumInsured?? 0,
+                                                          TotalSumInsured = s.T5.T3.T1.MarineTotalSumInsured ?? 0,
+                                                          SumInsured = s.T5.T3.T1.MarineSumInsured ?? 0,
+                                                          FromTransitDomestic = s.T5.T3.T1.TransitFromDomestic,
+                                                          ToTransitDomestic = s.T5.T3.T1.TransitToDomestic,
+                                                          VoyageType = s.T5.T3.T1.VoyageTypeId,
+                                                          Rate = s.T5.T3.T1.MarineRate??0
+                                                      },
+                                                      Misc = new MiscFromDataModel
+                                                      {
+                                                          Misc1 = s.T5.T3.T1.MiscInfo1,
+                                                          Misc2 = s.T5.T3.T1.MiscInfo2,
+                                                          Misc3 = s.T5.T3.T1.MiscInfo3,
+                                                          Misc4 = s.T5.T3.T1.MiscInfo4,
+                                                          MiscRate= s.T5.T3.T1.MiscRate
                                                       },
                                                       InsuranceBranch = s.T5.T3.T1.InsuranceBranchId ?? 0,
                                                       ControlNumber = s.T5.T3.T1.ControlNo,
@@ -618,7 +653,8 @@ namespace PolicyManagement.Services.Commercial
                                                       Flag2 = s.T5.T3.T1.Flag2,
                                                       Flag1 = s.T5.T3.T1.Flag1,
                                                       Portabality = s.T5.T3.T1.PortabilityId,
-                                                      ContinueStartDate = s.T5.T3.T1.CBStartDate
+                                                      ContinueStartDate = s.T5.T3.T1.CBStartDate,
+
                                                      
                                                   })
                                                   .FirstOrDefaultAsync();
@@ -818,7 +854,6 @@ namespace PolicyManagement.Services.Commercial
             motorPolicyData.CoverNoteNo = model.CoverNoteNumber;
             motorPolicyData.KMCovered = model.NumberOfKiloMeterCovered;
             motorPolicyData.ExtendedKMCovered = model.ExtendedKiloMeterCovered;
-            motorPolicyData.FinancerId = model.FinanceBy;
             motorPolicyData.VerticalCode = model.VerticalCode;
             motorPolicyData.AddonRiderId = model.AddOnRider.AddOnRiderId;
             motorPolicyData.ModifiedBy = baseModel.LoginUserId;
@@ -856,7 +891,21 @@ namespace PolicyManagement.Services.Commercial
             motorPolicyData.NumberofLocation = model.TpPolicy.NumberofLocation;
             motorPolicyData.LocationType = model.TpPolicy.LocationType;
             motorPolicyData.TerrorismPremium = model.Premium.TerrorimsPremium;
-
+            motorPolicyData.VoyageTypeId = model.Marine.VoyageType;
+            motorPolicyData.CoverageInlandId = model.Marine.CoverageInland;
+            motorPolicyData.TransitFromDomestic = model.Marine.FromTransitDomestic;
+            motorPolicyData.TransitToDomestic = model.Marine.ToTransitDomestic;
+            motorPolicyData.MarineRate = model.Marine.Rate;
+            motorPolicyData.MarineEndroseSumInsured = model.Marine.EndroseSumInsured;
+            motorPolicyData.MarineSumInsured = model.Marine.SumInsured;
+            motorPolicyData.MarineTotalSumInsured = model.Marine.TotalSumInsured;
+            motorPolicyData.StorageRiskId = model.TpPolicy.StorageRiskId;
+            motorPolicyData.FinancerId = model.TpPolicy.Hypothentication;
+            motorPolicyData.MiscRate = model.Misc.MiscRate;
+            motorPolicyData.MiscInfo1 = model.Misc.Misc1;
+            motorPolicyData.MiscInfo2 = model.Misc.Misc2;
+            motorPolicyData.MiscInfo3 = model.Misc.Misc3;
+            motorPolicyData.MiscInfo4 = model.Misc.Misc4;
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;
             else

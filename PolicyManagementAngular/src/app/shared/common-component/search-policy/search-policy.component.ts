@@ -20,6 +20,7 @@ import { Console } from 'console';
 import {CommonFunction} from 'src/app/shared/utilities/helpers/common-function';
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
 import { RetailService } from 'src/app/app-services/health-service/retail.service';
+import { CommercialService } from 'src/app/app-services/commercial-service/commercial.service';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
@@ -143,6 +144,8 @@ export class SearchPolicyComponent implements OnInit {
     private _commonFunction:CommonFunction,
     private _motorService:MotorService,
     private _healthService:RetailService,
+    private  _commercialService: CommercialService,
+
   ) {
     this._branchId = sessionStorage.getItem("branchId");   
     this.searchPolicyForm.patchValue({
@@ -240,9 +243,21 @@ export class SearchPolicyComponent implements OnInit {
     
     }else if(this._verticalTypeId==Vertical.Fire){
       this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
-      this._healthService._headerTitle$.next(this._headerTitle);
-      this._healthService.vertical$.next("Fire");
+      this._commercialService._headerTitle$.next(this._headerTitle);
+      this._commercialService.vertical$.next("Fire");
       this.router.navigate(["/pms/fire", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Fire}]);
+    
+    }else if(this._verticalTypeId==Vertical.Marine){
+      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
+      this._commercialService._headerTitle$.next(this._headerTitle);
+      this._commercialService.vertical$.next("Fire");
+      this.router.navigate(["/pms/marine", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Marine}]);
+    
+    }else if(this._verticalTypeId==Vertical.Misc){
+      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
+      this._commercialService._headerTitle$.next(this._headerTitle);
+      this._commercialService.vertical$.next("Fire");
+      this.router.navigate(["/pms/misc", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Misc}]);
     }
   }
 
@@ -415,6 +430,8 @@ export class SearchPolicyComponent implements OnInit {
       this.router.navigate(['./pms/health/health-policy-management']);
     if(this._verticalTypeId==Vertical.Pesonal_Accident)
       this.router.navigate(['./pms/pa/pa-policy-management']);
+    if(this._verticalTypeId==Vertical.Fire)
+      this.router.navigate(['./pms/fire/fire-policy-management']);
 
   }  
 }  

@@ -274,6 +274,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     occupancy: new FormControl(''),
     lineofBusiness: new FormControl(''),
     basementExposure: new FormControl(''),
+    storageriskid: new FormControl(''),
+    hypothentication: new FormControl(''),
   });
   //#endregion
 
@@ -331,6 +333,15 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     isAllTeleCaller: new FormControl(false)
   });
   //#endregion
+
+  miscform = new FormGroup({
+    miscrate: new FormControl(''),
+    misc1: new FormControl(''),
+    misc2: new FormControl(''),
+    misc3: new FormControl(''),
+    misc4: new FormControl(''),
+    misc5: new FormControl(''),
+  })
   private ChequeValidators = [
     Validators.pattern('^[a-zA-Z0-9]+$'),
   ];
@@ -459,6 +470,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   public _ped: IDropDownDto<number>[] = [];
   public _ppc: IDropDownDto<number>[] = [];
   public _commisionInland: IDropDownDto<number>[] = [];
+  public _storageRisk: IDropDownDto<number>[] = [];
   public _voyageType: IDropDownDto<number>[] = [];
 
   public _customerId: any;
@@ -524,6 +536,12 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   public isPA: boolean = false;
   public isHeath: boolean = false;
   public isTravel: boolean = false;
+  public isFire: boolean = false;
+  public isMarine: boolean = false;
+  public isLibality: boolean = false;
+  public isLife: boolean = false;
+  public isEnginnering: boolean = false;
+  public isMisc: boolean = false;
   public totalFireSumInsured : number = 0;
   public get SearchPolicyType(): typeof SearchPolicyType {
     return SearchPolicyType;
@@ -645,6 +663,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     await this.getBasementExposure();
     await this.getVoyageType();
     await this.getCommisionInland();
+    await this.getStorageRisk();
     this.setValidatoronVertical()
 
     //Not calling on edit
@@ -1085,6 +1104,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
         RiskLocation :this.PolicyForm.riskLocation,
         NumberofLocation : this.PolicyForm.numberofLocation, 
         LocationType : this.PolicyForm.locationType,
+        StorageRiskId : this.PolicyForm.storageriskid,
+        Hypothentication : this.PolicyForm.hypothentication,
       },
       OdPolicy: {
         StartDateString: this.commonService.getDateInString(this.PolicyForm.odStartDate),
@@ -1175,6 +1196,23 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
         ProductId: this.ProductPlanForm.product,
         Plan: this.ProductPlanForm.plan,
         PlanTypes: this.ProductPlanForm.planTypes
+      },
+      Marine: {
+        VoyageType: this.marineTermForm.value.voyageType,
+        CoverageInland: this.marineTermForm.value.coverageInland,
+        FromTransitDomestic: this.marineTermForm.value.fromTransitDomestic,
+        ToTransitDomestic: this.marineTermForm.value.toTransitDomestic,
+        Rate: this.marineTermForm.value.Rate,
+        TotalSumInsured: this.marineTermForm.value.totalSumInsured,
+        SumInsured: this.marineTermForm.value.sumInsured,
+        EndroseSumInsured: this.marineTermForm.value.endroseSumInsured,
+      },
+      Misc : {
+        MiscRate : this.miscform.value.miscrate,
+        Misc1 : this.miscform.value.misc1,
+        Misc2 : this.miscform.value.misc2,
+        Misc3 : this.miscform.value.misc3,
+        Misc4 : this.miscform.value.misc4,
       },
       Document: this._uploadDocuments,
       AddOnRider: this.getAddOnRiderFormData(),
@@ -1760,7 +1798,26 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       plateGlassRate: response.FireCoverage.PlateGlassRate,
       branchId: response.FireCoverage.BranchId
     });
-    
+    //update marine
+    this.marineTermForm.patchValue({
+      voyageType : response.Marine.VoyageType,
+      coverageInland: response.Marine.CoverageInland,
+      fromTransitDomestic: response.Marine.FromTransitDomestic,
+      toTransitDomestic:response.Marine.ToTransitDomestic,
+      Rate: response.Marine.Rate,
+      totalSumInsured: response.Marine.TotalSumInsured,
+      sumInsured : response.Marine.SumInsured,
+      endroseSumInsured: response.Marine.EndroseSumInsured,
+    });
+
+    //update misc
+    this.miscform.patchValue({
+      miscrate : response.Misc.MiscRate,
+      misc1: response.Misc.Misc1,
+      misc2: response.Misc.Misc2,
+      misc3: response.Misc.Misc3,
+      misc4: response.Misc.Misc4,
+    });
     //For previous value
 
     this.policyForm.patchValue({
@@ -1829,6 +1886,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
           riskLocation :response.TpPolicy.RiskLocation,
           numberofLocation : response.TpPolicy.NumberofLocation, 
           locationType : response.TpPolicy.LocationType,
+          storageriskid : response.TpPolicy.StorageRiskId,
+          hypothentication : response.TpPolicy.Hypothentication,
         });
 
         this.premiumForm.patchValue({
@@ -2404,6 +2463,12 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     });
   }
 
+  getStorageRisk() {
+    this.commonService.getStorageRisk().subscribe((response: any) => {
+      this._storageRisk = response;
+    });
+  }
+
   calculateChanges() {
 
   }
@@ -2448,6 +2513,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   redirectRoute() {
     this.verticalData = this.verticalData;
     if(this._verticalId == Vertical.Fire) this.router.navigate(["../pms/fire/fire-policy-management"]);
+   if(this._verticalId == Vertical.Marine) this.router.navigate(["../pms/marine/marine-policy-management"]);
+   if(this._verticalId == Vertical.Liabality) this.router.navigate(["../pms/liabality/liabality-policy-management"]);
+   if(this._verticalId == Vertical.Misc) this.router.navigate(["../pms/misc/misc-policy-management"]);
    if(this._verticalId == Vertical.Marine) this.router.navigate(["../pms/marine/marine-policy-management"]);
   }
 
@@ -2907,13 +2975,13 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     });
   }
   setActivateVertical(verticalId:number){
-    if(verticalId == Vertical.Fire) this.isHeath = true
-    if(verticalId == Vertical.Engineering) this.isPA = true
-    if(verticalId == Vertical.Life) this.isTravel = true
-    if(verticalId == Vertical.Engineering) this.isTravel = true
-    if(verticalId == Vertical.Liabality) this.isTravel = true
-    if(verticalId == Vertical.Misc) this.isTravel = true
-    if(verticalId == Vertical.Marine) this.isTravel = true
+    if(verticalId == Vertical.Fire) this.isFire = true
+    if(verticalId == Vertical.Pesonal_Accident) this.isPA = true
+    if(verticalId == Vertical.Life) this.isLife = true
+    if(verticalId == Vertical.Engineering) this.isEnginnering = true
+    if(verticalId == Vertical.Liabality) this.isLibality = true
+    if(verticalId == Vertical.Misc) this.isMisc = true
+    if(verticalId == Vertical.Marine) this.isMarine = true
   }
 
   setValidatoronVertical() {
@@ -2962,4 +3030,11 @@ calculatTotalFiredSumInsured() {
   })
 }
 
+
+calculateMarineSumInsured() {
+  let totalSumInsured = Number(this.marineTermForm.value.endroseSumInsured || 0) + Number(this.marineTermForm.value.sumInsured || 0) ;
+  this.marineTermForm.patchValue({
+    totalSumInsured : totalSumInsured
+  })
+}
 }

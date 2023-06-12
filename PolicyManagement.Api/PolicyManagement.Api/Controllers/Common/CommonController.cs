@@ -298,6 +298,10 @@ namespace PolicyManagement.Api.Controllers.Common
         [HttpGet]
         public async Task<IHttpActionResult> GetAllCoverageInland() => Json(await _commonService.FindCoverageInland());
 
+        [Route("storagerisk")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllStorageRisk() => Json(await _commonService.FindStorageRiskId());
+
 
     }
 }

@@ -376,6 +376,12 @@ public partial class tblMotorPolicyData
 
     public Nullable<int> LocationType { get; set; }
 
+    public Nullable<long> MarineTotalSumInsured { get; set; }
+
+    public Nullable<long> MarineEndroseSumInsured { get; set; }
+
+    public Nullable<long> MarineSumInsured { get; set; }
+
 }
 
 }

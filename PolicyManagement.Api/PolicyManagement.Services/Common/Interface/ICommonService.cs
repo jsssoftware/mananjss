@@ -82,7 +82,6 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindAllProfession();
         Task<List<DropDownDto<int>>> FindVoyageType();
         Task<List<DropDownDto<int>>> FindCoverageInland();
-
-
+        Task<List<DropDownDto<int>>> FindStorageRiskId();
     }
 }
