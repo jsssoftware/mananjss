@@ -4,5 +4,7 @@
     {
         public T Value { get; set; }
         public string Name { get; set; }
+        public int? Code { get; set; }
+
     }
 }

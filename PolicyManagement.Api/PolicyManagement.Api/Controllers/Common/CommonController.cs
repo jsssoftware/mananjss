@@ -302,6 +302,21 @@ namespace PolicyManagement.Api.Controllers.Common
         [HttpGet]
         public async Task<IHttpActionResult> GetAllStorageRisk() => Json(await _commonService.FindStorageRiskId());
 
+        [Route("userrole")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllUserRole() => Json(await _commonService.FindAllUserRole());
 
+        [Route("usertype")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllUserType() => Json(await _commonService.FindAllUserType());
+
+
+        [Route("users")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllUser() => Json(await _commonService.FindAllUser());
+
+        [Route("teammember")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetTeamMember() => Json(await _commonService.FindAllTeamMember());
     }
 }

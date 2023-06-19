@@ -1554,6 +1554,7 @@ namespace PolicyManagement.Services.Common
             }).OrderBy(o => o.Value).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
+        
 
         public async Task<List<DropDownDto<int>>> FindStorageRiskId()
         {
@@ -1561,6 +1562,65 @@ namespace PolicyManagement.Services.Common
             {
                 Name = s.StorageRisk,
                 Value = s.StorageRiskId
+            }).OrderBy(o => o.Value).ToListAsync();
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
+
+        public async Task<List<DropDownDto<int>>> FindAllUserRole()
+        {
+            List<DropDownDto<int>> result = await _dataContext.tblUserRole.Select(s => new DropDownDto<int>
+            {
+                Name = s.UserRoleName,
+                Value = s.UserRoleId
+            }).OrderBy(o => o.Value).ToListAsync();
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
+
+        public async Task<List<DropDownDto<int>>> FindAllUserType()
+        {
+            List<DropDownDto<int>> result = await _dataContext.tblUserType.Select(s => new DropDownDto<int>
+            {
+                Name = s.UserTypeName,
+                Value = s.UserTypeId
+            }).OrderBy(o => o.Value).ToListAsync();
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
+
+        public async Task<DataTableDto<List<UserDetailDto>>> FindAllUser()
+        {
+            List<UserDetailDto> result = await (from user in _dataContext.tblUser
+                                           join teamMember in _dataContext.tblTeamMember on user.TeamMemberId equals teamMember.TeamMemberId
+                                           join userType in _dataContext.tblUserType on user.UserTypeId equals userType.UserTypeId into usertype
+                                           join userRole in _dataContext.tblUserRole on user.UserRoleId equals userRole.UserRoleId into userrole
+                                           join branch in _dataContext.tblBranch on user.BranchId equals branch.BranchId into branchs
+                                            from userType in usertype.DefaultIfEmpty()
+                                            from userRole in userrole.DefaultIfEmpty()
+                                            from branch in branchs.DefaultIfEmpty()
+                                                select new UserDetailDto
+                                           {
+                                               BranchName =  branch.BranchName,
+                                               Username = user.UserName,
+                                               TeamMember =  teamMember.TeamMemberName,
+                                               UserRole =  userRole.UserRoleName,
+                                               EmailId =  teamMember.TeamMemberEmail1,
+                                               MobileNumber =  teamMember.TeamMemberPhone1,
+                                               Seniority =  teamMember.LevelNumber,
+                                               IsActive = teamMember.IsActive,
+                                               IsLocked  =  teamMember.IsLocked
+                                           }).ToListAsync();
+            return new DataTableDto<List<UserDetailDto>>
+            {
+                TotalCount = result.Count(),
+                Data = result
+            };
+        }
+
+        public async Task<List<DropDownDto<int>>> FindAllTeamMember()
+        {
+            List<DropDownDto<int>> result = await _dataContext.tblTeamMember.Select(s => new DropDownDto<int>
+            {
+                Name = s.TeamMemberName,
+                Value = s.TeamMemberId
             }).OrderBy(o => o.Value).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }

@@ -68,7 +68,9 @@ namespace PolicyManagement.Api.Mapper
 
                 cfg.CreateMap<tblCommissionPayType, DropDownDto<int>>()
                 .ForMember(destination => destination.Name, opts => opts.MapFrom(source => source.CommissionPayTypeName))
-                .ForMember(destination => destination.Value, opts => opts.MapFrom(source => source.CommissionPayTypeId));
+                .ForMember(destination => destination.Value, opts => opts.MapFrom(source => source.CommissionPayTypeId))
+                .ForMember(destination => destination.Code, opts => opts.MapFrom(source => source.Code));
+
 
                 cfg.CreateMap<tblAddonRider, DropDownDto<int>>()
                 .ForMember(destination => destination.Name, opts => opts.MapFrom(source => source.AddonRiderName))

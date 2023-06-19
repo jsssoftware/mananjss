@@ -22,6 +22,8 @@ import { IRetailService } from "./health-service/abstracts/retail.iservice";
 import { RetailService } from "./health-service/retail.service";
 import { ICommercialService } from "./commercial-service/abstracts/commercial.iservice";
 import { CommercialService } from "./commercial-service/commercial.service";
+import { IUserService } from "./user-management-service/abstracts/user.iservice";
+import { UserService } from "./user-management-service/user.service";
 
 export const Services = [
   { provide: IApiManagerService, useClass: ApiManagerService },
@@ -34,6 +36,7 @@ export const Services = [
   { provide: IInspectionService, useClass: InspectionService },
   { provide: IRetailService, useClass: RetailService },
   { provide: ICommercialService, useClass: CommercialService },
+  { provide: IUserService, useClass: UserService },
   { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT },
   { provide: HTTP_INTERCEPTORS, useClass: OAuthTokenInterceptor, multi: true }
 ];

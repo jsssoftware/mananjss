@@ -327,6 +327,7 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
           <Property Name="VerticalId" Type="int" />
+          <Property Name="Code" Type="int" />
         </EntityType>
         <EntityType Name="tblCommissionSlab">
           <Key>
@@ -4709,6 +4710,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
           <Property Name="VerticalId" Type="Int32" />
+          <Property Name="Code" Type="Int32" />
         </EntityType>
         <EntityType Name="tblCommissionSlab">
           <Key>
@@ -7197,6 +7199,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblCommissionPayType">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblCommissionPayType">
               <MappingFragment StoreEntitySet="tblCommissionPayType">
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="VerticalId" ColumnName="VerticalId" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />

@@ -21,6 +21,7 @@ import { SystemInitialModule } from './app-modules/dashboard/systeminitial.modul
 import { PolicyManagementModule } from './app-modules/policy-management/policymanagement.module'; 
 import { LoaderInterceptor } from './shared/common-component/loader/loaderInterceptor';
 import {MatListModule} from '@angular/material/list';
+import { UserManagementModule } from './app-modules/user-management/user-management.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +44,8 @@ import {MatListModule} from '@angular/material/list';
     PolicyManagementModule,
     SubSystemModule,
     MasterModule,
-    MaterialFileInputModule
+    MaterialFileInputModule,
+    UserManagementModule
   ],
   providers: [CommonFunction, Services, AuthGuard, { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
     {  

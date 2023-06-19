@@ -68,5 +68,9 @@ export class Common {
     public static readonly VoyageType = "api/common/voyageType";
     public static readonly CoverageInland = "api/common/coverageInland";
     public static readonly StorageRisk = "api/common/storagerisk";
+    public static readonly UserType = "api/common/usertype";
+    public static readonly UserRole = "api/common/userRole";
+    public static readonly Users = "api/common/users";
+    public static readonly TeamMember = "api/common/teammember";
 
 }

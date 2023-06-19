@@ -34,6 +34,8 @@ public partial class tblCommissionPayType
 
     public Nullable<int> VerticalId { get; set; }
 
+    public Nullable<int> Code { get; set; }
+
 }
 
 }

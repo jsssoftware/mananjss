@@ -57,6 +57,7 @@
     <Compile Include="Common\PolicyInspectionDto.cs" />
     <Compile Include="Common\PolicyVoucherDto.cs" />
     <Compile Include="Common\PreviousClaimDto.cs" />
+    <Compile Include="Common\UserDetailDto.cs" />
     <Compile Include="Common\SearchPolicyDto.cs" />
     <Compile Include="Common\VerticalDto.cs" />
     <Compile Include="Customer\CustomerClusterErrorDto.cs" />
