@@ -1599,7 +1599,7 @@ namespace PolicyManagement.Services.Common
                                                 select new UserDetailDto
                                            {
                                                BranchName =  branch.BranchName,
-                                               Username = user.UserName,
+                                               UserName = user.UserName,
                                                TeamMember =  teamMember.TeamMemberName,
                                                UserRole =  userRole.UserRoleName,
                                                EmailId =  teamMember.TeamMemberEmail1,
@@ -1611,7 +1611,7 @@ namespace PolicyManagement.Services.Common
                                                UserRoleId = user.UserRoleId,
                                                UserId = user.UserId,
                                                UserPassword = user.UserPassword,
-                                               BranchId = user.BranchId
+                                               BranchId = user.BranchId,
                                            }).ToListAsync();
             return new DataTableDto<List<UserDetailDto>>
             {

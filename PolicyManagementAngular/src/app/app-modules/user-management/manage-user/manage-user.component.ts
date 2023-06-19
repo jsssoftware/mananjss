@@ -34,7 +34,7 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
 
   displayedColumns: string[] = [
     'BranchName',
-    'Username',
+    'UserName',
     'TeamMember',
     'UserRole',
     'ReportedTo',

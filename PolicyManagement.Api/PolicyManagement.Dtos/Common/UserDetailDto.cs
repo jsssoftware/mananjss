@@ -6,7 +6,7 @@ namespace PolicyManagement.Dtos.Common
    public class UserDetailDto
     {
         public string BranchName { get; set; }
-        public string Username { get; set; }
+        public string UserName { get; set; }
         public string TeamMember { get; set; }
         public string UserRole { get; set; }
         public string ReportedTo { get; set; }
