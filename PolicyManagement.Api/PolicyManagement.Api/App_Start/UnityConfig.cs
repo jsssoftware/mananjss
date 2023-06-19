@@ -15,6 +15,8 @@ using PolicyManagement.Services.Inspection;
 using PolicyManagement.Services.Inspection.Interface;
 using PolicyManagement.Services.Motor;
 using PolicyManagement.Services.Motor.Interface;
+using PolicyManagement.Services.UserManagement;
+using PolicyManagement.Services.UserManagement.Interface;
 using PolicyManagement.Services.Voucher;
 using PolicyManagement.Services.Voucher.Interface;
 using System.Data.Entity;
@@ -47,6 +49,7 @@ namespace PolicyManagement.Api
             container.RegisterType<IClaimsService, ClaimsService>(new HierarchicalLifetimeManager());
             container.RegisterType<IInspectionService, InspectionService>(new HierarchicalLifetimeManager());
             container.RegisterType<IRetailService, RetailService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IUserManagementService, UserManagementService>(new HierarchicalLifetimeManager());
 
             //Register Mapper
             IMapper mapper = AutoMapperConfiguration.Register().CreateMapper();

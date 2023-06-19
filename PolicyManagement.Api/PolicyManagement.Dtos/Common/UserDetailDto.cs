@@ -16,5 +16,11 @@ namespace PolicyManagement.Dtos.Common
         public bool IsActive { get; set; }
         public bool? IsLocked { get; set; }
 
+        public int? TeamMemberId { get; set; }
+        public int? UserRoleId { get; set; }
+        public int UserId { get; set; }
+        public string UserPassword { get; set; }
+        public int BranchId { get; set; }
+
     }
 }

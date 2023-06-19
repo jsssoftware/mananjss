@@ -3,9 +3,11 @@ import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/fo
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { debounceTime } from 'rxjs/operators';
+import { ICommonDto } from 'src/app/app-entites/dtos/common/common-dto';
 import { IDataTableDto } from 'src/app/app-entites/dtos/common/data-table-dto';
 import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
 import { UserService } from 'src/app/app-services/user-management-service/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-manage-user',
@@ -40,10 +42,11 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
     'MobileNumber',
     'EmailId',
     'IsActive',
-    'IsLocked'
+    'IsLocked',
+    'Modify'
   ];
   manageuserform = new FormGroup({
-    branchId: new FormControl({value: '', disabled: true}),
+    branchId: new FormControl(''),
     teamMemberId: new FormControl('',[Validators.required]),
     userRoleId: new FormControl('',[Validators.required]),
     userPassword: new FormControl('',[Validators.required]),
@@ -60,7 +63,9 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
   ) { 
     this._branchId = sessionStorage.getItem("branchId");
     this._branchname = sessionStorage.getItem("branchName");
-    this.manageuserform.get("branchId").setValue(this._branchname);
+    this.manageuserform.patchValue({
+      "branchId":this._branchId
+    });
   }
 
   ngOnInit(): void {
@@ -106,9 +111,75 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
 
   pwdConfirming() {
     this._isPasswordInValid = false;
-   // debugger
       if (this.manageuserform.get('userPassword').value !== this.manageuserform.get('confirmPassword').value) 
          {this._isPasswordInValid = true};
     
+  }
+
+  editUser(data :any){
+      debugger
+      this.manageuserform.patchValue({
+        branchId: data?.BranchId,
+        teamMemberId: data?.TeamMemberId,
+        userRoleId: data?.UserRoleId,
+        userPassword: data?.UserPassword,
+        confirmPassword: data?.UserPassword,
+        reportedTo: data?.ReportedTo,
+        userName: data?.UserName,  
+        userId: data?.UserId,  
+        isLocked: data?.IsLocked,  
+        isActive: data?.IsActive 
+    });
+
+  }
+
+  createUser(){
+    this._userService.createUser(this.manageuserform.value).subscribe((response: ICommonDto<any>) => {
+      if (response.IsSuccess) {
+        this.getUsers();
+        Swal.fire({
+          icon: 'success',
+          title: 'Done',
+          text: response.Message,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.reset();
+          };
+        })
+      }
+      else {
+        if (response.Response == null) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Sorry',
+            text: response.Message,
+          });
+        }
+        else {
+          if (response.Response.IsError) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Sorry',
+              text: response.Message,
+            });
+          }
+          else {
+            Swal.fire({
+              title: 'Warning',
+              text: response.Message,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Yes, Save it!',
+              cancelButtonText: 'Cancel'
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                
+
+              }
+            })
+          }
+        }
+      }
+    });
   }
 }

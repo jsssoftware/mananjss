@@ -2248,7 +2248,6 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   }
 
   calculateCommissionablePremium(commissionPaidOnId: any) {
-    debugger
     this._commissionPaidOnId = commissionPaidOnId;
     switch (commissionPaidOnId) {
       case 6:

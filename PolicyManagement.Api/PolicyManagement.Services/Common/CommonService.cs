@@ -1606,7 +1606,12 @@ namespace PolicyManagement.Services.Common
                                                MobileNumber =  teamMember.TeamMemberPhone1,
                                                Seniority =  teamMember.LevelNumber,
                                                IsActive = teamMember.IsActive,
-                                               IsLocked  =  teamMember.IsLocked
+                                               IsLocked  =  teamMember.IsLocked,
+                                               TeamMemberId = user.TeamMemberId,
+                                               UserRoleId = user.UserRoleId,
+                                               UserId = user.UserId,
+                                               UserPassword = user.UserPassword,
+                                               BranchId = user.BranchId
                                            }).ToListAsync();
             return new DataTableDto<List<UserDetailDto>>
             {

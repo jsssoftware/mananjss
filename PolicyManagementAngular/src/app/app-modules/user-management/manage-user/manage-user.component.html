@@ -103,8 +103,11 @@
                 </div>
                 <div class="col-lg-4">
                     <mat-form-field>
-                        <input type="text" matInput formControlName="userPassword"/>
+                        <input type="text" matInput formControlName="userPassword" (keyup)="pwdConfirming()"/>
                     </mat-form-field>
+                    <span style="color:red;font-size: smaller;" *ngIf="manageuserform.controls['confirmPassword'].value && (manageuserform.controls['confirmPassword'].dirty || manageuserform.controls['confirmPassword'].touched) && _isPasswordInValid">
+                       Confirm Passwords don't match.
+                    </span>
                 </div>
                 <div class="col-lg-2">
                     <mat-label >Confirm Password <span style="color:red">*</span></mat-label>
@@ -113,11 +116,11 @@
                 <div class="col-lg-4">
                     <mat-form-field>
                         <input type="text" matInput formControlName="confirmPassword" (keyup)="pwdConfirming()"/>
-                        <div  *ngIf="manageuserform.controls['userPassword'].value && (manageuserform.controls['confirmPassword'].dirty || manageuserform.controls['confirmPassword'].touched) && _isPasswordInValid">
-                            Passwords don't match.
-                          </div>
-                          {{_isPasswordInValid}}
+                       
                     </mat-form-field>
+                    <span style="color:red;font-size: smaller;" *ngIf="manageuserform.controls['userPassword'].value && (manageuserform.controls['confirmPassword'].dirty || manageuserform.controls['confirmPassword'].touched) && _isPasswordInValid">
+                        Passwords don't match.
+                    </span>
                 </div>
             </div>
             <div class="row">
@@ -132,7 +135,7 @@
 
                   </div> 
                   <div class="col-lg-1">
-                      <button type="button" class="btn-block" mat-raised-button color="primary" (click)="reset()"> 
+                      <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createUser()"> 
                       <mat-icon style="font-size: 22px;">save</mat-icon>Save
                     </button>
                   </div>
@@ -206,7 +209,14 @@
                         {{element.IsLocked}}</td>
                     </ng-container>
                    
-          
+                    <ng-container matColumnDef="Modify">
+                        <th mat-header-cell *matHeaderCellDef>Modify</th>
+                        <td mat-cell *matCellDef="let row" [ngStyle]="{'text-align':'end'}">
+                            <button mat-icon-button (click)="editUser(row)">
+                                <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
           
                     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>

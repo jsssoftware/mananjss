@@ -1220,7 +1220,7 @@
                     <mat-select formControlName="commissionPaidOn"
                       (selectionChange)="calculateCommissionablePremium($event.value)">
                       <mat-option>Select</mat-option>
-                      <mat-option *ngFor="let commissionpaidon of _commissionPaidOn" [value]="commissionpaidon.Value">
+                      <mat-option *ngFor="let commissionpaidon of _commissionPaidOn" [value]="commissionpaidon.Code">
                         {{commissionpaidon.Name}}</mat-option>
                     </mat-select>
                   </mat-form-field>

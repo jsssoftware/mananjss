@@ -76,6 +76,7 @@
     <Compile Include="Motor\TpOdPolicyFormDataModel.cs" />
     <Compile Include="Motor\VehicleFormDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserManagement\UserManagement.cs" />
     <Compile Include="Voucher\AddUpdateVoucherModel.cs" />
     <Compile Include="Voucher\SearchVoucherModel.cs" />
     <Compile Include="Voucher\VoucherSearchPolicyModel.cs" />

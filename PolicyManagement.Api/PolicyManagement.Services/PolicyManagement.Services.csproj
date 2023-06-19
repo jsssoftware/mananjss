@@ -118,6 +118,8 @@
     <Compile Include="Motor\Interface\IMotorService.cs" />
     <Compile Include="Motor\MotorService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserManagement\UserManagementService.cs" />
+    <Compile Include="UserManagement\Interface\IUserManagementService.cs" />
     <Compile Include="Voucher\Interface\IVoucherService.cs" />
     <Compile Include="Voucher\VoucherService.cs" />
   </ItemGroup>
