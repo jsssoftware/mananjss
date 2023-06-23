@@ -6,13 +6,14 @@ import { MaterialModule } from 'src/app/shared/common-module/material-module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserManagementRoutingModule } from './user-management-routing.module';
 import { UserService } from 'src/app/app-services/user-management-service/user.service';
+import { ManageRolesComponent } from './manage-roles/manage-roles.component';
 
 
 
 @NgModule({
   declarations: [
     ManageUserComponent,
-
+    ManageRolesComponent
   ],
   imports: [
     CommonModule,

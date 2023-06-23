@@ -302,21 +302,25 @@ namespace PolicyManagement.Api.Controllers.Common
         [HttpGet]
         public async Task<IHttpActionResult> GetAllStorageRisk() => Json(await _commonService.FindStorageRiskId());
 
-        [Route("userrole")]
+        [Route("userrole/{branchId}")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAllUserRole() => Json(await _commonService.FindAllUserRole());
+        public async Task<IHttpActionResult> GetAllUserRole(int branchId) => Json(await _commonService.FindAllUserRole(branchId));
 
         [Route("usertype")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAllUserType() => Json(await _commonService.FindAllUserType());
 
 
-        [Route("users")]
+        [Route("users/{branchId}")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAllUser() => Json(await _commonService.FindAllUser());
+        public async Task<IHttpActionResult> GetAllUser(int branchId) => Json(await _commonService.FindAllUser(branchId));
 
-        [Route("teammember")]
+        [Route("teammember/{branchId}")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetTeamMember() => Json(await _commonService.FindAllTeamMember());
+        public async Task<IHttpActionResult> GetTeamMember(int branchId) => Json(await _commonService.FindAllTeamMember(branchId));
+
+        [Route("teammemberId/{teamMemberId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetTeamMemberById(int teamMemberId) => Json(await _commonService.FindTeamMemberById(teamMemberId));
     }
 }

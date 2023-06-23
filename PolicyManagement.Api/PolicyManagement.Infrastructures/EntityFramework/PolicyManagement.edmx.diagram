@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="926e612bf698436e8b81c4559ae26c46" Name="Diagram1" ZoomLevel="10">
+      <Diagram DiagramId="926e612bf698436e8b81c4559ae26c46" Name="Diagram1" ZoomLevel="72">
         <EntityTypeShape EntityType="PolicyManagerModel.tblAddonPlanOption" Width="1.5" PointX="5.75" PointY="4.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblAddonPlanOptionMapping" Width="1.5" PointX="7.75" PointY="4.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblAddonRider" Width="1.5" PointX="5.75" PointY="7.75" />

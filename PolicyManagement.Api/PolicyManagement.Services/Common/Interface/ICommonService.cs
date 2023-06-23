@@ -83,9 +83,10 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindVoyageType();
         Task<List<DropDownDto<int>>> FindCoverageInland();
         Task<List<DropDownDto<int>>> FindStorageRiskId();
-        Task<List<DropDownDto<int>>> FindAllUserRole();
+        Task<List<DropDownDto<int>>> FindAllUserRole(int branchId);
         Task<List<DropDownDto<int>>> FindAllUserType();
-        Task<DataTableDto<List<UserDetailDto>>> FindAllUser();
-        Task<List<DropDownDto<int>>> FindAllTeamMember();
+        Task<DataTableDto<List<UserDetailDto>>> FindAllUser(int branchId);
+        Task<List<DropDownDto<int>>> FindAllTeamMember(int branchId);
+        Task<dynamic> FindTeamMemberById(int teamMemberId);
     }
 }

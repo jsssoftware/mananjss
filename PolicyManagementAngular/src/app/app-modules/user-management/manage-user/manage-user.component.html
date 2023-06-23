@@ -13,38 +13,40 @@
         <form [formGroup]="manageuserform" autocomplete="off" style="padding-bottom:10px ;">
             <div class="row">
                 <div class="col-lg-2">
-                    <label for="inputEmail3">Branch :  </label>
+                    <label for="inputEmail3">Branch : </label>
                 </div>
                 <div class="col-lg-4">
                     <mat-form-field>
-                        <input type="text" matInput  [(ngModel)]="_branchname"  [ngModelOptions]="{standalone: true}"
-                        [disabled]="true"/>
+                        <input type="text" matInput [(ngModel)]="_branchname" [ngModelOptions]="{standalone: true}"
+                            [disabled]="true" />
                     </mat-form-field>
                 </div>
 
             </div>
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label >Team Member <span style="color:red">*</span></mat-label>
+                    <mat-label>Team Member <span style="color:red">*</span></mat-label>
                 </div>
                 <div class="col-lg-4">
-                        <mat-form-field >
-                            <mat-select formControlName="teamMemberId" required>
-                                <mat-option>Select</mat-option>
-                                <mat-option *ngFor="let teamMember of _teamMember" [value]="teamMember.Value">{{teamMember.Name}}
-                                </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="manageuserform.controls.teamMemberId">Please Select Team Member</mat-error>
-                        </mat-form-field>
+                    <mat-form-field>
+                        <mat-select formControlName="teamMemberId" required (selectionChange)="getTeamMemberId($event.value)">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let teamMember of _teamMember" [value]="teamMember.Value" >
+                                {{teamMember.Name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="manageuserform.controls.teamMemberId">Please Select Team Member</mat-error>
+                    </mat-form-field>
                 </div>
                 <div class="col-lg-2">
-                    <mat-label >Reported To <span style="color:red">*</span></mat-label>
+                    <mat-label>Reported To <span style="color:red">*</span></mat-label>
                 </div>
                 <div class="col-lg-4">
-                    <mat-form-field >
+                    <mat-form-field>
                         <mat-select formControlName="reportedTo" required>
                             <mat-option>Select</mat-option>
-                            <mat-option *ngFor="let teamMember of _teamMember" [value]="teamMember.Value">{{teamMember.Name}}
+                            <mat-option *ngFor="let reportedBy of _reportedBy" [value]="reportedBy.Value">
+                                {{reportedBy.Name}}
                             </mat-option>
                         </mat-select>
                         <mat-error *ngIf="manageuserform.controls.reportedTo">Please Select Reported To</mat-error>
@@ -53,11 +55,11 @@
             </div>
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label >User Role <span style="color:red">*</span></mat-label>
+                    <mat-label>User Role <span style="color:red">*</span></mat-label>
 
                 </div>
                 <div class="col-lg-4">
-                    <mat-form-field >
+                    <mat-form-field>
                         <mat-select formControlName="userRoleId" required>
                             <mat-option>Select</mat-option>
                             <mat-option *ngFor="let userRole of _userRole" [value]="userRole.Value">{{userRole.Name}}
@@ -67,13 +69,13 @@
                     </mat-form-field>
                 </div>
                 <div class="col-lg-2">
-                    <mat-label >Username <span style="color:red">*</span></mat-label>
+                    <mat-label>Username <span style="color:red">*</span></mat-label>
 
 
                 </div>
                 <div class="col-lg-4">
                     <mat-form-field>
-                        <input type="text" matInput formControlName="userName" required/>
+                        <input type="text" matInput formControlName="userName" required />
                         <mat-error *ngIf="manageuserform.controls.userName">Please Select User Name</mat-error>
 
                     </mat-form-field>
@@ -81,44 +83,48 @@
             </div>
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label >Mobile Number <span style="color:red">*</span></mat-label>
+                    <mat-label>Mobile Number </mat-label>
                 </div>
                 <div class="col-lg-4">
                     <mat-form-field>
-                        <input type="text" matInput [(ngModel)]="_mobileNumber"  [ngModelOptions]="{standalone: true}" required/>
+                        <input type="text" matInput [(ngModel)]="_mobileNumber" [ngModelOptions]="{standalone: true}"
+                            required  [disabled]= "true"/>
                     </mat-form-field>
                 </div>
                 <div class="col-lg-2">
-                    <mat-label >Email Id <span style="color:red">*</span></mat-label>
+                    <mat-label>Email Id </mat-label>
                 </div>
                 <div class="col-lg-4">
                     <mat-form-field>
-                        <input type="text" matInput [(ngModel)]="_emailId"  [ngModelOptions]="{standalone: true}" required/>
+                        <input type="text" matInput [(ngModel)]="_emailId" [ngModelOptions]="{standalone: true}"
+                            required [disabled]= "true"/>
                     </mat-form-field>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label >Password <span style="color:red">*</span></mat-label>
+                    <mat-label>Password <span style="color:red">*</span></mat-label>
                 </div>
                 <div class="col-lg-4">
                     <mat-form-field>
-                        <input type="text" matInput formControlName="userPassword" (keyup)="pwdConfirming()"/>
+                        <input type="text" matInput formControlName="userPassword" (keyup)="pwdConfirming()" />
                     </mat-form-field>
-                    <span style="color:red;font-size: smaller;" *ngIf="manageuserform.controls['confirmPassword'].value && (manageuserform.controls['confirmPassword'].dirty || manageuserform.controls['confirmPassword'].touched) && _isPasswordInValid">
-                       Confirm Passwords don't match.
+                    <span style="color:red;font-size: smaller;"
+                        *ngIf="manageuserform.controls['confirmPassword'].value && (manageuserform.controls['confirmPassword'].dirty || manageuserform.controls['confirmPassword'].touched) && _isPasswordInValid">
+                        Confirm Passwords don't match.
                     </span>
                 </div>
                 <div class="col-lg-2">
-                    <mat-label >Confirm Password <span style="color:red">*</span></mat-label>
+                    <mat-label>Confirm Password <span style="color:red">*</span></mat-label>
 
                 </div>
                 <div class="col-lg-4">
                     <mat-form-field>
-                        <input type="text" matInput formControlName="confirmPassword" (keyup)="pwdConfirming()"/>
-                       
+                        <input type="text" matInput formControlName="confirmPassword" (keyup)="pwdConfirming()" />
+
                     </mat-form-field>
-                    <span style="color:red;font-size: smaller;" *ngIf="manageuserform.controls['userPassword'].value && (manageuserform.controls['confirmPassword'].dirty || manageuserform.controls['confirmPassword'].touched) && _isPasswordInValid">
+                    <span style="color:red;font-size: smaller;"
+                        *ngIf="manageuserform.controls['userPassword'].value && (manageuserform.controls['confirmPassword'].dirty || manageuserform.controls['confirmPassword'].touched) && _isPasswordInValid">
                         Passwords don't match.
                     </span>
                 </div>
@@ -128,106 +134,113 @@
 
                     <mat-checkbox color="primary" formControlName="isLocked">Is Locked</mat-checkbox>
 
-                  </div>
-                  <div class="col-lg-3">
+                </div>
+                <div class="col-lg-3">
 
                     <mat-checkbox color="primary" formControlName="isActive">Is Active</mat-checkbox>
 
-                  </div> 
-                  <div class="col-lg-1">
-                      <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createUser()"> 
-                      <mat-icon style="font-size: 22px;">save</mat-icon>Save
+                </div>
+                <div class="col-lg-1">
+                    <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createUser()">
+                        <mat-icon style="font-size: 22px;">save</mat-icon>Save
                     </button>
-                  </div>
-                  <div class="col-lg-1">
-                    <button mat-flat-button color="secondary"  [ngStyle]="{'background-color':  '#fdcb7e'}" (click)="reset()">
+                </div>
+                <div class="col-lg-1">
+                    <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb7e'}"
+                        (click)="reset()">
                         Reset
-                      </button>
-                  </div> 
+                    </button>
+                </div>
             </div>
-           
+
         </form>
         <div class="col-lg-12">
-            <div class="row"   [hidden]="_length == 0" >
+            <div class="row" [hidden]="_length == 0">
                 <div class="col-lg-12">
-                  <table id="tbluserData" mat-table [dataSource]="_userData" style="width: 100%;">
-                    <ng-container matColumnDef="controlNumber">
-                      <th mat-header-cell *matHeaderCellDef> Sr .No </th>
-                      <td mat-cell *matCellDef="let element">
-                        
-                    </td>
-                    </ng-container>
-                    <ng-container matColumnDef="BranchName">
-                      <th mat-header-cell *matHeaderCellDef> Branch </th>
-                      <td mat-cell *matCellDef="let element">
-                        {{element.BranchName}} </td>
-                    </ng-container>
-                    <ng-container matColumnDef="UserName">
-                      <th mat-header-cell *matHeaderCellDef>User Name </th>
-                      <td mat-cell *matCellDef="let element">
-                        {{element.UserName}} </td>
-                    </ng-container>
-                    <ng-container matColumnDef="TeamMember">
-                      <th mat-header-cell *matHeaderCellDef> Team Member </th>
-                      <td mat-cell *matCellDef="let element">
-                        {{element.TeamMember}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="UserRole">
-                      <th mat-header-cell *matHeaderCellDef> User Role</th>
-                      <td mat-cell *matCellDef="let element">
-                        {{element.UserRole}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="ReportedTo">
-                      <th mat-header-cell *matHeaderCellDef> Seniority</th>
-                      <td mat-cell *matCellDef="let element">
-                        {{element.ReportedTo}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="Seniority">
-                      <th mat-header-cell *matHeaderCellDef> Reported to </th>
-                      <td mat-cell *matCellDef="let element">
-                        {{element.Seniority}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="MobileNumber">
-                      <th mat-header-cell *matHeaderCellDef> Mobile Number </th>
-                      <td mat-cell *matCellDef="let element">
-                        {{element.MobileNumber}}</td>
-                    </ng-container>
-               
-                    <ng-container matColumnDef="EmailId">
-                      <th mat-header-cell *matHeaderCellDef>Email Id</th>
-                      <td mat-cell *matCellDef="let element">
-                        {{element.EmailId}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="IsActive">
-                      <th mat-header-cell *matHeaderCellDef>Active</th>
-                      <td mat-cell *matCellDef="let element">
-                        {{element.IsActive}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="IsLocked">
-                      <th mat-header-cell *matHeaderCellDef>Locked</th>
-                      <td mat-cell *matCellDef="let element">
-                        {{element.IsLocked}}</td>
-                    </ng-container>
-                   
-                    <ng-container matColumnDef="Modify">
-                        <th mat-header-cell *matHeaderCellDef>Modify</th>
-                        <td mat-cell *matCellDef="let row" [ngStyle]="{'text-align':'end'}">
-                            <button mat-icon-button (click)="editUser(row)">
-                                <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
-                            </button>
-                        </td>
-                    </ng-container>
-          
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                  </table>
+                    <table id="tbluserData" mat-table [dataSource]="_userData" style="width: 100%;">
+                        <ng-container matColumnDef="controlNumber">
+                            <th mat-header-cell *matHeaderCellDef> Sr .No </th>
+                            <td mat-cell *matCellDef="let element">
+
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="BranchName">
+                            <th mat-header-cell *matHeaderCellDef> Branch </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.BranchName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="UserName">
+                            <th mat-header-cell *matHeaderCellDef>User Name </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.UserName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="TeamMember">
+                            <th mat-header-cell *matHeaderCellDef> Team Member </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.TeamMember}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="UserRole">
+                            <th mat-header-cell *matHeaderCellDef> User Role</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.UserRole}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ReportedTo">
+                            <th mat-header-cell *matHeaderCellDef> Reported to </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ReportedToName}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Seniority">
+                            <th mat-header-cell *matHeaderCellDef>Seniority </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.Seniority}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="MobileNumber">
+                            <th mat-header-cell *matHeaderCellDef> Mobile Number </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.MobileNumber}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="EmailId">
+                            <th mat-header-cell *matHeaderCellDef>Email Id</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.EmailId}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsActive">
+                            <th mat-header-cell *matHeaderCellDef>Active</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsActive}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsLocked">
+                            <th mat-header-cell *matHeaderCellDef>Locked</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsLocked}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Modify">
+                            <th mat-header-cell *matHeaderCellDef>Modify</th>
+                            <td mat-cell *matCellDef="let row" [ngStyle]="{'text-align':'end'}">
+                                <div class="row">
+                                   
+                                    <div class="col-lg-1">
+
+                                        <button mat-icon-button (click)="editUser(row)">
+                                            <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
                 </div>
                 <mat-paginator [length]="_length" [pageSize]="_pageSize" (page)="pageChanged($event)"></mat-paginator>
-              </div>
-              <div class="row"   [hidden]="_length != 0">
+            </div>
+            <div class="row" [hidden]="_length != 0">
                 <div class="col-lg-12" style="text-align: center; color: red;">
-                  No records found
+                    No records found
                 </div>
-              </div>
+            </div>
         </div>
     </mat-card-content>

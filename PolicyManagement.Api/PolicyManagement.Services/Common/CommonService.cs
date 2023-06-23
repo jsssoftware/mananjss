@@ -1566,9 +1566,9 @@ namespace PolicyManagement.Services.Common
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
 
-        public async Task<List<DropDownDto<int>>> FindAllUserRole()
+        public async Task<List<DropDownDto<int>>> FindAllUserRole(int branchId)
         {
-            List<DropDownDto<int>> result = await _dataContext.tblUserRole.Select(s => new DropDownDto<int>
+            List<DropDownDto<int>> result = await _dataContext.tblUserRole.Where(x => x.BranchId == branchId).Select(s => new DropDownDto<int>
             {
                 Name = s.UserRoleName,
                 Value = s.UserRoleId
@@ -1586,16 +1586,16 @@ namespace PolicyManagement.Services.Common
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
 
-        public async Task<DataTableDto<List<UserDetailDto>>> FindAllUser()
+        public async Task<DataTableDto<List<UserDetailDto>>> FindAllUser(int branchId)
         {
             List<UserDetailDto> result = await (from user in _dataContext.tblUser
                                            join teamMember in _dataContext.tblTeamMember on user.TeamMemberId equals teamMember.TeamMemberId
-                                           join userType in _dataContext.tblUserType on user.UserTypeId equals userType.UserTypeId into usertype
                                            join userRole in _dataContext.tblUserRole on user.UserRoleId equals userRole.UserRoleId into userrole
                                            join branch in _dataContext.tblBranch on user.BranchId equals branch.BranchId into branchs
-                                            from userType in usertype.DefaultIfEmpty()
+                                           join reportedTo in _dataContext.tblTeamMember on user.ReportedTo equals reportedTo.TeamMemberId into reportedto
                                             from userRole in userrole.DefaultIfEmpty()
                                             from branch in branchs.DefaultIfEmpty()
+                                            from reportedTo in reportedto.DefaultIfEmpty()
                                                 select new UserDetailDto
                                            {
                                                BranchName =  branch.BranchName,
@@ -1612,7 +1612,9 @@ namespace PolicyManagement.Services.Common
                                                UserId = user.UserId,
                                                UserPassword = user.UserPassword,
                                                BranchId = user.BranchId,
-                                           }).ToListAsync();
+                                               ReportedTo = user.ReportedTo,
+                                               ReportedToName =  reportedTo.TeamMemberName
+                                                }).Where(x=>x.BranchId == branchId).ToListAsync();
             return new DataTableDto<List<UserDetailDto>>
             {
                 TotalCount = result.Count(),
@@ -1620,14 +1622,22 @@ namespace PolicyManagement.Services.Common
             };
         }
 
-        public async Task<List<DropDownDto<int>>> FindAllTeamMember()
+        public async Task<List<DropDownDto<int>>> FindAllTeamMember(int branchId)
         {
-            List<DropDownDto<int>> result = await _dataContext.tblTeamMember.Select(s => new DropDownDto<int>
+            List<DropDownDto<int>> result = await _dataContext.tblTeamMember.Where(x => x.BranchId == branchId).Select(s => new DropDownDto<int>
             {
                 Name = s.TeamMemberName,
                 Value = s.TeamMemberId
             }).OrderBy(o => o.Value).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
+
+        public async Task<dynamic> FindTeamMemberById(int teamMemberId)
+        {
+           var team =  await _dataContext.tblTeamMember.Where(w => w.IsActive && w.TeamMemberId == teamMemberId).Select(s => new{
+               s.TeamMemberEmail1,s.TeamMemberMobile1
+               }).FirstOrDefaultAsync();
+           return team;
         }
     }
 }

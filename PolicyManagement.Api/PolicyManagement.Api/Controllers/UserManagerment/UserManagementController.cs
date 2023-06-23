@@ -20,7 +20,16 @@ namespace PolicyManagement.Api.Controllers.UserManangement
         [HttpPost]
         public async Task<IHttpActionResult> CreateUser(tblUser user) => Json(await _usermanagementService.CreateUser(user, new BaseModel()));
 
-  
+        [Route("")]
+        [HttpDelete]
+        public async Task<IHttpActionResult> DeleteUser(tblUser user) => Json(await _usermanagementService.DeleteUser(user, new BaseModel()));
 
+        [Route("roles/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetRoles(int branchId) => Json(await _usermanagementService.GetRoles(branchId));
+
+        [Route("roles/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateRole(tblUserRole userRole) => Json(await _usermanagementService.CreateRole(userRole, new BaseModel()));
     }
 }

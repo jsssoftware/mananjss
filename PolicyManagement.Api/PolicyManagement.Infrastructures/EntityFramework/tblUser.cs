@@ -30,8 +30,6 @@ public partial class tblUser
 
     public Nullable<int> UserRoleId { get; set; }
 
-    public short UserTypeId { get; set; }
-
     public Nullable<short> TeamMemberId { get; set; }
 
     public Nullable<bool> IsLocked { get; set; }
@@ -47,6 +45,8 @@ public partial class tblUser
     public Nullable<System.DateTime> ModifiedTime { get; set; }
 
     public Nullable<int> CurrentSessionId { get; set; }
+
+    public short ReportedTo { get; set; }
 
 
 

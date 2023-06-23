@@ -81,7 +81,7 @@ namespace PolicyManagement.Api.Provider
                         new Claim(ClaimsConstant.UserId, user.UserId.ToString()),
                         new Claim(ClaimsConstant.BranchId, user.BranchId.ToString()),
                         new Claim(ClaimsConstant.RoleId, user.UserRoleId.ToString()),
-                        new Claim(ClaimsConstant.UserTypeId, user.UserTypeId.ToString()),
+                        //new Claim(ClaimsConstant.UserTypeId, user.UserTypeId.ToString()),
                         new Claim(ClaimsConstant.TeamMemberId, user.TeamMemberId.HasValue ? user.TeamMemberId.Value.ToString() : string.Empty),
                         new Claim(ClaimsConstant.IsLocked, user.IsLocked.HasValue ? user.IsLocked.Value.ToString() : true.ToString())
                     };

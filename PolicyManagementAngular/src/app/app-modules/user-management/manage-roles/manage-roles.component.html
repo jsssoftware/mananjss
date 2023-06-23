@@ -1,0 +1,141 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header class="card-container" style="display: flow-root">
+        <mat-card-title style="width: 50%; float: left;">
+            <p>Manage Roles</p>
+        </mat-card-title>
+        <mat-card-title style="width: 10%; float: right;">
+            <!--         <p><button  class="btn-block" style="background: cadetblue;" mat-raised-button color="blue" (click)="backToMaster()">Back</button></p> 
+ -->
+        </mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+            <form [formGroup]="manageRoleform" autocomplete="off" style="padding-bottom:10px ;">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label for="inputEmail3">Role : </label>
+                    </div>
+                    <div class="col-lg-4">
+                            <mat-form-field>
+                                <input type="text" matInput formControlName="userRoleName" required />
+                                <mat-error *ngIf="manageRoleform.controls.userRoleName">Please Select Role Name</mat-error>
+                            </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label for="inputEmail3">Seniority Level : </label>
+                    </div>
+                    <div class="col-lg-4">
+                            <mat-form-field>
+                                <input type="text" matInput formControlName="levelNumber" required />
+                                <mat-error *ngIf="manageRoleform.controls.roleName">Please Select Senority</mat-error>
+                            </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <label for="inputEmail3">Vertical : </label>
+                    </div>
+                    <div class="col-lg-3">
+
+                        <mat-checkbox color="primary" formControlName="isMotor">Motor</mat-checkbox>
+    
+                    </div>
+                    <div class="col-lg-3">
+    
+                        <mat-checkbox color="primary" formControlName="isRetail">Retail</mat-checkbox>
+    
+                    </div>
+                    <div class="col-lg-3">
+    
+                        <mat-checkbox color="primary" formControlName="isCommercial">Commercial</mat-checkbox>
+    
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-8">
+    
+                        <mat-checkbox color="primary" formControlName="isActive">Is Active</mat-checkbox>
+    
+                    </div>
+                   
+                    <div class="col-lg-1">
+                        <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createRole()">
+                            <mat-icon style="font-size: 22px;">save</mat-icon>Save
+                        </button>
+                    </div>
+                    <div class="col-lg-1">
+                        <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb7e'}"
+                        (click)="reset()">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <div class="col-lg-12">
+                <div class="row" [hidden]="_length == 0">
+                    <div class="col-lg-12">
+                        <table id="tblRoleData" mat-table [dataSource]="_roleData" style="width: 100%;">
+                            <ng-container matColumnDef="Modify">
+                                <th mat-header-cell *matHeaderCellDef>Modify</th>
+                                <td mat-cell *matCellDef="let row" [ngStyle]="{'text-align':'end'}">
+                                    <div class="row">
+                                       
+                                        <div class="col-lg-1">
+    
+                                            <button mat-icon-button (click)="editRole(row)">
+                                                <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+    
+                            <ng-container matColumnDef="controlNumber">
+                                <th mat-header-cell *matHeaderCellDef> Sr .No </th>
+                                <td mat-cell *matCellDef="let element">
+    
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="RoleName">
+                                <th mat-header-cell *matHeaderCellDef> Role </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.RoleName}} </td>
+                            </ng-container>
+                          
+            
+                          
+                          
+                            <ng-container matColumnDef="Seniority">
+                                <th mat-header-cell *matHeaderCellDef>Seniority </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.Seniority}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="Vertical">
+                                <th mat-header-cell *matHeaderCellDef>Vertical </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.Vertical}}</td>
+                            </ng-container>
+                         
+                            <ng-container matColumnDef="IsActive">
+                                <th mat-header-cell *matHeaderCellDef>Active</th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.IsActive}}</td>
+                            </ng-container>
+                           
+                          
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+                    </div>
+                    <mat-paginator [length]="_length" [pageSize]="_pageSize" (page)="pageChanged($event)"></mat-paginator>
+                </div>
+                <div class="row" [hidden]="_length != 0">
+                    <div class="col-lg-12" style="text-align: center; color: red;">
+                        No records found
+                    </div>
+                </div>
+            </div>
+    </mat-card-content>
+</mat-card>

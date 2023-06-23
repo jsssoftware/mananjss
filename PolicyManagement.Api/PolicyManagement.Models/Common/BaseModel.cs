@@ -52,14 +52,7 @@ namespace PolicyManagement.Models.Common
                 return roleId;
             }
         }
-        public int LoginUserTypeId
-        {
-            get
-            {
-                int.TryParse(_identity.Claims.FirstOrDefault(f => f.Type == ClaimsConstant.UserTypeId).Value, out int userTypeId);
-                return userTypeId;
-            }
-        }
+       
         public int LoginUserTeamMemberId
         {
             get

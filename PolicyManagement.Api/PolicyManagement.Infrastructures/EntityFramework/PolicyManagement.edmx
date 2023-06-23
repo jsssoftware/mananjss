@@ -1813,7 +1813,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="UserFullName" Type="nvarchar" MaxLength="50" />
           <Property Name="BranchId" Type="smallint" Nullable="false" />
           <Property Name="UserRoleId" Type="int" />
-          <Property Name="UserTypeId" Type="smallint" Nullable="false" />
+          <Property Name="ReportedTo" Type="smallint" Nullable="false" />
           <Property Name="TeamMemberId" Type="smallint" />
           <Property Name="IsLocked" Type="bit" />
           <Property Name="IsActive" Type="bit" Nullable="false" />
@@ -6001,7 +6001,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="UserFullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BranchId" Type="Int16" Nullable="false" />
           <Property Name="UserRoleId" Type="Int32" />
-          <Property Name="UserTypeId" Type="Int16" Nullable="false" />
           <Property Name="TeamMemberId" Type="Int16" />
           <Property Name="IsLocked" Type="Boolean" />
           <Property Name="IsActive" Type="Boolean" Nullable="false" />
@@ -6013,6 +6012,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <NavigationProperty Name="tblBranch" Relationship="PolicyManagerModel.FK_tblUser_tblBranch" FromRole="tblUser" ToRole="tblBranch" />
           <NavigationProperty Name="tblTeamMember" Relationship="PolicyManagerModel.FK_tblUser_tblEmployee" FromRole="tblUser" ToRole="tblTeamMember" />
           <NavigationProperty Name="tblUserRole" Relationship="PolicyManagerModel.FK_tblUser_tblUserRole" FromRole="tblUser" ToRole="tblUserRole" />
+          <Property Name="ReportedTo" Type="Int16" Nullable="false" />
         </EntityType>
         <EntityType Name="tblUserRights">
           <Key>
@@ -8557,6 +8557,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblUser">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblUser">
               <MappingFragment StoreEntitySet="tblUser">
+                <ScalarProperty Name="ReportedTo" ColumnName="ReportedTo" />
                 <ScalarProperty Name="CurrentSessionId" ColumnName="CurrentSessionId" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
@@ -8565,7 +8566,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="IsLocked" ColumnName="IsLocked" />
                 <ScalarProperty Name="TeamMemberId" ColumnName="TeamMemberId" />
-                <ScalarProperty Name="UserTypeId" ColumnName="UserTypeId" />
                 <ScalarProperty Name="UserRoleId" ColumnName="UserRoleId" />
                 <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="UserFullName" ColumnName="UserFullName" />

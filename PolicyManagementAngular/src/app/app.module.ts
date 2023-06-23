@@ -29,7 +29,7 @@ import { UserManagementModule } from './app-modules/user-management/user-managem
     LoginComponent,  
     HeaderComponent,
     TopMenuComponent,
-    MenuItemComponent,
+    MenuItemComponent
   ],
   imports: [
     BrowserModule,

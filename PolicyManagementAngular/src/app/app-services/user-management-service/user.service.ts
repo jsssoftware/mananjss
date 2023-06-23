@@ -16,9 +16,11 @@ export class UserService extends IUserService {
     constructor(private apiManagerService: IApiManagerService) { super(); }
 
     getUserType = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(Common.UserType);
-    getUserRole = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(Common.UserRole);
-    getUsers = (): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(Common.Users);
-    getTeamMember = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(Common.TeamMember);
+    getUserRole = (branchId:any): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.UserRole}/${branchId}`);
+    getUsers = (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Common.Users}/${branchId}`);
+    getTeamMember = (branchId:any): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.TeamMember}/${branchId}`);
     createUser = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(UserManangement.CreateUser, model);
-
+    getTeamMemberById = (teamMemberId :any): Observable<any[]> => this.apiManagerService.getRequest<any[]>(`${Common.TeaMemberId}/${teamMemberId}`);
+    getRoles= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${UserManangement.GetRoles}/${branchId}`);
+    createRole = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(UserManangement.CreateRole, model);
 }
