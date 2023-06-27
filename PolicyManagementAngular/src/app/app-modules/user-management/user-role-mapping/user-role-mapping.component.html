@@ -1,0 +1,59 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header class="card-container" style="display: flow-root">
+        <mat-card-title style="width: 50%; float: left;">
+            <p>Manage User Role</p>
+        </mat-card-title>
+
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+        <div class="row">
+            <div class="col-lg-2">
+                <mat-label>Role Name <span style="color:red">*</span></mat-label>
+            </div>
+
+            <div class="col-lg-4">
+                <mat-form-field>
+                    <mat-select  [(ngModel)]="_userRoleId">
+                        <mat-option>Select</mat-option>
+                        <mat-option *ngFor="let userRole of _userRole" [value]="userRole.Value">{{userRole.Name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-1">
+                <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createUserRights()" >
+                    <mat-icon style="font-size: 22px;">save</mat-icon>Save
+                </button>
+            </div>
+            <div class="col-lg-1">
+                <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb7e'}"
+                    >
+                    Reset
+                </button>
+            </div>
+        </div>
+       
+        <div class="row">
+            <table class="table" border="1px" *ngIf="_formLists && _formLists.length>0 && _userRoleId">
+                <thead>
+                    <th>Sr. No</th>
+                    <th>Menu Name</th>
+                    <th>Rights (V)</th>
+                    
+                </thead>
+                <tr *ngFor="let formList of _formLists">
+                    <td>{{formList.FormId}}</td>
+                    <td>{{formList.FormName}}</td>
+                    <td>
+                        <mat-checkbox color="primary" (change)="onSelectionChanged($event, formList)"  ></mat-checkbox>
+                    </td>
+                   
+
+                </tr>
+
+
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>

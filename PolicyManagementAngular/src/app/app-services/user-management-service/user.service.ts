@@ -8,6 +8,7 @@ import { IUserService } from "./abstracts/user.iservice";
 import { Common } from "src/app/shared/utilities/api-urls/common";
 import { IDataTableDto } from "src/app/app-entites/dtos/common/data-table-dto";
 import { UserManangement } from "src/app/shared/utilities/api-urls/usermanagement";
+import { IUserRoleModel } from "src/app/app-entites/models/usermanagement/user-role-model";
 
 
 @Injectable()
@@ -23,4 +24,7 @@ export class UserService extends IUserService {
     getTeamMemberById = (teamMemberId :any): Observable<any[]> => this.apiManagerService.getRequest<any[]>(`${Common.TeaMemberId}/${teamMemberId}`);
     getRoles= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${UserManangement.GetRoles}/${branchId}`);
     createRole = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(UserManangement.CreateRole, model);
+    getFormList = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${UserManangement.FormList}`);
+    createUserRights = (model: any): Observable<ICommonDto<any>> => this.apiManagerService.postRequest<IUserRoleModel[]>(UserManangement.CreateUserRights, model);
+
 }

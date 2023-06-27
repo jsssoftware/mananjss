@@ -4,6 +4,7 @@ using PolicyManagement.Models.Common;
 using PolicyManagement.Models.UserManagement;
 using PolicyManagement.Services.Commercial.Interface;
 using PolicyManagement.Services.UserManagement.Interface;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -31,5 +32,13 @@ namespace PolicyManagement.Api.Controllers.UserManangement
         [Route("roles/create")]
         [HttpPost]
         public async Task<IHttpActionResult> CreateRole(tblUserRole userRole) => Json(await _usermanagementService.CreateRole(userRole, new BaseModel()));
+
+        [Route("formlist")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetFormList() => Json(await _usermanagementService.GetFormList());
+
+        [Route("userrights/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateUserRights(List<tblUserRights> userRights) => Json(await _usermanagementService.CreateUserRights(userRights, new BaseModel()));
     }
 }

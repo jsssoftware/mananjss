@@ -7,13 +7,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserManagementRoutingModule } from './user-management-routing.module';
 import { UserService } from 'src/app/app-services/user-management-service/user.service';
 import { ManageRolesComponent } from './manage-roles/manage-roles.component';
+import { UserRoleMappingComponent } from './user-role-mapping/user-role-mapping.component';
 
 
 
 @NgModule({
   declarations: [
     ManageUserComponent,
-    ManageRolesComponent
+    ManageRolesComponent,
+    UserRoleMappingComponent
   ],
   imports: [
     CommonModule,

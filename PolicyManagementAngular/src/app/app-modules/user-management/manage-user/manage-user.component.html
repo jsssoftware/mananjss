@@ -218,12 +218,12 @@
 
                         <ng-container matColumnDef="Modify">
                             <th mat-header-cell *matHeaderCellDef>Modify</th>
-                            <td mat-cell *matCellDef="let row" [ngStyle]="{'text-align':'end'}">
+                            <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{'text-align':'end'}">
                                 <div class="row">
                                    
                                     <div class="col-lg-1">
 
-                                        <button mat-icon-button (click)="editUser(row)">
+                                        <button mat-icon-button (click)="editUser(row)" *ngIf="i >1  ">
                                             <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
                                         </button>
                                     </div>

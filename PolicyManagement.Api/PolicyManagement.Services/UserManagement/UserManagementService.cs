@@ -147,6 +147,42 @@ namespace PolicyManagement.Services.UserManagement
 
         }
 
+        public async Task<List<tblFormList>> GetFormList()
+        {
+           var result = await _dataContext.tblFormList.ToListAsync();
+            return result;
+        }
+
+        public async Task<CommonDto<object>> CreateUserRights(List<tblUserRights> userRights, BaseModel baseModel)
+        {
+            try
+            {
+                userRights.ForEach(x => { 
+                    x.CreatedBy = baseModel.LoginUserId;
+                    x.CreatedTime = DateTime.Now;                    
+                });
+                _dataContext.tblUserRights.AddRange(userRights);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"User Rights is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+
 
 
     }

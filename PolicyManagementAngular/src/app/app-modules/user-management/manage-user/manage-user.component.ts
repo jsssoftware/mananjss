@@ -109,6 +109,8 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
   }
 
   reset(){
+    this.manageuserform.controls.teamMemberId.enable();
+
     this.manageuserform.reset();
     this._mobileNumber =  null;
     this._emailId =  "";
@@ -138,6 +140,7 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
         isLocked: data?.IsLocked,  
         isActive: data?.IsActive 
     });
+    this.manageuserform.controls.teamMemberId.disable();
     this._mobileNumber =  data?.MobileNumber
     this._emailId =  data?.EmailId
 
