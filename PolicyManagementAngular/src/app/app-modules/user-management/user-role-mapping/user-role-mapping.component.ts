@@ -4,6 +4,7 @@ import { ICommonDto } from 'src/app/app-entites/dtos/common/common-dto';
 import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
 import { IUserRoleModel } from 'src/app/app-entites/models/usermanagement/user-role-model';
 import { UserService } from 'src/app/app-services/user-management-service/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-role-mapping',
@@ -60,7 +61,50 @@ export class UserRoleMappingComponent implements OnInit {
 
    createUserRights(){
     this._userService.createUserRights(this._userModels).subscribe((response: ICommonDto<any>) => {
-      //this._userRole = response;
+      if (response.IsSuccess) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Done',
+          text: response.Message,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.reset();
+          };
+        })
+      }
+      else {
+        if (response.Response == null) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Sorry',
+            text: response.Message,
+          });
+        }
+        else {
+          if (response.Response.IsError) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Sorry',
+              text: response.Message,
+            });
+          }
+          else {
+            Swal.fire({
+              title: 'Warning',
+              text: response.Message,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Yes, Save it!',
+              cancelButtonText: 'Cancel'
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                
+
+              }
+            })
+          }
+        }
+      }
     });
  }
 
