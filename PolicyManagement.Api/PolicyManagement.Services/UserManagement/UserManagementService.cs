@@ -166,7 +166,7 @@ namespace PolicyManagement.Services.UserManagement
                 return new CommonDto<object>
                 {
                     IsSuccess = true,
-                    Message = $"User Rights is created or edited successfully",
+                    Message = $"User Rights is created successfully",
                 };
             }
             catch (Exception ex)
