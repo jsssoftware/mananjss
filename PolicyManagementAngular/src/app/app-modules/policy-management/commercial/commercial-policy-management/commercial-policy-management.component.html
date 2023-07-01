@@ -393,7 +393,7 @@
                   <mat-datepicker #StartDate></mat-datepicker>
                 </mat-form-field>
               </div>
-              <div class="col-lg-4" >
+              <div class="col-lg-4">
                 <mat-form-field appearance="fill">
                   <mat-label>Number of Year</mat-label>
                   <mat-select formControlName="tpNumberOfYear" required (selectionChange)="setExpiryDate('tp')">
@@ -404,7 +404,7 @@
                   <mat-error *ngIf="policyForm.controls.tpNumberOfYear">Please Select Number of Year</mat-error>
                 </mat-form-field>
               </div>
-             
+
               <div class="col-lg-4">
                 <mat-form-field appearance="fill">
                   <mat-label>{{(MenuVertical=='Motor')?'Expiry Date': isTravel ? 'Date of Return' : 'Risk End Date'}}
@@ -417,21 +417,22 @@
             </div>
             <hr />
             <div class="row" *ngIf="isMarine">
-              
+
               <div class="col-lg-8">
                 <div class="row">
-                  <div class="col-lg-4" >
+                  <div class="col-lg-4">
                     <mat-form-field appearance="fill">
                       <mat-label>Storage Risk Id</mat-label>
                       <mat-select formControlName="storageriskid" required>
                         <mat-option>Select</mat-option>
-                        <mat-option *ngFor="let storageRisk of _storageRisk" [value]="storageRisk.Value">{{storageRisk.Name}}
+                        <mat-option *ngFor="let storageRisk of _storageRisk" [value]="storageRisk.Value">
+                          {{storageRisk.Name}}
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="policyForm.controls.storageriskid">Please Select Storage Risk</mat-error>
-                    </mat-form-field>                  
+                    </mat-form-field>
                   </div>
-                  <div class="col-lg-4" >
+                  <div class="col-lg-4">
                     <mat-form-field appearance="fill">
                       <mat-label>Hypothentication</mat-label>
                       <mat-select formControlName="hypothentication" required>
@@ -440,7 +441,7 @@
                         </mat-option>
                       </mat-select>
                       <mat-error *ngIf="policyForm.controls.hypothentication">Please Select Storage Risk</mat-error>
-                    </mat-form-field>     
+                    </mat-form-field>
                   </div>
                 </div>
               </div>
@@ -475,7 +476,7 @@
                 </mat-form-field>
               </div>
             </div>
-            <div class="row"  *ngIf="isFire">
+            <div class="row" *ngIf="isFire">
               <div class="col-lg-4">
                 <mat-radio-group formControlName="locationType">
 
@@ -520,12 +521,27 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-lg-4" style="margin-top: 15px;">
-                <mat-checkbox color="primary" formControlName="isAll">Insurance Branch Office - All</mat-checkbox>
+              <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Insurance Branch</mat-label>
+                  <mat-select formControlName="insuranceBranch" required>
+                    <mat-option>Select</mat-option>
+                    <mat-option *ngFor="let branch of _insuranceCompanyBranches" [value]="branch.Value">{{branch.Name}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="policyForm.controls.insuranceBranch">Please Select Insurance Branch</mat-error>
+                </mat-form-field>
               </div>
-              <div class="col-lg-8" style="margin-top: 5px;">
-                <button type="button" mat-raised-button color="primary"
-                  (click)="getInsuranceCompanyBranches()">Refresh</button>
+              <div class="col-lg-8">
+                <div class="row">
+                  <div class="col-lg-4" style="margin-top: 15px;">
+                    <mat-checkbox color="primary" formControlName="isAll">Insurance Branch Office - All</mat-checkbox>
+                  </div>
+                  <div class="col-lg-8" style="margin-top: 5px;">
+                    <button type="button" mat-raised-button color="primary"
+                      (click)="getInsuranceCompanyBranches()">Refresh</button>
+                  </div>
+                </div>
               </div>
             </div>
             <section *ngIf="_type != 1">
@@ -655,7 +671,8 @@
         </mat-expansion-panel>
 
         <!--Star  Marine -->
-        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"  *ngIf="this._verticalId ==  Vertical.Marine">
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+          *ngIf="this._verticalId ==  Vertical.Marine">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Marine
@@ -698,15 +715,13 @@
                   <div class="col-lg-2">
                     <mat-form-field appearance="fill">
                       <mat-label>From</mat-label>
-                      <input type="text" matInput formControlName="fromTransitDomestic"
-                      class="uppercase" >
+                      <input type="text" matInput formControlName="fromTransitDomestic" class="uppercase">
                     </mat-form-field>
                   </div>
                   <div class="col-lg-2">
                     <mat-form-field appearance="fill">
                       <mat-label>To</mat-label>
-                      <input type="text" matInput formControlName="toTransitDomestic"
-                      class="uppercase">
+                      <input type="text" matInput formControlName="toTransitDomestic" class="uppercase">
                     </mat-form-field>
                   </div>
                 </div>
@@ -725,13 +740,15 @@
               <div class="col-lg-3">
                 <mat-form-field appearance="fill">
                   <mat-label>Sum Insured</mat-label>
-                  <input type="text" matInput formControlName="sumInsured" class="uppercase" required  (change)="calculateMarineSumInsured()">
+                  <input type="text" matInput formControlName="sumInsured" class="uppercase" required
+                    (change)="calculateMarineSumInsured()">
                 </mat-form-field>
               </div>
               <div class="col-lg-3">
                 <mat-form-field appearance="fill">
                   <mat-label>Endrose Sum Insured</mat-label>
-                  <input type="number" matInput formControlName="endroseSumInsured" class="uppercase" required (change)="calculateMarineSumInsured()">
+                  <input type="number" matInput formControlName="endroseSumInsured" class="uppercase" required
+                    (change)="calculateMarineSumInsured()">
                 </mat-form-field>
               </div>
               <div class="col-lg-3">
@@ -771,14 +788,13 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="fireSA" 
-                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                          <input type="text" matInput formControlName="fireSA" class="uppercase"
+                            (change)="calculatTotalFiredSumInsured()">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="fireRate" 
-                            class="uppercase" >
+                          <input type="text" matInput formControlName="fireRate" class="uppercase">
                         </mat-form-field>
                       </td>
                     </tr>
@@ -788,14 +804,13 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="earthQuakeSA" 
-                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                          <input type="text" matInput formControlName="earthQuakeSA" class="uppercase"
+                            (change)="calculatTotalFiredSumInsured()">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="earthQuakeRate"
-                             class="uppercase">
+                          <input type="text" matInput formControlName="earthQuakeRate" class="uppercase">
                         </mat-form-field>
                       </td>
                     </tr>
@@ -805,14 +820,13 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sTFISA" 
-                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                          <input type="text" matInput formControlName="sTFISA" class="uppercase"
+                            (change)="calculatTotalFiredSumInsured()">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sTFIRate" 
-                            class="uppercase">
+                          <input type="text" matInput formControlName="sTFIRate" class="uppercase">
                         </mat-form-field>
                       </td>
                     </tr>
@@ -833,14 +847,13 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="terrorismSA" 
-                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                          <input type="text" matInput formControlName="terrorismSA" class="uppercase"
+                            (change)="calculatTotalFiredSumInsured()">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="terrorismRate" 
-                            class="uppercase" >
+                          <input type="text" matInput formControlName="terrorismRate" class="uppercase">
                         </mat-form-field>
                       </td>
                     </tr>
@@ -850,14 +863,13 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="burglarySA" 
-                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                          <input type="text" matInput formControlName="burglarySA" class="uppercase"
+                            (change)="calculatTotalFiredSumInsured()">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="burglaryRate" 
-                            class="uppercase" >
+                          <input type="text" matInput formControlName="burglaryRate" class="uppercase">
                         </mat-form-field>
                       </td>
                     </tr>
@@ -867,14 +879,13 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="moneySA" 
-                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                          <input type="text" matInput formControlName="moneySA" class="uppercase"
+                            (change)="calculatTotalFiredSumInsured()">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="moneyRate" 
-                            class="uppercase">
+                          <input type="text" matInput formControlName="moneyRate" class="uppercase">
                         </mat-form-field>
                       </td>
                     </tr>
@@ -895,14 +906,13 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="breakDownSA" 
-                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                          <input type="text" matInput formControlName="breakDownSA" class="uppercase"
+                            (change)="calculatTotalFiredSumInsured()">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="breakDownRate"
-                            class="uppercase" >
+                          <input type="text" matInput formControlName="breakDownRate" class="uppercase">
                         </mat-form-field>
                       </td>
                     </tr>
@@ -912,15 +922,13 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="plateGlassSA" 
-                            class="uppercase" (change)="calculatTotalFiredSumInsured()">
+                          <input type="text" matInput formControlName="plateGlassSA" class="uppercase"
+                            (change)="calculatTotalFiredSumInsured()">
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="plateGlassRate"
-                             class="uppercase"
-                           >
+                          <input type="text" matInput formControlName="plateGlassRate" class="uppercase">
                         </mat-form-field>
                       </td>
                     </tr>
@@ -939,8 +947,7 @@
                 <mat-form-field>
                   <mat-label>Total Sum Insured</mat-label>
 
-                  <input type="text" matInput formControlName="sumInsured" 
-                    class="uppercase">
+                  <input type="text" matInput formControlName="sumInsured" class="uppercase">
                 </mat-form-field>
               </div>
             </div>
@@ -950,64 +957,65 @@
         <!--End Fire term-->
 
         <!--Start  Misc -->
-                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"  *ngIf="this._verticalId ==  Vertical.Misc">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                      Miscellenous
-                    </mat-panel-title>
-                  </mat-expansion-panel-header>
-                  <form [formGroup]="miscform">
-                    <hr style="margin-top: 0px;" />
-                    <div class="row">
-        
-                      <div class="col-lg-3">
-                        <mat-form-field appearance="fill">
-                          <mat-label>Rate</mat-label>
-                          <input type="text" matInput formControlName="miscrate" class="uppercase">
-                          <mat-error *ngIf="miscform.controls.miscrate">Please Select Rate</mat-error>
-                        </mat-form-field>
-                      </div>
-                      <div class="col-lg-3">
-                        <mat-form-field appearance="fill">
-                          <mat-label>Miscellenous 1</mat-label>
-                          <input type="text" matInput formControlName="misc1" class="uppercase">
-                          <mat-error *ngIf="miscform.controls.occupancy">Please Select Miscellenous</mat-error>
-                        </mat-form-field>
-                      </div>
-                      <div class="col-lg-3">
-                          <mat-form-field appearance="fill">
-                            <mat-label>Miscellenous 2</mat-label>
-                            <input type="text" matInput formControlName="misc1" class="uppercase">
-                            <mat-error *ngIf="miscform.controls.misc2">Please Select Miscellenous</mat-error>
-                          </mat-form-field>        
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-3">
-                        <mat-form-field appearance="fill">
-                          <mat-label>Miscellenous 3</mat-label>
-                          <input type="text" matInput formControlName="misc1" class="uppercase">
-                          <mat-error *ngIf="miscform.controls.misc3">Please Select Miscellenous</mat-error>
-                        </mat-form-field>
-                      </div>
-                      <div class="col-lg-3">
-                        <mat-form-field appearance="fill">
-                          <mat-label>Miscellenous 4</mat-label>
-                          <input type="text" matInput formControlName="misc1" class="uppercase">
-                          <mat-error *ngIf="miscform.controls.misc4">Please Select Miscellenous</mat-error>
-                        </mat-form-field>
-                      </div>
-                      <div class="col-lg-3">
-                          <mat-form-field appearance="fill">
-                            <mat-label>Miscellenous 5</mat-label>
-                            <input type="text" matInput formControlName="misc1" class="uppercase">
-                            <mat-error *ngIf="miscform.controls.misc5">Please Select Miscellenous</mat-error>
-                          </mat-form-field>        
-                      </div>
-        
-                    </div>
-                  </form>
-                </mat-expansion-panel>
+        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+          *ngIf="this._verticalId ==  Vertical.Misc">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Miscellenous
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <form [formGroup]="miscform">
+            <hr style="margin-top: 0px;" />
+            <div class="row">
+
+              <div class="col-lg-3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Rate</mat-label>
+                  <input type="text" matInput formControlName="miscrate" class="uppercase">
+                  <mat-error *ngIf="miscform.controls.miscrate">Please Select Rate</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Miscellenous 1</mat-label>
+                  <input type="text" matInput formControlName="misc1" class="uppercase">
+                  <mat-error *ngIf="miscform.controls.occupancy">Please Select Miscellenous</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Miscellenous 2</mat-label>
+                  <input type="text" matInput formControlName="misc1" class="uppercase">
+                  <mat-error *ngIf="miscform.controls.misc2">Please Select Miscellenous</mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Miscellenous 3</mat-label>
+                  <input type="text" matInput formControlName="misc1" class="uppercase">
+                  <mat-error *ngIf="miscform.controls.misc3">Please Select Miscellenous</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Miscellenous 4</mat-label>
+                  <input type="text" matInput formControlName="misc1" class="uppercase">
+                  <mat-error *ngIf="miscform.controls.misc4">Please Select Miscellenous</mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-lg-3">
+                <mat-form-field appearance="fill">
+                  <mat-label>Miscellenous 5</mat-label>
+                  <input type="text" matInput formControlName="misc1" class="uppercase">
+                  <mat-error *ngIf="miscform.controls.misc5">Please Select Miscellenous</mat-error>
+                </mat-form-field>
+              </div>
+
+            </div>
+          </form>
+        </mat-expansion-panel>
         <!--End Misc-->
         <!--Start Premium Details-->
         <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
@@ -1166,7 +1174,7 @@
                   <mat-select formControlName="commissionPaidOn"
                     (selectionChange)="calculateCommissionablePremium($event.value)">
                     <mat-option>Select</mat-option>
-                    <mat-option *ngFor="let commissionpaidon of _commissionPaidOn" [value]="commissionpaidon.Code" >
+                    <mat-option *ngFor="let commissionpaidon of _commissionPaidOn" [value]="commissionpaidon.Code">
                       {{commissionpaidon.Name}}</mat-option>
                   </mat-select>
                 </mat-form-field>
