@@ -449,6 +449,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   public _isTpPremiumDetailsDisabled: boolean = false;
   public _isOdPremiumDetailsDisabled: boolean = false;
   public _isDisableOdPolicyDetails: boolean = false;
+  public _isDisableProducts: boolean = false;
   public _showErrors: boolean = false;
   public _policyData?: IHealthPolicyFormDataModel;
   public _verticalName: any = "";
@@ -552,6 +553,9 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     if (this._policyType == SearchPolicyType.Motor_View) {
       this._isViewPolicyActive = true
     }
+   /*  if (this._policyType == SearchPolicyType.Motor_Renew) {
+      this._isViewPolicyActive = true
+    } */
 
   }
 
@@ -637,9 +641,28 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     });
 
     this.paymentUpdateValue();
+    this.setHealthValidation()
 
+  
   }
 
+
+  setHealthValidation(){
+    if(this.isHeath ){
+      this.policyForm.get("continutyStartDate")?.enable();
+      this.productPlanForm.get("product")?.enable();
+      if(this._policyType == SearchPolicyType.Motor_New){
+        this.policyForm.get("continutyStartDate")?.disable();
+      }
+      if (this._policyType == SearchPolicyType.Motor_rollover) {
+        this.policyForm.controls.continutyStartDate.setValidators([Validators.required]);
+      }
+      if(this._policyType ==  SearchPolicyType.Motor_Renew){
+        this.productPlanForm.get("product")?.disable();
+      }
+    }
+
+  }
   paymentUpdateValue(){
 
     const CHEQUE = "1";
@@ -827,6 +850,9 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   getNumberOfYears(): any {
     this.commonService.getNumberOfYears().subscribe((response: IYearDto[]) => {
       this._numberOfYears = response;
+      if(this.isHeath){
+        this._numberOfYears = this._numberOfYears.filter((year,idx) => idx < 6)
+      }
     });
   }
 
@@ -1273,7 +1299,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
 
 
-  setExpiryDate(policy: string) {
+  setExpiryDate(policy: string) {      
+    this.policyForm.get("continutyStartDate").setValue(new Date(this.policyForm.getRawValue().tpStartDate));
     let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
     const days = -1;
     if (this.policyForm.value.tpNumberOfYear == undefined
@@ -1281,7 +1308,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     let tpYear = this._numberOfYears.filter(f => f.Value == this.policyForm.getRawValue().tpNumberOfYear)[0];
     let odYear = this._numberOfYears.filter(f => f.Value == this.policyForm.getRawValue().odNumberOfYear)[0];
     if (policy === "tp") {
-
+    
       if (this.policyTermForm.value.policyType === PolicyType.SameCompanyRetention || this.policyTermForm.value.policyType === PolicyType.OtherCompanyRetention) {
         let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto) as Date;
         //startDate = new Date(startDate.setDate(startDate.getDate() + 1));
@@ -1358,6 +1385,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     if (this.policyForm.value.numberOfDays == undefined
       || this.policyForm.value.numberOfDays === "") return;
     let numberofDays = this.policyForm.getRawValue().numberOfDays;
+
     this.commonService.getDateDays(this.commonService.getDateInString(this.policyForm.getRawValue().tpStartDate), 0 , numberofDays).subscribe((response: IDateDto) => {
       this.policyForm.patchValue({
         tpExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
@@ -2843,6 +2871,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this.insuranceCustomerForm.controls.criskclass.clearValidators();
 
 
+   
     if (this._verticalId == Vertical.Travel) {
       this.insuranceCustomerForm.controls.cpassport.setValidators([Validators.required]);
     }
@@ -2858,6 +2887,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   setVerticalFunction() {
     if (this._verticalId == Vertical.Health) {
       this.changePortabality();
+
     }
    
     if (this._verticalId == Vertical.Pesonal_Accident) {
@@ -2875,6 +2905,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     const validator = form_field.validator({} as AbstractControl);
     return (validator && validator.required);
 }
+
+
 
 
 }

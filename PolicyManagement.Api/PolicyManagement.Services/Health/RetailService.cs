@@ -1101,7 +1101,7 @@ namespace PolicyManagement.Services.Health
                     && (model.TpPolicy.NumberOfYear != 22 && model.VerticalId != (short)Vertical.Travel) 
                     && (model.TpPolicy.NumberOfDays == null && model.VerticalId == (short)Vertical.Travel)  || 
                     (model.TpPolicy.NumberOfYear == 0 && model.VerticalId != (short)Vertical.Travel) 
-                    || model.TpPolicy.StartDateString == null || model.TpPolicy.InsuranceCompany == 0)
+                    || model.TpPolicy.StartDateString == null || model.TpPolicy.InsuranceCompany == 0 || (model.ContinueStartDate ==  null && model.PolicyTerm.PolicyType == (int)PolicyType.Rollover))
                 {
                     return false;
                 }
