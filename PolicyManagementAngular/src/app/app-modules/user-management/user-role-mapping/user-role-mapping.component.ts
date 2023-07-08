@@ -5,16 +5,54 @@ import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
 import { IUserRoleModel } from 'src/app/app-entites/models/usermanagement/user-role-model';
 import { UserService } from 'src/app/app-services/user-management-service/user.service';
 import Swal from 'sweetalert2';
-
+export interface Permission {
+  id: number;
+  children?: Permission[];
+  name?: boolean;
+  MenuCode:number
+  showChildren?: boolean;
+}
 @Component({
   selector: 'app-user-role-mapping',
   templateUrl: './user-role-mapping.component.html',
   styleUrls: ['./user-role-mapping.component.css']
 })
+
 export class UserRoleMappingComponent implements OnInit {
   public _branchId : string;
   public _userRoleId : number;
+  
+  permissions: Permission[];
+  columnsToDisplay: string[] = ['name', 'checkbox'];
+  parentColumn: string[] = ['name', 'checkbox'];
+  childColumn: string[] = ['name', 'checkbox'];
+  initializePermissions(permissions: Permission[]): void {
+    permissions.forEach(permission => {
+      permission.showChildren = false;
+      if (!permission.children) {
+        permission.children = [];
+      } else {
+        this.initializePermissions(permission.children);
+      }
+    });
+  }
+  toggleChildVisibility(permission: Permission): void {
+    permission.showChildren = !permission.showChildren;
+  }
 
+  renderPermissions(permissions: Permission[], level: number): Permission[] {
+    const renderedPermissions: Permission[] = [];
+
+    permissions.forEach(permission => {
+      renderedPermissions.push(permission);
+      if (permission.showChildren) {
+        const nestedPermissions = this.renderPermissions(permission.children, level + 1);
+        renderedPermissions.push(...nestedPermissions);
+      }
+    });
+
+    return renderedPermissions;
+  }
   constructor(
     private  _userService: UserService,
 
@@ -22,6 +60,8 @@ export class UserRoleMappingComponent implements OnInit {
     this._branchId = sessionStorage.getItem("branchId");
 
    }
+
+   
   public _userRole: IDropDownDto<number>[] = [];
   public _userModels: IUserRoleModel[] = [];
   public _userModel: IUserRoleModel;
@@ -40,7 +80,9 @@ export class UserRoleMappingComponent implements OnInit {
   }
   getAllUserForm(){
     this._userService.getFormList().subscribe((response: any[]) => {
-      this._formLists = response;
+      this.permissions = response;
+      this.initializePermissions(this.permissions);
+      console.log(this.permissions)
     });
   }
 

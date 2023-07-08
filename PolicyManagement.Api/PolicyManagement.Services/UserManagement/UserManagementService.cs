@@ -147,9 +147,27 @@ namespace PolicyManagement.Services.UserManagement
 
         }
 
-        public async Task<List<tblFormList>> GetFormList()
+        public async Task<List<MainFormListModel>> GetFormList()
         {
-           var result = await _dataContext.tblFormList.ToListAsync();
+
+            var result = await _dataContext.tblFormList.Where(x => x.ParentId == null).Select( s => new MainFormListModel
+            {
+                id = s.FormId,
+                name = s.FormName,
+                menuCode = s.MenuCode,
+                parentId =  s.ParentId
+
+            }).ToListAsync();
+            result.ForEach(s =>{
+                s.children = _dataContext.tblFormList.Where(x => x.ParentId == s.id).Select(c => new ChildFormListModel
+                {
+                    id = c.FormId,
+                    name = c.FormName,
+                    menuCode = c.MenuCode,
+                }).ToList();
+                s.showChildren = s.children.Count() > 0;
+            });
+            
             return result;
         }
 

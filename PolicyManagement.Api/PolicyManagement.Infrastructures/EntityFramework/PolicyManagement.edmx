@@ -669,6 +669,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
           <Property Name="FormBelongsTo" Type="int" />
+          <Property Name="ParentId" Type="int" />
         </EntityType>
         <EntityType Name="tblFuelType">
           <Key>
@@ -1822,6 +1823,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
           <Property Name="CurrentSessionId" Type="int" />
+          <Property Name="Isdefault" Type="bit" />
         </EntityType>
         <EntityType Name="tblUserRights">
           <Key>
@@ -1849,6 +1851,8 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
           <Property Name="BranchId" Type="int" />
+          <Property Name="VerticalId" Type="int" />
+          <Property Name="Level" Type="int" />
         </EntityType>
         <EntityType Name="tblUserType">
           <Key>
@@ -5049,6 +5053,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
           <Property Name="FormBelongsTo" Type="Int32" />
+          <Property Name="ParentId" Type="Int32" />
         </EntityType>
         <EntityType Name="tblFuelType">
           <Key>
@@ -6013,6 +6018,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <NavigationProperty Name="tblTeamMember" Relationship="PolicyManagerModel.FK_tblUser_tblEmployee" FromRole="tblUser" ToRole="tblTeamMember" />
           <NavigationProperty Name="tblUserRole" Relationship="PolicyManagerModel.FK_tblUser_tblUserRole" FromRole="tblUser" ToRole="tblUserRole" />
           <Property Name="ReportedTo" Type="Int16" Nullable="false" />
+          <Property Name="Isdefault" Type="Boolean" />
         </EntityType>
         <EntityType Name="tblUserRights">
           <Key>
@@ -6041,6 +6047,8 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
           <Property Name="BranchId" Type="Int32" />
           <NavigationProperty Name="tblUser" Relationship="PolicyManagerModel.FK_tblUser_tblUserRole" FromRole="tblUserRole" ToRole="tblUser" />
+          <Property Name="VerticalId" Type="Int32" />
+          <Property Name="Level" Type="Int32" />
         </EntityType>
         <EntityType Name="tblUserType">
           <Key>
@@ -7550,6 +7558,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblFormList">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblFormList">
               <MappingFragment StoreEntitySet="tblFormList">
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
                 <ScalarProperty Name="FormBelongsTo" ColumnName="FormBelongsTo" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
@@ -8557,6 +8566,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblUser">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblUser">
               <MappingFragment StoreEntitySet="tblUser">
+                <ScalarProperty Name="Isdefault" ColumnName="Isdefault" />
                 <ScalarProperty Name="ReportedTo" ColumnName="ReportedTo" />
                 <ScalarProperty Name="CurrentSessionId" ColumnName="CurrentSessionId" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
@@ -8592,6 +8602,8 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblUserRole">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblUserRole">
               <MappingFragment StoreEntitySet="tblUserRole">
+                <ScalarProperty Name="Level" ColumnName="Level" />
+                <ScalarProperty Name="VerticalId" ColumnName="VerticalId" />
                 <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />

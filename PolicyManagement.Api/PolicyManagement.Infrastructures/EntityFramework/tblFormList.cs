@@ -36,6 +36,8 @@ public partial class tblFormList
 
     public Nullable<int> FormBelongsTo { get; set; }
 
+    public Nullable<int> ParentId { get; set; }
+
 }
 
 }

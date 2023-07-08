@@ -48,6 +48,8 @@ public partial class tblUser
 
     public short ReportedTo { get; set; }
 
+    public Nullable<bool> Isdefault { get; set; }
+
 
 
     public virtual tblBranch tblBranch { get; set; }

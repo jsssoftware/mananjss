@@ -1,0 +1,53 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th,
+  td {
+    padding: 8px;
+  }
+  
+  th {
+    text-align: left;
+  }
+  
+  td.mat-cell {
+    padding-left: 16px;
+  }
+  
+  .toggle-icon {
+    cursor: pointer;
+  }
+  
+  .child-permission {
+    padding-left: 16px;
+    font-style: italic;
+  }
+
+  .parent-column {
+    text-align: left;
+
+  }
+  
+  .child-column {
+    text-align:start;
+    margin-left:20%;
+    font-style: italic;
+  }
+  
+  .child-permission {
+  
+  }
+
+  .parent-permissions {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .parent-permission {
+    margin-right: 16px;
+  }
+  
+
+  

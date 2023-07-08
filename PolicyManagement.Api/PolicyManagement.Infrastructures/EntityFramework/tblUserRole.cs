@@ -45,6 +45,10 @@ public partial class tblUserRole
 
     public Nullable<int> BranchId { get; set; }
 
+    public Nullable<int> VerticalId { get; set; }
+
+    public Nullable<int> Level { get; set; }
+
 
 
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
