@@ -670,6 +670,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedTime" Type="smalldatetime" />
           <Property Name="FormBelongsTo" Type="int" />
           <Property Name="ParentId" Type="int" />
+          <Property Name="GrandParentId" Type="int" />
         </EntityType>
         <EntityType Name="tblFuelType">
           <Key>
@@ -5054,6 +5055,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
           <Property Name="FormBelongsTo" Type="Int32" />
           <Property Name="ParentId" Type="Int32" />
+          <Property Name="GrandParentId" Type="Int32" />
         </EntityType>
         <EntityType Name="tblFuelType">
           <Key>
@@ -7558,6 +7560,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblFormList">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblFormList">
               <MappingFragment StoreEntitySet="tblFormList">
+                <ScalarProperty Name="GrandParentId" ColumnName="GrandParentId" />
                 <ScalarProperty Name="ParentId" ColumnName="ParentId" />
                 <ScalarProperty Name="FormBelongsTo" ColumnName="FormBelongsTo" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />

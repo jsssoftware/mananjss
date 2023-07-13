@@ -57,8 +57,7 @@
             </table>
         </div>
         
-        <table mat-table [dataSource]="renderPermissions(permissions, 0)" *ngIf="permissions?.length>0" >
-            <!-- Permission Name Column -->
+        <!-- <table mat-table [dataSource]="renderPermissions(permissions, 0)" *ngIf="permissions?.length>0" >
             <ng-container matColumnDef="name" >
               <th mat-header-cell *matHeaderCellDef>Permission</th>
               <td mat-cell *matCellDef="let permission"  [ngClass]="{'parent-column': permission.children.length > 0, 'child-column': permission.children.length === 0}"
@@ -71,7 +70,6 @@
               </td>
             </ng-container>
           
-            <!-- Checkbox Column -->
             <ng-container matColumnDef="checkbox">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let permission">
@@ -79,10 +77,55 @@
               </td>
             </ng-container>
           
-            <!-- Table Rows -->
             <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
             <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+          </table> -->
+
+
+          <table mat-table [dataSource]="renderPermissions(permissions, 0)" *ngIf="permissions?.length > 0">
+            <!-- Permission Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Permission</th>
+              <td mat-cell *matCellDef="let permission" [ngClass]="{
+                'parent-column': permission.children && permission.children.length > 0,
+                'child-column': !permission.children || permission.children.length === 0
+              }">
+                <span class="toggle-icon" *ngIf="permission.children && permission.children.length > 0" (click)="toggleChildVisibility(permission)">
+                  <mat-icon>{{ permission.showChildren ? 'remove' : 'add' }}</mat-icon>
+                </span>
+                {{ permission.name }}
+              </td>
+            </ng-container>
+          
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="checkbox">
+              <th mat-header-cell *matHeaderCellDef></th>
+              <td mat-cell *matCellDef="let permission" >
+                <mat-checkbox [(ngModel)]="permission.checkedid" (change)="toggleChildCheck(permission)"></mat-checkbox>
+              </td>
+            </ng-container>
+          
+            <!-- Table Rows -->
+            <ng-container *ngTemplateOutlet="recursiveRow; context: { rows: permissions, level: 0 }"></ng-container>
+            <!-- ... Existing code ... -->
+
+<!-- Table Rows -->
+<tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+<tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+
           </table>
+          
+          <ng-template #recursiveRow let-rows let-level="level">
+            <ng-container *ngFor="let row of rows">
+              <tr mat-row *matRowDef="let row; columns: columnsToDisplay;" [ngClass]="{'parent-row': level === 0, 'child-row': level > 0}"></tr>
+          
+              <!-- Recursive Child Rows -->
+              <ng-container *ngIf="row.children && row.children.length > 0 && row.showChildren">
+                <ng-container *ngTemplateOutlet="recursiveRow; context: { rows: row.children, level: level + 1 }"></ng-container>
+              </ng-container>
+            </ng-container>
+          </ng-template>
+          
           
           
           

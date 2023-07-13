@@ -864,7 +864,6 @@ namespace PolicyManagement.Services.Health
             motorPolicyData.MaxDaysSingleTrip = model.Premium.MaxDaysSingleTrip;
             motorPolicyData.CoverageId = model.TpPolicy.Coverage;
 
-
             if (string.IsNullOrEmpty(model.PolicyTerm.AcknowledgementSlipIssueDateString))
                 motorPolicyData.AkgSlipIssueDate = null;
             else

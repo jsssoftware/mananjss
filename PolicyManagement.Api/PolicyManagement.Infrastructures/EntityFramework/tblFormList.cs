@@ -38,6 +38,8 @@ public partial class tblFormList
 
     public Nullable<int> ParentId { get; set; }
 
+    public Nullable<int> GrandParentId { get; set; }
+
 }
 
 }

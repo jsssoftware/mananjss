@@ -1299,8 +1299,11 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
 
 
-  setExpiryDate(policy: string) {      
-    this.policyForm.get("continutyStartDate").setValue(new Date(this.policyForm.getRawValue().tpStartDate));
+  setExpiryDate(policy: string) {   
+      if (this.policyTermForm.value.policyType !== PolicyType.SameCompanyRetention || this.policyTermForm.value.policyType !== PolicyType.OtherCompanyRetention
+      ){   
+        this.policyForm.get("continutyStartDate").setValue(new Date(this.policyForm.getRawValue().tpStartDate));
+      }
     let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
     const days = -1;
     if (this.policyForm.value.tpNumberOfYear == undefined
@@ -1735,7 +1738,6 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
     this.calculatInsuredData();
     //For previous value
-
     this.policyForm.patchValue({
       lastYearInsuranceCompany: response.PreviousPolicy.LastYearInsuranceCompany,
       previousCnPolicyNumber: response.PreviousPolicy.PreviousPolicyNumber,
@@ -1743,8 +1745,10 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       isBlockAgent: false,
       isChangeAgent: false,
       previousPolicyPlan: response.PreviousPolicy.PreviousPolicyPlan,
-      previousPolicySumInsured: response.PreviousPolicy.PreviousPolicySumInsured
+      previousPolicySumInsured: response.PreviousPolicy.PreviousPolicySumInsured,
+      continutyStartDate: this.commonService.getDateFromIDateDto(response.ContinueStartDateDTO as IDateDto),
     });
+    
 
     
     if (this._policyType !== SearchPolicyType.Motor_Renew) {
@@ -1867,6 +1871,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       this._controlNumber = '';
       this._renewalCounter = response.RenewalCounter + 1;
 
+      this.policyForm.get("continutyStartDate")?.disable();
       this.policyForm.get("lastYearInsuranceCompany")?.disable();
       this.policyForm.get("previousCnPolicyNumber")?.disable();
       this.policyForm.get("lastPolicyExpiryDate")?.disable();
@@ -2080,7 +2085,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       });
       this._insuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this._policyData?.TpPolicy.InsuranceCompany);
 
-  
+      this.isTpInsuranceDisable = false;
+
   }
 
   changePortabality() {

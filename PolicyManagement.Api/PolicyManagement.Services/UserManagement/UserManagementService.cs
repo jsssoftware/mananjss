@@ -150,22 +150,35 @@ namespace PolicyManagement.Services.UserManagement
         public async Task<List<MainFormListModel>> GetFormList()
         {
 
-            var result = await _dataContext.tblFormList.Where(x => x.ParentId == null).Select( s => new MainFormListModel
+            var result = await _dataContext.tblFormList.Where(x => x.GrandParentId == -1 && x.ParentId == -1).Select( s => new MainFormListModel
             {
                 id = s.FormId,
                 name = s.FormName,
                 menuCode = s.MenuCode,
-                parentId =  s.ParentId
+                parentId =  s.ParentId,
+                grandParentId = s.GrandParentId
 
             }).ToListAsync();
             result.ForEach(s =>{
-                s.children = _dataContext.tblFormList.Where(x => x.ParentId == s.id).Select(c => new ChildFormListModel
+                s.children = _dataContext.tblFormList.Where(x => x.ParentId == s.id && x.GrandParentId == -1).Select(c => new ChildFormListModel
                 {
                     id = c.FormId,
                     name = c.FormName,
                     menuCode = c.MenuCode,
+                    grandParentId = c.GrandParentId,
+                    parentId = c.ParentId,
+                    children = _dataContext.tblFormList.Where(a => a.ParentId == c.FormId  && a.GrandParentId == s.id).Select(x => new GrandChildFormListModel
+                    {
+                        id = x.FormId,
+                        name = x.FormName,
+                        menuCode = x.MenuCode,
+                        grandParentId = x.GrandParentId,
+                        parentId = x.ParentId,
+                    }).ToList()
+
                 }).ToList();
                 s.showChildren = s.children.Count() > 0;
+
             });
             
             return result;

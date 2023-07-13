@@ -11,6 +11,7 @@ export interface Permission {
   name?: boolean;
   MenuCode:number
   showChildren?: boolean;
+  checkedId:boolean
 }
 @Component({
   selector: 'app-user-role-mapping',
@@ -72,6 +73,9 @@ export class UserRoleMappingComponent implements OnInit {
     this.getAllRoles();
     this.getAllUserForm();
   }
+
+  permissionMap: Map<number, number[]> = new Map<number, number[]>();
+
 
   getAllRoles(){
     this._userService.getUserRole(this._branchId).subscribe((response: IDropDownDto<number>[]) => {
@@ -153,5 +157,109 @@ export class UserRoleMappingComponent implements OnInit {
  reset(){
   this._userModels= [];
  }
+ level: number = 0; // Set the initial value of level
+
+ toggleChildCheck(permission: any): void {
+  if (permission.children && permission.children.length > 0) {
+    if (permission.children.children && permission.children.children.length > 0) {
+      const checkedid = permission.children.checkedid;
+      this.toggleChildren(permission.children, checkedid);
+      this.level= 1
+      return
+    }
+    // If the permission has children, toggle the state of the children checkboxes
+    const checkedid = permission.checkedid;
+    this.level= 2
+    this.toggleChildren(permission, checkedid);
+
+  } else {
+    // If the permission is a child, update its parent's state
+    this.updateParentCheck(permission);
+  }
+}
+
+selectedformData(arg: MatCheckboxChange,permission:any){
+
+/*   this.permissions.filter(x=>{
+    if(x.)
+  }) */
+  if(arg.checked){
+    this._userModel= {
+      UserRoleId : this._userRoleId,
+      FormId:permission.id,
+      BranchId:Number(this._branchId)
+    }
+    this._userModels.push(this._userModel);
+  }else{
+    const indexToRemove = this._userModels.findIndex((pl) => pl.FormId ===permission.id);
+    this._userModels.splice(indexToRemove, 1);
+  }
+}
+
+toggleChildren(permission: any, checkedid: boolean): void {
+  permission.children.forEach((child: any) => {
+    child.checkedid = checkedid;
+    if (child.children && child.children.length > 0) {
+      // Recursively toggle the state of the grandchildren checkboxes
+      this.toggleChildren(child, checkedid);
+    }
+  });
+}
+
+updateParentCheck(permission: any): void {
+  if(permission?.grandParentId !== -1 && permission?.parentId !== -1){
+    var parent = this.findChild(permission);
+  }else{
+    var parent = this.findParent(permission);
+  }
+ 
+  if (parent) {
+    const checkedChildren = parent.children.filter((child: any) => child.checkedid);
+    parent.checkedid = checkedChildren.length >0;
+    // Update the parent's state recursively
+    this.updateParentCheck(parent);
+    
+  }
+}
+
+
+
+updateAncestorParents(permission: any): void {
+  const ancestor = this.findParent(permission);
+  if (ancestor) {
+    this.updateParentCheck(ancestor);
+    this.updateAncestorParents(ancestor);
+  }
+}
+
+findParent(permission: any): any {
+  const parentId = permission.parentId;
+  if (!parentId) {
+    return null;
+  }
+  return this.permissions.find((p: any) => p.id === parentId);
+}
+
+
+findChild(permission: any): any {
+  const parentId = permission.parentId;
+  let foundChild: any = null;
+
+  this.permissions.forEach((permission: any) => {
+    const child = permission.children.find((c: any) => c.id === parentId);
+    if (child) {
+      foundChild = child;
+      return true; // Exit the loop
+    }
+    return false;
+  });
+  return foundChild;
+}
+
+
+
+
+
+
 
 }

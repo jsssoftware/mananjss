@@ -19,35 +19,41 @@ table {
   .toggle-icon {
     cursor: pointer;
   }
-  
-  .child-permission {
-    padding-left: 16px;
-    font-style: italic;
-  }
 
-  .parent-column {
-    text-align: left;
 
-  }
-  
-  .child-column {
-    text-align:start;
-    margin-left:20%;
-    font-style: italic;
-  }
-  
-  .child-permission {
-  
-  }
 
-  .parent-permissions {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .parent-permission {
-    margin-right: 16px;
-  }
-  
+/* CSS for left alignment */
+.parent-column, .child-column {
+  text-align: left;
+}
+/* CSS for parent rows */
+.parent-column {
+  background-color: #f5f5f5; /* Light gray background */
+}
+
+/* CSS for child rows */
+.child-column {
+  background-color: #f8f8f8; /* Slightly lighter gray background */
+}
+
+/* CSS for indentation */
+.child-column {
+  padding-left: 20px; /* Add left padding for indentation */
+}
+
+/* CSS for border */
+.parent-column, .child-column {
+  border-bottom: 1px solid #ccc; /* Add a bottom border */
+}
+
+/* CSS for font-weight */
+.parent-column {
+  font-weight: bold; /* Make parent rows bold */
+}
+
+
+
+
+
 
   
