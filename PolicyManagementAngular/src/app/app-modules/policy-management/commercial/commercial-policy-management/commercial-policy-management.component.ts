@@ -1927,7 +1927,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
         await this.commonService.getProduct().subscribe((presponse: any) => {
           this._products = presponse;
           this._selectedProductId = response.ProductPlan.ProductId;
-          this.commonService.getPlan(this._selectedProductId).subscribe((planresponse: any) => {
+          let insuranceCompanyId = this.policyForm.controls['tpInsuranceCompany'].value;
+
+          this.commonService.getPlan(this._selectedProductId,insuranceCompanyId,this._verticalId).subscribe((planresponse: any) => {
             this._plans = planresponse;
             this.productPlanForm.patchValue({
               product: this._selectedProductId,
@@ -2420,7 +2422,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
 
   getPlan() {
     this._selectedProductId = this.productPlanForm.value.product;
-    this.commonService.getPlan(this._selectedProductId).subscribe((response: any) => {
+    let insuranceCompanyId = this.policyForm.controls['tpInsuranceCompany'].value;
+
+    this.commonService.getPlan(this._selectedProductId,insuranceCompanyId,this._verticalId).subscribe((response: any) => {
       this._plans = response;
     });
   }

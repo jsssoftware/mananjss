@@ -248,9 +248,9 @@ namespace PolicyManagement.Api.Controllers.Common
         public async Task<IHttpActionResult> GetProducts() => Json(await _commonService.FindAllProducts());
 
 
-        [Route("plans/{productId}")]
+        [Route("plans")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetPlans(int productId) => Json(await _commonService.FindAllPlans(productId));
+        public async Task<IHttpActionResult> GetPlans(int productId, int insuranceCompanyId , int verticalId) => Json(await _commonService.FindAllPlans(productId, insuranceCompanyId,verticalId));
 
 
         [Route("planTypes")]

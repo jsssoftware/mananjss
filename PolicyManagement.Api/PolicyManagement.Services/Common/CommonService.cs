@@ -1440,7 +1440,7 @@ namespace PolicyManagement.Services.Common
                                                                                            .OrderBy(o => o.Name)
                                                                                            .ToListAsync();
 
-        public async Task<List<DropDownDto<int>>> FindAllPlans(int _productId) => await _dataContext.tblPlan.Where(w => w.IsActive && w.ProductId == _productId)
+        public async Task<List<DropDownDto<int>>> FindAllPlans(int _productId, int insuranceCompanyId, int verticalId) => await _dataContext.tblPlan.Where(w => w.IsActive && w.ProductId == _productId && w.InsuranceCompanyId == insuranceCompanyId&& w.VerticalId == verticalId)
                                                                                            .Select(s => new DropDownDto<int>
                                                                                            {
                                                                                                Name = s.PlanName,

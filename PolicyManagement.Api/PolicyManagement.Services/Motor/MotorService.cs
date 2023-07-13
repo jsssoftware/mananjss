@@ -345,48 +345,6 @@ namespace PolicyManagement.Services.Motor
                     }
                     #endregion
 
-                    #region Insert Insurance Person Details
-                    if (model.InsuredPersonData.Any())
-                    {
-                        List<tblInsuredPerson> tblInsuredPersons = new List<tblInsuredPerson>();
-                        foreach (var f in model.InsuredPersonData)
-                        {
-
-                            var customer = await AddorUpdateCustomerDetails(f, baseModel);
-                            tblInsuredPersons.Add(new tblInsuredPerson
-                            {
-                                PolicyId = motorPolicyData.PolicyId,
-                                CustomerId = customer.CustomerId,
-                                InsuredPersonName = f.Name,
-                                InsuredGenderId = f.GenderId,
-                                InsuredDOB = f.DateOfBirth,
-                                InsuredAge = CalculateAge(f.DateOfBirth),
-                                SumInsuredIndividual = f.SumInsuredIndividual,
-                                SumInsuredFloater = f.SumInsuredFloater,
-                                CummulativeBonus = f.CumulativeBonus,
-                                Deductable = f.Deductable,
-                                Loading = f.Loading,
-                                LoadingReason = f.LoadingReason,
-                                NomineeName = f.NomineeName,
-                                NomineeRelationId = 0,
-                                PEDId = f.Ped,
-                                PEDExclusion = f.PedExclusion,
-                                AnnualIncome = f.AnualIncome,
-                                RiskClassId = f.RiskClass,
-                                CreatedBy = baseModel.LoginUserId,
-                                CreatedTime = DateTime.Now,
-                                PassportNo = f.PassportNumber,
-                                BranchId= f.BranchId,
-                                IsActive = true
-
-                            });
-                        }
-                       
-                        _dataContext.tblInsuredPerson.AddRange(tblInsuredPersons);
-                        await _dataContext.SaveChangesAsync();
-
-                    }
-                    #endregion
 
 
 

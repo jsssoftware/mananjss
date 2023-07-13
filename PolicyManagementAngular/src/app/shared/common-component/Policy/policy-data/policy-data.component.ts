@@ -2818,7 +2818,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   getPlan() {
     this._selectedProductId = this.productPlanForm.value.product;
-    this.commonService.getPlan(this._selectedProductId).subscribe((response: any) => {
+    let insuranceCompanyId = this.policyForm.controls['tpInsuranceCompany'].value;
+
+    this.commonService.getPlan(this._selectedProductId,insuranceCompanyId,this._verticalDetail).subscribe((response: any) => {
       this._plans = response;
     });
   }
