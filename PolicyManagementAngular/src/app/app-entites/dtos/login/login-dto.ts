@@ -3,4 +3,5 @@ export interface ILoginDto {
     token_type: string;
     expires_in: string;
     error: string;
+    permission?: any[];
 }

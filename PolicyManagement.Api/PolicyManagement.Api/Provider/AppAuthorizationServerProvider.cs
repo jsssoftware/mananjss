@@ -3,6 +3,7 @@ using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json;
 using PolicyManagement.Dtos.Common;
 using PolicyManagement.Infrastructures.EntityFramework;
+using PolicyManagement.Models.UserManagement;
 using PolicyManagement.Utilities.Constants;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -51,7 +52,7 @@ namespace PolicyManagement.Api.Provider
             tblUser user = null;
             string role = string.Empty;
             string branchName = string.Empty;
-
+            List<UserPermission> apppermission = new List<UserPermission>();
             using (DataContext dataContext = new DataContext())
             {
                 user = await dataContext.tblUser.FirstOrDefaultAsync(f => f.UserName.ToLower() == context.UserName.ToLower()
@@ -63,6 +64,14 @@ namespace PolicyManagement.Api.Provider
                 {
                     role = await dataContext.tblUserRole.Where(w => w.UserRoleId == user.UserRoleId).Select(s => s.UserRoleName).FirstOrDefaultAsync();
                     branchName = await dataContext.tblBranch.Where(w => w.BranchId == user.BranchId).Select(s => s.BranchName).FirstOrDefaultAsync();
+                    apppermission = await dataContext.tblUserRights.Join(dataContext.tblFormList , T1 => T1.FormId, T2 => T2.FormId, (T1, T2) => new { T1, T2 })
+                        .Where(w => w.T1.UserRoleId == user.UserRoleId && w.T1.BranchId == user.BranchId )
+                        .Select(x=>new UserPermission {
+                           FormId  = x.T1.FormId,
+                           UserRightId = x.T1.UserRightId,
+                           UserRoleId= x.T1.UserRoleId,
+                           DisplayName = x.T2.MenuCode
+                        }).ToListAsync();
                 }
             }
 
@@ -78,10 +87,10 @@ namespace PolicyManagement.Api.Provider
                         new Claim(ClaimsConstant.UserFullName, user.UserFullName),
                         new Claim(ClaimsConstant.Role, role),
                         new Claim(ClaimsConstant.BranchName, branchName),
+                        new Claim(ClaimsConstant.permission,JsonConvert.SerializeObject(apppermission, Formatting.Indented)),
                         new Claim(ClaimsConstant.UserId, user.UserId.ToString()),
                         new Claim(ClaimsConstant.BranchId, user.BranchId.ToString()),
                         new Claim(ClaimsConstant.RoleId, user.UserRoleId.ToString()),
-                        //new Claim(ClaimsConstant.UserTypeId, user.UserTypeId.ToString()),
                         new Claim(ClaimsConstant.TeamMemberId, user.TeamMemberId.HasValue ? user.TeamMemberId.Value.ToString() : string.Empty),
                         new Claim(ClaimsConstant.IsLocked, user.IsLocked.HasValue ? user.IsLocked.Value.ToString() : true.ToString())
                     };

@@ -1,5 +1,9 @@
-﻿namespace PolicyManagement.Utilities.Constants
+﻿using PolicyManagement.Infrastructures.EntityFramework;
+using System.Collections.Generic;
+
+namespace PolicyManagement.Utilities.Constants
 {
+
     public static class ClaimsConstant
     {
         public const string Username = "username";
@@ -12,5 +16,8 @@
         public const string UserTypeId = "userTypeId";
         public const string TeamMemberId = "teamMemberId";
         public const string IsLocked = "isLocked";
+        public const string permission = "permission";
+
+
     }
 }

@@ -2,7 +2,7 @@
     <span *ngFor="let child of items">
       <!-- Handle branch node menu items -->
       <span *ngIf="child.tblMenuItem1 && child.tblMenuItem1.length > 0">
-        <button mat-menu-item color="primary" [matMenuTriggerFor]="menu.childMenu">
+        <button mat-menu-item color="primary" [matMenuTriggerFor]="menu.childMenu" *appHasClaim="child.Name">
           <mat-icon>{{child.Icon}}</mat-icon>
           <span>{{child.DisplayName}}</span>
         </button>
@@ -10,7 +10,7 @@
       </span>
       <!-- Handle leaf node menu items -->
       <span *ngIf="!child.tblMenuItem1 || child.tblMenuItem1.length === 0">
-        <button mat-menu-item [routerLink]="child.Link">
+        <button mat-menu-item [routerLink]="child.Link" >
           <mat-icon>{{child.Icon}}</mat-icon>
           <span>{{child.DisplayName}}</span>
         </button>

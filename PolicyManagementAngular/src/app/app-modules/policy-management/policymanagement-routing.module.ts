@@ -14,6 +14,7 @@ import { GmcPolicyManagementComponent } from './commercial/gmc-policy-management
 import { LiabalityPolicyManagementComponent } from './commercial/liabality-policy-management/liabality-policy-management.component';
 import { MarinePolicyManagementComponent } from './commercial/marine-policy-management/marine-policy-management.component';
 import { MiscPolicyManagementComponent } from './commercial/misc-policy-management/misc-policy-management.component';
+import { RoleGuard } from 'src/app/shared/auth-guard/authorization.gurad';
 
 const routes: Routes = [
   {
@@ -21,6 +22,8 @@ const routes: Routes = [
     children: [ 
       {
         path: 'motor',
+        data: { requestedClaim: 'motor' },
+        canActivate: [RoleGuard],
         component: MotorPolicyComponent,
       },
       {
@@ -35,6 +38,8 @@ const routes: Routes = [
 
       {
         path: 'health',
+        data: { requestedClaim: 'health' },
+        canActivate: [RoleGuard],
         component: RetailPolicyComponent,
       },
       {
@@ -47,6 +52,8 @@ const routes: Routes = [
       },
       {
         path: 'pa',
+        data: { requestedClaim: 'pa' },
+        canActivate: [RoleGuard],
         component: RetailPolicyComponent,
       },
       {
@@ -59,6 +66,8 @@ const routes: Routes = [
       },
       {
         path: 'travel',
+        data: { requestedClaim: 'travel' },
+        canActivate: [RoleGuard],
         component: RetailPolicyComponent,
       },
       {
@@ -71,6 +80,8 @@ const routes: Routes = [
       },
       {
         path: 'engineering',
+        data: { requestedClaim: 'engineering' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
@@ -83,6 +94,8 @@ const routes: Routes = [
       },
       {
         path: 'fire',
+        data: { requestedClaim: 'fire' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
@@ -107,6 +120,8 @@ const routes: Routes = [
       },
       {
         path: 'gmc',
+        data: { requestedClaim: 'gmc' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
@@ -119,6 +134,8 @@ const routes: Routes = [
       },
       {
         path: 'liabality',
+        data: { requestedClaim: 'liabality' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
@@ -131,6 +148,8 @@ const routes: Routes = [
       },
       {
         path: 'marine',
+        data: { requestedClaim: 'marine' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
@@ -143,6 +162,8 @@ const routes: Routes = [
       },
       {
         path: 'misc',
+        data: { requestedClaim: 'misc' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
@@ -160,6 +181,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [RoleGuard]
+
 })
 export class PolicyManagementRoutingModule { }

@@ -130,7 +130,6 @@ export class ManageRolesComponent implements OnInit {
   }
 
   editRole(data :any){
-    debugger
     this.manageRoleform.patchValue({
       branchId: data?.BranchId,
       userRoleId: data?.RoleId,

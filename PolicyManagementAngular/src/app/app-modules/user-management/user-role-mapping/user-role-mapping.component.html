@@ -101,7 +101,7 @@
             <ng-container matColumnDef="checkbox">
               <th mat-header-cell *matHeaderCellDef></th>
               <td mat-cell *matCellDef="let permission" >
-                <mat-checkbox [(ngModel)]="permission.checkedid" (change)="toggleChildCheck(permission)"></mat-checkbox>
+                <mat-checkbox [(ngModel)]="permission.checkedid" (change)="toggleChildCheck($event,permission)"></mat-checkbox>
               </td>
             </ng-container>
           

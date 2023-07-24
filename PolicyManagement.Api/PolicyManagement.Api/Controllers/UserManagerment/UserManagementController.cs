@@ -26,7 +26,7 @@ namespace PolicyManagement.Api.Controllers.UserManangement
         public async Task<IHttpActionResult> DeleteUser(tblUser user) => Json(await _usermanagementService.DeleteUser(user, new BaseModel()));
 
         [Route("roles/{branchId}")]
-        [HttpGet]
+        [HttpGet] 
         public async Task<IHttpActionResult> GetRoles(int branchId) => Json(await _usermanagementService.GetRoles(branchId));
 
         [Route("roles/create")]

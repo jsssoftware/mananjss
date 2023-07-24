@@ -42,8 +42,12 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { HasClaimDirective } from '../directives/has-claim.directive';
 
 @NgModule({
+    declarations: [
+        HasClaimDirective
+    ],
     exports: [
         A11yModule,
         CdkStepperModule,
@@ -89,6 +93,7 @@ import { MatMomentDateModule } from "@angular/material-moment-adapter";
         ScrollingModule,
         MatDatepickerModule,
         MatMomentDateModule,
+        HasClaimDirective
     ]
 })
 export class MaterialModule { }

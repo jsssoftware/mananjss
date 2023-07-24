@@ -151,7 +151,6 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
   }
 
   getTeamMemberId(teamMemberId :any){
-    //debugger
     this._userService.getTeamMemberById(teamMemberId).subscribe((response: any) => {
       this._mobileNumber = response?.TeamMemberMobile1;
       this._emailId = response?.TeamMemberEmail1;

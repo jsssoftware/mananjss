@@ -69,5 +69,11 @@ namespace PolicyManagement.Models.Common
                 return isLocked;
             }
         }
+
+        public string LoginUserPermission
+        {
+            get => _identity.Claims.FirstOrDefault(f => f.Type == ClaimsConstant.permission).Value;
+
+        }
     }
 }

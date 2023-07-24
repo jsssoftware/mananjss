@@ -48,5 +48,11 @@
     <Compile Include="Helpers\Security.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PolicyManagement.Infrastructures\PolicyManagement.Infrastructures.csproj">
+      <Project>{9B103EC3-E7D7-422B-9382-54C1BFD2DF09}</Project>
+      <Name>PolicyManagement.Infrastructures</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
