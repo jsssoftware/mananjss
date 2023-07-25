@@ -9,8 +9,8 @@
         <app-menu-item #menu [items]="child.tblMenuItem1"></app-menu-item>
       </span>
       <!-- Handle leaf node menu items -->
-      <span *ngIf="!child.tblMenuItem1 || child.tblMenuItem1.length === 0">
-        <button mat-menu-item [routerLink]="child.Link" >
+      <span *ngIf="!child.tblMenuItem1 || child.tblMenuItem1?.length === 0">
+        <button mat-menu-item [routerLink]="child.Link" *appHasClaim="child.Name">
           <mat-icon>{{child.Icon}}</mat-icon>
           <span>{{child.DisplayName}}</span>
         </button>

@@ -50,5 +50,7 @@ namespace PolicyManagement.Models.UserManagement
 
         public int? parentId { get; set; }
         public int? grandParentId { get; set; }
+        public bool checkedid { get; set; } = false;
+
     }
 }

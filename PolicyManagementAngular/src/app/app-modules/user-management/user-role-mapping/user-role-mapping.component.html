@@ -14,7 +14,7 @@
 
             <div class="col-lg-4">
                 <mat-form-field>
-                    <mat-select  [(ngModel)]="_userRoleId">
+                    <mat-select  [(ngModel)]="_userRoleId" (selectionChange)="getUpdatedRole()">
                         <mat-option>Select</mat-option>
                         <mat-option *ngFor="let userRole of _userRole" [value]="userRole.Value">{{userRole.Name}}
                         </mat-option>

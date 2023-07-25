@@ -188,6 +188,16 @@ namespace PolicyManagement.Services.UserManagement
         {
             try
             {
+                var userRoleId = userRights.FirstOrDefault()?.UserRoleId;
+
+                if (userRoleId != null)
+                {
+                    var checkIfuserRight = await _dataContext.tblUserRights.Where(x => x.UserRoleId == userRoleId).ToListAsync();
+                    if (checkIfuserRight != null && checkIfuserRight.Count() > 0)
+                    {
+                        _dataContext.tblUserRights.RemoveRange(checkIfuserRight);
+                    }
+                }
                 userRights.ForEach(x => { 
                     x.CreatedBy = baseModel.LoginUserId;
                     x.CreatedTime = DateTime.Now;                    
@@ -211,6 +221,46 @@ namespace PolicyManagement.Services.UserManagement
 
             }
 
+        }
+
+
+        public async Task<List<MainFormListModel>> GetFormListUpdated(int BranchId, int UserRoleId)
+        {
+
+            var result = await _dataContext.tblFormList.Where(x => x.GrandParentId == -1 && x.ParentId == -1).Select(s => new MainFormListModel
+            {
+                id = s.FormId,
+                name = s.FormName,
+                menuCode = s.MenuCode,
+                parentId = s.ParentId,
+                grandParentId = s.GrandParentId,
+                checkedid =  _dataContext.tblUserRights.Any(x=>x.BranchId == BranchId && x.UserRoleId == UserRoleId && x.FormId == s.FormId)
+
+            }).ToListAsync();
+            result.ForEach(s => {
+                s.children = _dataContext.tblFormList.Where(x => x.ParentId == s.id && x.GrandParentId == -1).Select(c => new ChildFormListModel
+                {
+                    id = c.FormId,
+                    name = c.FormName,
+                    menuCode = c.MenuCode,
+                    grandParentId = c.GrandParentId,
+                    parentId = c.ParentId,
+                    checkedid = _dataContext.tblUserRights.Any(x => x.BranchId == BranchId && x.UserRoleId == UserRoleId && x.FormId == c.FormId),
+                    children = _dataContext.tblFormList.Where(a => a.ParentId == c.FormId && a.GrandParentId == s.id).Select(x => new GrandChildFormListModel
+                    {
+                        id = x.FormId,
+                        name = x.FormName,
+                        menuCode = x.MenuCode,
+                        grandParentId = x.GrandParentId,
+                        parentId = x.ParentId,
+                        checkedid = _dataContext.tblUserRights.Any(z => z.BranchId == BranchId && z.UserRoleId == UserRoleId && z.FormId == x.FormId)
+                    }).ToList(),
+                }).ToList();
+                s.showChildren = s.children.Count() > 0;
+
+            });
+
+            return result;
         }
 
 

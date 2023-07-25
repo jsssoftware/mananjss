@@ -44,10 +44,14 @@ const routes: Routes = [
       },
       {
         path: 'health/:verticalId/:policyType',
+        data: { requestedClaim: 'health' },
+        canActivate: [RoleGuard],
         component: RetailPolicyComponent,
       },
       {
         path: 'health/health-policy-management',
+        data: { requestedClaim: 'health' },
+        canActivate: [RoleGuard],
         component: HealthPolicyManagementComponent,
       },
       {
@@ -58,10 +62,14 @@ const routes: Routes = [
       },
       {
         path: 'pa/:verticalId/:policyType',
+        data: { requestedClaim: 'pa' },
+        canActivate: [RoleGuard],
         component: RetailPolicyComponent,
       },
       {
         path: 'pa/pa-policy-management',
+        data: { requestedClaim: 'pa' },
+        canActivate: [RoleGuard],
         component: PaPolicyManagementComponent,
       },
       {
@@ -72,10 +80,14 @@ const routes: Routes = [
       },
       {
         path: 'travel/:verticalId/:policyType',
+        data: { requestedClaim: 'travel' },
+        canActivate: [RoleGuard],
         component: RetailPolicyComponent,
       },
       {
         path: 'travel/travel-policy-management',
+        data: { requestedClaim: 'travel' },
+        canActivate: [RoleGuard],
         component: TravelPolicyManagementComponent,
       },
       {
@@ -86,10 +98,14 @@ const routes: Routes = [
       },
       {
         path: 'engineering/:verticalId/:policyType',
+        data: { requestedClaim: 'engineering' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
         path: 'engineering/engineering-policy-management',
+        data: { requestedClaim: 'engineering' },
+        canActivate: [RoleGuard],
         component: EngineeringPolicyManagementComponent,
       },
       {
@@ -100,22 +116,14 @@ const routes: Routes = [
       },
       {
         path: 'fire/:verticalId/:policyType',
-        component: CommercialPolicyManagementComponent,
-      },
-      {
-        path: 'engineering/engineering-policy-management',
-        component: FirePolicyManagementComponent,
-      },
-      {
-        path: 'fire',
-        component: CommercialPolicyManagementComponent,
-      },
-      {
-        path: 'fire/:verticalId/:policyType',
+        data: { requestedClaim: 'fire' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
         path: 'fire/fire-policy-management',
+        data: { requestedClaim: 'fire' },
+        canActivate: [RoleGuard],
         component: FirePolicyManagementComponent,
       },
       {
@@ -126,10 +134,14 @@ const routes: Routes = [
       },
       {
         path: 'gmc/:verticalId/:policyType',
+        data: { requestedClaim: 'gmc' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
         path: 'gmc/gmc-policy-management',
+        data: { requestedClaim: 'gmc' },
+        canActivate: [RoleGuard],
         component: GmcPolicyManagementComponent,
       },
       {
@@ -140,10 +152,14 @@ const routes: Routes = [
       },
       {
         path: 'liabality/:verticalId/:policyType',
+        data: { requestedClaim: 'liabality' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
         path: 'liabality/liabality-policy-management',
+        data: { requestedClaim: 'liabality' },
+        canActivate: [RoleGuard],
         component: LiabalityPolicyManagementComponent,
       },
       {
@@ -154,10 +170,14 @@ const routes: Routes = [
       },
       {
         path: 'marine/:verticalId/:policyType',
+        data: { requestedClaim: 'marine' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
         path: 'marine/marine-policy-management',
+        data: { requestedClaim: 'marine' },
+        canActivate: [RoleGuard],
         component: MarinePolicyManagementComponent,
       },
       {
@@ -168,10 +188,14 @@ const routes: Routes = [
       },
       {
         path: 'misc/:verticalId/:policyType',
+        data: { requestedClaim: 'misc' },
+        canActivate: [RoleGuard],
         component: CommercialPolicyManagementComponent,
       },
       {
         path: 'misc/misc-policy-management',
+        data: { requestedClaim: 'misc' },
+        canActivate: [RoleGuard],
         component: MiscPolicyManagementComponent,
       }
 

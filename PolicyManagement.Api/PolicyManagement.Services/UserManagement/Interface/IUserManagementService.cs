@@ -16,5 +16,6 @@ namespace PolicyManagement.Services.UserManagement.Interface
         Task<CommonDto<object>> CreateRole(tblUserRole userRole, BaseModel baseModel);
         Task<List<MainFormListModel>> GetFormList();
         Task<CommonDto<object>> CreateUserRights(List<tblUserRights> userRights, BaseModel baseModel);
+        Task<List<MainFormListModel>> GetFormListUpdated(int BranchId, int UserRoleId);
     }
 }

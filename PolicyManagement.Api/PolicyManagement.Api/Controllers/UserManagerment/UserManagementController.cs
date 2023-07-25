@@ -40,5 +40,9 @@ namespace PolicyManagement.Api.Controllers.UserManangement
         [Route("userrights/create")]
         [HttpPost]
         public async Task<IHttpActionResult> CreateUserRights(List<tblUserRights> userRights) => Json(await _usermanagementService.CreateUserRights(userRights, new BaseModel()));
+
+        [Route("userrights/getUpdatedRole")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetFormListUpdated(int branchId, int userRoleId) => Json(await _usermanagementService.GetFormListUpdated(branchId, userRoleId));
     }
 }

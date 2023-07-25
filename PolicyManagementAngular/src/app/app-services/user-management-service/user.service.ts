@@ -26,5 +26,7 @@ export class UserService extends IUserService {
     createRole = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(UserManangement.CreateRole, model);
     getFormList = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${UserManangement.FormList}`);
     createUserRights = (model: any): Observable<ICommonDto<any>> => this.apiManagerService.postRequest<IUserRoleModel[]>(UserManangement.CreateUserRights, model);
+    getRoleUpdated = (branchId: string,userRoleId:number): Observable<any[]> => this.apiManagerService.getRequest<any[]>(`${UserManangement.GetUpdatedRole}?branchId=${branchId}&userRoleId=${userRoleId}`);
+
 
 }

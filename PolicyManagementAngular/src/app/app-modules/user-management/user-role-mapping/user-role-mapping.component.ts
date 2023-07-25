@@ -82,11 +82,16 @@ export class UserRoleMappingComponent implements OnInit {
       this._userRole = response;
     });
   }
+  getUpdatedRole() {
+    this._userService.getRoleUpdated(this._branchId,this._userRoleId).subscribe((response: any[]) => {
+      this.permissions = response;
+      this.initializePermissions(this.permissions);
+    });
+  }
   getAllUserForm() {
     this._userService.getFormList().subscribe((response: any[]) => {
       this.permissions = response;
       this.initializePermissions(this.permissions);
-      console.log(this.permissions)
     });
   }
 
@@ -157,6 +162,8 @@ export class UserRoleMappingComponent implements OnInit {
 
   reset() {
     this._userModels = [];
+    this.permissions = [];
+    this._userRoleId = 0;
   }
   level: number = 0; // Set the initial value of level
 

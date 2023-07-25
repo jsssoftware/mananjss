@@ -5,6 +5,7 @@ export class UserManangement {
     public static readonly CreateRole = "api/usermanagement/roles/create";
     public static readonly FormList = "api/usermanagement/formlist";
     public static readonly CreateUserRights = "api/usermanagement/userrights/create";
+    public static readonly GetUpdatedRole = "api/usermanagement/userrights/getUpdatedRole";
 
 
 }

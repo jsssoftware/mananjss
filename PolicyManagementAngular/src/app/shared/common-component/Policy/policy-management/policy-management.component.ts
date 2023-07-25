@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router ,ActivatedRoute} from '@angular/router';
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
+import { AuthorizationService } from 'src/app/shared/auth-guard/authorization-service';
 import { PolicyManagement, SearchPolicyType, Vertical } from 'src/app/shared/utilities/enums/enum';
 
 @Component({
@@ -13,12 +14,24 @@ export class PolicyManagementComponent implements OnInit {
   verticalData :Vertical = Vertical.Motor;
   panelOpenState = false;
   newPolicyContent:string = "New Policy Data Entry";
+  isShowNewPolicy:boolean = false;
+  isShowRollover:boolean = false;
+  isShowRenew:boolean = false;
+  isShowDataEntryIncomplete:boolean = false;
+  isShowDataEntryCorrection:boolean = false;
+  isShowDataEntryVerify:boolean = false;
+  isShowDataEntryModify:boolean = false;
+  isShowViewPolicy:boolean = false;
 
-  constructor(private router: Router,private route: ActivatedRoute,private motorservice:MotorService) { }
+  constructor(private router: Router,private route: ActivatedRoute,private motorservice:MotorService,
+    private authorizationServie :AuthorizationService) { 
+    
+  }
 
   ngOnInit(): void {
    
     this.newPolicyContent ="New "+ this.MenuVertical +" Policy Data Entry";
+    this.checkAccessRights()
 
   }
 
@@ -96,5 +109,60 @@ export class PolicyManagementComponent implements OnInit {
         this.router.navigate(["/master/customer/" + SearchPolicyType.Motor_rollover + "/" +this.verticalData + ""]);
 
     }
+  }
+
+  checkAccessRights(){
+    debugger
+    let credentials :any = this.authorizationServie.credentials;
+
+    if (typeof credentials === 'string') {
+      var authCredentails = JSON.parse(credentials);
+    }else{
+      authCredentails = credentials;
+    }
+    authCredentails.forEach((element:any) => {
+      debugger
+      let vertical =  this.MenuVertical;	
+      if(this.MenuVertical=='Personal Accident')
+      {
+        vertical = "PA";
+      }
+      let menuNameNewDataEntry = "mnu"+ vertical+ "NewDataEntry";
+      let menuNameDataIncomplete = "mnu"+ vertical+ "DataIncomplete";
+      let menuNameVerifyDataEntry = "mnu"+ vertical+ "VerifyDataEntry";
+      let menuNameModifyEntry = "mnu"+ vertical+ "ModifyEntry";
+      let menuNameViewPolicy = "mnu"+ vertical+ "ViewPolicy";
+      let menuNameRenewDataEntry = "mnu"+ vertical+ "RenewEntry";
+      let menuNameDataCorrection = "mnu"+ vertical+ "DataCorrection";
+      let menuNameRolloverEntry = "mnu"+ vertical+ "RolloverEntry";
+      if(element?.DisplayName == menuNameNewDataEntry){
+        this.isShowNewPolicy =  true;
+      }  
+      if(element?.DisplayName == menuNameDataIncomplete){
+        this.isShowDataEntryIncomplete =  true;
+      }  
+      if(element?.DisplayName == menuNameVerifyDataEntry){
+        this.isShowDataEntryVerify =  true;
+      }  
+      if(element?.DisplayName == menuNameModifyEntry){
+        this.isShowDataEntryModify =  true;
+      }  
+      if(element?.DisplayName == menuNameRenewDataEntry){
+        this.isShowRenew =  true;
+      }  
+     
+      if(element?.DisplayName == menuNameDataCorrection){
+        this.isShowDataEntryCorrection =  true;
+      }  
+     
+      if(element?.DisplayName == menuNameRolloverEntry){
+        this.isShowRollover =  true;
+      }  
+      if(element?.DisplayName == menuNameViewPolicy){
+        this.isShowViewPolicy =  true;
+      }  
+     
+    });
+    
   }
 }
