@@ -12,23 +12,27 @@ export class HeaderComponent implements OnInit {
 
   public _branchName: string='';
   public _loggedInUserName: string = '';
-  public _role: string = '';
+  public _userDetails: any;
   public _permission: string = '';
-
+  public _role: string = '';
 
   constructor(private router: Router,private commonService: ICommonService,private sessionStorage :SessionStorageManagementService) { }
 
   ngOnInit() {
     this._branchName = sessionStorage.getItem('branchName') as string;
+    this._userDetails = JSON.parse((sessionStorage.getItem("userDetails")));
+    this._loggedInUserName = this._userDetails?.LoginUserFullName;
+    this._role = this._userDetails?.LoginUserRoleId;
   }
 
   ngAfterViewInit() {
-    this.commonService.getLoggedInUserDetail().subscribe((response) => {
-      this._loggedInUserName = response.LoginUserFullName;
+   /*  this.commonService.getLoggedInUserDetail().subscribe((response) => {
       this._role = response.LoginUserRole;
-      this.sessionStorage.setItem("credentialsKey", response.LoginUserPermission)
-    });
-  }
+      this._loggedInUserName = response.LoginUserFullName; 
+    this.sessionStorage.setItem("userDetails", response)
+    this.sessionStorage.setItem("credentialsKey", response.LoginUserPermission)
+/*     });
+ */  }
 
   public logout() {
     sessionStorage.clear();

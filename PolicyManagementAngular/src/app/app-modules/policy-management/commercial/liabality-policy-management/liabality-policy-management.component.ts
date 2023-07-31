@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./liabality-policy-management.component.css']
 })
 export class LiabalityPolicyManagementComponent implements OnInit {
-  public Vertical: string = "Liabality";
+  public Vertical: string = "Liability";
 
   constructor() { }
 

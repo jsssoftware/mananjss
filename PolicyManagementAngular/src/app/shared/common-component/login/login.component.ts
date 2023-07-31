@@ -43,18 +43,22 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
+    this.loginDetails()
+  }
+
+
+  async loginDetails() {
     let model: ILoginModel = {
       Username: this.loginForm.value.username,
       Password: this.loginForm.value.password,
       BranchId: parseInt(this.loginForm.value.branch)
     };
-
-    this.accountService.login(model).subscribe((response: ILoginDto) => {
+    await this.accountService.login(model).subscribe(async (response: ILoginDto) => {
       if (response.error == null || response.error == "" || response.error == null || response.error == undefined) {
         sessionStorage.setItem('branchId', this.loginForm.value.branch);
         sessionStorage.setItem('branchName', this._branchs.filter((f: any) => f.Value === this.loginForm.value.branch)[0].Name)
         sessionStorage.setItem('oauth-token', response.access_token);
-        Swal.fire({
+       await Swal.fire({
           position: 'top-end',
           icon: 'success',
           title: 'You have successfully logged in',
@@ -63,10 +67,15 @@ export class LoginComponent implements OnInit {
           showClass: {
             popup: 'animate__animated animate__fadeInRightBig'
           }
-        }); 
-        this.router.navigate(["/user/dashboard"]).then(() => {
+        });
+        await this.commonService.getLoggedInUserDetail().subscribe((response) => {
+          sessionStorage.setItem("userDetails", JSON.stringify(response))
+          sessionStorage.setItem("credentialsKey", response.LoginUserPermission);
+          this.router.navigate(["/user/dashboard"]).then(() => {
             window.location.reload();
-        });    
+          });
+        });
+
       }
       else {
         Swal.fire({

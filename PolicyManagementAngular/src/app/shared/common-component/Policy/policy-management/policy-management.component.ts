@@ -77,10 +77,10 @@ export class PolicyManagementComponent implements OnInit {
       this.verticalData = Vertical.Misc; 
       this.motorservice.vertical$.next("Miscellaneous")
     }
-    if(this.MenuVertical=='Liabality')
+    if(this.MenuVertical=='Liability')
     {
       this.verticalData = Vertical.Liabality; 
-      this.motorservice.vertical$.next("Liabality")
+      this.motorservice.vertical$.next("Liability")
     }
 
     switch (enumName) {
@@ -112,7 +112,6 @@ export class PolicyManagementComponent implements OnInit {
   }
 
   checkAccessRights(){
-    debugger
     let credentials :any = this.authorizationServie.credentials;
 
     if (typeof credentials === 'string') {
@@ -120,8 +119,8 @@ export class PolicyManagementComponent implements OnInit {
     }else{
       authCredentails = credentials;
     }
+  //  var  cred= authCredentails.find((x:any)=>x.DisplayName.includes("Motor"));
     authCredentails.forEach((element:any) => {
-      debugger
       let vertical =  this.MenuVertical;	
       if(this.MenuVertical=='Personal Accident')
       {

@@ -24,7 +24,7 @@ export class AuthorizationService {
   public currentCredentialsSubject: BehaviorSubject<Credentials> = new BehaviorSubject<Credentials>(null);
    constructor(private sessionStorageManagementService: SessionStorageManagementService) {
     // TODO: This is a security issue, should switch to HTTP only cookies
-        const savedCredentials = localStorage.getItem(credentialsKey) || this.sessionStorageManagementService.getItem(credentialsKey);
+        const savedCredentials = localStorage.getItem(credentialsKey) || sessionStorage.getItem(credentialsKey);
     if (savedCredentials) {
       this.currentCredentialsSubject.next(JSON.parse(savedCredentials));
     }

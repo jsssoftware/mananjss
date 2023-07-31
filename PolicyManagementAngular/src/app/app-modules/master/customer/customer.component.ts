@@ -126,7 +126,7 @@ export class CustomerComponent implements OnInit {
       this.router.navigate(["/pms/misc/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
     if( this.Verticaltype == Vertical.Liabality){
-      this._commercialService.vertical$.next("Liabality");
+      this._commercialService.vertical$.next("Liability");
       this.router.navigate(["/pms/liabality/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
 
