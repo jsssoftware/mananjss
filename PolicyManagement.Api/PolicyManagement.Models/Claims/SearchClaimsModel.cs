@@ -14,5 +14,7 @@
         public string ClaimsEntryToDate { get; set; }
         public int Mode { get; set; }
         public bool IsShowAll { get; set; }
+        public int RoleId { get; set; }
+
     }
 }

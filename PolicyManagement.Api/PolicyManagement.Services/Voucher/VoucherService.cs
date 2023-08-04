@@ -350,6 +350,7 @@ namespace PolicyManagement.Services.Voucher
             {
                 DateTime tillDate = DateTime.Now.AddDays(-365);
                 IQueryable<SearchVoucher> query = _dataContext.SearchVoucher.Where(w => w.BranchId == model.LoginUserBranchId && w.VoucherDate >= tillDate).AsQueryable();
+                var roles = await _dataContext.tblUserRole.Where(x => x.UserRoleId == model.RoleId).FirstOrDefaultAsync();
 
                 if (!model.IsShowAll)
                 {
@@ -383,7 +384,12 @@ namespace PolicyManagement.Services.Voucher
                         query = query.Where(w => w.VoucherDate >= from && w.VoucherDate <= to);
                     }
                 }
+                if (roles.VerticalData != null)
+                {
+                    var verticalsegments = roles.VerticalData.Split(',');
 
+                    query = query.Where(w => verticalsegments.Contains(w.VerticalSegmentId.ToString()));
+                }
                 if (model.Mode == (int)VoucherFormMode.Verification)
                     query = query.Where(w => w.IsVerified == null && w.StatusId != (short)VoucherStatus.Reject && w.CreatedBy != model.LoginUserId && w.ModifiedBy != model.LoginUserId);
 

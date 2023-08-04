@@ -12,4 +12,5 @@ export interface ISearchInspectionModel {
     ModelId?: number;
     InspectionEntryFromDate: string;
     InspectionEntryToDate: string;
+    RoleId:number;
 }

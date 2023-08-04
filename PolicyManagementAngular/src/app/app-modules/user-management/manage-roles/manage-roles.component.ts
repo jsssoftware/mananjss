@@ -7,6 +7,7 @@ import { ICommonDto } from 'src/app/app-entites/dtos/common/common-dto';
 import { IDataTableDto } from 'src/app/app-entites/dtos/common/data-table-dto';
 import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
 import { UserService } from 'src/app/app-services/user-management-service/user.service';
+import { VerticalSegment } from 'src/app/shared/utilities/enums/enum';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -29,6 +30,7 @@ export class ManageRolesComponent implements OnInit {
   public _pageNumber: number = 0;
   public _input: string = "";
   public _showAll: boolean =false;
+  verticalId:string[] = [];
 
   displayedColumns: string[] = [
     'RoleName',
@@ -46,9 +48,9 @@ export class ManageRolesComponent implements OnInit {
     isCommercial: new FormControl(''),
     isActive: new FormControl(true),
     userRoleId: new FormControl(''),
+    verticalId:  new FormControl('')
 
   });
-  
   constructor(private  _userService: UserService,) {
     this._branchId = sessionStorage.getItem("branchId");
     this._branchname = sessionStorage.getItem("branchName");
@@ -76,6 +78,7 @@ export class ManageRolesComponent implements OnInit {
   }
 
   createRole(){
+    this.verticalIdArray();
     this._userService.createRole(this.manageRoleform.value).subscribe((response: ICommonDto<any>) => {
       if (response.IsSuccess) {
         this.getRoles();
@@ -139,6 +142,22 @@ export class ManageRolesComponent implements OnInit {
   this._mobileNumber =  data?.MobileNumber
   this._emailId =  data?.EmailId
 
+}
+
+verticalIdArray(){
+  if(this.manageRoleform.value.isMotor){
+    this.verticalId.push(VerticalSegment.Motor.toString());
+  }
+  if(this.manageRoleform.value.isCommercial){
+    this.verticalId.push(VerticalSegment.Retail.toString());
+  }
+  if(this.manageRoleform.value.isRetail){
+    this.verticalId.push(VerticalSegment.Commercial.toString());
+  }
+
+  this.manageRoleform.patchValue({
+    "verticalId":this.verticalId
+  });
 }
   
 }

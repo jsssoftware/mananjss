@@ -85,7 +85,7 @@
                                         <div class="col-lg-1">
     
                                             <button mat-icon-button (click)="editRole(row)">
-                                                <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
+                                                <mat-icon color="warn" style="font-size: 20px;" *ngIf="(row.RoleName| lowercase) != 'admin' && (row.RoleName| lowercase) != 'business head'">edit</mat-icon>
                                             </button>
                                         </div>
                                     </div>

@@ -70,6 +70,8 @@ public partial class SearchVoucher
 
     public short InsuranceCompanyId { get; set; }
 
+    public Nullable<int> VerticalSegmentId { get; set; }
+
 }
 
 }

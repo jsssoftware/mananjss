@@ -14,5 +14,7 @@ namespace PolicyManagement.Models.Voucher
         public string VoucherStartToDate { get; set; }
         public int Mode { get; set; }
         public bool IsShowAll { get; set; }
+        public int RoleId { get; set; }
+
     }
 }

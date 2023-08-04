@@ -13,7 +13,7 @@ namespace PolicyManagement.Services.UserManagement.Interface
         Task<CommonDto<object>> CreateUser(tblUser users, BaseModel baseModel);
         Task<CommonDto<object>> DeleteUser(tblUser users, BaseModel baseModel);
         Task<DataTableDto<List<RoleDetailDto>>> GetRoles(int branchId);
-        Task<CommonDto<object>> CreateRole(tblUserRole userRole, BaseModel baseModel);
+        Task<CommonDto<object>> CreateRole(UserRole userRole, BaseModel baseModel);
         Task<List<MainFormListModel>> GetFormList();
         Task<CommonDto<object>> CreateUserRights(List<tblUserRights> userRights, BaseModel baseModel);
         Task<List<MainFormListModel>> GetFormListUpdated(int BranchId, int UserRoleId);

@@ -27,11 +27,12 @@ export class RoleGuard implements CanActivate {
    let validationResult:boolean; 
    const observableResult=
       forkJoin([
-            this.authorizationService.hasClaim(claimType)    
+            this.authorizationService.hasClaim(claimType), 
+            of<boolean>(this.authorizationService.hasRole(expectedRole))
           ])
-    .pipe(map(([bool1]) => {
-           validationResult= bool1 ;
-            return validationResult;
+    .pipe(map(([bool1, bool2]) => {
+        validationResult= bool1 || bool2;
+        return validationResult;           
       }));
     observableResult.subscribe(x => {
       if (!x) {

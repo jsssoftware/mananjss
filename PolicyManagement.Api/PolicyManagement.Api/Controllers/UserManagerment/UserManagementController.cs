@@ -31,7 +31,7 @@ namespace PolicyManagement.Api.Controllers.UserManangement
 
         [Route("roles/create")]
         [HttpPost]
-        public async Task<IHttpActionResult> CreateRole(tblUserRole userRole) => Json(await _usermanagementService.CreateRole(userRole, new BaseModel()));
+        public async Task<IHttpActionResult> CreateRole(UserRole userRole) => Json(await _usermanagementService.CreateRole(userRole, new BaseModel()));
 
         [Route("formlist")]
         [HttpGet]

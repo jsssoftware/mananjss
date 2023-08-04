@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Router ,ActivatedRoute} from '@angular/router';
 import { MotorService } from 'src/app/app-services/motor-service/motor.service';
 import { AuthorizationService } from 'src/app/shared/auth-guard/authorization-service';
-import { PolicyManagement, SearchPolicyType, Vertical } from 'src/app/shared/utilities/enums/enum';
+import { FullApplicationAccess, PolicyManagement, SearchPolicyType, Vertical } from 'src/app/shared/utilities/enums/enum';
 
 @Component({
   selector: 'app-policy-management',
@@ -22,7 +22,8 @@ export class PolicyManagementComponent implements OnInit {
   isShowDataEntryVerify:boolean = false;
   isShowDataEntryModify:boolean = false;
   isShowViewPolicy:boolean = false;
-
+  _userDetails:any = [];
+  
   constructor(private router: Router,private route: ActivatedRoute,private motorservice:MotorService,
     private authorizationServie :AuthorizationService) { 
     
@@ -32,6 +33,7 @@ export class PolicyManagementComponent implements OnInit {
    
     this.newPolicyContent ="New "+ this.MenuVertical +" Policy Data Entry";
     this.checkAccessRights()
+    this._userDetails = JSON.parse((sessionStorage.getItem("userDetails")));
 
   }
 
@@ -112,6 +114,13 @@ export class PolicyManagementComponent implements OnInit {
   }
 
   checkAccessRights(){
+    const adminBusinessHeadRight = this.authorizationServie.hasRole(FullApplicationAccess.AdminBusiness);
+    if(adminBusinessHeadRight){
+      this.hasAllAcessRight();
+      return;
+    }
+   
+
     let credentials :any = this.authorizationServie.credentials;
 
     if (typeof credentials === 'string') {
@@ -163,5 +172,16 @@ export class PolicyManagementComponent implements OnInit {
      
     });
     
+  }
+
+  hasAllAcessRight(){
+      this.isShowNewPolicy = true;
+      this.isShowRollover = true;
+      this.isShowRenew = true;
+      this.isShowDataEntryIncomplete = true;
+      this.isShowDataEntryCorrection = true;
+      this.isShowDataEntryVerify = true;
+      this.isShowDataEntryModify = true;
+      this.isShowViewPolicy = true;
   }
 }

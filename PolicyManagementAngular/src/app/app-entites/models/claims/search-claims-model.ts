@@ -11,4 +11,5 @@ export interface ISearchClaimsModel {
     ClaimsEntryToDate: string;
     Mode: number;
     IsShowAll: boolean;
+    RoleId:number;
 }

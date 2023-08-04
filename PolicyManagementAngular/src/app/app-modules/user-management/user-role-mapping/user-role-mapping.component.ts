@@ -79,7 +79,7 @@ export class UserRoleMappingComponent implements OnInit {
 
   getAllRoles() {
     this._userService.getUserRole(this._branchId).subscribe((response: IDropDownDto<number>[]) => {
-      this._userRole = response;
+      this._userRole = response//.filter(x=>x.Name?.toLowerCase() != 'admin'&& x.Name?.toLowerCase() !='business head');
     });
   }
   getUpdatedRole() {

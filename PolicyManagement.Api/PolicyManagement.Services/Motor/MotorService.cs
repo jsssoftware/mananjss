@@ -382,7 +382,8 @@ namespace PolicyManagement.Services.Motor
         public async Task<MotorPolicyFormDataModel> FindMotorPolicyByPolicyId(int policyId)
         {    
             MotorPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
-                                                  .Join(_dataContext.tblRTOZone, T3 => T3.T1.RTOZoneId, T4 => T4.RTOZoneId, (T3, T4) => new { T3, T4 })
+                                                  .GroupJoin(_dataContext.tblRTOZone, T3 => T3.T1.RTOZoneId, T4 => T4.RTOZoneId, (T3, T4) => new { T3, T4 })
+                                                    .SelectMany(s => s.T4.DefaultIfEmpty(), (policy, rtoZone) => new { policy.T3, T4 = rtoZone })
                                                     .GroupJoin(_dataContext.tblCluster, T5 => T5.T3.T2.ClusterId, T6 => T6.ClusterId, (T5, T6) => new { T5, T6 })
                                                   .SelectMany(s => s.T6.DefaultIfEmpty(), (policyWithCustomer, cluster) => new { policyWithCustomer.T5, T6 = cluster })
                                                   .Where(w => w.T5.T3.T1.PolicyId == policyId)
@@ -577,8 +578,7 @@ namespace PolicyManagement.Services.Motor
                         InstrumentNumber = s.ChequeNo,
                         Mode = s.PaymentModeId
                     }).ToList();
-
-                    motorPolicy.PaymentData = dataPaymentFormDataModel;
+                    if(motorPolicy!=null) motorPolicy.PaymentData = dataPaymentFormDataModel;
                 }
 
             }

@@ -34,6 +34,7 @@ using System.Data.Entity.Infrastructure;
 using PolicyManagement.Services.UserManagement.Interface;
 using PolicyManagement.Models.UserManagement;
 using AutoMapper.Configuration.Annotations;
+using Newtonsoft.Json.Linq;
 
 namespace PolicyManagement.Services.UserManagement
 {
@@ -120,13 +121,21 @@ namespace PolicyManagement.Services.UserManagement
             };
         }
 
-        public async Task<CommonDto<object>> CreateRole(tblUserRole userRole, BaseModel baseModel)
+        public async Task<CommonDto<object>> CreateRole(UserRole userRole, BaseModel baseModel)
         {
             try
             {
-                userRole.CreatedBy = baseModel.LoginUserId;
-                userRole.CreatedTime = DateTime.Now;
-                _dataContext.tblUserRole.AddOrUpdate(userRole);
+
+                tblUserRole tblUserRoles = new tblUserRole();
+                tblUserRoles.CreatedBy = baseModel.LoginUserId;
+                tblUserRoles.CreatedTime = DateTime.Now;
+                tblUserRoles.UserRoleId = userRole.UserRoleId;
+                tblUserRoles.UserRoleName = userRole.UserRoleName;
+                tblUserRoles.UserRoleDescription = userRole.UserRoleDescription;
+                tblUserRoles.VerticalData = string.Join(",", userRole.VerticalId); ;
+                tblUserRoles.IsActive = userRole.IsActive;
+                tblUserRoles.BranchId = userRole.BranchId;
+                _dataContext.tblUserRole.AddOrUpdate(tblUserRoles);
                 await _dataContext.SaveChangesAsync();
                 return new CommonDto<object>
                 {

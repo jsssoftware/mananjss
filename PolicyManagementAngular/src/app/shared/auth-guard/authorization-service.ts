@@ -47,15 +47,14 @@ export class AuthorizationService {
   }
 
   hasRole(expectedRole: any): boolean {
+    let userDetails = JSON.parse((sessionStorage.getItem("userDetails")));
     if (expectedRole) {
-      if (typeof this.credentials === 'string') {
-        var authCredentails = JSON.parse(this.credentials);
-      }else{
-        authCredentails = this.credentials;
-      }
+     
+       let authCredentails = userDetails.LoginUserRole;
+      
       if(expectedRole.includes(","))
       {
-      return expectedRole.toLocaleLowerCase().includes(authCredentails?.role.toLocaleLowerCase());
+      return expectedRole.toLocaleLowerCase().includes(authCredentails?.toLocaleLowerCase());
       }
       else
       {

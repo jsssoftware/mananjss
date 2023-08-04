@@ -60,6 +60,8 @@ public partial class SearchClaims
 
     public Nullable<int> PosId { get; set; }
 
+    public Nullable<int> VerticalSegmentId { get; set; }
+
 }
 
 }

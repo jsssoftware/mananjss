@@ -81,3 +81,11 @@ export enum Portabality{
     Yes,
     No
 }
+export enum VerticalSegment{
+    Motor =1,
+    Retail,
+    Commercial
+}
+export enum FullApplicationAccess{
+    AdminBusiness = 'Admin, Business Head'
+}

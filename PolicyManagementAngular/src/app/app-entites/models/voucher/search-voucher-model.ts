@@ -9,4 +9,5 @@ export interface ISearchVoucherModel {
     VoucherStartToDate: string;
     Mode: number;
     IsShowAll: boolean;
+    RoleId :number;
 }

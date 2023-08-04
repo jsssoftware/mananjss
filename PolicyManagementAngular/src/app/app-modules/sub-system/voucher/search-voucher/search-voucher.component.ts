@@ -26,6 +26,7 @@ export class SearchVoucherComponent implements OnInit, AfterViewInit {
   public _posDatas: IDropDownDto<number>[] = [];
   public _filteredPosOptions: IDropDownDto<number>[] = [];
   public _vouchers: ISearchVoucherDto[] = [];
+  public _userDetails:any;
   displayedColumns: string[] = [
     'voucherNumber',
     'voucherDateString',
@@ -95,6 +96,7 @@ export class SearchVoucherComponent implements OnInit, AfterViewInit {
       else
         this.filterInsurancerCompaniesData(input.Name);
     });
+    this._userDetails = JSON.parse((sessionStorage.getItem("userDetails")));
   }
 
   ngAfterViewInit(): void {
@@ -199,7 +201,8 @@ export class SearchVoucherComponent implements OnInit, AfterViewInit {
       PosId: this.searchVoucherForm.get('posId')?.value?.Value,
       VoucherNumber: this.searchVoucherForm.get('voucherNumber')?.value,
       Mode: parseInt(this._form),
-      IsShowAll: false
+      IsShowAll: false,
+      RoleId : this._userDetails.LoginUserRoleId
     };
   }
 

@@ -386,12 +386,6 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblCompanyDetails">
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
-        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -1854,6 +1848,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="BranchId" Type="int" />
           <Property Name="VerticalId" Type="int" />
           <Property Name="Level" Type="int" />
+          <Property Name="VerticalData" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="tblUserType">
           <Key>
@@ -1933,13 +1928,6 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblVersion">
-          <Property Name="Major" Type="tinyint" />
-          <Property Name="Minor" Type="tinyint" />
-          <Property Name="Revision" Type="tinyint" />
-        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -2092,6 +2080,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.SearchClaims' does not have a 
           <Property Name="VerticalId" Type="smallint" Nullable="false" />
           <Property Name="Product" Type="nvarchar" MaxLength="50" />
           <Property Name="PosId" Type="int" />
+          <Property Name="VerticalSegmentId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'PolicyManagerQA.dbo.SearchClaimsPolicy' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2196,6 +2185,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.SearchVoucher' does not have a
           <Property Name="TeamMemberId" Type="smallint" Nullable="false" />
           <Property Name="InsuranceCompany" Type="nvarchar" MaxLength="100" />
           <Property Name="InsuranceCompanyId" Type="smallint" Nullable="false" />
+          <Property Name="VerticalSegmentId" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'PolicyManagerQA.dbo.View_SearchForm' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2877,7 +2867,8 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
     [SearchClaims].[Vertical] AS [Vertical], 
     [SearchClaims].[VerticalId] AS [VerticalId], 
     [SearchClaims].[Product] AS [Product], 
-    [SearchClaims].[PosId] AS [PosId]
+    [SearchClaims].[PosId] AS [PosId], 
+    [SearchClaims].[VerticalSegmentId] AS [VerticalSegmentId]
     FROM [dbo].[SearchClaims] AS [SearchClaims]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="SearchClaimsPolicy" EntityType="Self.SearchClaimsPolicy" store:Type="Views" store:Schema="dbo">
@@ -2951,7 +2942,8 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
     [SearchVoucher].[TeamMember] AS [TeamMember], 
     [SearchVoucher].[TeamMemberId] AS [TeamMemberId], 
     [SearchVoucher].[InsuranceCompany] AS [InsuranceCompany], 
-    [SearchVoucher].[InsuranceCompanyId] AS [InsuranceCompanyId]
+    [SearchVoucher].[InsuranceCompanyId] AS [InsuranceCompanyId], 
+    [SearchVoucher].[VerticalSegmentId] AS [VerticalSegmentId]
     FROM [dbo].[SearchVoucher] AS [SearchVoucher]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="View_SearchForm" EntityType="Self.View_SearchForm" store:Type="Views" store:Schema="dbo">
@@ -6051,6 +6043,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <NavigationProperty Name="tblUser" Relationship="PolicyManagerModel.FK_tblUser_tblUserRole" FromRole="tblUserRole" ToRole="tblUser" />
           <Property Name="VerticalId" Type="Int32" />
           <Property Name="Level" Type="Int32" />
+          <Property Name="VerticalData" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblUserType">
           <Key>
@@ -6280,6 +6273,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="VerticalId" Type="Int16" Nullable="false" />
           <Property Name="Product" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PosId" Type="Int32" />
+          <Property Name="VerticalSegmentId" Type="Int32" />
         </EntityType>
         <EntityType Name="SearchClaimsPolicy">
           <Key>
@@ -6378,6 +6372,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="TeamMemberId" Type="Int16" Nullable="false" />
           <Property Name="InsuranceCompany" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="InsuranceCompanyId" Type="Int16" Nullable="false" />
+          <Property Name="VerticalSegmentId" Type="Int32" />
         </EntityType>
         <EntityType Name="View_SearchForm">
           <Key>
@@ -8605,6 +8600,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblUserRole">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblUserRole">
               <MappingFragment StoreEntitySet="tblUserRole">
+                <ScalarProperty Name="VerticalData" ColumnName="VerticalData" />
                 <ScalarProperty Name="Level" ColumnName="Level" />
                 <ScalarProperty Name="VerticalId" ColumnName="VerticalId" />
                 <ScalarProperty Name="BranchId" ColumnName="BranchId" />
@@ -8830,6 +8826,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="SearchClaims">
             <EntityTypeMapping TypeName="PolicyManagerModel.SearchClaims">
               <MappingFragment StoreEntitySet="SearchClaims">
+                <ScalarProperty Name="VerticalSegmentId" ColumnName="VerticalSegmentId" />
                 <ScalarProperty Name="PosId" ColumnName="PosId" />
                 <ScalarProperty Name="Product" ColumnName="Product" />
                 <ScalarProperty Name="VerticalId" ColumnName="VerticalId" />
@@ -8905,6 +8902,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="SearchVoucher">
             <EntityTypeMapping TypeName="PolicyManagerModel.SearchVoucher">
               <MappingFragment StoreEntitySet="SearchVoucher">
+                <ScalarProperty Name="VerticalSegmentId" ColumnName="VerticalSegmentId" />
                 <ScalarProperty Name="InsuranceCompanyId" ColumnName="InsuranceCompanyId" />
                 <ScalarProperty Name="InsuranceCompany" ColumnName="InsuranceCompany" />
                 <ScalarProperty Name="TeamMemberId" ColumnName="TeamMemberId" />

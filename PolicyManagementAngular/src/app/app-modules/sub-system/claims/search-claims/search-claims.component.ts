@@ -30,7 +30,7 @@ export class SearchClaimsComponent implements OnInit, AfterViewInit {
   public _posDatas: IDropDownDto<number>[] = [];
   public _filteredPosOptions: IDropDownDto<number>[] = [];
   public _claims: ISearchClaimsDto[] = [];
-
+  public _userDetails:any;
   displayedColumns: string[] = [
     'controlNumber',
     'customerName',
@@ -60,6 +60,8 @@ export class SearchClaimsComponent implements OnInit, AfterViewInit {
     }
     this._form = formType;
     this._branchId = parseInt(sessionStorage.getItem("branchId") as string);
+    this._userDetails = JSON.parse((sessionStorage.getItem("userDetails")));
+
   }
 
   ngOnInit(): void {
@@ -92,6 +94,8 @@ export class SearchClaimsComponent implements OnInit, AfterViewInit {
       else
         this.filterInsurancerCompaniesData(input.Name);
     });
+
+    
   }
 
   ngAfterViewInit(): void {
@@ -191,7 +195,8 @@ export class SearchClaimsComponent implements OnInit, AfterViewInit {
       IsShowAll: false,
       ControlNumber: this.searchClaimForm.get('controlNumber')?.value,
       MobileNumber: this.searchClaimForm.get('mobileNumber')?.value,
-      RegistrationNumber: this.searchClaimForm.get('registrationNumber')?.value
+      RegistrationNumber: this.searchClaimForm.get('registrationNumber')?.value,
+      RoleId : this._userDetails.LoginUserRoleId
     };
 
   }

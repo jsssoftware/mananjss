@@ -30,6 +30,7 @@ export class SearchInspectionComponent implements OnInit {
   public _filteredPosOptions: IDropDownDto<number>[] = [];
   public _branchId: number;
   public _inspections: ISearchInspectionDto[] = [];
+  public _userDetails:any;
 
   displayedColumns: string[] = [
     'Customer',
@@ -112,6 +113,7 @@ export class SearchInspectionComponent implements OnInit {
       else
         this.filterPosData(input.Name);
     });
+    this._userDetails = JSON.parse((sessionStorage.getItem("userDetails")));
   }
 
   ngAfterViewInit(): void {
@@ -198,6 +200,8 @@ export class SearchInspectionComponent implements OnInit {
       ManufacturerId: this.inspectionSearchForm.get('manufacturer')?.value?.Value,
       ModelId: this.inspectionSearchForm.get('modelId')?.value,
       PosId: this.inspectionSearchForm.get('posId')?.value?.Value,
+      RoleId : this._userDetails.LoginUserRoleId
+
     };
   }
 }

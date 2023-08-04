@@ -214,7 +214,7 @@ namespace PolicyManagement.Services.Claims
                 || (!string.IsNullOrEmpty(model.ClaimsEntryFromDate) && !string.IsNullOrEmpty(model.ClaimsEntryToDate)))
             {
                 IQueryable<SearchClaims> query = _dataContext.SearchClaims.AsQueryable();
-
+                var roles =  await _dataContext.tblUserRole.Where(x=>x.UserRoleId== model.RoleId).FirstOrDefaultAsync();
                 if (!model.IsShowAll)
                 {
                     if (!string.IsNullOrEmpty(model.CustomerName))
@@ -255,8 +255,18 @@ namespace PolicyManagement.Services.Claims
                         DateTime to = DateTime.ParseExact(model.ClaimsEntryToDate, "MM/dd/yyyy", CultureInfo.InvariantCulture).AddHours(23).AddMinutes(59).AddSeconds(59);
                         query = query.Where(w => w.ClaimsEntryDate >= from && w.ClaimsEntryDate <= to);
                     }
-                }
 
+                    if (!string.IsNullOrEmpty(model.RegistrationNumber))
+                        query = query.Where(w => w.RegistrationNumber.Equals(model.RegistrationNumber));
+
+                   
+                }
+                if (roles.VerticalData != null)
+                {
+                    var verticalsegments = roles.VerticalData.Split(',');
+
+                    query = query.Where(w => verticalsegments.Contains(w.VerticalSegmentId.ToString()));
+                }
                 return await query.Select(s => new SearchClaimsDto
                 {
                     ClaimsEntryDate = s.ClaimsEntryDate,
