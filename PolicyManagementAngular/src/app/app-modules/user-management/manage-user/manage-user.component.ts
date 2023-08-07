@@ -34,16 +34,16 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
   public _showAll: boolean =false;
 
   displayedColumns: string[] = [
-    'BranchName',
-    'UserName',
     'TeamMember',
     'UserRole',
+    'UserName',
     'ReportedTo',
     'Seniority',
     'MobileNumber',
     'EmailId',
     'IsActive',
     'IsLocked',
+    'BranchName',
     'Modify'
   ];
   manageuserform = new FormGroup({
