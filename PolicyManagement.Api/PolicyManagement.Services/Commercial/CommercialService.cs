@@ -461,7 +461,8 @@ namespace PolicyManagement.Services.Commercial
         public async Task<CommercialPolicyFormDataModel> FindCommercialPolicyByPolicyId(int policyId)
         {
             CommercialPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
-                                                  .Join(_dataContext.tblRTOZone, T3 => T3.T1.RTOZoneId, T4 => T4.RTOZoneId, (T3, T4) => new { T3, T4 })
+                                                    .GroupJoin(_dataContext.tblRTOZone, T3 => T3.T1.RTOZoneId, T4 => T4.RTOZoneId, (T3, T4) => new { T3, T4 })
+                                                    .SelectMany(s => s.T4.DefaultIfEmpty(), (policy, rtoZone) => new { policy.T3, T4 = rtoZone })
                                                     .GroupJoin(_dataContext.tblCluster, T5 => T5.T3.T2.ClusterId, T6 => T6.ClusterId, (T5, T6) => new { T5, T6 })
                                                   .SelectMany(s => s.T6.DefaultIfEmpty(), (policyWithCustomer, cluster) => new { policyWithCustomer.T5, T6 = cluster })
                                                   .Where(w => w.T5.T3.T1.PolicyId == policyId)
