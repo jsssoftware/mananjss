@@ -1614,7 +1614,7 @@ namespace PolicyManagement.Services.Common
                                                BranchId = user.BranchId,
                                                ReportedTo = user.ReportedTo,
                                                ReportedToName =  reportedTo.TeamMemberName
-                                                }).Where(x=>x.BranchId == branchId).ToListAsync();
+                                                }).Where(x=>x.BranchId == branchId).OrderBy(x=>x.IsActive).ThenBy(x => x.UserRole).ThenBy(x => x.TeamMember).ToListAsync();
             return new DataTableDto<List<UserDetailDto>>
             {
                 TotalCount = result.Count(),

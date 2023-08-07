@@ -111,7 +111,8 @@ namespace PolicyManagement.Services.UserManagement
                                                     RoleName = userole.UserRoleName,
                                                     IsActive = userole.IsActive,
                                                     UserRoleDescription = userole.UserRoleDescription,
-                                                    BranchId = branch.BranchId
+                                                    BranchId = branch.BranchId,
+                                                    VerticalData =  userole.VerticalData,
 
                                                 }).ToListAsync();
             return new DataTableDto<List<RoleDetailDto>>

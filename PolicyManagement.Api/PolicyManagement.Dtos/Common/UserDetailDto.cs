@@ -33,6 +33,8 @@ namespace PolicyManagement.Dtos.Common
         public bool IsActive { get; set; }
         public int RoleId { get; set; }
         public int BranchId { get; set; }
+        public string VerticalData { get; set; }
+
 
     }
 }

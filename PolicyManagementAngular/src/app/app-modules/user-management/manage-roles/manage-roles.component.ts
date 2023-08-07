@@ -139,6 +139,25 @@ export class ManageRolesComponent implements OnInit {
       isActive: data?.IsActive,
       userRoleName:  data?.RoleName
   });
+  let roleArr:any[] =  data?.VerticalData?.split(',');
+  if(roleArr.includes(VerticalSegment.Motor.toString())){
+    this.manageRoleform.patchValue({
+      isMotor: true
+    });
+
+  }
+  if(roleArr.includes(VerticalSegment.Commercial.toString())){
+    this.manageRoleform.patchValue({
+      isCommercial: true
+    });
+
+  }
+  if(roleArr.includes(VerticalSegment.Retail.toString())){
+    this.manageRoleform.patchValue({
+      isRetail: true
+    });
+
+  }
   this._mobileNumber =  data?.MobileNumber
   this._emailId =  data?.EmailId
 
@@ -148,10 +167,10 @@ verticalIdArray(){
   if(this.manageRoleform.value.isMotor){
     this.verticalId.push(VerticalSegment.Motor.toString());
   }
-  if(this.manageRoleform.value.isCommercial){
+  if(this.manageRoleform.value.isRetail){
     this.verticalId.push(VerticalSegment.Retail.toString());
   }
-  if(this.manageRoleform.value.isRetail){
+  if(this.manageRoleform.value.isCommercial){
     this.verticalId.push(VerticalSegment.Commercial.toString());
   }
 
