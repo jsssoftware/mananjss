@@ -223,8 +223,8 @@
                                    
                                     <div class="col-lg-1">
 
-                                        <button mat-icon-button (click)="editUser(row)" *ngIf="i >1  ">
-                                            <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
+                                        <button mat-icon-button (click)="editUser(row)">
+                                            <mat-icon color="warn" style="font-size: 20px;"  *ngIf="(row.UserRole| lowercase) != 'admin' && (row.UserRole| lowercase) != 'business head'">edit</mat-icon>
                                         </button>
                                     </div>
                                 </div>

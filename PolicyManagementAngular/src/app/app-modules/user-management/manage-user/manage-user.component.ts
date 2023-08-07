@@ -126,6 +126,7 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
   }
 
   editUser(data :any){
+    debugger
       let teamdata =  this.savedTeamMember.find(x=>x.Value == data?.TeamMemberId)
       this._teamMember.push(teamdata)
       this.manageuserform.patchValue({
@@ -158,7 +159,7 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
   }
 
   createUser(){
-    this._userService.createUser(this.manageuserform.value).subscribe((response: ICommonDto<any>) => {
+    this._userService.createUser(this.manageuserform.getRawValue()).subscribe((response: ICommonDto<any>) => {
       if (response.IsSuccess) {
         this.getUsers();
         Swal.fire({

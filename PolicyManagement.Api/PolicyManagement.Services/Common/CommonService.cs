@@ -1606,7 +1606,7 @@ namespace PolicyManagement.Services.Common
                                                MobileNumber =  teamMember.TeamMemberPhone1,
                                                Seniority =  teamMember.LevelNumber,
                                                IsActive = teamMember.IsActive,
-                                               IsLocked  =  teamMember.IsLocked,
+                                               IsLocked  = user.IsLocked,
                                                TeamMemberId = user.TeamMemberId,
                                                UserRoleId = user.UserRoleId,
                                                UserId = user.UserId,

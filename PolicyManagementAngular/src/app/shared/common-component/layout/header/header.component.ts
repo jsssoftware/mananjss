@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit {
     this._branchName = sessionStorage.getItem('branchName') as string;
     this._userDetails = JSON.parse((sessionStorage.getItem("userDetails")));
     this._loggedInUserName = this._userDetails?.LoginUserFullName;
-    this._role = this._userDetails?.LoginUserRoleId;
+    this._role = this._userDetails?.LoginUserRole;
   }
 
   ngAfterViewInit() {
