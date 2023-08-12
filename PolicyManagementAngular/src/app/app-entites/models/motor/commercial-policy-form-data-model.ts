@@ -83,6 +83,9 @@ export interface ICommercialPolicyFormDataModel {
     FireCoverage:any;
     Marine?: IMarineFormDataModel;
     Misc?: IMiscFormDataModel
+    Liability?: ILiabilityFormDataModel
+    Enginnering?: IEnginneringFormDataModel
+    Gmc?: IGmcDataModel
 
 }
 
@@ -92,4 +95,43 @@ export interface IMiscFormDataModel {
     Misc2: number,
     Misc3: number,
     Misc4: number,
+}
+
+
+export interface ILiabilityFormDataModel {
+    LiabilityTermId:number,
+    TotalSumInsured: number,
+    NoWorker: number,
+    NatureCoverage: string,
+    ExcessClause: string,
+    RiskLocation: number,
+    OtherInfo: string,
+    RetroSpectiveDate: any,
+    PolicyId?:number 
+}
+
+export interface IEnginneringFormDataModel {
+    EnginneringTermId:number,
+    TotalSumInsured: number,
+    Rate: number,
+    NatureofCoverage: string,
+    RiskLocation: number,
+    OtherInfo: string,
+    PeriodDate: any,
+    EnginneringId?:any 
+    PolicyId?:number 
+}
+
+
+export interface IGmcDataModel {
+    CoverageType: string,
+    NoEmployee: number,
+    GmcTermId: number,
+    NoDependent: string,
+    NoLife: number,
+    Coverage: string,
+    CooperateLimit: string,
+    OtherInfo: string,
+    PolicyId?:number 
+    Covertype:number 
 }

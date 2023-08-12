@@ -258,6 +258,22 @@ export class SearchPolicyComponent implements OnInit {
       this._commercialService._headerTitle$.next(this._headerTitle);
       this._commercialService.vertical$.next("Fire");
       this.router.navigate(["/pms/misc", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Misc}]);
+    
+    }else if(this._verticalTypeId==Vertical.GMC){
+      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
+      this._commercialService._headerTitle$.next(this._headerTitle);
+      this._commercialService.vertical$.next("Gmc");
+      this.router.navigate(["/pms/gmc", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.GMC}]);
+    }else if(this._verticalTypeId==Vertical.Engineering){
+      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
+      this._commercialService._headerTitle$.next(this._headerTitle);
+      this._commercialService.vertical$.next("Engineering");
+      this.router.navigate(["/pms/engineering", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Engineering}]);
+    }else if(this._verticalTypeId==Vertical.Liabality){
+      this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
+      this._commercialService._headerTitle$.next(this._headerTitle);
+      this._commercialService.vertical$.next("Engineering");
+      this.router.navigate(["/pms/liability", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Liabality}]);
     }
   }
 
@@ -432,6 +448,17 @@ export class SearchPolicyComponent implements OnInit {
       this.router.navigate(['./pms/pa/pa-policy-management']);
     if(this._verticalTypeId==Vertical.Fire)
       this.router.navigate(['./pms/fire/fire-policy-management']);
+    if(this._verticalTypeId==Vertical.GMC)
+      this.router.navigate(['./pms/gmc/gmc-policy-management']);
+    if(this._verticalTypeId == Vertical.Engineering) {
+        this.router.navigate(["../pms/engineering/engineering-policy-management"]);
+    }
+    if(this._verticalTypeId == Vertical.Marine) {
+        this.router.navigate(["../pms/marine/marine-policy-management"]);
+    }
+    if(this._verticalTypeId == Vertical.Liabality) {
+        this.router.navigate(["../pms/liability/liability-policy-management"]);
+    }
 
   }  
 }  

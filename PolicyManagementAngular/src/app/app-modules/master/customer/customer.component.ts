@@ -129,6 +129,10 @@ export class CustomerComponent implements OnInit {
       this._commercialService.vertical$.next("Liability");
       this.router.navigate(["/pms/liabality/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
+    if( this.Verticaltype == Vertical.GMC){
+      this._commercialService.vertical$.next("Gmc");
+      this.router.navigate(["/pms/gmc/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
+    }
 
   }
 

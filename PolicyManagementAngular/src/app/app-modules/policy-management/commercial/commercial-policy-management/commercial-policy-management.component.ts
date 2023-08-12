@@ -159,6 +159,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   _commissionPaidOnId: number = 0;
   _isViewPolicyActive: boolean = false;
   _displayedColumnsVouchers: string[] = ['voucherNumber', 'voucherAmount', 'voucherType', 'voucherDateString', 'voucherStatus', 'voucherRemark', 'action'];
+  _coverType:  IDropDownDto<any>[] =this.mainCommercialService._coverageType;
 
   _displayedColumnsInspections: string[] = [
     'dateString',
@@ -231,6 +232,27 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     totalSumInsured: new FormControl(''),
     sumInsured: new FormControl(''),
     endroseSumInsured: new FormControl(''),
+  });
+
+  liabilityTermForm = new FormGroup({
+    liabilityTotalSum: new FormControl(''),
+    liabilityNoOfWorker: new FormControl(''),
+    liabilityNatureofCoverage: new FormControl(''),
+    liabilityExcessClause: new FormControl(''),
+    liabilityRetroDate: new FormControl(''),
+    liabilityOtherInfo: new FormControl(''),
+    liabilityTermId : new FormControl('')
+  });
+
+  engineeringTermForm = new FormGroup({
+    enginneringTotalSum: new FormControl(''),
+    enginneringRate: new FormControl(''),
+    enginneringNatureofCoverage: new FormControl(''),
+    enginneringPeriodDate: new FormControl(''),
+    enginneringOtherInfo: new FormControl(''),
+    enginneringRiskLocatiion: new FormControl(''),
+    enginneringTermId : new FormControl('')
+
   });
   //#endregion
 
@@ -341,6 +363,18 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     misc3: new FormControl(''),
     misc4: new FormControl(''),
     misc5: new FormControl(''),
+  })
+
+  gmcTermForm = new FormGroup({
+    gmcCoveragetype: new FormControl(''),
+    gmcNoofEmployee: new FormControl(''),
+    gmcNoofDependent: new FormControl(''),
+    gmcNoofLife: new FormControl({value: '', disabled: true}),
+    gmcCoverage: new FormControl(''),
+    gmcCovertype: new FormControl(''),
+    gmcCooperateLimit: new FormControl(''),
+    gmcOtherInfo: new FormControl(''),
+    gmcTermId: new FormControl('')
   })
   private ChequeValidators = [
     Validators.pattern('^[a-zA-Z0-9]+$'),
@@ -573,6 +607,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       AddOnValue: []
     };
   }
+
+
   ngOnInit(): void {
     this.setVertical();
     this._verticalName = this.mainCommercialService.vertical$.getValue();
@@ -1061,7 +1097,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     if (this._policyType == SearchPolicyType.Motor_Verify) {
       this.IsVerified = true
     }
-    this.validationPolicyData
+
+  
+    debugger
     let model: ICommercialPolicyFormDataModel = {
       PolicyId: this._policyId,
       BranchId: this._branchId,
@@ -1213,6 +1251,39 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
         Misc2 : this.miscform.value.misc2,
         Misc3 : this.miscform.value.misc3,
         Misc4 : this.miscform.value.misc4,
+      },
+      Liability : {
+        TotalSumInsured : this.liabilityTermForm.value.liabilityTotalSum,
+        NoWorker : this.liabilityTermForm.value.liabilityNoOfWorker,
+        NatureCoverage : this.liabilityTermForm.value.liabilityNatureofCoverage,
+        ExcessClause : this.liabilityTermForm.value.liabilityExcessClause,
+        RiskLocation :(this.liabilityTermForm.value.liabilityRiskLocatiion),
+        OtherInfo : this.liabilityTermForm.value.liabilityOtherInfo,
+        RetroSpectiveDate :  this.formatDate(this.liabilityTermForm.value.liabilityRetroDate),
+        PolicyId :this._policyId,
+        LiabilityTermId:  this.liabilityTermForm.value.liabilityTermForm
+      },
+      Enginnering : {
+        TotalSumInsured :   this.engineeringTermForm.value.enginneringTotalSum,
+        Rate :this.engineeringTermForm.value.enginneringRate,
+        NatureofCoverage: this.engineeringTermForm.value.enginneringNatureofCoverage,
+        PeriodDate: this.formatDate(this.engineeringTermForm.value.enginneringPeriodDate),
+        OtherInfo: this.engineeringTermForm.value.enginneringOtherInfo,
+        RiskLocation:   this.engineeringTermForm.value.enginneringRiskLocatiion,
+        PolicyId :this._policyId,
+        EnginneringTermId :   this.engineeringTermForm.value.enginneringTermId
+      },
+      Gmc : {
+        CoverageType :   this.gmcTermForm.value.gmcCoveragetype,
+        NoEmployee :this.gmcTermForm.value.gmcNoofEmployee,
+        NoDependent: this.gmcTermForm.value.gmcNoofDependent,
+        NoLife: this.gmcTermForm.getRawValue().gmcNoofLife,
+        Coverage: this.gmcTermForm.value.gmcCoverage,
+        OtherInfo:   this.gmcTermForm.value.gmcOtherInfo,
+        Covertype:   this.gmcTermForm.value.gmcCovertype,
+        CooperateLimit:   this.gmcTermForm.value.gmcCooperateLimit,
+        PolicyId :this._policyId,
+        GmcTermId:  this.gmcTermForm.value.gmcTermId
       },
       Document: this._uploadDocuments,
       AddOnRider: this.getAddOnRiderFormData(),
@@ -1736,14 +1807,14 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   getHealthPolicyById(policyId: number) {
     this.commercialService.getCommercialPolicyById(policyId).subscribe((response: ICommercialPolicyFormDataModel) => {
       this._policyData = response;
-      this.setHealthPolicyData(response);
+      this.setCommercialPolicyData(response);
       this.getPolicyDocuments();
 
     });
   }
 
 
-  async setHealthPolicyData(response: ICommercialPolicyFormDataModel): Promise<void> {
+  async setCommercialPolicyData(response: ICommercialPolicyFormDataModel): Promise<void> {
  
     this.setCompanyInsuranceBranch(response)
     this.setCustomerDetail(<ICustomerShortDetailDto>{
@@ -1808,6 +1879,39 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       totalSumInsured: response.Marine.TotalSumInsured,
       sumInsured : response.Marine.SumInsured,
       endroseSumInsured: response.Marine.EndroseSumInsured,
+    });
+   
+    //update libality
+    this.liabilityTermForm.patchValue({
+      liabilityTotalSum: response.Liability.TotalSumInsured,
+      liabilityNoOfWorker: response.Liability.NoWorker,
+      liabilityNatureofCoverage: response.Liability.NatureCoverage,
+      liabilityExcessClause: response.Liability.ExcessClause,
+      liabilityRetroDate:new Date( response.Liability.RetroSpectiveDate),
+      liabilityOtherInfo: response.Liability.OtherInfo,
+      liabilityTermId :  response.Liability.LiabilityTermId
+    });
+  
+        //update eng
+    this.engineeringTermForm.patchValue({
+      enginneringTotalSum: response.Enginnering.TotalSumInsured,
+      enginneringRate: response.Enginnering.Rate,
+      enginneringNatureofCoverage:response.Enginnering.NatureofCoverage,
+      enginneringPeriodDate:response.Enginnering.PeriodDate,
+      enginneringOtherInfo:response.Enginnering.OtherInfo,
+      enginneringRiskLocatiion: response.Enginnering.RiskLocation,
+      enginneringTermId :  response.Enginnering.EnginneringTermId
+    });
+    this.gmcTermForm.patchValue({
+      gmcCoveragetype: Number(response.Gmc.CoverageType),
+      gmcNoofEmployee: response.Gmc.NoEmployee,
+      gmcNoofDependent:response.Gmc.NoDependent,
+      gmcCoverage:response.Gmc.Coverage,
+      gmcOtherInfo:response.Gmc.OtherInfo,
+      gmcCovertype:  Number(response.Gmc.Covertype),
+      gmcCooperateLimit :  response.Gmc.CooperateLimit,
+      gmcTermId :  response.Gmc.GmcTermId,
+      gmcNoofLife: response.Gmc.NoLife
     });
 
     //update misc
@@ -2520,7 +2624,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
    if(this._verticalId == Vertical.Marine) this.router.navigate(["../pms/marine/marine-policy-management"]);
    if(this._verticalId == Vertical.Liabality) this.router.navigate(["../pms/liabality/liabality-policy-management"]);
    if(this._verticalId == Vertical.Misc) this.router.navigate(["../pms/misc/misc-policy-management"]);
-   if(this._verticalId == Vertical.Marine) this.router.navigate(["../pms/marine/marine-policy-management"]);
+   if(this._verticalId == Vertical.Engineering) this.router.navigate(["../pms/engineering/engineering-policy-management"]);
+   if(this._verticalId == Vertical.GMC) this.router.navigate(["../pms/gmc/gmc-policy-management"]);
   }
 
   getCustomerDataByClusterId(clusterId: number) {
@@ -3041,4 +3146,25 @@ calculateMarineSumInsured() {
     totalSumInsured : totalSumInsured
   })
 }
+
+formatDate(d: Date) {
+  debugger
+  if(d&& d!= null){
+  d = new Date(d);   
+  var convertDate = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes() - d.getTimezoneOffset()).toISOString();
+  return convertDate
+  }
+  return null;
+}
+
+
+gmcTotalLife(){
+  let noofemp = this.gmcTermForm.get("gmcNoofEmployee")?.value || 0;
+  let noofDependent = this.gmcTermForm.get("gmcNoofDependent")?.value ||0;
+  let total = noofemp + noofDependent
+  this.gmcTermForm.patchValue({
+    gmcNoofLife: total
+  })
+}
+
 }

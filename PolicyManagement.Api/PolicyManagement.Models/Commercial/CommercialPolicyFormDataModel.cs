@@ -92,6 +92,8 @@ namespace PolicyManagement.Models.Commercial
         public tblFireCoverage FireCoverage { get; set; }
         public  MarineFormDataModel Marine { get; set; }
         public MiscFromDataModel Misc { get; set; }
-
+        public tblLiabilityTerm Liability { get; set; }
+        public tblEnginneringTerm Enginnering { get; set; }
+        public tblGmcTerm Gmc { get; set; }
     }
 }

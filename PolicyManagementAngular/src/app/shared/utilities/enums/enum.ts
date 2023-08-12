@@ -10,6 +10,7 @@ export enum Vertical {
     Liabality = 12,
     Marine = 5,
     Life = 14,
+    GMC =15
 
 }
 

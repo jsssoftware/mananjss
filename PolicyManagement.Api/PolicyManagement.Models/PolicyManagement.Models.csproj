@@ -47,6 +47,8 @@
     <Compile Include="Claims\ClaimsDocumentModel.cs" />
     <Compile Include="Claims\ClaimsSearchPolicyModel.cs" />
     <Compile Include="Claims\SearchClaimsModel.cs" />
+    <Compile Include="Commercial\EnginnneringFormDataModel.cs" />
+    <Compile Include="Commercial\LiabilityFormDataModel.cs" />
     <Compile Include="Commercial\MiscFormDataModel.cs" />
     <Compile Include="Commercial\MarineFormDataModel.cs" />
     <Compile Include="Common\BaseModel.cs" />

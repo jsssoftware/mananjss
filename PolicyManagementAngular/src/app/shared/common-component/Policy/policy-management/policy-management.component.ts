@@ -84,6 +84,11 @@ export class PolicyManagementComponent implements OnInit {
       this.verticalData = Vertical.Liabality; 
       this.motorservice.vertical$.next("Liability")
     }
+    if(this.MenuVertical=='Gmc')
+    {
+      this.verticalData = Vertical.GMC; 
+      this.motorservice.vertical$.next("GMC")
+    }
 
     switch (enumName) {
       case "New":

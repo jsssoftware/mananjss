@@ -182,6 +182,9 @@
     <Compile Include="EntityFramework\tblEndorsementType.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\tblEnginneringTerm.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\tblFinancer.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
@@ -198,6 +201,9 @@
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\tblGenerator.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\tblGmcTerm.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\tblGST.cs">
@@ -228,6 +234,9 @@
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\tblInsuredPerson.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\tblLiabilityTerm.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\tblLog.cs">

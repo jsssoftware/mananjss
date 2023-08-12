@@ -421,10 +421,40 @@ namespace PolicyManagement.Services.Commercial
                     #endregion
 
                     #region Insert FireDetail
+                    if (model.FireCoverage != null && model.VerticalId == (short)Vertical.Fire)
+                    {
                         model.FireCoverage.PolicyId = motorPolicyData.PolicyId;
                         model.FireCoverage.BranchId = motorPolicyData.BranchId;
                         _dataContext.tblFireCoverage.Add(model.FireCoverage);
                         await _dataContext.SaveChangesAsync();
+                    }
+                    #endregion
+
+                    #region Insert Liabality
+                    if (model.Liability != null && model.VerticalId == (short)Vertical.Liablity)
+                    {
+                        model.Liability.PolicyId = motorPolicyData.PolicyId;
+                        _dataContext.tblLiabilityTerms.Add(model.Liability);
+                        await _dataContext.SaveChangesAsync();
+                    }
+                    #endregion
+
+                    #region Insert Enginnerring
+                    if (model.Enginnering != null && model.VerticalId == (short)Vertical.Engineering)
+                    {
+                        model.Enginnering.PolicyId = motorPolicyData.PolicyId;
+                        _dataContext.tblEnginneringTerms.Add(model.Enginnering);
+                        await _dataContext.SaveChangesAsync();
+                    }
+                    #endregion
+
+                    #region Insert Gmc
+                    if (model.Gmc != null && model.VerticalId == (short)Vertical.GroupHealth)
+                    {
+                        model.Gmc.PolicyId = motorPolicyData.PolicyId;
+                        _dataContext.tblGmcTerms.Add(model.Gmc);
+                        await _dataContext.SaveChangesAsync();
+                    }
                     #endregion
 
                     dbContextTransaction.Commit();
@@ -460,205 +490,215 @@ namespace PolicyManagement.Services.Commercial
 
         public async Task<CommercialPolicyFormDataModel> FindCommercialPolicyByPolicyId(int policyId)
         {
-            CommercialPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
-                                                    .GroupJoin(_dataContext.tblRTOZone, T3 => T3.T1.RTOZoneId, T4 => T4.RTOZoneId, (T3, T4) => new { T3, T4 })
-                                                    .SelectMany(s => s.T4.DefaultIfEmpty(), (policy, rtoZone) => new { policy.T3, T4 = rtoZone })
-                                                    .GroupJoin(_dataContext.tblCluster, T5 => T5.T3.T2.ClusterId, T6 => T6.ClusterId, (T5, T6) => new { T5, T6 })
-                                                  .SelectMany(s => s.T6.DefaultIfEmpty(), (policyWithCustomer, cluster) => new { policyWithCustomer.T5, T6 = cluster })
-                                                  .Where(w => w.T5.T3.T1.PolicyId == policyId)
-                                                  .Select(s => new CommercialPolicyFormDataModel
+            CommercialPolicyFormDataModel motorPolicy = await (from T1 in _dataContext.tblMotorPolicyData
+                                                              join T2 in _dataContext.tblCustomer on T1.CustomerId equals T2.CustomerId
+                                                              join T3 in _dataContext.tblRTOZone on T1.RTOZoneId equals T3.RTOZoneId into rtoJoin
+                                                              from T4 in rtoJoin.DefaultIfEmpty()
+                                                              join T5 in _dataContext.tblCluster on T2.ClusterId equals T5.ClusterId into clusterJoin
+                                                              from T6 in clusterJoin.DefaultIfEmpty()
+                                                              join T7 in _dataContext.tblEnginneringTerms on T1.PolicyId equals T7.PolicyId into engJoin
+                                                              from T8 in engJoin.DefaultIfEmpty()
+                                                               join T9 in _dataContext.tblLiabilityTerms on T1.PolicyId equals T9.PolicyId into liabalityJoin
+                                                               from T10 in liabalityJoin.DefaultIfEmpty()
+                                                               join T11 in _dataContext.tblGmcTerms on T1.PolicyId equals T11.PolicyId into gmcJoin
+                                                               from T12 in gmcJoin.DefaultIfEmpty()
+                                                               where T1.PolicyId == policyId
+                                                              select  new CommercialPolicyFormDataModel
                                                   {
-                                                      PolicyId = s.T5.T3.T1.PolicyId,
-                                                      BranchId = s.T5.T3.T1.BranchId.ToString(),
-                                                      CoverNoteIssueDate = s.T5.T3.T1.CoverNoteDate,
-                                                      CoverNoteNumber = s.T5.T3.T1.CoverNoteNo,
+                                                      PolicyId = T1.PolicyId,
+                                                      BranchId = T1.BranchId.ToString(),
+                                                      CoverNoteIssueDate = T1.CoverNoteDate,
+                                                      CoverNoteNumber = T1.CoverNoteNo,
                                                       AddOnRider = new AddOnRiderModel
                                                       {
-                                                          AddOnRiderId = s.T5.T3.T1.AddonRiderId
+                                                          AddOnRiderId = T1.AddonRiderId
                                                       },
                                                       CreatedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user => user.TeamMemberId, teammember => teammember.TeamMemberId,
-                                                      (user, teammember) => new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.CreatedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
+                                                      (user, teammember) => new { user, teammember }).Where(x => x.user.UserId ==T1.CreatedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
                                                       VerifiedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user => user.TeamMemberId, teammember => teammember.TeamMemberId,
-                                                      (user, teammember) => new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.VerifiedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
-                                                      CreatedTime = s.T5.T3.T1.CreatedTime,
-                                                      VerifiedTime = s.T5.T3.T1.VerifiedTime,
+                                                      (user, teammember) => new { user, teammember }).Where(x => x.user.UserId == T1.VerifiedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
+                                                      CreatedTime = T1.CreatedTime,
+                                                      VerifiedTime = T1.VerifiedTime,
                                                       ModifiedBy = _dataContext.tblUser.Join(_dataContext.tblTeamMember, user => user.TeamMemberId, teammember => teammember.TeamMemberId,
-                                                      (user, teammember) => new { user, teammember }).Where(x => x.user.UserId == s.T5.T3.T1.ModifiedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
-                                                      ModifiedTime = s.T5.T3.T1.ModifiedTime,
+                                                      (user, teammember) => new { user, teammember }).Where(x => x.user.UserId == T1.ModifiedBy).Select(x => x.teammember.TeamMemberName).FirstOrDefault(),
+                                                      ModifiedTime = T1.ModifiedTime,
 
                                                       Customer = new CustomerFormDataModel
                                                       {
-                                                          AddressInPolicy = s.T5.T3.T1.AddressInPolicy,
-                                                          Cluster = s.T6.ClusterName,
-                                                          ClusterCode = s.T6.ClusterCode,
-                                                          ContactNumber = s.T5.T3.T2.DefaultContactNo == 1 ? s.T5.T3.T2.CustomerMobile1 : s.T5.T3.T2.DefaultContactNo == 2 ? s.T5.T3.T2.CustomerMobile2 : s.T5.T3.T2.DefaultContactNo == 3 ? s.T5.T3.T2.CustomerPhone1 : s.T5.T3.T2.CustomerPhone2,
-                                                          ContactPerson = s.T5.T3.T2.CustomerContact,
-                                                          CustomerCode = s.T5.T3.T2.CustomerCode,
-                                                          CustomerId = s.T5.T3.T2.CustomerId,
-                                                          CustomerType = s.T5.T3.T2.IsCompany.HasValue && s.T5.T3.T2.IsCompany.Value ? "Company/Firm" : "Individual",
-                                                          Email = string.IsNullOrEmpty(s.T5.T3.T2.CustomerEmail1) ? s.T5.T3.T2.CustomerEmail2 : s.T5.T3.T2.CustomerEmail1,
-                                                          Gstin = !string.IsNullOrEmpty(s.T5.T3.T2.GSTIN1) ? s.T5.T3.T2.GSTIN1 : !string.IsNullOrEmpty(s.T5.T3.T2.GSTIN2) ? s.T5.T3.T2.GSTIN2 : s.T5.T3.T2.GSTIN3,
-                                                          NameInPolicy = s.T5.T3.T1.NameInPolicy,
-                                                          Pan = s.T5.T3.T2.PAN,
-                                                          Gender = _dataContext.tblGender.Where(x => x.GenderId == s.T5.T3.T2.GenderId).Select(x => x.Gender).FirstOrDefault(),
-                                                          DateOfBirth = s.T5.T3.T2.CustomerDOB,
-                                                          PassportNumber = s.T5.T3.T2.PassportNo,
-                                                          ClusterId =  s.T5.T3.T2.ClusterId
+                                                          AddressInPolicy = T1.AddressInPolicy,
+                                                          Cluster = T6.ClusterName,
+                                                          ClusterCode = T6.ClusterCode,
+                                                          ContactNumber = T2.DefaultContactNo == 1 ? T2.CustomerMobile1 : T2.DefaultContactNo == 2 ? T2.CustomerMobile2 : T2.DefaultContactNo == 3 ? T2.CustomerPhone1 : T2.CustomerPhone2,
+                                                          ContactPerson = T2.CustomerContact,
+                                                          CustomerCode = T2.CustomerCode,
+                                                          CustomerId = T2.CustomerId,
+                                                          CustomerType = T2.IsCompany.HasValue && T2.IsCompany.Value ? "Company/Firm" : "Individual",
+                                                          Email = string.IsNullOrEmpty(T2.CustomerEmail1) ? T2.CustomerEmail2 : T2.CustomerEmail1,
+                                                          Gstin = !string.IsNullOrEmpty(T2.GSTIN1) ? T2.GSTIN1 : !string.IsNullOrEmpty(T2.GSTIN2) ? T2.GSTIN2 : T2.GSTIN3,
+                                                          NameInPolicy = T1.NameInPolicy,
+                                                          Pan = T2.PAN,
+                                                          Gender = _dataContext.tblGender.Where(x => x.GenderId == T2.GenderId).Select(x => x.Gender).FirstOrDefault(),
+                                                          DateOfBirth = T2.CustomerDOB,
+                                                          PassportNumber = T2.PassportNo,
+                                                          ClusterId =  T2.ClusterId
                                                       },
-                                                      ExtendedKiloMeterCovered = s.T5.T3.T1.ExtendedKMCovered ?? 0,
-                                                      FinanceBy = s.T5.T3.T1.FinancerId ?? 0,
+                                                      ExtendedKiloMeterCovered = T1.ExtendedKMCovered ?? 0,
+                                                      FinanceBy = T1.FinancerId ?? 0,
                                                       //InspectionData = new InspectionFormDataModel
                                                       //{
-                                                      //    InspectionCompany = s.T5.T3.T1.InspectionCompanyId,
-                                                      //    InspectionDate = s.T5.T3.T1.InspectionDate,
-                                                      //    InspectionNumber = s.T5.T3.T1.InspectionNo,
-                                                      //    InspectionRemarks = s.T5.T3.T1.InspectionRemark,
-                                                      //    InspectionTime = s.T5.T3.T1.InspectionTime.HasValue ? s.T5.T3.T1.InspectionTime.Value.ToString() : string.Empty
+                                                      //    InspectionCompany = T1.InspectionCompanyId,
+                                                      //    InspectionDate = T1.InspectionDate,
+                                                      //    InspectionNumber = T1.InspectionNo,
+                                                      //    InspectionRemarks = T1.InspectionRemark,
+                                                      //    InspectionTime = T1.InspectionTime.HasValue ? T1.InspectionTime.Value.ToString() : string.Empty
                                                       //},
                                                       Nomination = new NominationFormDataModel
                                                       {
-                                                          Age = s.T5.T3.T1.NomineeAge ?? 0,
-                                                          GuardianName = s.T5.T3.T1.NomineeGuardian,
-                                                          Name = s.T5.T3.T1.NomineeName,
-                                                          Relation = s.T5.T3.T1.NomineeRelationShipId
+                                                          Age = T1.NomineeAge ?? 0,
+                                                          GuardianName = T1.NomineeGuardian,
+                                                          Name = T1.NomineeName,
+                                                          Relation = T1.NomineeRelationShipId
                                                       },
-                                                      NumberOfKiloMeterCovered = s.T5.T3.T1.KMCovered ?? 0,
+                                                      NumberOfKiloMeterCovered = T1.KMCovered ?? 0,
                                                       PolicySource = new PolicySourceFormDataModel
                                                       {
-                                                          BusinessDoneBy = s.T5.T3.T1.BusinessDoneBy,
-                                                          Fos = s.T5.T3.T1.FOSId,
-                                                          PolicyRemarks = s.T5.T3.T1.PolicyRemarks,
-                                                          Pos = s.T5.T3.T1.POSId,
-                                                          PosManagedBy = s.T5.T3.T1.POSManageBy,
-                                                          Reference = s.T5.T3.T1.ReferenceId,
-                                                          TeleCaller = s.T5.T3.T1.TeleCallerId
+                                                          BusinessDoneBy = T1.BusinessDoneBy,
+                                                          Fos = T1.FOSId,
+                                                          PolicyRemarks = T1.PolicyRemarks,
+                                                          Pos = T1.POSId,
+                                                          PosManagedBy = T1.POSManageBy,
+                                                          Reference = T1.ReferenceId,
+                                                          TeleCaller = T1.TeleCallerId
                                                       },
                                                       PolicyTerm = new PolicyTermFormDataModel
                                                       {
-                                                          AcknowledgementSlipIssueDate = s.T5.T3.T1.AkgSlipIssueDate,
-                                                          AcknowledgementSlipNumber = s.T5.T3.T1.AkgSlipNo,
-                                                          PackageType = s.T5.T3.T1.PolicyPackageType,
-                                                          PackageTypeId = s.T5.T3.T1.PolicyPackageTypeId,
-                                                          PolicyTerm = s.T5.T3.T1.PolicyTermId,
-                                                          PolicyType = s.T5.T3.T1.PolicyTypeId,
+                                                          AcknowledgementSlipIssueDate = T1.AkgSlipIssueDate,
+                                                          AcknowledgementSlipNumber = T1.AkgSlipNo,
+                                                          PackageType = T1.PolicyPackageType,
+                                                          PackageTypeId = T1.PolicyPackageTypeId,
+                                                          PolicyTerm = T1.PolicyTermId,
+                                                          PolicyType = T1.PolicyTypeId,
                                                       },
                                                       Premium = new PremiumFormDataModel
                                                       {
-                                                          AddOnRiderOd = s.T5.T3.T1.AddonOD ?? 0,
-                                                          CngLpgIdv = s.T5.T3.T1.CNGIDV ?? 0,
-                                                          CommissionablePremium = s.T5.T3.T1.CommissionablePremium ?? 0,
-                                                          CommissionPaidOn = s.T5.T3.T1.CommissionPayTypeId ?? 0,
-                                                          ElectricAccessoriesIdv = s.T5.T3.T1.ElectricAssessoriesIDV ?? 0,
-                                                          EndorseGrossPremium = s.T5.T3.T1.EndorseGrossPremium ?? 0,
-                                                          EndorseOd = s.T5.T3.T1.EndorseOD ?? 0,
-                                                          EndorseTp = s.T5.T3.T1.EndorseTP ?? 0,
-                                                          GrossPremium = s.T5.T3.T1.GrossPremium ?? 0,
-                                                          GstPercentage = s.T5.T3.T1.GSTRate ?? 0M,
-                                                          GstValue = s.T5.T3.T1.TotalGST ?? 0,
-                                                          Loading = s.T5.T3.T1.Loading ?? 0M,
-                                                          Ncb = s.T5.T3.T1.NCBId,
-                                                          NonCommissionComponentPremium = s.T5.T3.T1.NonCommissionComponentPremium ?? 0,//ask later
-                                                          NonElectricAccessoriesIdv = s.T5.T3.T1.NonElectricAssessoriesIDV ?? 0,
-                                                          Od = s.T5.T3.T1.OD ?? 0,
-                                                          PassengerCover = s.T5.T3.T1.PassengerCover ?? 0,
-                                                          SpecialDiscount = s.T5.T3.T1.SpecialDiscount ?? 0M,
-                                                          TotalGrossPremium = s.T5.T3.T1.TotalGrossPremium ?? 0,
-                                                          TotalIdv = s.T5.T3.T1.TotalIDV ?? 0,
-                                                          TotalOd = s.T5.T3.T1.TotalOD ?? 0,
-                                                          TotalTp = s.T5.T3.T1.TotalTP ?? 0,
-                                                          Tp = s.T5.T3.T1.TPPremium ?? 0,
-                                                          VehicleIdv = s.T5.T3.T1.VehicleIDV ?? 0,
-                                                          BasicTpGstPercentage = s.T5.T3.T1.BasicTpGstPercentage ?? 0,
-                                                          NetPremium = s.T5.T3.T1.NetPremium ?? 0,
-                                                          FamilyDiscount = s.T5.T3.T1.FamilyDiscount ?? 0,
-                                                          LongtermDiscount = s.T5.T3.T1.LongTermDiscount?? 0,
-                                                          AdditionalDiscount = s.T5.T3.T1.AdditionalDiscount ?? 0,
-                                                          SectionDiscount = s.T5.T3.T1.SectionDiscount ?? 0,
-                                                          MaxDaysSingleTrip  = s.T5.T3.T1.MaxDaysSingleTrip?? 0,
-                                                          TerrorimsPremium = s.T5.T3.T1.TerrorismPremium ?? 0
+                                                          AddOnRiderOd = T1.AddonOD ?? 0,
+                                                          CngLpgIdv = T1.CNGIDV ?? 0,
+                                                          CommissionablePremium = T1.CommissionablePremium ?? 0,
+                                                          CommissionPaidOn = T1.CommissionPayTypeId ?? 0,
+                                                          ElectricAccessoriesIdv = T1.ElectricAssessoriesIDV ?? 0,
+                                                          EndorseGrossPremium = T1.EndorseGrossPremium ?? 0,
+                                                          EndorseOd = T1.EndorseOD ?? 0,
+                                                          EndorseTp = T1.EndorseTP ?? 0,
+                                                          GrossPremium = T1.GrossPremium ?? 0,
+                                                          GstPercentage = T1.GSTRate ?? 0M,
+                                                          GstValue = T1.TotalGST ?? 0,
+                                                          Loading = T1.Loading ?? 0M,
+                                                          Ncb = T1.NCBId,
+                                                          NonCommissionComponentPremium = T1.NonCommissionComponentPremium ?? 0,//ask later
+                                                          NonElectricAccessoriesIdv = T1.NonElectricAssessoriesIDV ?? 0,
+                                                          Od = T1.OD ?? 0,
+                                                          PassengerCover = T1.PassengerCover ?? 0,
+                                                          SpecialDiscount = T1.SpecialDiscount ?? 0M,
+                                                          TotalGrossPremium = T1.TotalGrossPremium ?? 0,
+                                                          TotalIdv = T1.TotalIDV ?? 0,
+                                                          TotalOd = T1.TotalOD ?? 0,
+                                                          TotalTp = T1.TotalTP ?? 0,
+                                                          Tp = T1.TPPremium ?? 0,
+                                                          VehicleIdv = T1.VehicleIDV ?? 0,
+                                                          BasicTpGstPercentage = T1.BasicTpGstPercentage ?? 0,
+                                                          NetPremium = T1.NetPremium ?? 0,
+                                                          FamilyDiscount = T1.FamilyDiscount ?? 0,
+                                                          LongtermDiscount = T1.LongTermDiscount?? 0,
+                                                          AdditionalDiscount = T1.AdditionalDiscount ?? 0,
+                                                          SectionDiscount = T1.SectionDiscount ?? 0,
+                                                          MaxDaysSingleTrip  = T1.MaxDaysSingleTrip?? 0,
+                                                          TerrorimsPremium = T1.TerrorismPremium ?? 0
                                                       },
                                                       PreviousPolicy = new PreviousPolicyFormDataModel
                                                       {
-                                                          LastPolicyExpiryDate = s.T5.T3.T1.PreviousPolicyEndDate,
-                                                          LastYearInsuranceCompany = s.T5.T3.T1.PreviousInsuranceCompanyId ?? 0,
-                                                          PreviousPolicyNumber = s.T5.T3.T1.PreviousPolicyNo,
-                                                          PreviousPolicyPlan = s.T5.T3.T1.PreviousPolicyPlan,
-                                                          PreviousPolicySumInsured = s.T5.T3.T1.PreviousSumInsured ?? 0,
+                                                          LastPolicyExpiryDate = T1.PreviousPolicyEndDate,
+                                                          LastYearInsuranceCompany = T1.PreviousInsuranceCompanyId ?? 0,
+                                                          PreviousPolicyNumber = T1.PreviousPolicyNo,
+                                                          PreviousPolicyPlan = T1.PreviousPolicyPlan,
+                                                          PreviousPolicySumInsured = T1.PreviousSumInsured ?? 0,
                                                       },
-                                                      VerticalCode = s.T5.T3.T1.VerticalCode,
+                                                      VerticalCode = T1.VerticalCode,
                                                       TpPolicy = new TpOdPolicyFormDataModel
                                                       {
-                                                          ExpiryDate = s.T5.T3.T1.PolicyEndDate,
-                                                          InsuranceCompany = s.T5.T3.T1.InsuranceCompanyId ?? 0,
-                                                          NumberOfYear = s.T5.T3.T1.NoofYearId ?? 0,
-                                                          PolicyNumber = s.T5.T3.T1.PolicyNo,
-                                                          StartDate = s.T5.T3.T1.PolicyStartDate,
-                                                          NumberOfDays = s.T5.T3.T1.NoofDays,
-                                                          Coverage = s.T5.T3.T1.CoverageId?? 0,
-                                                          LineofBusiness = s.T5.T3.T1.LineofBusiness,
-                                                          Occupancy = s.T5.T3.T1.Occupancy,
-                                                          BasementExposure = s.T5.T3.T1.BasementExposerId,
-                                                          RiskLocation = s.T5.T3.T1.RiskLocation,
-                                                          NumberofLocation = s.T5.T3.T1.NumberofLocation,
-                                                          LocationType = s.T5.T3.T1.LocationType,
-                                                          StorageRiskId = s.T5.T3.T1.StorageRiskId,
-                                                          Hypothentication = s.T5.T3.T1.FinancerId?? 0,
+                                                          ExpiryDate = T1.PolicyEndDate,
+                                                          InsuranceCompany = T1.InsuranceCompanyId ?? 0,
+                                                          NumberOfYear = T1.NoofYearId ?? 0,
+                                                          PolicyNumber = T1.PolicyNo,
+                                                          StartDate = T1.PolicyStartDate,
+                                                          NumberOfDays = T1.NoofDays,
+                                                          Coverage = T1.CoverageId?? 0,
+                                                          LineofBusiness = T1.LineofBusiness,
+                                                          Occupancy = T1.Occupancy,
+                                                          BasementExposure = T1.BasementExposerId,
+                                                          RiskLocation = T1.RiskLocation,
+                                                          NumberofLocation = T1.NumberofLocation,
+                                                          LocationType = T1.LocationType,
+                                                          StorageRiskId = T1.StorageRiskId,
+                                                          Hypothentication = T1.FinancerId?? 0,
 
                                                       },
                                                       ProductPlan = new ProductPlanModel
                                                       {
-                                                          ProductId = s.T5.T3.T1.ProductId,
-                                                          Plan = s.T5.T3.T1.PlanId,
-                                                          PlanTypes = s.T5.T3.T1.PlanTypeId
+                                                          ProductId = T1.ProductId,
+                                                          Plan = T1.PlanId,
+                                                          PlanTypes = T1.PlanTypeId
                                                       },
                                                       Marine = new MarineFormDataModel
                                                       {
-                                                          CoverageInland = s.T5.T3.T1.CoverageInlandId,
-                                                          EndroseSumInsured = s.T5.T3.T1.MarineEndroseSumInsured?? 0,
-                                                          TotalSumInsured = s.T5.T3.T1.MarineTotalSumInsured ?? 0,
-                                                          SumInsured = s.T5.T3.T1.MarineSumInsured ?? 0,
-                                                          FromTransitDomestic = s.T5.T3.T1.TransitFromDomestic,
-                                                          ToTransitDomestic = s.T5.T3.T1.TransitToDomestic,
-                                                          VoyageType = s.T5.T3.T1.VoyageTypeId,
-                                                          Rate = s.T5.T3.T1.MarineRate??0
+                                                          CoverageInland = T1.CoverageInlandId,
+                                                          EndroseSumInsured = T1.MarineEndroseSumInsured?? 0,
+                                                          TotalSumInsured = T1.MarineTotalSumInsured ?? 0,
+                                                          SumInsured = T1.MarineSumInsured ?? 0,
+                                                          FromTransitDomestic = T1.TransitFromDomestic,
+                                                          ToTransitDomestic = T1.TransitToDomestic,
+                                                          VoyageType = T1.VoyageTypeId,
+                                                          Rate = T1.MarineRate??0
                                                       },
-                                                      Misc = new MiscFromDataModel
-                                                      {
-                                                          Misc1 = s.T5.T3.T1.MiscInfo1,
-                                                          Misc2 = s.T5.T3.T1.MiscInfo2,
-                                                          Misc3 = s.T5.T3.T1.MiscInfo3,
-                                                          Misc4 = s.T5.T3.T1.MiscInfo4,
-                                                          MiscRate= s.T5.T3.T1.MiscRate
+                                                      Enginnering = T8,
+                                                      Liability = T10,
+                                                       Gmc = T12,
+                                                        Misc = new MiscFromDataModel
+                                                        {
+                                                          Misc1 = T1.MiscInfo1,
+                                                          Misc2 = T1.MiscInfo2,
+                                                          Misc3 = T1.MiscInfo3,
+                                                          Misc4 = T1.MiscInfo4,
+                                                          MiscRate= T1.MiscRate
                                                       },
-                                                      InsuranceBranch = s.T5.T3.T1.InsuranceBranchId ?? 0,
-                                                      ControlNumber = s.T5.T3.T1.ControlNo,
-                                                      VerticalId = s.T5.T3.T1.VerticalId,
-                                                      VerticalSegmentId = s.T5.T3.T1.VerticalSegmentId ?? 0,
-                                                      RenewalCounter = s.T5.T3.T1.LoyaltyCounter ?? 0,
-                                                      PreviousPolicyId = s.T5.T3.T1.PreviousPolicyId ?? 0,
-                                                      PolicyStatusId = s.T5.T3.T1.PolicyStatusId,
-                                                      PolicyCancelReasonId = s.T5.T3.T1.PolicyCancelReasonId ?? 0,
-                                                      DataEntryStatus = s.T5.T3.T1.Flag1 == false && s.T5.T3.T1.Flag2 == false ? "Data Entry In-Process" : s.T5.T3.T1.Flag1 && s.T5.T3.T1.Flag2 && s.T5.T3.T1.IsVerified == false ? "Data Entry Complete but QC Pending" : s.T5.T3.T1.Flag1 && s.T5.T3.T1.Flag2 && s.T5.T3.T1.IsVerified ? "Data Entry Complete and QC Done" : null,
-                                                      DataEntryStatusColor = s.T5.T3.T1.Flag1 == false && s.T5.T3.T1.Flag2 == false ? HtmlColor.LightPink : s.T5.T3.T1.Flag1 && s.T5.T3.T1.Flag2 && s.T5.T3.T1.IsVerified == false ? HtmlColor.LightPink : s.T5.T3.T1.Flag1 && s.T5.T3.T1.Flag2 && s.T5.T3.T1.IsVerified ? HtmlColor.LightGreen : HtmlColor.White,
-                                                      PolicyStatusColor = s.T5.T3.T1.PolicyStatusId == 2 ? HtmlColor.LightRed : HtmlColor.LightYellow,
-                                                      PolicyCancelReasonColor = s.T5.T3.T1.PolicyStatusId == 2 ? HtmlColor.LightPink : HtmlColor.White,
-                                                      IsReconDone = s.T5.T3.T1.IRDACommissionReceived,
-                                                      IsPreviousPolicyApplicable = s.T5.T3.T1.IsPreviousPolicyApplicable,
-                                                      IsCommissionReceived = s.T5.T3.T1.POSCommissionReceived,
-                                                      IRDACommMonthCycleId = s.T5.T3.T1.IRDACommMonthCycleId,
-                                                      POSCommMonthCycleId = s.T5.T3.T1.POSCommMonthCycleId,
+                                                      InsuranceBranch = T1.InsuranceBranchId ?? 0,
+                                                      ControlNumber = T1.ControlNo,
+                                                      VerticalId = T1.VerticalId,
+                                                      VerticalSegmentId = T1.VerticalSegmentId ?? 0,
+                                                      RenewalCounter = T1.LoyaltyCounter ?? 0,
+                                                      PreviousPolicyId = T1.PreviousPolicyId ?? 0,
+                                                      PolicyStatusId = T1.PolicyStatusId,
+                                                      PolicyCancelReasonId = T1.PolicyCancelReasonId ?? 0,
+                                                      DataEntryStatus = T1.Flag1 == false && T1.Flag2 == false ? "Data Entry In-Process" : T1.Flag1 && T1.Flag2 && T1.IsVerified == false ? "Data Entry Complete but QC Pending" : T1.Flag1 && T1.Flag2 && T1.IsVerified ? "Data Entry Complete and QC Done" : null,
+                                                      DataEntryStatusColor = T1.Flag1 == false && T1.Flag2 == false ? HtmlColor.LightPink : T1.Flag1 && T1.Flag2 && T1.IsVerified == false ? HtmlColor.LightPink : T1.Flag1 && T1.Flag2 && T1.IsVerified ? HtmlColor.LightGreen : HtmlColor.White,
+                                                      PolicyStatusColor = T1.PolicyStatusId == 2 ? HtmlColor.LightRed : HtmlColor.LightYellow,
+                                                      PolicyCancelReasonColor = T1.PolicyStatusId == 2 ? HtmlColor.LightPink : HtmlColor.White,
+                                                      IsReconDone = T1.IRDACommissionReceived,
+                                                      IsPreviousPolicyApplicable = T1.IsPreviousPolicyApplicable,
+                                                      IsCommissionReceived = T1.POSCommissionReceived,
+                                                      IRDACommMonthCycleId = T1.IRDACommMonthCycleId,
+                                                      POSCommMonthCycleId = T1.POSCommMonthCycleId,
                                                       CommissionStatusColor = HtmlColor.White,
                                                       ReconStatusColor = HtmlColor.White,
-                                                      AddOnSelected = s.T5.T3.T1.AddOnSelected,
-                                                      IsVerified = s.T5.T3.T1.IsVerified,
-                                                      Flag2 = s.T5.T3.T1.Flag2,
-                                                      Flag1 = s.T5.T3.T1.Flag1,
-                                                      Portabality = s.T5.T3.T1.PortabilityId,
-                                                      ContinueStartDate = s.T5.T3.T1.CBStartDate,
+                                                      AddOnSelected = T1.AddOnSelected,
+                                                      IsVerified = T1.IsVerified,
+                                                      Flag2 = T1.Flag2,
+                                                      Flag1 = T1.Flag1,
+                                                      Portabality = T1.PortabilityId,
+                                                      ContinueStartDate = T1.CBStartDate,
 
                                                      
-                                                  })
-                                                  .FirstOrDefaultAsync();
+                                                  }).FirstOrDefaultAsync();
+                                           
 
             try
             {
@@ -1116,6 +1156,32 @@ namespace PolicyManagement.Services.Commercial
 
             #endregion
 
+            #region Update Liabality
+            if (model.Liability.LiabilityTermId != 0  && model.VerticalId == (short)Vertical.Liablity)
+            {
+                model.Liability.PolicyId = motorPolicyData.PolicyId;
+                _dataContext.tblLiabilityTerms.AddOrUpdate(model.Liability);
+                await _dataContext.SaveChangesAsync();
+            }
+            #endregion
+
+            #region Update Gmc
+            if (model.Gmc.GmcTermId != 0 && model.VerticalId == (short)Vertical.GroupHealth)
+            {
+                model.Gmc.PolicyId = motorPolicyData.PolicyId;
+                _dataContext.tblGmcTerms.AddOrUpdate(model.Gmc);
+                await _dataContext.SaveChangesAsync();
+            }
+            #endregion
+
+            #region Update Engineering
+            if (model.Enginnering.EnginneringId != 0 && model.VerticalId == (short)Vertical.Engineering )
+            {
+                model.Enginnering.PolicyId = motorPolicyData.PolicyId;
+                _dataContext.tblEnginneringTerms.AddOrUpdate(model.Enginnering);
+                await _dataContext.SaveChangesAsync();
+            }
+            #endregion
 
             return new CommonDto<object>
             {
