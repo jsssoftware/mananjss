@@ -16,7 +16,7 @@ export class CustomerService extends ICustomerService {
         this.apiManagerService.getRequest(`${Customer.CustomerByName}?name=${name}&pageNumber=${pageNumber}&pageSize=${pageSize}`);
 
     getCustomerNames = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(`${Customer.CustomerNames}`);
-
+    getCustomerNamesAndPhone = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(`${Customer.CustomerNamesPhone}`);
     getAllTitles = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Customer.Titles);
 
     getAllTerritories = (branchId: number): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(`${Customer.Territories}/${branchId}`);

@@ -25,4 +25,5 @@ export interface IAddUpdateVoucherModel {
     BouncedDate: string;
     BouncedReceiptNumber: string;
     BranchCode:string;
+    SearchCustomer:number;
 }

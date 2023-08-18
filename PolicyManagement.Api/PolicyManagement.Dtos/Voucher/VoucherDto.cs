@@ -73,5 +73,7 @@ namespace PolicyManagement.Dtos.Voucher
         public int StatusId { get; set; }
         public string Status { get; set; }
         public string VerificationStatus { get; set; }
+        public int? SearchCustomer { get; set; }
+
     }
 }

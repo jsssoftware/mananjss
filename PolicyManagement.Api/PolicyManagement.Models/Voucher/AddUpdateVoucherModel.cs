@@ -32,5 +32,6 @@ namespace PolicyManagement.Models.Voucher
         public string BouncedReceiptNumber { get; set; }
         public bool? IsVoucherVerified { get; set; }
         public string BranchCode { get; set; }
+        public int SearchCustomer { get; set; }
     }
 }

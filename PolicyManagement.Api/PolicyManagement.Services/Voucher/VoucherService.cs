@@ -62,7 +62,8 @@ namespace PolicyManagement.Services.Voucher
                 CreatedBy = model.LoginUserId,
                 CreatedTime = DateTime.Now,
                 VoucherRemark = model.Remarks,
-                VoucherStatusId = (short)VoucherStatus.Active
+                VoucherStatusId = (short)VoucherStatus.Active,
+                SearchCustomer =  model.SearchCustomer
             };
 
             _dataContext.tblVoucherDetails.Add(voucherDetail);
@@ -128,6 +129,7 @@ namespace PolicyManagement.Services.Voucher
             voucherDetail.ModifiedBy = model.LoginUserId;
             voucherDetail.ModifiedTime = DateTime.Now;
             voucherDetail.VoucherRemark = model.Remarks;
+            voucherDetail.SearchCustomer = model.SearchCustomer;
 
             if (!string.IsNullOrEmpty(model.PaymentDate))
                 voucherDetail.TxnInstrumentDate = DateTime.ParseExact(model.PaymentDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
@@ -211,7 +213,7 @@ namespace PolicyManagement.Services.Voucher
             voucherDetail.ModificationReason = model.Reason;
             voucherDetail.ModifiedBy = model.LoginUserId;
             voucherDetail.ModifiedTime = DateTime.Now;
-
+            voucherDetail.SearchCustomer = model.SearchCustomer;
             if (voucherDetail.IsVerified.HasValue && voucherDetail.IsVerified.Value)
                 voucherDetail.IsVerified = null;
 
@@ -460,7 +462,8 @@ namespace PolicyManagement.Services.Voucher
                                                                          BouncedReceiptNumber = s.BounceReceiptNo,
                                                                          CancellationReason = s.CancelReason ?? string.Empty,
                                                                          StatusId = s.VoucherStatusId ?? 0,
-                                                                         VerificationStatus = s.IsVerified.HasValue ? "VERIFIED" : "NOT VERIFIED"
+                                                                         VerificationStatus = s.IsVerified.HasValue ? "VERIFIED" : "NOT VERIFIED",
+                                                                         SearchCustomer = s.SearchCustomer
                                                                      })
                                                                      .FirstOrDefaultAsync();
 

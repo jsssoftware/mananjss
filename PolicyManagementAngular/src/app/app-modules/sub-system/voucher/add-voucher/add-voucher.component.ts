@@ -51,9 +51,11 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
   public _branchId: number;
   public _posDatas: IDropDownDto<number>[] = [];
   public _filteredPosOptions: IDropDownDto<number>[] = [];
+  public _filteredCustomerOptions: IDropDownDto<number>[] = [];
   public _inHouseDatas: IDropDownDto<number>[] = [];
   public _filteredInHouseOptions: IDropDownDto<number>[] = [];
   public _customers: IDropDownDto<number>[] = [];
+  public _customersNamePhone: IDropDownDto<number>[] = [];
   public _filteredOptions: IDropDownDto<number>[] = [];
   public _labelText: string = 'Remarks';
   public _updateMode: string = '';
@@ -88,6 +90,7 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
     voucherDate: new FormControl(''),
     voucherNumber: new FormControl(''),
     remarks: new FormControl(''),
+    searchcustomer: new FormControl(''),
     reason: new FormControl('', [Validators.required]),
     updateMode: new FormControl('', [Validators.required]),
     bouncedAmount: new FormControl('', [Validators.required]),
@@ -146,6 +149,7 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
     this.getPos(Vertical.All);
     this.getInHouse(Vertical.All);
     this.getCustomers();
+    this.getCustomersNamePhone();
     if (this._form === 'update') {
       this.setVoucherDetails();
     }
@@ -287,6 +291,16 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
         this.filterInHouseData(input);
       else
         this.filterInHouseData(input.Name);
+    });
+
+    this.voucherForm.get("searchcustomer")?.valueChanges.subscribe(input => {
+      if (input == null || input === undefined || input === '')
+        return;
+
+      if (typeof (input) == "string")
+        this.filterCustomerData(input);
+      else
+        this.filterCustomerData(input.Name);
     });
 
     this.voucherForm.get("insuranceCompany")?.valueChanges.subscribe(input => {
@@ -436,6 +450,14 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
     });
   }
 
+  filterCustomerData(input: any) {
+    if (input === undefined)
+      return;
+    this._filteredCustomerOptions = this._customersNamePhone.filter(item => {
+      return item.Name.toLowerCase().indexOf(input.toLowerCase()) > -1
+    });
+  }
+
   filterInHouseData(input: any) {
     if (input === undefined)
       return;
@@ -472,6 +494,11 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
 
   getInHouseName(value: number): string {
     return value ? this._inHouseDatas.filter(f => f.Value == value)[0].Name : '';
+  }
+
+  
+  getCustomerNameMobile(value: number): string {
+    return value ? this._customersNamePhone.filter(f => f.Value == value)[0].Name : '';
   }
 
   getPaymentModes(): void {
@@ -513,6 +540,12 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
   getCustomers(): void {
     this.customerService.getCustomerNames().subscribe((response: IDropDownDto<number>[]) => {
       this._customers = response;
+    });
+  }
+
+  getCustomersNamePhone(): void {
+    this.customerService.getCustomerNamesAndPhone().subscribe((response: IDropDownDto<number>[]) => {
+      this._customersNamePhone = response;
     });
   }
 
@@ -569,7 +602,8 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
       BouncedReceiptNumber: this.voucherForm.get('bouncedReceiptNumber')?.value,
       Reason: this.voucherForm.get('reason')?.value,
       UpdateMode: parseInt(this.voucherForm.get('updateMode')?.value),
-      BranchCode: this._branchCode
+      BranchCode: this._branchCode,
+      SearchCustomer: this.voucherForm.get('searchcustomer')?.value,
     }
   }
 
@@ -627,7 +661,8 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
         updateMode: this._updateMode,
         bouncedAmount: response.BouncedAmount,
         bouncedDate: this.commonService.getDateFromIDateDto(response.BouncedDateDto as IDateDto),
-        bouncedReceiptNumber: response.BouncedReceiptNumber
+        bouncedReceiptNumber: response.BouncedReceiptNumber,
+        searchcustomer :  response.SearchCustomer
       });
 
       if (this._mode == 1 || this._mode == 2 || this._mode == 4) { this.voucherForm.get('bank')?.disable(); }

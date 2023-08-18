@@ -96,6 +96,8 @@ public partial class tblVoucherDetails
 
     public Nullable<System.DateTime> ModifiedTime { get; set; }
 
+    public Nullable<int> SearchCustomer { get; set; }
+
 }
 
 }

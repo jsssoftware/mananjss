@@ -36,4 +36,5 @@ export interface IVoucherDto {
     Status: string;
     VoucherType: string;
     VerificationStatus:string;
+    SearchCustomer:number;
 }

@@ -907,5 +907,13 @@ namespace PolicyManagement.Services.Customer
                 Data = customers
             };
         }
+
+        public async Task<List<DropDownDto<int>>> FindAllCustomerNamesPhones() => await _dataContext.tblCustomer.Where(w => w.IsActive)
+                                                                                                          .Select(s => new DropDownDto<int>
+                                                                                                          {
+                                                                                                              Name = s.CustomerName + " (" + s.CustomerMobile1 + ")",
+                                                                                                              Value = s.CustomerId
+                                                                                                          })
+                                                                                                          .ToListAsync();
     }
 }

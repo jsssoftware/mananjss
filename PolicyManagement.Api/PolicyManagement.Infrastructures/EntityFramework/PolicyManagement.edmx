@@ -386,6 +386,12 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblCompanyDetails">
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -1969,6 +1975,13 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblVersion">
+          <Property Name="Major" Type="tinyint" />
+          <Property Name="Minor" Type="tinyint" />
+          <Property Name="Revision" Type="tinyint" />
+        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -2038,6 +2051,7 @@
           <Property Name="VerifiedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
+          <Property Name="SearchCustomer" Type="int" />
         </EntityType>
         <EntityType Name="tblVoucherStatus">
           <Key>
@@ -6239,6 +6253,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="VerifiedTime" Type="DateTime" Precision="0" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
+          <Property Name="SearchCustomer" Type="Int32" />
         </EntityType>
         <EntityType Name="tblVoucherStatus">
           <Key>
@@ -8817,6 +8832,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblVoucherDetails">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblVoucherDetails">
               <MappingFragment StoreEntitySet="tblVoucherDetails">
+                <ScalarProperty Name="SearchCustomer" ColumnName="SearchCustomer" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="VerifiedTime" ColumnName="VerifiedTime" />

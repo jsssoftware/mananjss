@@ -77,5 +77,9 @@ namespace PolicyManagement.Api.Controllers.Customer
         [Route("customercluster/{clusterId}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAllCustomerByClusterCode(int? clusterId) => Json(await _customerService.FindCustomrByClusterCode(clusterId));
+
+        [Route("namesphone")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllCustomerNamesPhone() => Json(await _customerService.FindAllCustomerNamesPhones());
     }
 }

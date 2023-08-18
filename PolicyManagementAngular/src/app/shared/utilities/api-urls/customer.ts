@@ -1,6 +1,7 @@
 export class Customer {
     public static readonly CustomerByName: string = "api/customer";
     public static readonly CustomerNames: string = "api/customer/names";
+    public static readonly CustomerNamesPhone: string = "api/customer/namesphone";
     public static readonly Titles = "api/customer/titles";
     public static readonly Territories = "api/customer/territories";
     public static readonly MaritalStatus = "api/customer/marital-status";

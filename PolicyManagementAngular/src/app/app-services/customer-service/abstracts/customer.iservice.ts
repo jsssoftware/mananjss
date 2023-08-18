@@ -7,6 +7,7 @@ import { IAddUpdateCustomerModel } from "src/app/app-entites/models/customer/add
 export abstract class ICustomerService {
     abstract getCustomerByName(name: string, pageNumber: number, pageSize: number): Observable<any>;
     abstract getCustomerNames(): Observable<IDropDownDto<number>[]>;
+    abstract getCustomerNamesAndPhone(): Observable<IDropDownDto<number>[]>;
     abstract getAllTitles(): Observable<IDropDownDto<number>[]>;
     abstract getAllTerritories(branchId: number): Observable<IDropDownDto<number>[]>;
     abstract getAllMaritalStatus(): Observable<IDropDownDto<number>[]>;

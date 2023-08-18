@@ -939,13 +939,12 @@
                     <div class="col-lg-3">
                       <mat-form-field appearance="fill">
                         <mat-label>Coverage Type</mat-label>
-                        <mat-select formControlName="gmcCoveragetype"
-                        >
-                        <mat-option>Select</mat-option>
-                        <mat-option *ngFor="let coverageType of _coverage" [value]="coverageType.Value">
-                          {{coverageType.Name}}</mat-option>
-                      </mat-select>                      
-                    </mat-form-field>
+                      <mat-select>
+                        <mat-option *ngFor="let planTypes of _planTypes" [value]="planTypes.Value">
+                          {{planTypes.Name}}</mat-option>
+                      </mat-select>
+                        <mat-error *ngIf="policyTermForm.controls.policyType">Please Select Plan</mat-error>
+                      </mat-form-field>
                     </div>
       
                     <div class="col-lg-3">
@@ -980,13 +979,7 @@
                       </mat-form-field>
                     </div>
       
-                    <div class="col-lg-3">
-                      <mat-form-field appearance="fill">
-                        <mat-label>Other Info</mat-label>
-                        <input type="text" matInput formControlName="gmcOtherInfo" class="uppercase" required
-                         >
-                      </mat-form-field>
-                    </div>
+                    
                     <div class="col-lg-3">
                       <mat-form-field appearance="fill">
                           <mat-label>Cover Type</mat-label>
@@ -1005,6 +998,13 @@
                         <input type="number" matInput formControlName="gmcCooperateLimit" class="uppercase" required
                          >
                       </mat-form-field>
+                  </div>
+                  <div class="col-lg-3">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Other Info</mat-label>
+                      <input type="text" matInput formControlName="gmcOtherInfo" class="uppercase" required
+                       >
+                    </mat-form-field>
                   </div>
                   </div>
                 </form>
