@@ -386,12 +386,6 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblCompanyDetails">
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
-        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -628,7 +622,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="NatureofCoverage" Type="varchar" MaxLength="50" />
           <Property Name="PeriodDate" Type="datetime" />
           <Property Name="OtherInfo" Type="varchar" MaxLength="50" />
-          <Property Name="RiskLocatiion" Type="smallint" />
+          <Property Name="RiskLocation" Type="smallint" />
           <Property Name="PolicyId" Type="int" />
           <Property Name="TotalSumInsured" Type="int" />
         </EntityType>
@@ -1975,13 +1969,6 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblVersion">
-          <Property Name="Major" Type="tinyint" />
-          <Property Name="Minor" Type="tinyint" />
-          <Property Name="Revision" Type="tinyint" />
-        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -4396,8 +4383,8 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySet Name="tblMotorPolicyDatas" EntityType="PolicyManagerModel.tblMotorPolicyData" />
           <EntitySet Name="tblLogs" EntityType="PolicyManagerModel.tblLog" />
           <EntitySet Name="tblLiabilityTerms" EntityType="PolicyManagerModel.tblLiabilityTerm" />
-          <EntitySet Name="tblEnginneringTerms" EntityType="PolicyManagerModel.tblEnginneringTerm" />
           <EntitySet Name="tblGmcTerms" EntityType="PolicyManagerModel.tblGmcTerm" />
+          <EntitySet Name="tblEnginneringTerms" EntityType="PolicyManagerModel.tblEnginneringTerm" />
         </EntityContainer>
         <ComplexType Name="GetPolicyFamilyDtl_Result">
           <Property Type="String" Name="InsuredPersonName" Nullable="true" MaxLength="50" />
@@ -6940,19 +6927,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="OtherInfo" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="RetroSpectiveDate" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="tblEnginneringTerm">
-          <Key>
-            <PropertyRef Name="EnginneringId" />
-          </Key>
-          <Property Name="EnginneringId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Rate" Type="Int32" />
-          <Property Name="NatureofCoverage" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="PeriodDate" Type="DateTime" Precision="3" />
-          <Property Name="OtherInfo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="RiskLocatiion" Type="Int16" />
-          <Property Name="PolicyId" Type="Int32" />
-          <Property Name="TotalSumInsured" Type="Int32" />
-        </EntityType>
         <EntityType Name="tblGmcTerm">
           <Key>
             <PropertyRef Name="GmcTermId" />
@@ -6966,6 +6940,19 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="CooperateLimit" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="OtherInfo" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
           <Property Name="PolicyId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tblEnginneringTerm">
+          <Key>
+            <PropertyRef Name="EnginneringId" />
+          </Key>
+          <Property Name="EnginneringId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Rate" Type="Int32" />
+          <Property Name="NatureofCoverage" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PeriodDate" Type="DateTime" Precision="3" />
+          <Property Name="OtherInfo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RiskLocation" Type="Int16" />
+          <Property Name="PolicyId" Type="Int32" />
+          <Property Name="TotalSumInsured" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -9463,20 +9450,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblEnginneringTerms">
-            <EntityTypeMapping TypeName="PolicyManagerModel.tblEnginneringTerm">
-              <MappingFragment StoreEntitySet="tblEnginneringTerm">
-                <ScalarProperty Name="TotalSumInsured" ColumnName="TotalSumInsured" />
-                <ScalarProperty Name="PolicyId" ColumnName="PolicyId" />
-                <ScalarProperty Name="RiskLocatiion" ColumnName="RiskLocatiion" />
-                <ScalarProperty Name="OtherInfo" ColumnName="OtherInfo" />
-                <ScalarProperty Name="PeriodDate" ColumnName="PeriodDate" />
-                <ScalarProperty Name="NatureofCoverage" ColumnName="NatureofCoverage" />
-                <ScalarProperty Name="Rate" ColumnName="Rate" />
-                <ScalarProperty Name="EnginneringId" ColumnName="EnginneringId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblGmcTerms">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblGmcTerm">
               <MappingFragment StoreEntitySet="tblGmcTerm">
@@ -9489,6 +9462,20 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
                 <ScalarProperty Name="NoEmployee" ColumnName="NoEmployee" />
                 <ScalarProperty Name="CoverageType" ColumnName="CoverageType" />
                 <ScalarProperty Name="GmcTermId" ColumnName="GmcTermId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblEnginneringTerms">
+            <EntityTypeMapping TypeName="PolicyManagerModel.tblEnginneringTerm">
+              <MappingFragment StoreEntitySet="tblEnginneringTerm">
+                <ScalarProperty Name="TotalSumInsured" ColumnName="TotalSumInsured" />
+                <ScalarProperty Name="PolicyId" ColumnName="PolicyId" />
+                <ScalarProperty Name="RiskLocation" ColumnName="RiskLocation" />
+                <ScalarProperty Name="OtherInfo" ColumnName="OtherInfo" />
+                <ScalarProperty Name="PeriodDate" ColumnName="PeriodDate" />
+                <ScalarProperty Name="NatureofCoverage" ColumnName="NatureofCoverage" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="EnginneringId" ColumnName="EnginneringId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

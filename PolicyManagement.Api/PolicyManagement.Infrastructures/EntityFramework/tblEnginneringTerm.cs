@@ -28,7 +28,7 @@ public partial class tblEnginneringTerm
 
     public string OtherInfo { get; set; }
 
-    public Nullable<short> RiskLocatiion { get; set; }
+    public Nullable<short> RiskLocation { get; set; }
 
     public Nullable<int> PolicyId { get; set; }
 

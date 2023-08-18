@@ -273,7 +273,7 @@ export class SearchPolicyComponent implements OnInit {
       this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyType)); 
       this._commercialService._headerTitle$.next(this._headerTitle);
       this._commercialService.vertical$.next("Engineering");
-      this.router.navigate(["/pms/liability", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Liabality}]);
+      this.router.navigate(["/pms/liabality", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Liabality}]);
     }
   }
 

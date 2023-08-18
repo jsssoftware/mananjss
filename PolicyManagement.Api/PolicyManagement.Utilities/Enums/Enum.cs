@@ -2,50 +2,22 @@
 {
     public enum Vertical
     {
-        /// <summary>
-        /// VerticalSegmentId = 1 VerticalSegment = Motor
-        /// </summary>
+        
         Motor = 1,
-        /// <summary>
-        /// VerticalSegmentId = 2 VerticalSegment = Health
-        /// </summary>
+     
         Health, //2
-        /// <summary>
-        /// VerticalSegmentId = 2 VerticalSegment = Health
-        /// </summary>
+     
         Travel,//2
-        /// <summary>
-        /// VerticalSegmentId = 2 VerticalSegment = Health
-        /// </summary>
-        PersonalAccident,//2
-        /// <summary>
-        /// VerticalSegmentId = 2 VerticalSegment = Health
-        /// </summary>
-        GroupHealth,//2
-        /// <summary>
-        /// VerticalSegmentId = 3 VerticalSegment = Commercial
-        /// </summary>
+        
         Fire, //3
-        /// <summary>
-        /// VerticalSegmentId = 3 VerticalSegment = Commercial
-        /// </summary>
         Marine,//3
-        /// <summary>
-        /// VerticalSegmentId = 3 VerticalSegment = Commercial
-        /// </summary>
-        Miscellaneous,//3
-        /// <summary>
-        /// VerticalSegmentId = 3 VerticalSegment = Commercial
-        /// </summary>
-        Liablity, //3
-        /// <summary>
-        /// VerticalSegmentId = 3 VerticalSegment = Commercial
-        /// </summary>
-        Engineering, //3
-        /// <summary>
-        /// VerticalSegmentId = 4 VerticalSegment = Life
-        /// </summary>
-        Life
+        PersonalAccident,//2
+        Miscellaneous,
+        Liablity =12,
+        Engineering=13,
+        Life=14,
+        GroupHealth=15,
+        
     }
 
     public enum PolicyManagementType

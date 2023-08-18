@@ -275,9 +275,9 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<tblLiabilityTerm> tblLiabilityTerms { get; set; }
 
-    public virtual DbSet<tblEnginneringTerm> tblEnginneringTerms { get; set; }
-
     public virtual DbSet<tblGmcTerm> tblGmcTerms { get; set; }
+
+    public virtual DbSet<tblEnginneringTerm> tblEnginneringTerms { get; set; }
 
 
     public virtual int GetOtherHelathPolicy(Nullable<int> policyId, Nullable<int> customerID)

@@ -241,7 +241,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     liabilityExcessClause: new FormControl(''),
     liabilityRetroDate: new FormControl(''),
     liabilityOtherInfo: new FormControl(''),
-    liabilityTermId : new FormControl('')
+    liabilityTermId : new FormControl(''),
+    liabilityRiskLocatiion: new FormControl('')
   });
 
   engineeringTermForm = new FormGroup({
@@ -250,7 +251,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     enginneringNatureofCoverage: new FormControl(''),
     enginneringPeriodDate: new FormControl(''),
     enginneringOtherInfo: new FormControl(''),
-    enginneringRiskLocatiion: new FormControl(''),
+    enginneringRiskLocation: new FormControl(''),
     enginneringTermId : new FormControl('')
 
   });
@@ -1261,7 +1262,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
         OtherInfo : this.liabilityTermForm.value.liabilityOtherInfo,
         RetroSpectiveDate :  this.formatDate(this.liabilityTermForm.value.liabilityRetroDate),
         PolicyId :this._policyId,
-        LiabilityTermId:  this.liabilityTermForm.value.liabilityTermForm
+        LiabilityTermId:  this.liabilityTermForm.value.liabilityTermId
       },
       Enginnering : {
         TotalSumInsured :   this.engineeringTermForm.value.enginneringTotalSum,
@@ -1269,7 +1270,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
         NatureofCoverage: this.engineeringTermForm.value.enginneringNatureofCoverage,
         PeriodDate: this.formatDate(this.engineeringTermForm.value.enginneringPeriodDate),
         OtherInfo: this.engineeringTermForm.value.enginneringOtherInfo,
-        RiskLocation:   this.engineeringTermForm.value.enginneringRiskLocatiion,
+        RiskLocation:   this.engineeringTermForm.value.enginneringRiskLocation,
         PolicyId :this._policyId,
         EnginneringTermId :   this.engineeringTermForm.value.enginneringTermId
       },
@@ -1848,8 +1849,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
 
     this.businessDoneBy();
     //Update fire panel
+    if(response.FireCoverage){
     this.fireTermForm.patchValue({
-      sumInsured: response.FireCoverage.SumInsured,
+      sumInsured: response.FireCoverage?.SumInsured,
       fireCoverageId: response.FireCoverage.FireCoverageId,
       fireSA: response.FireCoverage.FireSA,
       fireRate: response.FireCoverage.FireRate,
@@ -1869,7 +1871,10 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       plateGlassRate: response.FireCoverage.PlateGlassRate,
       branchId: response.FireCoverage.BranchId
     });
+  }
     //update marine
+    if(response.Marine){
+
     this.marineTermForm.patchValue({
       voyageType : response.Marine.VoyageType,
       coverageInland: response.Marine.CoverageInland,
@@ -1880,8 +1885,11 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       sumInsured : response.Marine.SumInsured,
       endroseSumInsured: response.Marine.EndroseSumInsured,
     });
+  }
    
     //update libality
+    if(response.Liability){
+
     this.liabilityTermForm.patchValue({
       liabilityTotalSum: response.Liability.TotalSumInsured,
       liabilityNoOfWorker: response.Liability.NoWorker,
@@ -1889,10 +1897,14 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       liabilityExcessClause: response.Liability.ExcessClause,
       liabilityRetroDate:new Date( response.Liability.RetroSpectiveDate),
       liabilityOtherInfo: response.Liability.OtherInfo,
-      liabilityTermId :  response.Liability.LiabilityTermId
+      liabilityTermId :  response.Liability.LiabilityTermId,
+      liabilityRiskLocatiion : response.Liability.RiskLocation
     });
+  }
   
         //update eng
+  if(response.Enginnering){
+
     this.engineeringTermForm.patchValue({
       enginneringTotalSum: response.Enginnering.TotalSumInsured,
       enginneringRate: response.Enginnering.Rate,
@@ -1902,6 +1914,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       enginneringRiskLocatiion: response.Enginnering.RiskLocation,
       enginneringTermId :  response.Enginnering.EnginneringTermId
     });
+  }
+  if(response.Gmc){
     this.gmcTermForm.patchValue({
       gmcCoveragetype: Number(response.Gmc.CoverageType),
       gmcNoofEmployee: response.Gmc.NoEmployee,
@@ -1913,6 +1927,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       gmcTermId :  response.Gmc.GmcTermId,
       gmcNoofLife: response.Gmc.NoLife
     });
+  }
 
     //update misc
     this.miscform.patchValue({
@@ -3148,7 +3163,6 @@ calculateMarineSumInsured() {
 }
 
 formatDate(d: Date) {
-  debugger
   if(d&& d!= null){
   d = new Date(d);   
   var convertDate = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes() - d.getTimezoneOffset()).toISOString();
