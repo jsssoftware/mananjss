@@ -62,7 +62,8 @@
                 <hr class="hrClass" />
                 <mat-list-item>
                   <div mat-line
-                    *ngIf="_policyTypes !== SearchPolicyType.Motor_Renew || _policyTypes == SearchPolicyType.Motor_Verify">
+                    *ngIf="_type !== SearchPolicyType.Motor_Renew ">
+                    {{_type}}
                     <button mat-flat-button color="primary"
                       [ngStyle]="{'background-color': _policyData != undefined ? _policyData.DataEntryStatusColor :'#ffffff'}">
                       {{(_policyData != undefined ? _policyData.DataEntryStatus :"")}}

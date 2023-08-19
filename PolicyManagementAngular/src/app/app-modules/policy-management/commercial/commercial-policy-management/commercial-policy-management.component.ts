@@ -1999,8 +1999,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
           portability: response.Portabality,
           coverage : response.TpPolicy.Coverage,
           numberOfDays : Number(response.TpPolicy.NumberOfDays),
-          lineofBusiness : Number(response.TpPolicy.LineofBusiness),
-          occupancy: Number(response.TpPolicy.Occupancy),
+          lineofBusiness : (response.TpPolicy.LineofBusiness),
+          occupancy: (response.TpPolicy.Occupancy),
           basementExposure :  response.TpPolicy.BasementExposure,
           riskLocation :response.TpPolicy.RiskLocation,
           numberofLocation : response.TpPolicy.NumberofLocation, 
@@ -2058,7 +2058,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
           });
         });
 
-
+        if(this._verticalId == Vertical.Fire){
+          this.calculatTotalFiredSumInsured();
+        }
         //Updating add on rider value
         if (response?.AddOnRider?.AddOnRiderId) await this.getAddOnRiders()
         this._addOnRiderModel.AddOnRiderId = response?.AddOnRider?.AddOnRiderId;
@@ -2216,10 +2218,12 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       let insuranceCompany = this._policyData?.TpPolicy.InsuranceCompany;
       let policyNumber = this._policyData?.TpPolicy.PolicyNumber;
       let policyExpiryDate = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto);
+      debugger
+      let previousPolicyInsuranceCompany = this._policyData.PreviousPolicy.LastYearInsuranceCompany;
       let previousPolicyPlan = this._policyData.PreviousPolicy.PreviousPolicyPlan;
       let previousPolicySumInsured = this._policyData.PreviousPolicy.PreviousPolicySumInsured;
       this.policyForm.patchValue({
-        lastYearInsuranceCompany: insuranceCompany,
+        lastYearInsuranceCompany: previousPolicyInsuranceCompany,
         previousCnPolicyNumber: policyNumber,
         lastPolicyExpiryDate: policyExpiryDate,
         previousPolicyPlan: previousPolicyPlan,
