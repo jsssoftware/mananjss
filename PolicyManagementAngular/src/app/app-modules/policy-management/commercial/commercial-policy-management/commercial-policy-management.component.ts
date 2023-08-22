@@ -1092,6 +1092,13 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     }
   }
 
+  handleEmptyInput(event: any){
+    if(event.target.value === '') {
+      this.getPosManagedBy(event.target.value)
+      this.businessDoneBy();
+    }
+  }
+
 
   createPolicy(): any {
     let menu = this.MenuVertical;
@@ -1100,7 +1107,6 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     }
 
   
-    debugger
     let model: ICommercialPolicyFormDataModel = {
       PolicyId: this._policyId,
       BranchId: this._branchId,
@@ -1948,8 +1954,10 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       previousPolicyPlan: response.PreviousPolicy.PreviousPolicyPlan,
       previousPolicySumInsured: response.PreviousPolicy.PreviousPolicySumInsured
     });
+    if(this._verticalId == Vertical.Fire){
+      this.calculatTotalFiredSumInsured();
+    }
 
-    
     if (this._policyType !== SearchPolicyType.Motor_Renew) {
 
       this._renewalCounter = response.RenewalCounter;
@@ -2043,7 +2051,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
           policyRemarks: response.PolicySource.PolicyRemarks
         });
 
-        await this.commonService.getProduct().subscribe((presponse: any) => {
+        this.getPosManagedBy(response.PolicySource.Pos)
+
+        await this.commonService.getProducts(this._verticalId).subscribe((presponse: any) => {
           this._products = presponse;
           this._selectedProductId = response.ProductPlan.ProductId;
           let insuranceCompanyId = this.policyForm.controls['tpInsuranceCompany'].value;
@@ -2058,9 +2068,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
           });
         });
 
-        if(this._verticalId == Vertical.Fire){
-          this.calculatTotalFiredSumInsured();
-        }
+       
         //Updating add on rider value
         if (response?.AddOnRider?.AddOnRiderId) await this.getAddOnRiders()
         this._addOnRiderModel.AddOnRiderId = response?.AddOnRider?.AddOnRiderId;
@@ -2106,6 +2114,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       this.getAddOnRiders();
       this.setPortablity();
       this.changePortabality();
+      this.setPreviousInsuranceCompany();
     }, 3000);
     this.setvalues();
   }
@@ -2214,12 +2223,10 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   }
 
   setPreviousInsuranceCompany() {
-    if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
-      let insuranceCompany = this._policyData?.TpPolicy.InsuranceCompany;
+    if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention || this._policyType == SearchPolicyType.Motor_Renew) {
       let policyNumber = this._policyData?.TpPolicy.PolicyNumber;
       let policyExpiryDate = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto);
-      debugger
-      let previousPolicyInsuranceCompany = this._policyData.PreviousPolicy.LastYearInsuranceCompany;
+      let previousPolicyInsuranceCompany = this._policyData?.TpPolicy.InsuranceCompany ? this._policyData?.TpPolicy.InsuranceCompany :this._policyData.PreviousPolicy.LastYearInsuranceCompany;
       let previousPolicyPlan = this._policyData.PreviousPolicy.PreviousPolicyPlan;
       let previousPolicySumInsured = this._policyData.PreviousPolicy.PreviousPolicySumInsured;
       this.policyForm.patchValue({
@@ -2725,9 +2732,10 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     this.validatePolicyType(response)
     this.validatePremiumDetail(response)
     this.validatePolicySourceDetail(response)
-    this.validatePaymentData(response)
+    this.validatePaymentData(response);
+    this.validateProductDetail(response);
   };
-  erorr: string = "This Field is Required";
+  erorr: string = "Field is Required";
   errorList: any = [];
 
 
@@ -2808,6 +2816,17 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
 
     }
   }
+
+  validateProductDetail(response: ICommercialPolicyFormDataModel) {
+    debugger
+    if (response.ProductPlan.ProductId == 0) {
+      this.errorList.push("Product Detail " + this.erorr)
+    }
+    if (response.ProductPlan.Plan == 0) {
+      this.errorList.push("Plan Detail " + this.erorr)
+    }
+   
+}
 
 
 

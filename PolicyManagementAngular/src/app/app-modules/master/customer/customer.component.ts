@@ -46,9 +46,11 @@ export class CustomerComponent implements OnInit {
     this._headerTitle= this._commonFunction.getTitle((parseInt)(this._policyTypeId)); 
     this._motorService._headerTitle$.next(this._headerTitle);
     this._healthService._headerTitle$.next(this._headerTitle);
+    this._commercialService._headerTitle$.next(this._headerTitle);
     this.Verticaltype  = Number(this.route.snapshot.paramMap.get('verticalType'));
     this._motorService._verticalId$.next( this.Verticaltype );
     this._healthService._verticalId$.next( this.Verticaltype );
+    this._commercialService._verticalId$.next( this.Verticaltype );
   }
 
   pageChanged(event: PageEvent): void {

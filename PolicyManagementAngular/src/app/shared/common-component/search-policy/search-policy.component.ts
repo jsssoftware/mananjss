@@ -158,7 +158,7 @@ export class SearchPolicyComponent implements OnInit {
     this.getManufacturers();
     this.getPos(parseInt(this._branchId));
     this._policyType = this.route.snapshot.paramMap.get('policyType');
-    if(this._policyType == SearchPolicyType.Motor_Incomplete){
+    if(this._policyType == SearchPolicyType.Motor_Incomplete || this._policyType ==  SearchPolicyType.Motor_Verify){
       this._showAll = true
     }
     this._verticalTypeId = this.route.snapshot.paramMap.get('verticalType'); 

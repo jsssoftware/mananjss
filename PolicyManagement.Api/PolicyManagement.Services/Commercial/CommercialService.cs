@@ -1192,7 +1192,7 @@ namespace PolicyManagement.Services.Commercial
 
         private bool IsFlag2True(CommercialPolicyFormDataModel model)
         {
-                if( ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model) ) { 
+                if( ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model) && ValidateProductDetail(model)) { 
                 return true; 
             } 
             return false;
@@ -1220,6 +1220,15 @@ namespace PolicyManagement.Services.Commercial
         private bool ValidatePremiumDetail(CommercialPolicyFormDataModel model)
         {
             if (model.Premium.Tp == 0 || model.Premium.GstPercentage == 0 || model.Premium.CommissionPaidOn == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool ValidateProductDetail(CommercialPolicyFormDataModel model)
+        {
+            if (model.ProductPlan.ProductId ==  0 || model.ProductPlan.Plan == 0 )
             {
                 return false;
             }

@@ -63,7 +63,6 @@
                 <mat-list-item>
                   <div mat-line
                     *ngIf="_type !== SearchPolicyType.Motor_Renew ">
-                    {{_type}}
                     <button mat-flat-button color="primary"
                       [ngStyle]="{'background-color': _policyData != undefined ? _policyData.DataEntryStatusColor :'#ffffff'}">
                       {{(_policyData != undefined ? _policyData.DataEntryStatus :"")}}
@@ -1548,7 +1547,7 @@
                 <mat-form-field appearance="fill">
                   <mat-label>POS Name</mat-label>
                   <input type="text" placeholder="POS Name" aria-label="POS Name" matInput formControlName="posName"
-                    [matAutocomplete]="autoPos">
+                    [matAutocomplete]="autoPos" (change)="handleEmptyInput($event)">
                   <mat-autocomplete autoActiveFirstOption #autoPos="matAutocomplete"
                     [displayWith]="getPosForBind.bind(this)" (optionSelected)="businessDoneBy()">
                     <mat-option *ngFor="let posData of _filteredPosOptions" [value]="posData.Value">
@@ -1600,6 +1599,7 @@
                   <input type="text" matInput formControlName="businessDoneBy" [readonly]="true" />
                 </mat-form-field>
               </div>
+            
               <div class="col-lg-6">
                 <mat-form-field>
                   <mat-label>POS Managed By</mat-label>

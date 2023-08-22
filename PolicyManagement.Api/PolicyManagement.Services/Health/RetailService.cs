@@ -29,6 +29,7 @@ using PolicyManagement.Models.Motor;
 using System.Xml.Linq;
 using System.Reflection;
 using System.Numerics;
+using PolicyManagement.Models.Commercial;
 
 namespace PolicyManagement.Services.Health
 {
@@ -1085,13 +1086,22 @@ namespace PolicyManagement.Services.Health
         private bool IsFlag2True(RetailPolicyFormDataModel model)
         {
                 if( ValidatePolicyDetail(model) && ValidatePremiumDetail(model) && ValidatePolicySourceDetail(model) && ValidatePaymentData(model) 
-                 && ValidateInsuredPersonDetail(model)) { 
+                 && ValidateInsuredPersonDetail(model)&& ValidateProductDetail(model)) { 
                 return true; 
             } 
             return false;
         }
-       
-   
+
+        private bool ValidateProductDetail(RetailPolicyFormDataModel model)
+        {
+            if (model.ProductPlan.ProductId == 0 || model.ProductPlan.Plan == 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
         private bool ValidatePolicyDetail(RetailPolicyFormDataModel model)
         {
             if (model.PolicyTerm.PackageTypeId == (short)PackageType.TP_ONLY)

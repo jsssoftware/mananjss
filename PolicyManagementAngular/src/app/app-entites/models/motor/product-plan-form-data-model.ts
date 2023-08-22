@@ -1,6 +1,6 @@
 
 export interface IProductPlanFormDataModel {
     ProductId: number;
-    Plan: string;
+    Plan: Number;
     PlanTypes: string;
 }

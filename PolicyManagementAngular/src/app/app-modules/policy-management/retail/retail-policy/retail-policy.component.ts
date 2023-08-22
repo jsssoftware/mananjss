@@ -1300,9 +1300,12 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
 
   setExpiryDate(policy: string) {   
-      if (this.policyTermForm.value.policyType !== PolicyType.SameCompanyRetention || this.policyTermForm.value.policyType !== PolicyType.OtherCompanyRetention
-      ){   
+      if(this.isTravel && this.policyForm.getRawValue().tpStartDate && this.policyForm.getRawValue().continutyStartDate && new Date(this.policyForm.getRawValue().tpStartDate) > new Date(this.policyForm.getRawValue().continutyStartDate )){
         this.policyForm.get("continutyStartDate").setValue(new Date(this.policyForm.getRawValue().tpStartDate));
+      }
+      if ((this.policyTermForm.value.policyType !== PolicyType.SameCompanyRetention || this.policyTermForm.value.policyType !== PolicyType.OtherCompanyRetention
+      )&& policy){   
+        this.isTravel ? this.policyForm.get("continutyStartDate").setValue(new Date(this.policyForm.getRawValue().tpStartDate)) : "";
       }
     let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
     const days = -1;
@@ -1836,7 +1839,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
           posManagedBy: response.PolicySource.PosManagedBy,
           policyRemarks: response.PolicySource.PolicyRemarks
         });
-
+        this.getPosManagedBy(response.PolicySource.Pos)
         await this.commonService.getProduct().subscribe((presponse: any) => {
           this._products = presponse;
           this._selectedProductId = response.ProductPlan.ProductId;
@@ -1899,6 +1902,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       this.getAddOnRiders();
       this.setPortablity();
       this.changePortabality();
+      this.setPreviousInsuranceCompany();
     }, 3000);
     this.setvalues();
   }
@@ -2007,14 +2011,14 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   setPreviousInsuranceCompany() {
-    if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
-      let insuranceCompany = this._policyData?.TpPolicy.InsuranceCompany;
+    if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention || this._policyType == SearchPolicyType.Motor_Renew) {
       let policyNumber = this._policyData?.TpPolicy.PolicyNumber;
       let policyExpiryDate = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto);
+      let previousPolicyInsuranceCompany = this._policyData?.TpPolicy.InsuranceCompany ? this._policyData?.TpPolicy.InsuranceCompany :this._policyData.PreviousPolicy.LastYearInsuranceCompany;
       let previousPolicyPlan = this._policyData.PreviousPolicy.PreviousPolicyPlan;
       let previousPolicySumInsured = this._policyData.PreviousPolicy.PreviousPolicySumInsured;
       this.policyForm.patchValue({
-        lastYearInsuranceCompany: insuranceCompany,
+        lastYearInsuranceCompany: previousPolicyInsuranceCompany,
         previousCnPolicyNumber: policyNumber,
         lastPolicyExpiryDate: policyExpiryDate,
         previousPolicyPlan: previousPolicyPlan,
@@ -2023,12 +2027,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     }
     else {
       this.refreshLastInsuranceCompanies();
-      /*   this.policyForm.patchValue({
-          lastYearInsuranceCompany: undefined
-        }); */
     }
-
-
   }
 
   resetPreviousInsuranceCompany() {
@@ -2519,7 +2518,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   validatePolicyType(response: IHealthPolicyFormDataModel) {
-    if (this._type !== SearchPolicyType.Motor_New && !response.IsPreviousPolicyApplicable && this._type !== SearchPolicyType.Motor_Renew) {
+    if (this._type !== SearchPolicyType.Motor_New && !response.IsPreviousPolicyApplicable && this._type !== SearchPolicyType.Motor_Renew && !this.isTravel) {
       if (!response.PreviousPolicy.LastPolicyExpiryDateDto) {
         this.errorList.push("Previous Policy Expiry Date" + this.erorr)
 
