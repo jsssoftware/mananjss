@@ -1066,7 +1066,7 @@ namespace PolicyManagement.Services.Motor
             if (model.PolicyTerm.PackageTypeId == (short)PackageType.TP_ONLY)
             {
                 //22 IS ZERO YEAR IN TP
-                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || (model.TpPolicy.ExpiryDateString == null && model.TpPolicy.NumberOfYear != 22) || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null)
+                if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || (model.TpPolicy.ExpiryDateString == null && model.TpPolicy.NumberOfYear != 22) || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null || model.InsuranceBranch == 0)
                 {
                     return false;
                 }
@@ -1074,7 +1074,7 @@ namespace PolicyManagement.Services.Motor
             else
             {
                 if (string.IsNullOrEmpty(model.TpPolicy.PolicyNumber) || (model.TpPolicy.ExpiryDateString == null && model.TpPolicy.NumberOfYear != 22) || model.TpPolicy.NumberOfYear == 0 || model.TpPolicy.StartDateString == null
-                    || string.IsNullOrEmpty(model.OdPolicy.PolicyNumber) || (model.OdPolicy.ExpiryDateString == null && model.OdPolicy.NumberOfYear != 22) || model.OdPolicy.NumberOfYear == 0 || model.OdPolicy.StartDateString == null)
+                    || string.IsNullOrEmpty(model.OdPolicy.PolicyNumber) || (model.OdPolicy.ExpiryDateString == null && model.OdPolicy.NumberOfYear != 22) || model.OdPolicy.NumberOfYear == 0 || model.OdPolicy.StartDateString == null || model.InsuranceBranch == 0)
                 {
                     return false;
                 }

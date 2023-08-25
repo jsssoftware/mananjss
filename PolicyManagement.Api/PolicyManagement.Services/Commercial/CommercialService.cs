@@ -908,7 +908,7 @@ namespace PolicyManagement.Services.Commercial
                 motorPolicyData.VerifiedTime= DateTime.Now;
             }
             motorPolicyData.IsPreviousPolicyApplicable = model.IsPreviousPolicyApplicable;
-            motorPolicyData.Flag2 =  model.IsVerified  == false ? IsFlag2True(model) : true;
+            motorPolicyData.Flag2 = IsFlag2True(model); //model.IsVerified  == false ? IsFlag2True(model) : true;
             motorPolicyData.Flag1 = true;
             motorPolicyData.FamilyDiscount = model.Premium.FamilyDiscount;
             motorPolicyData.SectionDiscount = model.Premium.SectionDiscount;
@@ -1208,7 +1208,7 @@ namespace PolicyManagement.Services.Commercial
                     && (model.TpPolicy.NumberOfYear != 22 && model.VerticalId != (short)Vertical.Travel) 
                     && (model.TpPolicy.NumberOfDays == null && model.VerticalId == (short)Vertical.Travel)  || 
                     (model.TpPolicy.NumberOfYear == 0 && model.VerticalId != (short)Vertical.Travel) 
-                    || model.TpPolicy.StartDateString == null || model.TpPolicy.InsuranceCompany == 0)
+                    || model.TpPolicy.StartDateString == null || model.TpPolicy.InsuranceCompany == 0 || model.InsuranceBranch == 0)
                 {
                     return false;
                 }
@@ -1228,7 +1228,7 @@ namespace PolicyManagement.Services.Commercial
 
         private bool ValidateProductDetail(CommercialPolicyFormDataModel model)
         {
-            if (model.ProductPlan.ProductId ==  0 || model.ProductPlan.Plan == 0 )
+            if (model.ProductPlan.ProductId ==  0)
             {
                 return false;
             }

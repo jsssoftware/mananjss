@@ -1247,7 +1247,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
         CoverageInland: this.marineTermForm.value.coverageInland,
         FromTransitDomestic: this.marineTermForm.value.fromTransitDomestic,
         ToTransitDomestic: this.marineTermForm.value.toTransitDomestic,
-        Rate: this.marineTermForm.value.Rate,
+        Rate: this.marineTermForm.value.rate,
         TotalSumInsured: this.marineTermForm.value.totalSumInsured,
         SumInsured: this.marineTermForm.value.sumInsured,
         EndroseSumInsured: this.marineTermForm.value.endroseSumInsured,
@@ -1886,7 +1886,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       coverageInland: response.Marine.CoverageInland,
       fromTransitDomestic: response.Marine.FromTransitDomestic,
       toTransitDomestic:response.Marine.ToTransitDomestic,
-      Rate: response.Marine.Rate,
+      rate: response.Marine.Rate,
       totalSumInsured: response.Marine.TotalSumInsured,
       sumInsured : response.Marine.SumInsured,
       endroseSumInsured: response.Marine.EndroseSumInsured,
@@ -2818,14 +2818,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   }
 
   validateProductDetail(response: ICommercialPolicyFormDataModel) {
-    debugger
     if (response.ProductPlan.ProductId == 0) {
       this.errorList.push("Product Detail " + this.erorr)
     }
-    if (response.ProductPlan.Plan == 0) {
-      this.errorList.push("Plan Detail " + this.erorr)
-    }
-   
 }
 
 
@@ -3171,7 +3166,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
 }
 calculatTotalFiredSumInsured() {
   this.totalFireSumInsured = Number(this.fireTermForm.value.fireSA || 0) + Number(this.fireTermForm.value.earthQuakeSA || 0) + Number(this.fireTermForm.value.sTFISA || 0)
-  + Number(this.fireTermForm.value.terrorismSA || 0)+ Number(this.fireTermForm.value.burglarySA || 0) + Number(this.fireTermForm.value.moneySA || 0) ;
+  + Number(this.fireTermForm.value.terrorismSA || 0)+ Number(this.fireTermForm.value.burglarySA || 0) + Number(this.fireTermForm.value.moneySA || 0)  + Number(this.fireTermForm.value.breakDownSA || 0)
+  + Number(this.fireTermForm.value.plateGlassSA || 0) ;
   this.fireTermForm.patchValue({
     sumInsured : this.totalFireSumInsured
   })
