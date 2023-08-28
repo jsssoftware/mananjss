@@ -1156,6 +1156,15 @@ namespace PolicyManagement.Services.Commercial
 
             #endregion
 
+            #region Update Fire
+            if (model.FireCoverage.FireCoverageId != 0 && model.VerticalId == (short)Vertical.Fire)
+            {
+                model.FireCoverage.PolicyId = motorPolicyData.PolicyId;
+                _dataContext.tblFireCoverage.AddOrUpdate(model.FireCoverage);
+                await _dataContext.SaveChangesAsync();
+            }
+            #endregion
+
             #region Update Liabality
             if (model.Liability.LiabilityTermId != 0  && model.VerticalId == (short)Vertical.Liablity)
             {

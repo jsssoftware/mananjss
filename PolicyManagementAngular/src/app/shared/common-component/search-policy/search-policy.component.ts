@@ -132,6 +132,7 @@ export class SearchPolicyComponent implements OnInit {
   public _filteredManufacturers: IDropDownDto<number>[] = [];
   public _filteredPosOptions : IDropDownDto<number>[] = [];
   public _headerTitle:any;  
+  public _verticalTitle:any;  
   public _isSearchButtonDisabled:boolean =  true;  
 
   //#endregion
@@ -196,6 +197,7 @@ export class SearchPolicyComponent implements OnInit {
     this.searchPolicyForm.valueChanges.subscribe(value => {
       this._isSearchButtonDisabled = false
     });
+    this.setVertical()
   }  
 
   getInsuranceCompanies(): any {
@@ -275,6 +277,7 @@ export class SearchPolicyComponent implements OnInit {
       this._commercialService.vertical$.next("Engineering");
       this.router.navigate(["/pms/liabality", { policyId, policyTypeId: policyTypeId,policyType :this._policyType,verticalId: Vertical.Liabality}]);
     }
+
   }
 
   searchPolicy(): void {
@@ -459,6 +462,33 @@ export class SearchPolicyComponent implements OnInit {
     if(this._verticalTypeId == Vertical.Liabality) {
         this.router.navigate(["../pms/liability/liability-policy-management"]);
     }
-
+    if(this._verticalTypeId == Vertical.Travel) {
+        this.router.navigate(["../pms/travel/travel-policy-management"]);
+    }
   }  
+
+  setVertical(){
+    if(this._verticalTypeId==Vertical.Motor)
+    this._verticalTitle = "Motor"
+    if(this._verticalTypeId==Vertical.Health)
+    this._verticalTitle = "Health";
+    if(this._verticalTypeId==Vertical.Pesonal_Accident)
+    this._verticalTitle = "Pesonal_Accident";
+    if(this._verticalTypeId==Vertical.Fire)
+    this._verticalTitle = "Fire";
+    if(this._verticalTypeId==Vertical.GMC)
+    this._verticalTitle = "GMC";
+    if(this._verticalTypeId == Vertical.Engineering) {
+      this._verticalTitle = "Engineering";
+    }
+    if(this._verticalTypeId == Vertical.Marine) {
+      this._verticalTitle = "Marine";
+    }
+    if(this._verticalTypeId == Vertical.Liabality) {
+      this._verticalTitle = "Liabality";
+    }
+    if(this._verticalTypeId == Vertical.Travel) {
+      this._verticalTitle = "Travel";
+    }
+  }
 }  

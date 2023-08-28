@@ -119,8 +119,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   @Output() tableNameToDialogBox = new EventEmitter<string>();
   displayedColumnsDocumentTable: string[] = ["Sno", "DocumentTypeName", "FileName", "Remarks", "DocumentTypeId"];
   displayedColumnsCustomerCluster: string[] = ["Sno", "NameInPolicy", "DateOfBirth", "Gender", "Mobile", "Code", "Action"];
-  displayedColumnsInsuranceCluster: string[] = ["Action", "Sno", "NameInPolicy", "DateOfBirth", "Gender", "Mobile", "Code", "RelationProposer"
-    , "SumInsuredIndividual", "SumInsuredFloater", "CumulativeBonus", "Deductable", "Loading", "LoadingReason", "Ped", "PedExclusion"
+  displayedColumnsInsuranceCluster: string[] = ["Action", "Sno", "NameInPolicy", "DateOfBirth","Age","Gender", "Mobile", "Code", "RelationProposer"
+    , "SumInsuredIndividual", "SumInsuredFloater", "CumulativeBonus", "Deductable", "Loading", "LoadingReason", "Ped","Ppc","PedExclusion"
     , "AnualIncome", "NomineeName", "NomineeRelationship"];
   displayedColumns: string[] = [
     'endorsementReason',
@@ -1300,7 +1300,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
 
   setExpiryDate(policy: string) {   
-      if(this.isTravel && this.policyForm.getRawValue().tpStartDate && this.policyForm.getRawValue().continutyStartDate && new Date(this.policyForm.getRawValue().tpStartDate) > new Date(this.policyForm.getRawValue().continutyStartDate )){
+      if(this.isTravel && this.policyForm.getRawValue().tpStartDate && this.policyForm.getRawValue().continutyStartDate && new Date(this.policyForm.getRawValue().tpStartDate) < new Date(this.policyForm.getRawValue().continutyStartDate )){
         this.policyForm.get("continutyStartDate").setValue(new Date(this.policyForm.getRawValue().tpStartDate));
       }
       if ((this.policyTermForm.value.policyType !== PolicyType.SameCompanyRetention || this.policyTermForm.value.policyType !== PolicyType.OtherCompanyRetention
@@ -1728,7 +1728,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       await this._selectedinsuranceCustomerPersonDetail.filter(y=>{
         y.NomineeRelationShipName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
         y.RelationProposerName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
-        y.PedName = this._ped.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cped)?.Name
+        y.PedName = this._ped.find((x: { Value: any; }) => x.Value == y.Ped)?.Name
+        y.PpcName = this._ppc.find((x: { Value: any; }) => x.Value == y.Ppc)?.Name
       })
       this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
   
@@ -2677,6 +2678,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this.insurancePerson.Loading = this.InsurancePersonForm.cloading
     this.insurancePerson.LoadingReason = this.InsurancePersonForm.cloadingreason
     this.insurancePerson.Ped = this.InsurancePersonForm.cped
+    this.insurancePerson.Ppc = this.InsurancePersonForm.cppc
     this.insurancePerson.PedExclusion = this.InsurancePersonForm.cpedexclusion
     this.insurancePerson.AnualIncome = this.InsurancePersonForm.canualincome
     this.insurancePerson.RiskClass = this.InsurancePersonForm.criskclass
@@ -2685,6 +2687,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this.insurancePerson.NomineeRelationShipName = this._relations.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cnomineerelation)?.Name
     this.insurancePerson.RelationProposerName = this._relations.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.crelprposer)?.Name
     this.insurancePerson.PedName = this._ped.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cped)?.Name
+    this.insurancePerson.PpcName = this._ppc.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cppc)?.Name
       this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
     this.insurancePerson.GenderId = this.InsurancePersonForm.cgender;
     let ss =
@@ -2700,6 +2703,14 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this.insurancePerson.TeamMemebrId = this.customerDetails.TeamMemebrId;
     this.insurancePerson.ReferenceId = this.customerDetails.ReferenceId;
     this.insurancePerson.PosId = this.customerDetails.PosId;
+    let age ;
+    if(this.policyForm.getRawValue().continutyStartDate){
+      let DOB = new Date(this.insurancePerson.DateOfBirth)
+      let continueStartDate :any = new Date(this.policyForm.getRawValue().continutyStartDate)
+      let timeDiff  = Math.abs(continueStartDate - DOB.getTime());
+      age = Number(Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25));
+    }
+    this.insurancePerson.Age = age
     //insurancePerson
     if (this.productPlanForm.value.planTypes == ProductPlanType.Floater) {
       if (this._selectedinsuranceCustomerPersonDetail.length >= 1) {
@@ -2912,6 +2923,13 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
     const validator = form_field.validator({} as AbstractControl);
     return (validator && validator.required);
+}
+
+handleEmptyInput(event: any){
+  if(event.target.value === '') {
+    this.getPosManagedBy(event.target.value)
+    this.businessDoneBy();
+  }
 }
 
 

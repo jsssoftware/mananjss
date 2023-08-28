@@ -969,6 +969,10 @@
                         <th mat-header-cell *matHeaderCellDef> Date of Birth </th>
                         <td mat-cell *matCellDef="let element"> {{element.DateOfBirth  | date: 'dd/MM/yyyy' }} </td>
                       </ng-container>
+                      <ng-container matColumnDef="Age">
+                        <th mat-header-cell *matHeaderCellDef> Age </th>
+                        <td mat-cell *matCellDef="let element"> {{element.Age  }} </td>
+                      </ng-container>
                       <ng-container matColumnDef="Gender">
                         <th mat-header-cell *matHeaderCellDef> Gender</th>
                         <td mat-cell *matCellDef="let element"> {{element.Gender}} </td>
@@ -1018,6 +1022,10 @@
                       <ng-container matColumnDef="PedExclusion">
                         <th mat-header-cell *matHeaderCellDef>Ped Exclusion</th>
                         <td mat-cell *matCellDef="let element"> {{element.PedExclusion}} </td>
+                      </ng-container>
+                      <ng-container matColumnDef="Ppc">
+                        <th mat-header-cell *matHeaderCellDef>Ppc </th>
+                        <td mat-cell *matCellDef="let element"> {{element.PpcName}} </td>
                       </ng-container>
                       <ng-container matColumnDef="AnualIncome">
                         <th mat-header-cell *matHeaderCellDef> Annual Income</th>
@@ -1358,7 +1366,7 @@
                   <mat-form-field appearance="fill">
                     <mat-label>POS Name</mat-label>
                     <input type="text" placeholder="POS Name" aria-label="POS Name" matInput formControlName="posName"
-                      [matAutocomplete]="autoPos">
+                      [matAutocomplete]="autoPos" (change)="handleEmptyInput($event)">
                     <mat-autocomplete autoActiveFirstOption #autoPos="matAutocomplete"
                       [displayWith]="getPosForBind.bind(this)" (optionSelected)="businessDoneBy()">
                       <mat-option *ngFor="let posData of _filteredPosOptions" [value]="posData.Value">

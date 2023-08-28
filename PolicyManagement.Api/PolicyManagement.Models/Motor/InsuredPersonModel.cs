@@ -46,7 +46,8 @@ namespace PolicyManagement.Models.Motor
         public string RelationProposerName { get; set; }
         public string CustomerCode { get; set; }
         public int? Profession { get; set; }
-
+        public string PpcName { get; set; }
+        public short? Ppc { get; set; }
 
     }
 }

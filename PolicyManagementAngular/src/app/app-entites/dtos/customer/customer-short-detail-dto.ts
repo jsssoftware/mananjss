@@ -70,6 +70,8 @@ export interface ICustomerInsuranceDetail{
     ReferenceId? :  number;
     NomineeRelationShipName? :  string;
     PedName? :  string;
+    PpcName? :  string;
     RelationProposerName?: string;
     ProfessionName?: string;
+    Age?: Number;
 }

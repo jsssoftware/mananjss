@@ -257,7 +257,7 @@
                 <mat-form-field appearance="fill">
                   <mat-label>Policy Type</mat-label>
                   <mat-select formControlName="policyType" required (selectionChange)="getPolicyTerms()"
-                    [disabled]="_type !== SearchPolicyType.Motor_Renew">
+                    [disabled]="_policyType !== SearchPolicyType.Motor_Renew">
                     <mat-option>Select</mat-option>
                     <mat-option *ngFor="let policyType of _policyTypes" [value]="policyType.Value">{{policyType.Name}}
                     </mat-option>

@@ -2101,7 +2101,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     if (this._policyType !== SearchPolicyType.Motor_Renew || this._policyType == SearchPolicyType.Motor_Incomplete) {
       this.validationPolicyData(response)
     }
-    if (this._type == PolicyType.OtherCompanyRetention) {
+    if (response.PolicyTerm.PolicyType == PolicyType.OtherCompanyRetention) {
       this.policyForm.get("tpInsuranceCompany")?.disable();
       this.policyForm.get("policyNumber")?.disable();
       this.policyForm.get("tpStartDate")?.disable();

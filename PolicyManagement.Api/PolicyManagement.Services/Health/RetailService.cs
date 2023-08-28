@@ -385,7 +385,7 @@ namespace PolicyManagement.Services.Health
                                 PassportNo = f.PassportNumber,
                                 BranchId= f.BranchId,
                                 IsActive = true,
-                                PPCId = f.Ped,
+                                PPCId = f.Ppc,
                                 InsuredRelationId = f.RelationProposer
 
                             });
@@ -644,7 +644,8 @@ namespace PolicyManagement.Services.Health
                         Gender = f.T1.gender.Gender,
                         CustomerCode = f.T2.CustomerCode,
                         RelationProposer = f.T1.insuredPerson.InsuredRelationId,
-                        Profession = f.T2.ProfessionId
+                        Profession = f.T2.ProfessionId,
+                        Ppc = f.T1.insuredPerson.PPCId
                     });
                 }
                 if (insuredPersons != null && insuredPersons.Count > 0)
