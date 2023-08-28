@@ -2552,7 +2552,10 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
 
   getPlan() {
     this._selectedProductId = this.productPlanForm.value.product;
-    let insuranceCompanyId = this.policyForm.controls['tpInsuranceCompany'].value;
+    let insuranceCompanyId = 0;
+    if(this._verticalId == Vertical.Travel){
+       insuranceCompanyId = this.policyForm.controls['tpInsuranceCompany'].value;
+    }
 
     this.commonService.getPlan(this._selectedProductId,insuranceCompanyId,this._verticalId).subscribe((response: any) => {
       this._plans = response;
@@ -2933,10 +2936,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     this.insurancePerson.NomineeRelationShipName = this._relations.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cnomineerelation)?.Name
     this.insurancePerson.RelationProposerName = this._relations.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.crelprposer)?.Name
     this.insurancePerson.PedName = this._ped.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cped)?.Name
-      this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
+    this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
     this.insurancePerson.GenderId = this.InsurancePersonForm.cgender;
-    let ss =
-      this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId ? this._storeCustomerClusterDetail.find(x => x.CustomerId == this.insuranceCustomerForm.value.ccustomerId).BranchId :
+    this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId ? this._storeCustomerClusterDetail?.find(x => x.CustomerId == this.insuranceCustomerForm.value.ccustomerId).BranchId :
         this._branchId
     this.insurancePerson.uid = this.InsurancePersonForm.ccustomerUid;
     this.insurancePerson.CustomerCode = this._insuranceCustomerPersonDetails?.find(x => x.uid == this.InsurancePersonForm?.ccustomerUid)?.Code

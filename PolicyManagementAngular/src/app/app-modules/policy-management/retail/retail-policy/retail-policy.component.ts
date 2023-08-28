@@ -1177,7 +1177,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       IsVerified: this.IsVerified,
       PreviousPolicyId: this._type == SearchPolicyType.Motor_Renew ? this._policyId : "",
       Portabality: this.PolicyForm.portability,
-      ContinueStartDate: this.PolicyForm.continutyStartDate,
+      ContinueStartDate: this.formatDate(this.PolicyForm.continutyStartDate),
       NumberOfChild: this.noofchild,
       NumberOfAdult : this.noofAdult,
       TotalSumInsured: this.totalSumInsured
@@ -1300,13 +1300,10 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
 
   setExpiryDate(policy: string) {   
-      if(this.isTravel && this.policyForm.getRawValue().tpStartDate && this.policyForm.getRawValue().continutyStartDate && new Date(this.policyForm.getRawValue().tpStartDate) < new Date(this.policyForm.getRawValue().continutyStartDate )){
+      if(this.isTravel && this.policyForm.getRawValue().tpStartDate && this.policyForm.getRawValue().continutyStartDate && new Date(this.policyForm.getRawValue().tpStartDate) < new Date(this.policyForm.getRawValue().continutyStartDate ) && policy == ''){
         this.policyForm.get("continutyStartDate").setValue(new Date(this.policyForm.getRawValue().tpStartDate));
       }
-      if ((this.policyTermForm.value.policyType !== PolicyType.SameCompanyRetention || this.policyTermForm.value.policyType !== PolicyType.OtherCompanyRetention
-      )&& policy){   
-        this.isTravel ? this.policyForm.get("continutyStartDate").setValue(new Date(this.policyForm.getRawValue().tpStartDate)) : "";
-      }
+      
     let policyTerm: IPolicyTermDto = this.policyTermForm.value.policyTerm as IPolicyTermDto;
     const days = -1;
     if (this.policyForm.value.tpNumberOfYear == undefined
@@ -1726,10 +1723,12 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this._selectedinsuranceCustomerPersonDetail = JSON.parse(JSON.stringify(response.InsuredPersonData));
     if(this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length>0){
       await this._selectedinsuranceCustomerPersonDetail.filter(y=>{
+        this._incrementalUid = this._incrementalUid + 1;
         y.NomineeRelationShipName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
         y.RelationProposerName  = this._relations.find((x: { Value: any; }) => x.Value == y.NomineeRelationship)?.Name
         y.PedName = this._ped.find((x: { Value: any; }) => x.Value == y.Ped)?.Name
-        y.PpcName = this._ppc.find((x: { Value: any; }) => x.Value == y.Ppc)?.Name
+        y.PpcName = this._ppc.find((x: { Value: any; }) => x.Value == y.Ppc)?.Name,
+        y.uid =   this._incrementalUid;
       })
       this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
   
@@ -2510,10 +2509,10 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       if (!response.TpPolicy.StartDateDto) {
         this.errorList.push("Risk Policy start date" + this.erorr)
       }
-      if (response.TpPolicy.InsuranceCompany == 0) {
+      if (response.TpPolicy.InsuranceCompany == 0 && this.isTravel == false) {
         this.errorList.push("Insurance company " + this.erorr)
       }
-      if (!response.InsuranceBranch) {
+      if (!response.InsuranceBranch && this.isTravel == false) {
         this.errorList.push("Insurance Branch " + this.erorr)
       }
   }
@@ -2635,21 +2634,25 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       customerCode : data.CustomerCode
     })
     this._insuranceCustomerPersonDetails.push(data);
-    console.log(this._insuranceCustomerPersonDetails)
     this.removeInsuranceCLuster(index)
     this.sumInsuredCalculation();
   }
   insurancePerson: ICustomerInsuranceDetail = <ICustomerInsuranceDetail>{};
   addInsuracePersondetail(): void {
-    console.log(this.insuranceCustomerForm)
     if(!this.insuranceCustomerForm.valid) {
       this.insuranceCustomerForm.markAllAsTouched();
       return;
     }
-    console.log(this.insuranceCustomerForm.value)
     if (!this.InsurancePersonForm.cnameInsuredPerson) {
       alert("Customer name is required");
       return
+    }
+     if(this.insuranceCustomerForm.value.ccustomerUid == null){
+        this._incrementalUid = this._incrementalUid + 1;
+        let incrementalId = this._incrementalUid + 1;
+        this.insuranceCustomerForm.patchValue({
+          ccustomerUid: incrementalId,
+      })
     }
     this._isInsurancePersoneEdit = false;
     let selectedInsurancePersonIndex = this._selectedinsuranceCustomerPersonDetail?.findIndex(x => x.uid == this.insuranceCustomerForm.value.ccustomerUid);
@@ -2662,7 +2665,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     }
     this.insurancePerson.CustomerId = this.InsurancePersonForm?.ccustomerId || 0
     this.insurancePerson.Name = this.InsurancePersonForm.cnameInsuredPerson
-    this.insurancePerson.DateOfBirth = this.InsurancePersonForm.cdob,
+    this.insurancePerson.DateOfBirth = this.formatDate(this.InsurancePersonForm.cdob),
       this.insurancePerson.Gender = this._genders?.find(x => x.Value == this.InsurancePersonForm.cgender)?.Name
     this.insurancePerson.Mobile = this.InsurancePersonForm.cmobile
     this.insurancePerson.Email = this.InsurancePersonForm.cemail
@@ -2690,8 +2693,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this.insurancePerson.PpcName = this._ppc.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cppc)?.Name
       this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
     this.insurancePerson.GenderId = this.InsurancePersonForm.cgender;
-    let ss =
-      this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId ? this._storeCustomerClusterDetail.find(x => x.CustomerId == this.insuranceCustomerForm.value.ccustomerId).BranchId :
+      this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId  && this._storeCustomerClusterDetail?.length>0? this._storeCustomerClusterDetail?.find(x => x.CustomerId == this.insuranceCustomerForm.value.ccustomerId).BranchId :
         this._branchId
     this.insurancePerson.uid = this.InsurancePersonForm.ccustomerUid;
     this.insurancePerson.CustomerCode = this._insuranceCustomerPersonDetails?.find(x => x.uid == this.InsurancePersonForm?.ccustomerUid)?.Code
@@ -2706,8 +2708,14 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     let age ;
     if(this.policyForm.getRawValue().continutyStartDate){
       let DOB = new Date(this.insurancePerson.DateOfBirth)
-      let continueStartDate :any = new Date(this.policyForm.getRawValue().continutyStartDate)
-      let timeDiff  = Math.abs(continueStartDate - DOB.getTime());
+      let StartDate:any;
+      if(this.isTravel){
+         StartDate  = new Date(this.policyForm.getRawValue().continutyStartDate)
+      }
+      if(this.isHeath || this.isPA){
+         StartDate  = new Date(this.policyForm.getRawValue().tpStartDate)
+      }
+      let timeDiff  = Math.abs(StartDate - DOB.getTime());
       age = Number(Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25));
     }
     this.insurancePerson.Age = age
@@ -2766,7 +2774,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this._isInsurancePersoneEdit = true;
     this.insuranceCustomerForm.patchValue({
       cnameInsuredPerson: element.Name,
-      cdob: element.DateOfBirth != null ? new Date(element.DateOfBirth) : null,
+      cdob: element.DateOfBirth != null ? this.formatDate(element.DateOfBirth) : null,
       cgender: element.GenderId,
       cmobile: element.Mobile,
       cemail: element.Email,
@@ -2831,9 +2839,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this.totalSumInsured = 0;
     if (this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length > 0) {
       this._selectedinsuranceCustomerPersonDetail.filter((x) => {
-        let DOB = new Date(x.DateOfBirth)
-        let timeDiff = Math.abs(Date.now() - DOB.getTime());
-        let age = Number(Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25));
+        let age = x.Age;
         if (age <= 18) {
           this.noofchild++;
         } else {
@@ -2930,6 +2936,15 @@ handleEmptyInput(event: any){
     this.getPosManagedBy(event.target.value)
     this.businessDoneBy();
   }
+}
+
+formatDate(d: Date) {
+  if(d&& d!= null){
+  d = new Date(d);   
+  var convertDate = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes() - d.getTimezoneOffset()).toISOString();
+  return convertDate
+  }
+  return null;
 }
 
 

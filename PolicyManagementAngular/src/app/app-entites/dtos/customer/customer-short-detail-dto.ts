@@ -40,7 +40,7 @@ export interface ICustomerInsuranceDetail{
     Pan: string;
     Gstin: string;
     Gender: string;
-    DateOfBirth: Date;
+    DateOfBirth: any;
     PassportNumber: string;
     CustomerId: number;
     ClusterId?:number

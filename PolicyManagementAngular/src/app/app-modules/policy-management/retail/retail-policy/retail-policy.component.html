@@ -258,7 +258,7 @@
                   <mat-form-field appearance="fill">
                     <mat-label>Policy Type</mat-label>
                     <mat-select formControlName="policyType" required (selectionChange)="getPolicyTerms()"
-                      [disabled]="_type !== SearchPolicyType.Motor_Renew">
+                      [disabled]="_type !== SearchPolicyType.Motor_Renew ">
                       <mat-option>Select</mat-option>
                       <mat-option *ngFor="let policyType of _policyTypes" [value]="policyType.Value">{{policyType.Name}}
                       </mat-option>
@@ -458,7 +458,7 @@
                 </div>
                 <div class="col-lg-3" *ngIf="isTravel">
                   <mat-form-field appearance="fill" >
-                    <mat-label>{{isTravel ? 'Issue Date' : 'Continuty Start Date'}}</mat-label>
+                    <mat-label>Issue Date</mat-label>
                     <input matInput [matDatepicker]="continutyStartDate" formControlName="continutyStartDate" (dateChange)="setExpiryDate('')" required>
                     <mat-datepicker-toggle matSuffix [for]="continutyStartDate"></mat-datepicker-toggle>
                     <mat-datepicker #continutyStartDate></mat-datepicker>
@@ -754,7 +754,7 @@
                   <div class="col-lg-4">
                     <mat-form-field>
                       <mat-label>Mobile</mat-label>
-                      <input type="number" matInput formControlName="cmobile" placeholder="Mobile"
+                      <input type="text" matInput formControlName="cmobile" placeholder="Mobile"
                         style="line-height: 28px;" numbersOnlyWithOutDecimal>
                       <mat-error *ngIf="insuranceCustomerForm.controls.cmobile">Mobile is <strong>required</strong>
                       </mat-error>
@@ -912,7 +912,7 @@
                   <div class="col-lg-3">
                     <mat-form-field>
                       <mat-label>Nominee Name </mat-label>
-                      <input type="text" matInput formControlName="cnomineename" placeholder="Profession"
+                      <input type="text" matInput formControlName="cnomineename" placeholder="Nominee Name"
                         style="line-height: 28px;">
                     </mat-form-field>
                   </div>
@@ -1016,15 +1016,15 @@
                         <td mat-cell *matCellDef="let element"> {{element.LoadingReason}} </td>
                       </ng-container>
                       <ng-container matColumnDef="Ped">
-                        <th mat-header-cell *matHeaderCellDef>Ped </th>
+                        <th mat-header-cell *matHeaderCellDef>PED </th>
                         <td mat-cell *matCellDef="let element"> {{element.PedName}} </td>
                       </ng-container>
                       <ng-container matColumnDef="PedExclusion">
-                        <th mat-header-cell *matHeaderCellDef>Ped Exclusion</th>
+                        <th mat-header-cell *matHeaderCellDef>PED Exclusion</th>
                         <td mat-cell *matCellDef="let element"> {{element.PedExclusion}} </td>
                       </ng-container>
                       <ng-container matColumnDef="Ppc">
-                        <th mat-header-cell *matHeaderCellDef>Ppc </th>
+                        <th mat-header-cell *matHeaderCellDef>PPC </th>
                         <td mat-cell *matCellDef="let element"> {{element.PpcName}} </td>
                       </ng-container>
                       <ng-container matColumnDef="AnualIncome">

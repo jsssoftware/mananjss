@@ -1395,14 +1395,35 @@ namespace PolicyManagement.Services.Common
                                                                                            .OrderBy(o => o.Name)
                                                                                            .ToListAsync();
 
-        public async Task<List<DropDownDto<int>>> FindAllPlans(int _productId, int insuranceCompanyId, int verticalId) => await _dataContext.tblPlan.Where(w => w.IsActive && w.ProductId == _productId && w.InsuranceCompanyId == insuranceCompanyId&& w.VerticalId == verticalId)
-                                                                                           .Select(s => new DropDownDto<int>
-                                                                                           {
-                                                                                               Name = s.PlanName,
-                                                                                               Value = s.PlanId
-                                                                                           })
-                                                                                           .OrderBy(o => o.Name)
-                                                                                           .ToListAsync();
+        public async Task<List<DropDownDto<int>>> FindAllPlans(int _productId, int insuranceCompanyId, int verticalId)
+        {
+            var data = new List<DropDownDto<int>>();
+            if (insuranceCompanyId != 0)
+            {
+                 data = await _dataContext.tblPlan.
+                     Where(w => w.IsActive && w.ProductId == _productId && w.InsuranceCompanyId == insuranceCompanyId && w.VerticalId == verticalId)
+                .Select(s => new DropDownDto<int>
+                {
+                    Name = s.PlanName,
+                    Value = s.PlanId
+                })
+                .OrderBy(o => o.Name)
+                .ToListAsync();
+            }
+            else
+            {
+                 data = await _dataContext.tblPlan.
+                         Where(w => w.IsActive && w.ProductId == _productId  && w.VerticalId == verticalId)
+                    .Select(s => new DropDownDto<int>
+                    {
+                        Name = s.PlanName,
+                        Value = s.PlanId
+                    })
+                    .OrderBy(o => o.Name)
+                    .ToListAsync();
+            }
+            return data;
+        }
 
         public async Task<List<DropDownDto<int>>> FindAllPlanTypes() => await _dataContext.tblPlanType.Where(w => w.IsActive)
                                                                                            .Select(s => new DropDownDto<int>
