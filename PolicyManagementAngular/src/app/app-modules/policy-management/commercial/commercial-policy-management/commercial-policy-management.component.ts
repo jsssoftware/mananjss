@@ -903,9 +903,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
 
     if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
       await this.setPolicySourceRenewal()
-      await this.setPreviousInsuranceCompany()
       await this.setPortablity()
     }
+    await this.setPreviousInsuranceCompany()
   }
 
  
@@ -1101,6 +1101,14 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
 
 
   createPolicy(): any {
+    if(!this.policyTermForm.value.policyType ){
+      Swal.fire({
+        icon: 'error',
+        title: 'Sorry',
+        text: "Please select Policy Type",
+      });
+      return
+    }
     let menu = this.MenuVertical;
     if (this._policyType == SearchPolicyType.Motor_Verify) {
       this.IsVerified = true
@@ -2103,7 +2111,6 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     }
     if (response.PolicyTerm.PolicyType == PolicyType.OtherCompanyRetention) {
       this.policyForm.get("tpInsuranceCompany")?.disable();
-      this.policyForm.get("policyNumber")?.disable();
       this.policyForm.get("tpStartDate")?.disable();
     }
     //Calling insurance company branch api location
@@ -2222,29 +2229,37 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     this.setVerticalFunction();
   }
 
-  setPreviousInsuranceCompany() {
-    if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention || this._policyType == SearchPolicyType.Motor_Renew) {
-      let policyNumber = this._policyData?.TpPolicy.PolicyNumber;
-      let policyExpiryDate = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto);
-      let previousPolicyInsuranceCompany = this._policyData?.TpPolicy.InsuranceCompany ? this._policyData?.TpPolicy.InsuranceCompany :this._policyData.PreviousPolicy.LastYearInsuranceCompany;
-      let previousPolicyPlan = this._policyData.PreviousPolicy.PreviousPolicyPlan;
-      let previousPolicySumInsured = this._policyData.PreviousPolicy.PreviousPolicySumInsured;
-      this.policyForm.patchValue({
-        lastYearInsuranceCompany: previousPolicyInsuranceCompany,
-        previousCnPolicyNumber: policyNumber,
-        lastPolicyExpiryDate: policyExpiryDate,
-        previousPolicyPlan: previousPolicyPlan,
-        previousPolicySumInsured: previousPolicySumInsured
-      });
-    }
+    setPreviousInsuranceCompany() {
+      if (this._policyType == SearchPolicyType.Motor_Renew) {
+        let policyNumber = this._policyData?.TpPolicy.PolicyNumber;
+        let policyExpiryDate = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto);
+        let previousPolicyInsuranceCompany = this._policyData?.TpPolicy.InsuranceCompany ? this._policyData?.TpPolicy.InsuranceCompany :this._policyData.PreviousPolicy.LastYearInsuranceCompany;
+        let previousPolicyPlan = this._policyData.PreviousPolicy.PreviousPolicyPlan;
+        let previousPolicySumInsured = this._policyData.PreviousPolicy.PreviousPolicySumInsured;
+        this.policyForm.patchValue({
+          lastYearInsuranceCompany: previousPolicyInsuranceCompany,
+          previousCnPolicyNumber: policyNumber,
+          lastPolicyExpiryDate: policyExpiryDate,
+          previousPolicyPlan: previousPolicyPlan,
+          previousPolicySumInsured: previousPolicySumInsured
+        });
+      } else if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention ) {
+        let policyNumber = this._policyData?.PreviousPolicy.PreviousPolicyNumber;
+        let policyExpiryDate = this.commonService.getDateFromIDateDto(this._policyData?.PreviousPolicy.LastPolicyExpiryDateDto as IDateDto);
+        let previousPolicyInsuranceCompany = this._policyData.PreviousPolicy.LastYearInsuranceCompany;
+        let previousPolicyPlan = this._policyData.PreviousPolicy.PreviousPolicyPlan;
+        let previousPolicySumInsured = this._policyData.PreviousPolicy.PreviousPolicySumInsured;
+        this.policyForm.patchValue({
+          lastYearInsuranceCompany: previousPolicyInsuranceCompany,
+          previousCnPolicyNumber: policyNumber,
+          lastPolicyExpiryDate: policyExpiryDate,
+          previousPolicyPlan: previousPolicyPlan,
+          previousPolicySumInsured: previousPolicySumInsured
+        });
+      }
     else {
       this.refreshLastInsuranceCompanies();
-      /*   this.policyForm.patchValue({
-          lastYearInsuranceCompany: undefined
-        }); */
     }
-
-
   }
 
   resetPreviousInsuranceCompany() {
@@ -2308,10 +2323,10 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
 
   changePortabality() {
     this._lastInsuranceCompanies = this._savedinsuranceCompanies;
-    this.policyForm.patchValue({
-      lastYearInsuranceCompany: ""
-    });
     if (this._type == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.No) {
+      this.policyForm.patchValue({
+        lastYearInsuranceCompany: ""
+      });
       this._lastInsuranceCompanies = this._lastInsuranceCompanies.filter(f => f.Value != this.policyForm.value.tpInsuranceCompany);
     } else  if (this._type == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.No &&  ( this.policyForm.value.isChangeAgent || this.policyForm.value.isBlockAgent)) {
       let insuranceCompany = this.policyForm.value.tpInsuranceCompany;
@@ -2319,6 +2334,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
         lastYearInsuranceCompany: insuranceCompany
       });
     } else  if (this._type == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.Yes && ( !this.policyForm.value.isChangeAgent && !this.policyForm.value.isBlockAgent))  {
+      this.policyForm.patchValue({
+        lastYearInsuranceCompany: ""
+      });
       this._lastInsuranceCompanies = this._lastInsuranceCompanies.filter(f => f.Value != this.policyForm.value.tpInsuranceCompany);
     }
 
@@ -2552,11 +2570,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
 
   getPlan() {
     this._selectedProductId = this.productPlanForm.value.product;
-    let insuranceCompanyId = 0;
-    if(this._verticalId == Vertical.Travel){
-       insuranceCompanyId = this.policyForm.controls['tpInsuranceCompany'].value;
-    }
-
+    let insuranceCompanyId = this.policyForm.controls['tpInsuranceCompany'].value;
     this.commonService.getPlan(this._selectedProductId,insuranceCompanyId,this._verticalId).subscribe((response: any) => {
       this._plans = response;
     });
@@ -2824,7 +2838,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     if (response.ProductPlan.ProductId == 0) {
       this.errorList.push("Product Detail " + this.erorr)
     }
-}
+  }
 
 
 

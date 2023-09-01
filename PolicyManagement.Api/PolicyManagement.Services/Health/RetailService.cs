@@ -353,7 +353,7 @@ namespace PolicyManagement.Services.Health
                     #endregion
 
                     #region Insert Insurance Person Details
-                    if (model.InsuredPersonData.Any())
+                    if (model.InsuredPersonData != null && model.InsuredPersonData.Any())
                     {
                         List<tblInsuredPerson> tblInsuredPersons = new List<tblInsuredPerson>();
                         foreach (var f in model.InsuredPersonData)
@@ -1031,7 +1031,7 @@ namespace PolicyManagement.Services.Health
                 _dataContext.tblInsuredPerson.RemoveRange(tblInsuredPerson);
                 await _dataContext.SaveChangesAsync();
             }
-            if (model.InsuredPersonData.Any())
+            if (model.InsuredPersonData != null && model.InsuredPersonData.Any())
             {
                 List<tblInsuredPerson> tblInsuredPersons = new List<tblInsuredPerson>();
                 foreach (var f in model.InsuredPersonData)
@@ -1133,7 +1133,7 @@ namespace PolicyManagement.Services.Health
 
         private bool ValidateInsuredPersonDetail(RetailPolicyFormDataModel model)
         {
-            if (model.InsuredPersonData.Count == 0)
+            if (model.InsuredPersonData ==  null && model.InsuredPersonData.Count == 0)
             {
                 return false;
             }

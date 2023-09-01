@@ -733,7 +733,7 @@
               <div class="col-lg-3">
                 <mat-form-field appearance="fill">
                   <mat-label>Rate</mat-label>
-                  <input type="text" matInput formControlName="rate" class="uppercase" required>
+                  <input type="text" matInput formControlName="rate" class="uppercase" required numbersOnlyWithOutDecimal>
                 </mat-form-field>
               </div>
 
@@ -741,14 +741,14 @@
                 <mat-form-field appearance="fill">
                   <mat-label>Sum Insured</mat-label>
                   <input type="text" matInput formControlName="sumInsured" class="uppercase" required
-                    (change)="calculateMarineSumInsured()">
+                    (change)="calculateMarineSumInsured()" numbersOnlyWithOutDecimal>
                 </mat-form-field>
               </div>
               <div class="col-lg-3">
                 <mat-form-field appearance="fill">
                   <mat-label>Endrose Sum Insured</mat-label>
                   <input type="number" matInput formControlName="endroseSumInsured" class="uppercase" required
-                    (change)="calculateMarineSumInsured()">
+                    (change)="calculateMarineSumInsured()" numbersOnlyWithOutDecimal>
                 </mat-form-field>
               </div>
               <div class="col-lg-3">
@@ -1037,12 +1037,12 @@
                       <td>
                         <mat-form-field>
                           <input type="text" matInput formControlName="fireSA" class="uppercase"
-                            (change)="calculatTotalFiredSumInsured()">
+                            (change)="calculatTotalFiredSumInsured()" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="fireRate" class="uppercase">
+                          <input type="text" matInput formControlName="fireRate" class="uppercase" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1053,12 +1053,12 @@
                       <td>
                         <mat-form-field>
                           <input type="text" matInput formControlName="earthQuakeSA" class="uppercase"
-                            (change)="calculatTotalFiredSumInsured()">
+                            (change)="calculatTotalFiredSumInsured()" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="earthQuakeRate" class="uppercase">
+                          <input type="text" matInput formControlName="earthQuakeRate" class="uppercase" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1069,12 +1069,12 @@
                       <td>
                         <mat-form-field>
                           <input type="text" matInput formControlName="sTFISA" class="uppercase"
-                            (change)="calculatTotalFiredSumInsured()">
+                            (change)="calculatTotalFiredSumInsured()" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sTFIRate" class="uppercase">
+                          <input type="text" matInput formControlName="sTFIRate" class="uppercase" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1096,12 +1096,12 @@
                       <td>
                         <mat-form-field>
                           <input type="text" matInput formControlName="terrorismSA" class="uppercase"
-                            (change)="calculatTotalFiredSumInsured()">
+                            (change)="calculatTotalFiredSumInsured()" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="terrorismRate" class="uppercase">
+                          <input type="text" matInput formControlName="terrorismRate" class="uppercase" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1112,12 +1112,12 @@
                       <td>
                         <mat-form-field>
                           <input type="text" matInput formControlName="burglarySA" class="uppercase"
-                            (change)="calculatTotalFiredSumInsured()">
+                            (change)="calculatTotalFiredSumInsured()" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="burglaryRate" class="uppercase">
+                          <input type="text" matInput formControlName="burglaryRate" class="uppercase" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1128,12 +1128,12 @@
                       <td>
                         <mat-form-field>
                           <input type="text" matInput formControlName="moneySA" class="uppercase"
-                            (change)="calculatTotalFiredSumInsured()">
+                            (change)="calculatTotalFiredSumInsured()" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="moneyRate" class="uppercase">
+                          <input type="text" matInput formControlName="moneyRate" class="uppercase" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1155,12 +1155,12 @@
                       <td>
                         <mat-form-field>
                           <input type="text" matInput formControlName="breakDownSA" class="uppercase"
-                            (change)="calculatTotalFiredSumInsured()">
+                            (change)="calculatTotalFiredSumInsured()" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="breakDownRate" class="uppercase">
+                          <input type="text" matInput formControlName="breakDownRate" class="uppercase" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1171,12 +1171,12 @@
                       <td>
                         <mat-form-field>
                           <input type="text" matInput formControlName="plateGlassSA" class="uppercase"
-                            (change)="calculatTotalFiredSumInsured()">
+                            (change)="calculatTotalFiredSumInsured()" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="plateGlassRate" class="uppercase">
+                          <input type="text" matInput formControlName="plateGlassRate" class="uppercase" numbersOnlyWithOutDecimal>
                         </mat-form-field>
                       </td>
                     </tr>

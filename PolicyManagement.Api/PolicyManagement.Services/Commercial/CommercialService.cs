@@ -1244,15 +1244,6 @@ namespace PolicyManagement.Services.Commercial
             return true;
         }
 
-        private bool ValidateInsuredPersonDetail(CommercialPolicyFormDataModel model)
-        {
-            if (model.InsuredPersonData.Count == 0)
-            {
-                return false;
-            }
-            return true;
-        }
-
         private bool ValidatePolicySourceDetail(CommercialPolicyFormDataModel model)
         {
             if (model.PolicySource.TeleCaller == 0 && model.PolicySource.Fos == 0 && model.PolicySource.Pos == 0 && model.PolicySource.Reference == 0 )

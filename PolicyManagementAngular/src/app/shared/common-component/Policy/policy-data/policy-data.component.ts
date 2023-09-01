@@ -1123,6 +1123,14 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
 
   createPolicy(): any {
+    if(!this.policyTermForm.value.policyType ){
+      Swal.fire({
+        icon: 'error',
+        title: 'Sorry',
+        text: "Please select Policy Type",
+      });
+      return
+    }
     let menu = this.MenuVertical;
     if (this._policyType == SearchPolicyType.Motor_Verify) {
       this.IsVerified = true
@@ -3044,7 +3052,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     this.validatePaymentData(response)
     this.validateVehicleDetail(response)
   };
-  erorr: string = "This Field is Required";
+  erorr: string = " Field is Required";
   errorList: any = [];
   validatePolicyTerm(response: IMotorPolicyFormDataModel) {
 
@@ -3053,7 +3061,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     }
 
     if (!response.PolicyTerm.PackageTypeId) {
-      this.errorList.push("Package Type " + this.erorr)
+      this.errorList.push("Package Type" + this.erorr)
     }
     if (!response.PolicyTerm.PolicyTerm) {
       this.errorList.push("Policy Term" + this.erorr)
@@ -3065,17 +3073,17 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
 
   validatePolicyDetail(response: IMotorPolicyFormDataModel) {
     if (!response.FinanceBy || response.FinanceBy == 0) {
-      this.errorList.push("Finance By " + this.erorr)
+      this.errorList.push("Finance By" + this.erorr)
     }
     if (response.PolicyTerm.PackageTypeId === PackageType.TP_ONLY) {
       if (!response.TpPolicy.PolicyNumber) {
         this.errorList.push("TP Policy Number" + this.erorr)
       }
       if (!response.TpPolicy.ExpiryDateDto && response.TpPolicy.NumberOfYear !== Common.ZERO) {
-        this.errorList.push("TP Expiry Date " + this.erorr)
+        this.errorList.push("TP Expiry Date" + this.erorr)
       }
       if (!response.TpPolicy.NumberOfYear && response.TpPolicy.NumberOfYear !== Common.ZERO) {
-        this.errorList.push("TP Number of Year " + this.erorr)
+        this.errorList.push("TP Number of Year" + this.erorr)
       }
       if (!response.TpPolicy.StartDateDto) {
         this.errorList.push("TP Policy start date" + this.erorr)
@@ -3086,7 +3094,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         this.errorList.push(" TP Policy Number" + this.erorr)
       }
       if (!response.TpPolicy.ExpiryDateDto && response.TpPolicy.NumberOfYear !== Common.ZERO) {
-        this.errorList.push(" TP Expiry date " + this.erorr)
+        this.errorList.push(" TP Expiry date" + this.erorr)
       }
       if (!response.TpPolicy.NumberOfYear && response.TpPolicy.NumberOfYear !== Common.ZERO) {
         this.errorList.push("TP Number of Year" + this.erorr)
@@ -3099,10 +3107,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
         this.errorList.push("OD Policy Number" + this.erorr)
       }
       if (!response.OdPolicy.ExpiryDateDto && response.OdPolicy.NumberOfYear !== Common.ZERO) {
-        this.errorList.push("OD Expiry date " + this.erorr)
+        this.errorList.push("OD Expiry date" + this.erorr)
       }
       if (!response.OdPolicy.NumberOfYear && response.OdPolicy.NumberOfYear !== Common.ZERO) {
-        this.errorList.push(" OD Number of year" + this.erorr)
+        this.errorList.push("OD Number of year" + this.erorr)
       }
       if (!response.OdPolicy.StartDateDto) {
         this.errorList.push("OD Policy Start date" + this.erorr)

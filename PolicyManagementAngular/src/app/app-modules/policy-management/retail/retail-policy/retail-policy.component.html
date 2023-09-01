@@ -259,7 +259,7 @@
                     <mat-label>Policy Type</mat-label>
                     <mat-select formControlName="policyType" required (selectionChange)="getPolicyTerms()"
                       [disabled]="_type !== SearchPolicyType.Motor_Renew ">
-                      <mat-option>Select</mat-option>
+                      <mat-option [value]= ''>Select</mat-option>
                       <mat-option *ngFor="let policyType of _policyTypes" [value]="policyType.Value">{{policyType.Name}}
                       </mat-option>
                     </mat-select>
@@ -350,7 +350,7 @@
               <div class="row">
                 <div class="col-lg-8">
                   <mat-form-field appearance="fill" [ngClass]="{disabledDiv: isTpInsuranceDisable}">
-                    <mat-label>{{(MenuVertical=='Motor')?'TP Insurance Company' : 'Insurance Company'}}</mat-label>
+                    <mat-label>Insurance Company</mat-label>
                     <input type="text"
                       [placeholder]="(MenuVertical=='Motor')?'TP Insurance Company' : 'Insurance Company'"
                       aria-label="(MenuVertical=='Motor')?'TP Insurance Company' : 'Insurance Company'" matInput
@@ -449,7 +449,7 @@
                 </div>
                 <div class="col-lg-3" *ngIf="isHeath">
                   <mat-form-field appearance="fill" >
-                    <mat-label>{{isTravel ? 'Issue Date' : 'Continuty Start Date'}}</mat-label>
+                    <mat-label>Continuty Start Date</mat-label>
                     <input matInput [matDatepicker]="continutyStartDate" formControlName="continutyStartDate" (dateChange)="setExpiryDate('tp')" required>
                     <mat-datepicker-toggle matSuffix [for]="continutyStartDate"></mat-datepicker-toggle>
                     <mat-datepicker #continutyStartDate></mat-datepicker>
@@ -462,7 +462,7 @@
                     <input matInput [matDatepicker]="continutyStartDate" formControlName="continutyStartDate" (dateChange)="setExpiryDate('')" required>
                     <mat-datepicker-toggle matSuffix [for]="continutyStartDate"></mat-datepicker-toggle>
                     <mat-datepicker #continutyStartDate></mat-datepicker>
-                    <mat-error *ngIf="policyForm.controls.continutyStartDate">Please Select Continuty Start Date</mat-error>
+                    <mat-error *ngIf="policyForm.controls.continutyStartDate">Please Select issue Start Date</mat-error>
                   </mat-form-field>
                 </div>
               </div>
