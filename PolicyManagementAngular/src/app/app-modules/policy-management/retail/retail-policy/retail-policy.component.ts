@@ -1,5 +1,5 @@
 import { ActivatedRoute, Router } from '@angular/router';
-import { AfterViewInit, Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, Component, OnInit, Output, EventEmitter, Input, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, ValidationErrors, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatTableDataSource } from '@angular/material/table';
@@ -44,6 +44,7 @@ import { VoucherDetailComponent } from 'src/app/shared/common-component/Policy/d
 import { IHealthPolicyFormDataModel } from 'src/app/app-entites/models/motor/health-policy-form-data-model';
 import { IVehicleFormDataModel } from 'src/app/app-entites/models/motor/vehicle-form-data-model';
 import { INominationFormDataModel } from 'src/app/app-entites/models/motor/nomination-form-data-model';
+import { MatPaginator } from '@angular/material/paginator';
 
 export interface PeriodicElement {
   endorsementReason: string;
@@ -115,6 +116,8 @@ const ELEMENT_DATA_InspectionDetail: PeriodicElementForInspectionDetail[] = [
 })
 export class RetailPolicyComponent implements OnInit, AfterViewInit {
   public Vertical = 'Health'
+  @ViewChild('paginator') paginator: MatPaginator;
+
   @Input('MenuVertical') public MenuVertical: string = '';
   @Output() tableNameToDialogBox = new EventEmitter<string>();
   displayedColumnsDocumentTable: string[] = ["Sno", "DocumentTypeName", "FileName", "Remarks", "DocumentTypeId"];
@@ -435,6 +438,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   public _dataSourceUploadDocuments: MatTableDataSource<IPolicyDocumentDto> = new MatTableDataSource<IPolicyDocumentDto>();
   public _dataSourceCustomerCluster: MatTableDataSource<ICustomerInsuranceDetail> = new MatTableDataSource<ICustomerInsuranceDetail>();
   public _dataInsuranceCustomerCluster: MatTableDataSource<ICustomerInsuranceDetail> = new MatTableDataSource<ICustomerInsuranceDetail>();
+  insuranceCustomerClusterLength = 0;
+  sourceCustomerClusterLength = 0;
 
   public _controlNumber: string = "";
   public _headerTitle: string = "";
@@ -643,7 +648,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this.paymentUpdateValue();
     this.setHealthValidation()
 
-  
+    this._dataInsuranceCustomerCluster.paginator =  this.paginator;
+    this._dataSourceCustomerCluster.paginator =  this.paginator;
   }
 
 
@@ -1717,7 +1723,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     });
 
 
-    this.businessDoneBy();
+   await this.businessDoneBy();
     //Update insurance person
 
 
@@ -1742,7 +1748,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this._dataSourceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
   }
 
-    this.calculatInsuredData();
+   await this.calculatInsuredData();
     //For previous value
    await this.policyForm.patchValue({
       lastYearInsuranceCompany: response.PreviousPolicy.LastYearInsuranceCompany,
@@ -1752,7 +1758,6 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       isChangeAgent: false,
       previousPolicyPlan: response.PreviousPolicy.PreviousPolicyPlan,
       previousPolicySumInsured: response.PreviousPolicy.PreviousPolicySumInsured,
-      continutyStartDate: this.commonService.getDateFromIDateDto(response.ContinueStartDateDTO as IDateDto),
     });
     
 
@@ -1791,7 +1796,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
         }
       }
         
-        this.policyForm.patchValue({
+      await  this.policyForm.patchValue({
           tpInsuranceCompany: response.TpPolicy.InsuranceCompany,
           coverNoteNumber: response.CoverNoteNumber,
           coverNoteIssueDate: response.CoverNoteIssueDateDto ? this.commonService.getDateFromIDateDto(response.CoverNoteIssueDateDto as IDateDto) : "",
@@ -1809,7 +1814,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
           numberOfDays : response.TpPolicy.NumberOfDays
         });
 
-        this.premiumForm.patchValue({
+      await  this.premiumForm.patchValue({
 
           tp: response.Premium.Tp,
           passengerCover: response.Premium.PassengerCover,
@@ -1833,7 +1838,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
           maxTripDays : response.Premium.MaxDaysSingleTrip
         });
 
-        this.policySourceForm.patchValue({
+      await  this.policySourceForm.patchValue({
           teleCaller: response.PolicySource.TeleCaller,
           fosName: response.PolicySource.Fos,
           posName: response.PolicySource.Pos,
@@ -1842,7 +1847,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
           posManagedBy: response.PolicySource.PosManagedBy,
           policyRemarks: response.PolicySource.PolicyRemarks
         });
-        this.getPosManagedBy(response.PolicySource.Pos)
+       await this.getPosManagedBy(response.PolicySource.Pos)
         await this.commonService.getProduct().subscribe((presponse: any) => {
           this._products = presponse;
           this._selectedProductId = response.ProductPlan.ProductId;
@@ -1879,7 +1884,14 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       this._controlNumber = '';
       this._renewalCounter = response.RenewalCounter + 1;
 
-      this.policyForm.get("continutyStartDate")?.disable();
+      if(this._verticalId ==  Vertical.Health ){
+        this.policyForm.get("continutyStartDate")?.disable()
+      };
+      if(this._verticalId ==  Vertical.Travel ){
+        this.policyForm.patchValue({
+          continutyStartDate: ''
+        });
+      };
       this.policyForm.get("lastYearInsuranceCompany")?.disable();
       this.policyForm.get("previousCnPolicyNumber")?.disable();
       this.policyForm.get("lastPolicyExpiryDate")?.disable();
@@ -1892,7 +1904,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     if (this._policyType !== SearchPolicyType.Motor_Renew || this._policyType == SearchPolicyType.Motor_Incomplete) {
       this.validationPolicyData(response)
     }
-    if (this._type == PolicyType.OtherCompanyRetention) {
+    if (response.PolicyTerm.PolicyType == PolicyType.OtherCompanyRetention) {
       this.policyForm.get("tpInsuranceCompany")?.disable();
       this.policyForm.get("tpStartDate")?.disable();
     }
@@ -2013,7 +2025,6 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   setPreviousInsuranceCompany() {
-    debugger
     if (this._policyType == SearchPolicyType.Motor_Renew) {
       let policyNumber = this._policyData?.TpPolicy.PolicyNumber;
       let policyExpiryDate = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto);
@@ -2073,7 +2084,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       tpInsuranceCompany: this._policyData?.TpPolicy.InsuranceCompany,
       tpStartDate: moment(startDate),
       insuranceCompanyBranches: this._policyData?.TpPolicy,
-      continueStartDate: continueStartDate
+      continutyStartDate: continueStartDate
     });
 
     this.isTpInsuranceDisable = true;
@@ -2098,7 +2109,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       }
       await this.policyForm.patchValue({
         tpStartDate: moment(startDate),
-        continueStartDate:continueStartDate
+        continutyStartDate:continueStartDate
       });
       this._insuranceCompanies = this._insuranceCompanies.filter(f => f.Value != this._policyData?.TpPolicy.InsuranceCompany);
 
@@ -2455,7 +2466,6 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   setPolicyDetails(): void {
     if (this._policyType == SearchPolicyType.Motor_Renew && this._policyType != SearchPolicyType.Motor_Modify) {
       this.setPolicySourceRenewal()
-      this.setPreviousInsuranceCompany()
     }
   }
 
@@ -2973,6 +2983,13 @@ formatDate(d: Date) {
 }
 
 
-
+icustomerapplyFilter(event: Event) {
+  const filterValue = (event.target as HTMLInputElement).value;
+  this._dataInsuranceCustomerCluster.filter = filterValue.trim().toLowerCase();
+}
+isourcesutomerapplyFilter(event: Event) {
+  const filterValue = (event.target as HTMLInputElement).value;
+  this._dataSourceCustomerCluster.filter = filterValue.trim().toLowerCase();
+}
 
 }

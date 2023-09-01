@@ -632,7 +632,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
         this._type = SearchPolicyType.Motor_rollover;
         break;
       case 4:
-        this._type = 4;
+        this._type = SearchPolicyType.Motor_Correction;
         break;
       case 5:
         this._type = SearchPolicyType.Motor_Verify;
@@ -901,7 +901,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       this._isTpPremiumDetailsDisabled = true
     }
 
-    if (this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
+    if ((this.policyTermForm.value.policyType == PolicyType.OtherCompanyRetention || this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention)) {
       await this.setPolicySourceRenewal()
       await this.setPortablity()
     }
@@ -2695,7 +2695,6 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
   setPolicyDetails(): void {
     if (this._policyType == SearchPolicyType.Motor_Renew && this._policyType != SearchPolicyType.Motor_Modify) {
       this.setPolicySourceRenewal()
-      this.setPreviousInsuranceCompany()
     }
   }
 
