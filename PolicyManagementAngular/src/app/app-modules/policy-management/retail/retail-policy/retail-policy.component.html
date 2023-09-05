@@ -572,14 +572,14 @@
                 <div class="row" *ngIf="MenuVertical!='Motor'">
                   <div class="col-lg-6">
                     <mat-form-field>
-                      <mat-label> Previous Policy Plan <span style="color:red" *ngIf="_type !== SearchPolicyType.Motor_Renew">*</span></mat-label>
+                      <mat-label> Previous Policy Plan </mat-label>
                       <input type="text" matInput formControlName="previousPolicyPlan" placeholder="Previous Policy Plan"
                         style="line-height: 30px;" class="uppercase"  [disabled]="_disableFields">
                     </mat-form-field>
                   </div>
                   <div class="col-lg-6">
                     <mat-form-field>
-                      <mat-label> Previous Policy SumInsured <span style="color:red"  *ngIf="_type !== SearchPolicyType.Motor_Renew">*</span></mat-label>
+                      <mat-label> Previous Policy SumInsured </mat-label>
                       <input type="text" matInput formControlName="previousPolicySumInsured"
                         placeholder="Previous Policy SumInsured" style="line-height: 30px;"  [disabled]="_disableFields">
                     </mat-form-field>

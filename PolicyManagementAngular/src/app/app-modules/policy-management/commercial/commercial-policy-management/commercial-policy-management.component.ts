@@ -1925,7 +1925,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       enginneringNatureofCoverage:response.Enginnering.NatureofCoverage,
       enginneringPeriodDate:response.Enginnering.PeriodDate,
       enginneringOtherInfo:response.Enginnering.OtherInfo,
-      enginneringRiskLocatiion: response.Enginnering.RiskLocation,
+      enginneringRiskLocation: response.Enginnering.RiskLocation,
       enginneringTermId :  response.Enginnering.EnginneringTermId
     });
   }
@@ -2046,7 +2046,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
           sectionDiscount: response.Premium.SectionDiscount,
           additionalDiscount: response.Premium.AdditionalDiscount,
           totalGrossPremium: response.Premium.TotalGrossPremium,
-          maxTripDays : response.Premium.MaxDaysSingleTrip
+          maxTripDays : response.Premium.MaxDaysSingleTrip,
+          terrorimsPremium: response.Premium.TerrorimsPremium
         });
 
         this.policySourceForm.patchValue({
@@ -2951,11 +2952,10 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     this.insurancePerson.PedName = this._ped.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cped)?.Name
     this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
     this.insurancePerson.GenderId = this.InsurancePersonForm.cgender;
-    this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId ? this._storeCustomerClusterDetail?.find(x => x.CustomerId == this.insuranceCustomerForm.value.ccustomerId).BranchId :
+    this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId ? this._storeCustomerClusterDetail?.find(x => x.CustomerId == this.insuranceCustomerForm.value.ccustomerId)?.BranchId :
         this._branchId
     this.insurancePerson.uid = this.InsurancePersonForm.ccustomerUid;
     this.insurancePerson.CustomerCode = this._insuranceCustomerPersonDetails?.find(x => x.uid == this.InsurancePersonForm?.ccustomerUid)?.Code
-
     this.insurancePerson.Address = this.customerForm.getRawValue().addressInPolicy;
     this.insurancePerson.CityId = this._customerCityId
     this.insurancePerson.ClusterId = this._customerClusterId;

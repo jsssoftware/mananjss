@@ -1263,6 +1263,17 @@ namespace PolicyManagement.Services.Commercial
             return true;
         }
 
+        private bool ValidatePreviousPolicyApplicable(CommercialPolicyFormDataModel model)
+        {
+
+            if ((model.PreviousPolicy.LastYearInsuranceCompany == 0 || string.IsNullOrEmpty(model.PreviousPolicy.PreviousPolicyNumber)|| model.PreviousPolicy.LastPolicyExpiryDate == null
+               ) && ( model.IsPreviousPolicyApplicable == false &&  model.VerticalSegmentId == (int)PolicyType.Rollover))
+            {
+                return false;
+            }
+            return true;
+        }
+
 
         private async Task<CommonDto<object>> ValidateData(CommercialPolicyFormDataModel model)
         {

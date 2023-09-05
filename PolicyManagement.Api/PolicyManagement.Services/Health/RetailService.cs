@@ -1095,7 +1095,7 @@ namespace PolicyManagement.Services.Health
 
         private bool ValidateProductDetail(RetailPolicyFormDataModel model)
         {
-            if (model.ProductPlan.ProductId == 0)
+            if (model.ProductPlan.ProductId == 0 || model.ProductPlan.PlanTypes == 0 || model.ProductPlan.Plan == 0)
             {
                 return false;
             }

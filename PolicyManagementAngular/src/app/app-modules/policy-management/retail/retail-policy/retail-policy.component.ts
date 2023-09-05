@@ -1018,7 +1018,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
 
   createPolicy(): any {
-    if(!this.policyTermForm.value.policyType ){
+    if(!this.policyTermForm.value.policyType){
       Swal.fire({
         icon: 'error',
         title: 'Sorry',
@@ -2120,17 +2120,17 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   changePortabality() {
     this._lastInsuranceCompanies = this._savedinsuranceCompanies;
    
-    if (this._type == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.No) {
+    if (this._policyType == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.No) {
       this.policyForm.patchValue({
         lastYearInsuranceCompany: ""
       });
       this._lastInsuranceCompanies = this._lastInsuranceCompanies.filter(f => f.Value != this.policyForm.value.tpInsuranceCompany);
-    } else  if (this._type == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.No &&  ( this.policyForm.value.isChangeAgent || this.policyForm.value.isBlockAgent)) {
+    } else  if (this._policyType == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.No &&  ( this.policyForm.value.isChangeAgent || this.policyForm.value.isBlockAgent)) {
       let insuranceCompany = this.policyForm.value.tpInsuranceCompany;
       this.policyForm.patchValue({
         lastYearInsuranceCompany: insuranceCompany
       });
-    } else  if (this._type == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.Yes && ( !this.policyForm.value.isChangeAgent && !this.policyForm.value.isBlockAgent))  {
+    } else  if (this._policyType == SearchPolicyType.Motor_rollover && this.policyForm.value.portability == Portabality.Yes && ( !this.policyForm.value.isChangeAgent && !this.policyForm.value.isBlockAgent))  {
       this.policyForm.patchValue({
         lastYearInsuranceCompany: ""
       });
