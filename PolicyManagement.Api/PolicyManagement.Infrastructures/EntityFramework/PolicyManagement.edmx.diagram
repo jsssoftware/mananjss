@@ -136,6 +136,7 @@
         <EntityTypeShape EntityType="PolicyManagerModel.tblLiabilityTerm" Width="1.5" PointX="16.375" PointY="33.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblGmcTerm" Width="1.5" PointX="20.375" PointY="36.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblEnginneringTerm" Width="1.5" PointX="26.375" PointY="36.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblMarineTerm" Width="1.5" PointX="32.375" PointY="36.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

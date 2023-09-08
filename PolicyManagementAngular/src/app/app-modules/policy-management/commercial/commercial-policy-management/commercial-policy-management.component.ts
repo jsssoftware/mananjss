@@ -232,6 +232,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     totalSumInsured: new FormControl(''),
     sumInsured: new FormControl(''),
     endroseSumInsured: new FormControl(''),
+    perSendingLimit: new FormControl(''),
+    perLocationLimit: new FormControl(''),
+    marineTermId: new FormControl(''),
   });
 
   liabilityTermForm = new FormGroup({
@@ -1259,6 +1262,9 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
         TotalSumInsured: this.marineTermForm.value.totalSumInsured,
         SumInsured: this.marineTermForm.value.sumInsured,
         EndroseSumInsured: this.marineTermForm.value.endroseSumInsured,
+        PerLocationLimit: this.marineTermForm.value.perLocationLimit,
+        PerSendingLimit: this.marineTermForm.value.perSendingLimit,
+        MarineTermId :  this.marineTermForm.value.marineTermId
       },
       Misc : {
         MiscRate : this.miscform.value.miscrate,
@@ -1890,6 +1896,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     if(response.Marine){
 
     this.marineTermForm.patchValue({
+      marineTermId :  response.Marine.MarineTermId,
       voyageType : response.Marine.VoyageType,
       coverageInland: response.Marine.CoverageInland,
       fromTransitDomestic: response.Marine.FromTransitDomestic,
@@ -1898,6 +1905,8 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       totalSumInsured: response.Marine.TotalSumInsured,
       sumInsured : response.Marine.SumInsured,
       endroseSumInsured: response.Marine.EndroseSumInsured,
+      perLocationLimit: response.Marine.PerLocationLimit,
+      perSendingLimit: response.Marine.PerSendingLimit,
     });
   }
    

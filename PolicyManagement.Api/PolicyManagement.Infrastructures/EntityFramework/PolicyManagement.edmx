@@ -386,12 +386,6 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblCompanyDetails">
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
-        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -988,6 +982,23 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="CreatedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
+        </EntityType>
+        <EntityType Name="tblMarineTerms">
+          <Key>
+            <PropertyRef Name="MarineTermId" />
+          </Key>
+          <Property Name="MarineTermId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PolicyDetailId" Type="int" Nullable="false" />
+          <Property Name="VoyageTypeId" Type="smallint" />
+          <Property Name="CoverageInlandId" Type="smallint" />
+          <Property Name="TransitFromDomestic" Type="varchar" MaxLength="50" />
+          <Property Name="TransitToDomestic" Type="varchar" MaxLength="50" />
+          <Property Name="MarineRate" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="MarineEndroseSumInsured" Type="int" />
+          <Property Name="MarineSumInsured" Type="int" />
+          <Property Name="MarineTotalSumInsured" Type="bigint" />
+          <Property Name="PerSendingLimit" Type="int" />
+          <Property Name="PerLocationLimit" Type="int" />
         </EntityType>
         <EntityType Name="tblMaritalStatus">
           <Key>
@@ -1975,13 +1986,6 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblVersion">
-          <Property Name="Major" Type="tinyint" />
-          <Property Name="Minor" Type="tinyint" />
-          <Property Name="Revision" Type="tinyint" />
-        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -2844,6 +2848,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySet Name="tblLog" EntityType="Self.tblLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblMakeYear" EntityType="Self.tblMakeYear" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblManufacturer" EntityType="Self.tblManufacturer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblMarineTerms" EntityType="Self.tblMarineTerms" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblMaritalStatus" EntityType="Self.tblMaritalStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblMenuItem" EntityType="Self.tblMenuItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblModel" EntityType="Self.tblModel" Schema="dbo" store:Type="Tables" />
@@ -4399,6 +4404,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySet Name="tblLiabilityTerms" EntityType="PolicyManagerModel.tblLiabilityTerm" />
           <EntitySet Name="tblGmcTerms" EntityType="PolicyManagerModel.tblGmcTerm" />
           <EntitySet Name="tblEnginneringTerms" EntityType="PolicyManagerModel.tblEnginneringTerm" />
+          <EntitySet Name="tblMarineTerms" EntityType="PolicyManagerModel.tblMarineTerm" />
         </EntityContainer>
         <ComplexType Name="GetPolicyFamilyDtl_Result">
           <Property Type="String" Name="InsuredPersonName" Nullable="true" MaxLength="50" />
@@ -6969,6 +6975,23 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="PolicyId" Type="Int32" />
           <Property Name="TotalSumInsured" Type="Int32" />
         </EntityType>
+        <EntityType Name="tblMarineTerm">
+          <Key>
+            <PropertyRef Name="MarineTermId" />
+          </Key>
+          <Property Name="MarineTermId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PolicyDetailId" Type="Int32" Nullable="false" />
+          <Property Name="VoyageTypeId" Type="Int16" />
+          <Property Name="CoverageInlandId" Type="Int16" />
+          <Property Name="TransitFromDomestic" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="TransitToDomestic" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MarineRate" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="MarineEndroseSumInsured" Type="Int32" />
+          <Property Name="MarineSumInsured" Type="Int32" />
+          <Property Name="MarineTotalSumInsured" Type="Int64" />
+          <Property Name="PerSendingLimit" Type="Int32" />
+          <Property Name="PerLocationLimit" Type="Int32" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -9492,6 +9515,24 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
                 <ScalarProperty Name="NatureofCoverage" ColumnName="NatureofCoverage" />
                 <ScalarProperty Name="Rate" ColumnName="Rate" />
                 <ScalarProperty Name="EnginneringId" ColumnName="EnginneringId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblMarineTerms">
+            <EntityTypeMapping TypeName="PolicyManagerModel.tblMarineTerm">
+              <MappingFragment StoreEntitySet="tblMarineTerms">
+                <ScalarProperty Name="PerLocationLimit" ColumnName="PerLocationLimit" />
+                <ScalarProperty Name="PerSendingLimit" ColumnName="PerSendingLimit" />
+                <ScalarProperty Name="MarineTotalSumInsured" ColumnName="MarineTotalSumInsured" />
+                <ScalarProperty Name="MarineSumInsured" ColumnName="MarineSumInsured" />
+                <ScalarProperty Name="MarineEndroseSumInsured" ColumnName="MarineEndroseSumInsured" />
+                <ScalarProperty Name="MarineRate" ColumnName="MarineRate" />
+                <ScalarProperty Name="TransitToDomestic" ColumnName="TransitToDomestic" />
+                <ScalarProperty Name="TransitFromDomestic" ColumnName="TransitFromDomestic" />
+                <ScalarProperty Name="CoverageInlandId" ColumnName="CoverageInlandId" />
+                <ScalarProperty Name="VoyageTypeId" ColumnName="VoyageTypeId" />
+                <ScalarProperty Name="PolicyDetailId" ColumnName="PolicyDetailId" />
+                <ScalarProperty Name="MarineTermId" ColumnName="MarineTermId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

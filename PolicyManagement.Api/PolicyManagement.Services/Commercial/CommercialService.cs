@@ -186,14 +186,7 @@ namespace PolicyManagement.Services.Commercial
                         NumberofLocation= model.TpPolicy.NumberofLocation, 
                         LocationType  = model.TpPolicy.LocationType,
                         TerrorismPremium =  model.Premium.TerrorimsPremium.Value,
-                        VoyageTypeId = model.Marine.VoyageType,
-                        CoverageInlandId =  model.Marine.CoverageInland,
-                        TransitFromDomestic = model.Marine.FromTransitDomestic,
-                        TransitToDomestic = model.Marine.ToTransitDomestic,
-                        MarineRate =  model.Marine.Rate,
-                        MarineEndroseSumInsured = model.Marine.EndroseSumInsured,
-                        MarineSumInsured =  model.Marine.SumInsured,
-                        MarineTotalSumInsured= model.Marine.TotalSumInsured,
+                       
                         StorageRiskId = model.TpPolicy.StorageRiskId,
                         FinancerId = model.TpPolicy.Hypothentication,
                         MiscRate = model.Misc.MiscRate,
@@ -457,6 +450,26 @@ namespace PolicyManagement.Services.Commercial
                     }
                     #endregion
 
+                    #region Insert Marine
+                    if (model.Marine != null && model.VerticalId == (short)Vertical.Marine)
+                    {
+                        tblMarineTerm marineTerm= new tblMarineTerm();
+                        marineTerm.PolicyDetailId= motorPolicyData.PolicyId;
+                        marineTerm.VoyageTypeId = model.Marine.VoyageType;
+                        marineTerm.CoverageInlandId = model.Marine.CoverageInland;
+                        marineTerm.TransitFromDomestic = model.Marine.FromTransitDomestic;
+                        marineTerm.TransitToDomestic = model.Marine.ToTransitDomestic;
+                        marineTerm.MarineRate = model.Marine.Rate;
+                        marineTerm.MarineEndroseSumInsured = (int?)model.Marine.EndroseSumInsured;
+                        marineTerm.MarineSumInsured = (int?)model.Marine.SumInsured;
+                        marineTerm.MarineTotalSumInsured = model.Marine.TotalSumInsured;
+                        marineTerm.PerLocationLimit = model.Marine.PerLocationLimit;
+                        marineTerm.PerSendingLimit  = model.Marine.PerSendingLimit;
+                        _dataContext.tblMarineTerms.Add(marineTerm);
+                        await _dataContext.SaveChangesAsync();
+                    }
+                    #endregion
+
                     dbContextTransaction.Commit();
 
 
@@ -502,6 +515,8 @@ namespace PolicyManagement.Services.Commercial
                                                                from T10 in liabalityJoin.DefaultIfEmpty()
                                                                join T11 in _dataContext.tblGmcTerms on T1.PolicyId equals T11.PolicyId into gmcJoin
                                                                from T12 in gmcJoin.DefaultIfEmpty()
+                                                               join T13 in _dataContext.tblMarineTerms on T1.PolicyId equals T13.PolicyDetailId into marineJoin
+                                                               from T14 in marineJoin.DefaultIfEmpty()
                                                                where T1.PolicyId == policyId
                                                               select  new CommercialPolicyFormDataModel
                                                   {
@@ -650,14 +665,17 @@ namespace PolicyManagement.Services.Commercial
                                                       },
                                                       Marine = new MarineFormDataModel
                                                       {
-                                                          CoverageInland = T1.CoverageInlandId,
-                                                          EndroseSumInsured = T1.MarineEndroseSumInsured?? 0,
-                                                          TotalSumInsured = T1.MarineTotalSumInsured ?? 0,
-                                                          SumInsured = T1.MarineSumInsured ?? 0,
-                                                          FromTransitDomestic = T1.TransitFromDomestic,
-                                                          ToTransitDomestic = T1.TransitToDomestic,
-                                                          VoyageType = T1.VoyageTypeId,
-                                                          Rate = T1.MarineRate??0
+                                                          CoverageInland = T14.CoverageInlandId,
+                                                          EndroseSumInsured = T14.MarineEndroseSumInsured?? 0,
+                                                          TotalSumInsured = T14.MarineTotalSumInsured ?? 0,
+                                                          SumInsured = T14.MarineSumInsured ?? 0,
+                                                          FromTransitDomestic = T14.TransitFromDomestic,
+                                                          ToTransitDomestic = T14.TransitToDomestic,
+                                                          VoyageType = T14.VoyageTypeId,
+                                                          Rate = T14.MarineRate??0,
+                                                          PerSendingLimit = T14.PerSendingLimit??0,
+                                                          PerLocationLimit= T14.PerLocationLimit??0,
+                                                          MarineTermId= T14.MarineTermId
                                                       },
                                                       Enginnering = T8,
                                                       Liability = T10,
@@ -932,14 +950,6 @@ namespace PolicyManagement.Services.Commercial
             motorPolicyData.NumberofLocation = model.TpPolicy.NumberofLocation;
             motorPolicyData.LocationType = model.TpPolicy.LocationType;
             motorPolicyData.TerrorismPremium = model.Premium.TerrorimsPremium;
-            motorPolicyData.VoyageTypeId = model.Marine.VoyageType;
-            motorPolicyData.CoverageInlandId = model.Marine.CoverageInland;
-            motorPolicyData.TransitFromDomestic = model.Marine.FromTransitDomestic;
-            motorPolicyData.TransitToDomestic = model.Marine.ToTransitDomestic;
-            motorPolicyData.MarineRate = model.Marine.Rate;
-            motorPolicyData.MarineEndroseSumInsured = model.Marine.EndroseSumInsured;
-            motorPolicyData.MarineSumInsured = model.Marine.SumInsured;
-            motorPolicyData.MarineTotalSumInsured = model.Marine.TotalSumInsured;
             motorPolicyData.StorageRiskId = model.TpPolicy.StorageRiskId;
             motorPolicyData.FinancerId = model.TpPolicy.Hypothentication;
             motorPolicyData.MiscRate = model.Misc.MiscRate;
@@ -1188,6 +1198,27 @@ namespace PolicyManagement.Services.Commercial
             {
                 model.Enginnering.PolicyId = motorPolicyData.PolicyId;
                 _dataContext.tblEnginneringTerms.AddOrUpdate(model.Enginnering);
+                await _dataContext.SaveChangesAsync();
+            }
+            #endregion
+
+            #region Update Marine
+            if (model.Marine != null && model.VerticalId == (short)Vertical.Marine)
+            {
+                tblMarineTerm marineTerm = new tblMarineTerm();
+                marineTerm.MarineTermId = model.Marine.MarineTermId;
+                marineTerm.PolicyDetailId = motorPolicyData.PolicyId;
+                marineTerm.VoyageTypeId = model.Marine.VoyageType;
+                marineTerm.CoverageInlandId = model.Marine.CoverageInland;
+                marineTerm.TransitFromDomestic = model.Marine.FromTransitDomestic;
+                marineTerm.TransitToDomestic = model.Marine.ToTransitDomestic;
+                marineTerm.MarineRate = model.Marine.Rate;
+                marineTerm.MarineEndroseSumInsured = (int?)model.Marine.EndroseSumInsured;
+                marineTerm.MarineSumInsured = (int?)model.Marine.SumInsured;
+                marineTerm.MarineTotalSumInsured = model.Marine.TotalSumInsured;
+                marineTerm.PerLocationLimit = model.Marine.PerLocationLimit;
+                marineTerm.PerSendingLimit = model.Marine.PerSendingLimit;
+                _dataContext.tblMarineTerms.AddOrUpdate(marineTerm);
                 await _dataContext.SaveChangesAsync();
             }
             #endregion

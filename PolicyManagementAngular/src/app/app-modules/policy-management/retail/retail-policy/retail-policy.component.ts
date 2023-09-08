@@ -2202,6 +2202,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
   calculateCommissionablePremium(commissionPaidOnId: number) {
     this._commissionPaidOnId = commissionPaidOnId;
+    this.premiumForm.patchValue({ commissionablePremium: 0 });
+
     switch (commissionPaidOnId) {
       case 6:
         this.calculateCommissionablePremiumTp();
@@ -2613,7 +2615,13 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
 
   validateProductDetail(response: IHealthPolicyFormDataModel) {
     if (response.ProductPlan.ProductId == 0) {
-      this.errorList.push("Product Detail " + this.erorr)
+      this.errorList.push("Product Detail" + this.erorr)
+    }
+    if (!response.ProductPlan.PlanTypes) {
+      this.errorList.push("Plan Type" + this.erorr)
+    }
+    if (response.ProductPlan.Plan == 0) {
+      this.errorList.push("Plan" + this.erorr)
     }
   }
 
@@ -2732,9 +2740,9 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this.insurancePerson.RelationProposerName = this._relations.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.crelprposer)?.Name
     this.insurancePerson.PedName = this._ped.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cped)?.Name
     this.insurancePerson.PpcName = this._ppc.find((x: { Value: any; }) => x.Value == this.InsurancePersonForm.cppc)?.Name
-      this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
+    this.insurancePerson.Aadhar = this.InsurancePersonForm.caadhar;
     this.insurancePerson.GenderId = this.InsurancePersonForm.cgender;
-      this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId  && this._storeCustomerClusterDetail?.length>0? this._storeCustomerClusterDetail?.find(x => x.CustomerId == this.insuranceCustomerForm.value.ccustomerId).BranchId :
+    this.insurancePerson.BranchId = this.InsurancePersonForm?.ccustomerId  && this._storeCustomerClusterDetail?.length>0? this._storeCustomerClusterDetail?.find(x => x.CustomerId == this.insuranceCustomerForm.value.ccustomerId)?.BranchId :
         this._branchId
     this.insurancePerson.uid = this.InsurancePersonForm.ccustomerUid;
     this.insurancePerson.CustomerCode = this._insuranceCustomerPersonDetails?.find(x => x.uid == this.InsurancePersonForm?.ccustomerUid)?.Code
@@ -2747,7 +2755,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this.insurancePerson.ReferenceId = this.customerDetails.ReferenceId;
     this.insurancePerson.PosId = this.customerDetails.PosId;
     let age ;
-    if(this.policyForm.getRawValue().continutyStartDate || this.policyForm.getRawValue().tpStartDate){
+    if(this.policyForm.getRawValue().continutyStartDate !== '' || this.policyForm.getRawValue().tpStartDate !== ''){
       let DOB = new Date(this.insurancePerson.DateOfBirth)
       let StartDate:any;
       if(this.isTravel){
@@ -2969,6 +2977,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       this.insuranceCustomerForm.controls.criskclass.setValidators([Validators.required]);
     }
     this.insuranceCustomerForm.controls['cpassport'].updateValueAndValidity()
+    this.insuranceCustomerForm.controls['criskclass'].updateValueAndValidity()
 
     
   }

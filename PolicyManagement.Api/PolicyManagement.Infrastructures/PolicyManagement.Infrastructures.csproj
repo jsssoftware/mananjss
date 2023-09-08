@@ -248,6 +248,9 @@
     <Compile Include="EntityFramework\tblManufacturer.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\tblMarineTerm.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\tblMaritalStatus.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>

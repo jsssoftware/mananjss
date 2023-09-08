@@ -9,4 +9,7 @@ export interface IMarineFormDataModel {
         TotalSumInsured: number,
         SumInsured: number,
         EndroseSumInsured: number,
+        PerSendingLimit: number,
+        PerLocationLimit: number,
+        MarineTermId:number
 }
