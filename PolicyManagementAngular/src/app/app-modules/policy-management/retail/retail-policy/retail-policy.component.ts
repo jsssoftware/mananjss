@@ -1393,15 +1393,18 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
   }
 
   setExpiryDateDays() {
-    if (this.policyForm.value.numberOfDays == undefined
-      || this.policyForm.value.numberOfDays === "") return;
-    let numberofDays = this.policyForm.getRawValue().numberOfDays;
-
-    this.commonService.getDateDays(this.commonService.getDateInString(this.policyForm.getRawValue().tpStartDate), 0 , numberofDays).subscribe((response: IDateDto) => {
+    if (this.policyForm.value.tpStartDate == undefined
+      || this.policyForm.value.tpStartDate === ""|| this.policyForm.value.tpExpiryDate == undefined || "") return;
+    if(this.isTravel){
+      let StartDate :any = new Date(this.policyForm.getRawValue().tpStartDate)
+      let expDate :any = new Date(this.policyForm.getRawValue().tpExpiryDate)
+      let timeDiff  = Math.abs(StartDate - expDate);
+      var numberDays = Number(Math.floor((timeDiff)  / 1000 / 60 / 60 / 24));
       this.policyForm.patchValue({
-        tpExpiryDate: moment(new Date(`${response.Year}-${response.Month}-${response.Day}`))
+        numberOfDays :numberDays
       });
-    });
+    }
+   
   }
 
 
@@ -1739,7 +1742,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
         y.uid =   this._incrementalUid;
       })
       this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
-  
+     
     }
     if(this._storeCustomerClusterDetail && this._storeCustomerClusterDetail?.length>0){
     this._storeCustomerClusterDetail = this._storeCustomerClusterDetail?.filter(x => !this._selectedinsuranceCustomerPersonDetail.filter(y => y.ClusterId === x.ClusterId));
@@ -1860,6 +1863,9 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
               plan: response.ProductPlan.Plan,
               planTypes: response.ProductPlan.PlanTypes
             })
+            if (response.ProductPlan.PlanTypes == ProductPlanType.Floater.toString() && this._selectedinsuranceCustomerPersonDetail.length >= 1) {
+                this.sumInsuredCalculation();
+            }
           });
         });
 
@@ -2753,20 +2759,20 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       let timeDiff  = Math.abs(StartDate - DOB.getTime());
       age = Number(Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25));
     }
-    this.insurancePerson.Age = age
+    this.insurancePerson.Age = age;
     //insurancePerson
-    if (this.productPlanForm.value.planTypes == ProductPlanType.Floater) {
-      if (this._selectedinsuranceCustomerPersonDetail?.length >= 1) {
-        this.insurancePerson.SumInsuredFloater = 0;
-        this.sumInsuredCalculation();
-      }
-    }
+    
 
     this._selectedinsuranceCustomerPersonDetail.push({ ...this.insurancePerson })
     this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
     this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
     if (this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length > 0) {
       this.calculatInsuredData()
+    }
+    if (this.productPlanForm.value.planTypes == ProductPlanType.Floater || ProductPlanType.Hybrid) {
+      if (this._selectedinsuranceCustomerPersonDetail?.length >= 1) {
+        this.sumInsuredCalculation();
+      }
     }
     let insurancePersonIndex = this._insuranceCustomerPersonDetails?.findIndex(x => x.uid == this.insuranceCustomerForm.value.ccustomerUid);
     this._insuranceCustomerPersonDetails.splice(insurancePersonIndex, 1);
@@ -2800,7 +2806,8 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       this._selectedinsuranceCustomerPersonDetail.splice(index, 1)
       this._dataInsuranceCustomerCluster = new MatTableDataSource<ICustomerInsuranceDetail>(this._selectedinsuranceCustomerPersonDetail);
       this._dataInsuranceCustomerCluster._updateChangeSubscription(); // <-- Refresh the datasource
-      this.calculatInsuredData()
+      this.calculatInsuredData();
+      this.sumInsuredCalculation();
     }
   }
 
@@ -2832,7 +2839,13 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       caadhar: element.Aadhar,
       ccustomerId: element.CustomerId,
       ccustomerUid: element.uid
-    })
+    });
+    if(element.SumInsuredFloater && element.SumInsuredFloater != 0){
+      this.insuranceCustomerForm.get("csuminsuredfloater")?.enable();
+    }
+    if(element.SumInsuredIndividual && element.SumInsuredIndividual != 0){
+      this.insuranceCustomerForm.get("csuminsuredindividual")?.enable();    
+    }
   }
 
   getRisksClass(): any {
@@ -2872,6 +2885,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     this.noofAdult = 0;
     this.noofchild = 0;
     this.totalSumInsured = 0;
+    this.maxAge = 0;
     if (this._selectedinsuranceCustomerPersonDetail && this._selectedinsuranceCustomerPersonDetail.length > 0) {
       this._selectedinsuranceCustomerPersonDetail.filter((x) => {
         let age = x.Age;
@@ -2885,9 +2899,11 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       })
       this.maxAge = Math.max.apply(null, this.allAge);
     }
+
   }
 
   sumInsuredCalculation() {
+    this.insurancePerson.SumInsuredFloater = 0;
     this.insuranceCustomerForm.get("csuminsuredfloater").reset();
     this.insuranceCustomerForm.get("csuminsuredindividual").reset();
     this.insuranceCustomerForm.get("csuminsuredfloater")?.enable();
@@ -2906,6 +2922,19 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     if (this.productPlanForm.value.planTypes == ProductPlanType.Individual) {
       this.insuranceCustomerForm.get("csuminsuredindividual")?.enable();
       this.insuranceCustomerForm.get("csuminsuredfloater")?.disable();
+    }
+
+    if (this.productPlanForm.value.planTypes == ProductPlanType.Hybrid) {
+      this.insuranceCustomerForm.get("csuminsuredindividual")?.enable();
+      this.insuranceCustomerForm.get("csuminsuredfloater")?.enable();
+      if (this._selectedinsuranceCustomerPersonDetail.length >= 1) {
+        this.insuranceCustomerForm.value.csuminsuredfloater = 0;
+        let isFloater =  this._selectedinsuranceCustomerPersonDetail.some(x=>x.SumInsuredFloater!=0);
+        if(isFloater){
+        this.insuranceCustomerForm.get("csuminsuredfloater").setValue(0);
+        this.insuranceCustomerForm.get("csuminsuredfloater")?.disable();
+        }
+      }
     }
   }
 

@@ -430,21 +430,22 @@
                     <mat-error *ngIf="policyForm.controls.tpNumberOfYear">Please Select Number of Year</mat-error>
                   </mat-form-field>
                 </div>
+               
+                <div class="col-lg-3">
+                  <mat-form-field appearance="fill">
+                    <mat-label>{{(MenuVertical=='Motor')?'Expiry Date':  isTravel ? 'Date of Return' : 'Risk End Date'}}</mat-label>
+                    <input matInput [matDatepicker]="ExpiryDate" formControlName="tpExpiryDate"  (dateChange)="setExpiryDateDays()"/>
+                    <mat-datepicker-toggle matSuffix [for]="ExpiryDate"></mat-datepicker-toggle>
+                    <mat-datepicker #ExpiryDate></mat-datepicker>
+                  </mat-form-field>
+                </div>
                 <div class="col-lg-4" *ngIf="isTravel">
                   <mat-form-field appearance="fill">
                     <mat-label>Number of Days</mat-label>
                     
                     <input type="text" matInput formControlName="numberOfDays" placeholder="Number of Days"
-                    style="line-height: 30px;" class="uppercase" maxlength="4" max="4" (input)="setExpiryDateDays()">
+                    style="line-height: 30px;" class="uppercase" maxlength="4" max="4" >
                     <mat-error *ngIf="policyForm.controls.numberOfDays">Please select Number of Days</mat-error>
-                  </mat-form-field>
-                </div>
-                <div class="col-lg-3">
-                  <mat-form-field appearance="fill">
-                    <mat-label>{{(MenuVertical=='Motor')?'Expiry Date':  isTravel ? 'Date of Return' : 'Risk End Date'}}</mat-label>
-                    <input matInput [matDatepicker]="ExpiryDate" formControlName="tpExpiryDate" />
-                    <mat-datepicker-toggle matSuffix [for]="ExpiryDate"></mat-datepicker-toggle>
-                    <mat-datepicker #ExpiryDate></mat-datepicker>
                   </mat-form-field>
                 </div>
                 <div class="col-lg-3" *ngIf="isHeath">

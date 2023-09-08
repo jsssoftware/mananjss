@@ -74,7 +74,8 @@ export enum Common{
 
 export enum ProductPlanType{
     Floater =2,
-    Individual = 1
+    Individual = 1,
+    Hybrid=3
 }
 
 export enum Portabality{

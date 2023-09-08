@@ -2900,7 +2900,6 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       customerCode : data.CustomerCode
     })
     this._insuranceCustomerPersonDetails.push(data);
-    console.log(this._insuranceCustomerPersonDetails)
     this.removeInsuranceCLuster(index)
     this.sumInsuredCalculation();
   }

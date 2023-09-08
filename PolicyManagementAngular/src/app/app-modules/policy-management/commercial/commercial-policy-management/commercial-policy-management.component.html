@@ -849,7 +849,7 @@
                 *ngIf="this._verticalId ==  Vertical.Engineering">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
-                    Enginnering
+                    Enginnering /ER /CR
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <form [formGroup]="engineeringTermForm">
@@ -862,24 +862,6 @@
                         <input type="number" matInput formControlName="enginneringTotalSum" class="uppercase">
                       </mat-form-field>
                     </div>
-      
-                    <div class="col-lg-3">
-                      <mat-form-field appearance="fill">
-                        <mat-label>Rate</mat-label>
-                        <input type="number" matInput formControlName="enginneringRate" class="uppercase">
-                      </mat-form-field>
-                    </div>
-                    <div class="col-lg-3">
-                      <mat-form-field appearance="fill">
-                        <mat-label>Nature of Coverage</mat-label>
-                        <input type="text" matInput formControlName="enginneringNatureofCoverage" class="uppercase">
-                      </mat-form-field>
-      
-                    </div>
-                 
-                  </div>
-                  <div class="row">
-      
                     <div class="col-lg-3">
                       <mat-form-field appearance="fill">
                         <mat-label>Non Liabality Period</mat-label>
@@ -895,6 +877,24 @@
                         <input type="text" matInput formControlName="enginneringOtherInfo" class="uppercase" required
                          >
                       </mat-form-field>
+                    </div>
+
+                   
+                 
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-3">
+                      <mat-form-field appearance="fill">
+                        <mat-label>Rate</mat-label>
+                        <input type="number" matInput formControlName="enginneringRate" class="uppercase">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-lg-3">
+                      <mat-form-field appearance="fill">
+                        <mat-label>Nature of Coverage</mat-label>
+                        <input type="text" matInput formControlName="enginneringNatureofCoverage" class="uppercase">
+                      </mat-form-field>
+      
                     </div>
                     <div class="col-md-6">
                     <mat-radio-group formControlName="enginneringRiskLocation" >
@@ -1040,7 +1040,7 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="fireRate" class="uppercase" numbersOnlyWithOutDecimal>
+                          <input type="text" matInput formControlName="fireRate" class="uppercase" appTwoDigitDecimaNumber>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1056,7 +1056,7 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="earthQuakeRate" class="uppercase" numbersOnlyWithOutDecimal>
+                          <input type="text" matInput formControlName="earthQuakeRate" class="uppercase" appTwoDigitDecimaNumber>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1072,7 +1072,7 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="sTFIRate" class="uppercase" numbersOnlyWithOutDecimal>
+                          <input type="text" matInput formControlName="sTFIRate" class="uppercase" appTwoDigitDecimaNumber>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1099,7 +1099,7 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="terrorismRate" class="uppercase" numbersOnlyWithOutDecimal>
+                          <input type="text" matInput formControlName="terrorismRate" class="uppercase" appTwoDigitDecimaNumber>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1115,7 +1115,7 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="burglaryRate" class="uppercase" numbersOnlyWithOutDecimal>
+                          <input type="text" matInput formControlName="burglaryRate" class="uppercase" appTwoDigitDecimaNumber>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1131,7 +1131,7 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="moneyRate" class="uppercase" numbersOnlyWithOutDecimal>
+                          <input type="text" matInput formControlName="moneyRate" class="uppercase" appTwoDigitDecimaNumber>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1158,7 +1158,7 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="breakDownRate" class="uppercase" numbersOnlyWithOutDecimal>
+                          <input type="text" matInput formControlName="breakDownRate" class="uppercase" appTwoDigitDecimaNumber>
                         </mat-form-field>
                       </td>
                     </tr>
@@ -1174,7 +1174,7 @@
                       </td>
                       <td>
                         <mat-form-field>
-                          <input type="text" matInput formControlName="plateGlassRate" class="uppercase" numbersOnlyWithOutDecimal>
+                          <input type="text" matInput formControlName="plateGlassRate" class="uppercase" appTwoDigitDecimaNumber>
                         </mat-form-field>
                       </td>
                     </tr>
