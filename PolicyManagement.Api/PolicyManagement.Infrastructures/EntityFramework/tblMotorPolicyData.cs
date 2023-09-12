@@ -50,11 +50,11 @@ public partial class tblMotorPolicyData
 
     public short PolicyPackageTypeId { get; set; }
 
-    public short ProductId { get; set; }
+    public Nullable<short> ProductId { get; set; }
 
-    public short PlanId { get; set; }
+    public Nullable<short> PlanId { get; set; }
 
-    public short PlanTypeId { get; set; }
+    public Nullable<short> PlanTypeId { get; set; }
 
     public int CustomerId { get; set; }
 

@@ -569,9 +569,9 @@ namespace PolicyManagement.Services.Health
                                                       },
                                                       ProductPlan = new ProductPlanModel
                                                       {
-                                                          ProductId = s.T5.T3.T1.ProductId,
-                                                          Plan = s.T5.T3.T1.PlanId,
-                                                          PlanTypes = s.T5.T3.T1.PlanTypeId
+                                                          ProductId = s.T5.T3.T1.ProductId?? 0,
+                                                          Plan = s.T5.T3.T1.PlanId ?? 0,
+                                                          PlanTypes = s.T5.T3.T1.PlanTypeId ?? 0
                                                       },
                                                       InsuranceBranch = s.T5.T3.T1.InsuranceBranchId ?? 0,
                                                       ControlNumber = s.T5.T3.T1.ControlNo,

@@ -386,6 +386,12 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblCompanyDetails">
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -1075,9 +1081,9 @@
           <Property Name="PolicyTermId" Type="smallint" Nullable="false" />
           <Property Name="PolicyPackageType" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="PolicyPackageTypeId" Type="smallint" Nullable="false" />
-          <Property Name="ProductId" Type="smallint" Nullable="false" />
-          <Property Name="PlanId" Type="smallint" Nullable="false" />
-          <Property Name="PlanTypeId" Type="smallint" Nullable="false" />
+          <Property Name="ProductId" Type="smallint" />
+          <Property Name="PlanId" Type="smallint" />
+          <Property Name="PlanTypeId" Type="smallint" />
           <Property Name="CustomerId" Type="int" Nullable="false" />
           <Property Name="CustomerType" Type="nvarchar" MaxLength="20" />
           <Property Name="NameInPolicy" Type="nvarchar" MaxLength="100" />
@@ -1986,6 +1992,13 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblVersion">
+          <Property Name="Major" Type="tinyint" />
+          <Property Name="Minor" Type="tinyint" />
+          <Property Name="Revision" Type="tinyint" />
+        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -6755,9 +6768,9 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="PolicyTermId" Type="Int16" Nullable="false" />
           <Property Name="PolicyPackageType" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="PolicyPackageTypeId" Type="Int16" Nullable="false" />
-          <Property Name="ProductId" Type="Int16" Nullable="false" />
-          <Property Name="PlanId" Type="Int16" Nullable="false" />
-          <Property Name="PlanTypeId" Type="Int16" Nullable="false" />
+          <Property Name="ProductId" Type="Int16" />
+          <Property Name="PlanId" Type="Int16" />
+          <Property Name="PlanTypeId" Type="Int16" />
           <Property Name="CustomerId" Type="Int32" Nullable="false" />
           <Property Name="CustomerType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="NameInPolicy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />

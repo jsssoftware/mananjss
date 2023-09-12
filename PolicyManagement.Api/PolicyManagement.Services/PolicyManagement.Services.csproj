@@ -115,6 +115,8 @@
     <Compile Include="Inspection\Interface\IInspectionService.cs" />
     <Compile Include="Health\Interface\IRetailService.cs" />
     <Compile Include="Health\RetailService.cs" />
+    <Compile Include="Master\Interface\IMasterService.cs" />
+    <Compile Include="Master\MasterService.cs" />
     <Compile Include="Motor\Interface\IMotorService.cs" />
     <Compile Include="Motor\MotorService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -145,5 +147,6 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

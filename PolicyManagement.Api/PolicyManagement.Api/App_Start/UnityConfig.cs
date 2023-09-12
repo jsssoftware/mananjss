@@ -13,6 +13,8 @@ using PolicyManagement.Services.Health;
 using PolicyManagement.Services.Health.Interface;
 using PolicyManagement.Services.Inspection;
 using PolicyManagement.Services.Inspection.Interface;
+using PolicyManagement.Services.Master;
+using PolicyManagement.Services.Master.Interface;
 using PolicyManagement.Services.Motor;
 using PolicyManagement.Services.Motor.Interface;
 using PolicyManagement.Services.UserManagement;
@@ -50,6 +52,7 @@ namespace PolicyManagement.Api
             container.RegisterType<IInspectionService, InspectionService>(new HierarchicalLifetimeManager());
             container.RegisterType<IRetailService, RetailService>(new HierarchicalLifetimeManager());
             container.RegisterType<IUserManagementService, UserManagementService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IMasterService, MasterService>(new HierarchicalLifetimeManager());
 
             //Register Mapper
             IMapper mapper = AutoMapperConfiguration.Register().CreateMapper();

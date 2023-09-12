@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/auth-guard/auth.guard';
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { CustomerComponent } from './customer/customer.component';
+import { InsurancebranchComponent } from './insurancebranch/insurancebranch.component';
 
 const routes: Routes = [
     {
@@ -27,6 +28,10 @@ const routes: Routes = [
             {
                 path: 'add-customer',
                 component: AddCustomerComponent,
+            },
+            {
+                path: 'insurancebranch',
+                component: InsurancebranchComponent,
             }
         ]
     }
