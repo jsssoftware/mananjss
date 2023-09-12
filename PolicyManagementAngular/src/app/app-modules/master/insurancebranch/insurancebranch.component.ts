@@ -52,7 +52,7 @@ export class InsurancebranchComponent implements OnInit {
   ngOnInit(): void {
     this._branchId = parseInt(sessionStorage.getItem("branchId") as string);
     this.insurancebranchform.patchValue({
-      BranchId : this._branchId
+      branchId : this._branchId
     })
     this.getInsuranceCompanies()
     this.getInsuranceBranch()

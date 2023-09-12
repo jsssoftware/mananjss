@@ -79,7 +79,7 @@
 
                 </div>
                 <div class="col-lg-1">
-                    <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createInsuranceBranch()">
+                    <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createInsuranceBranch()" [disabled]="!insurancebranchform.valid">
                         <mat-icon style="font-size: 22px;">save</mat-icon>Save
                     </button>
                 </div>
