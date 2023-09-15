@@ -27,6 +27,8 @@ export class CommonService extends ICommonService {
    
     constructor(private apiManagerService: IApiManagerService) { super(); }
 
+ 
+
     getBanks = (): Observable<IDropDownDto<string>> => this.apiManagerService.getRequest<IDropDownDto<string>>(Common.Banks);
 
     getVerticalById = (verticalId: number): Observable<any> => this.apiManagerService.getRequest<any>(`${Common.Verticals}/${verticalId}`);
@@ -189,4 +191,8 @@ export class CommonService extends ICommonService {
     getVoyageType = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Common.VoyageType);
     getStorageRisk = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Common.StorageRisk);
     getDateDays = (date: string, year: number, days : number): Observable<IDateDto> => this.apiManagerService.getRequest<IDateDto>(`${Common.Date}?date=${date}&year=${year}&days=${days}`);
+    getDesignation = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Common.Designation);
+    getDepartment = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<number>[]>(Common.Department);
+    getUserRole = (branchId:any): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.UserRole}/${branchId}`);
+
 }

@@ -44,4 +44,24 @@ export class CommonFunction {
         event.preventDefault();
     }
     }
+    public lowerCaseFirstCharacter(obj:any) {
+      const lowerCaseFormValues:any = {};
+      for (const key in obj) {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+          const lowerCaseKey = key.charAt(0).toLowerCase() + key.slice(1);
+          lowerCaseFormValues[lowerCaseKey] = obj[key];
+        }
+      }
+      return lowerCaseFormValues;
+
+  }
+
+  public formatDate(d: Date) {
+    if(d&& d!= null){
+    d = new Date(d);   
+    var convertDate = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes() - d.getTimezoneOffset()).toISOString();
+    return convertDate
+    }
+    return null;
+  }
 }

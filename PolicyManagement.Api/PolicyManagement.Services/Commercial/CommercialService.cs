@@ -659,9 +659,9 @@ namespace PolicyManagement.Services.Commercial
                                                       },
                                                       ProductPlan = new ProductPlanModel
                                                       {
-                                                          ProductId = T1.ProductId,
-                                                          Plan = T1.PlanId,
-                                                          PlanTypes = T1.PlanTypeId
+                                                          ProductId = T1.ProductId??0,
+                                                          Plan = T1.PlanId ?? 0,
+                                                          PlanTypes = T1.PlanTypeId ?? 0
                                                       },
                                                       Marine = new MarineFormDataModel
                                                       {

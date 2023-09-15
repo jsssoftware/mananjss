@@ -1,5 +1,5 @@
 ﻿using PolicyManagement.Models.Common;
-using PolicyManagement.Models;
+using PolicyManagement.Models.Master;
 using PolicyManagement.Services.Master.Interface;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -22,6 +22,14 @@ namespace PolicyManagement.Api.Controllers.Master
         [Route("insurancebranch/create")]
         [HttpPost]
         public async Task<IHttpActionResult> CreateInsuranceBranch(tblInsuranceCompanyBranch insuranceCompanyBranch) => Json(await _masterService.CreateInsuranceBranch(insuranceCompanyBranch, new BaseModel()));
+
+        [Route("teammember/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetTeamMembers(int branchId) => Json(await _masterService.GetTeamMember(branchId));
+
+        [Route("teammember/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateTeamMember(tblTeamMember teamMember) => Json(await _masterService.CreateTeamMember(teamMember, new BaseModel()));
 
 
 

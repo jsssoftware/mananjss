@@ -322,5 +322,18 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("teammemberId/{teamMemberId}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetTeamMemberById(int teamMemberId) => Json(await _commonService.FindTeamMemberById(teamMemberId));
+
+        [Route("designation")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllDesignation() => Json(await _commonService.FindAllDesignation());
+
+        [Route("department")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllDepartment() => Json(await _commonService.FindAllDepartment());
+
+
+        [Route("roles")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllRole() => Json(await _commonService.FindAllDepartment());
     }
 }

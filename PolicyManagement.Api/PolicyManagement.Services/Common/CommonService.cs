@@ -1615,5 +1615,20 @@ namespace PolicyManagement.Services.Common
                }).FirstOrDefaultAsync();
            return team;
         }
+
+        public async Task<List<DropDownDto<int>>> FindAllDesignation() => await _dataContext.tblDesignation.Where(w => w.IsActive == true)
+                                                                                                .Select(s => new DropDownDto<int>
+                                                                                                {
+                                                                                                    Name = s.DesignationName,
+                                                                                                    Value = s.DesignationId
+                                                                                                })
+                                                                                                .ToListAsync();
+        public async Task<List<DropDownDto<int>>> FindAllDepartment() => await _dataContext.tblDepartment.Where(w => w.IsActive == true)
+                                                                                               .Select(s => new DropDownDto<int>
+                                                                                               {
+                                                                                                   Name = s.DepartmentName,
+                                                                                                   Value = s.DepartmentId
+                                                                                               })
+                                                                                               .ToListAsync();
     }
 }

@@ -91,6 +91,9 @@ export abstract class ICommonService {
     abstract getCommisionInland(): Observable<IDropDownDto<number>[]>;
     abstract getStorageRisk(): Observable<IDropDownDto<number>[]>;
     abstract getVoyageType(): Observable<IDropDownDto<number>[]>;
+    abstract getDesignation(): Observable<IDropDownDto<number>[]>;
+    abstract getDepartment(): Observable<IDropDownDto<number>[]>;
+    abstract getUserRole(BranchId:number): Observable<IDropDownDto<number>[]>;
 
 
 }

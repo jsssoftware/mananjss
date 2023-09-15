@@ -1,0 +1,345 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header class="card-container" style="display: flow-root">
+        <mat-card-title style="width: 50%; float: left;">
+            <p>Team Member Master</p>
+        </mat-card-title>
+        <mat-card-title style="width: 10%; float: right;">
+            <!--         <p><button  class="btn-block" style="background: cadetblue;" mat-raised-button color="blue" (click)="backToMaster()">Back</button></p> 
+ -->
+        </mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+        <form [formGroup]="teammemberform" autocomplete="off" style="padding-bottom:10px ;">
+           
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Team Member Name <span style="color:red">*</span></mat-label>
+                </div>
+                <div class="col-lg-8">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="teamMemberName" required />
+                    </mat-form-field>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Designation </mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="designationId"  >
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let designation of _designation" [value]="designation.Value" >
+                                {{designation.Name}}
+                            </mat-option>
+                        </mat-select>                    
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Department </mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="departmentId"  >
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let department of _department" [value]="department.Value" >
+                                {{department.Name}}
+                            </mat-option>
+                        </mat-select>                    
+                    </mat-form-field>
+                </div>
+                
+            </div>
+            <div class="row">
+                
+                <div class="col-lg-2">
+                    <mat-label>Reported To </mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="reportedToId"  >
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let teammembers of _teammembers" [value]="teammembers.Value" >
+                                {{teammembers.Name}}
+                            </mat-option>
+                        </mat-select>                    
+                    </mat-form-field>
+                </div>
+            </div>
+           
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Address </mat-label>
+                </div>
+                <div class="col-lg-8">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="teamMemberAddress"  />
+                    </mat-form-field>
+                </div>
+               
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Phone 1</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="teamMemberPhone1"  />
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Phone 2</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="teamMemberPhone2"  />
+                    </mat-form-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Mobile 1</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="teamMemberMobile1"  />
+                        <mat-error *ngIf="teammemberform.controls.teamMemberMobile1  && (teammemberform.controls['teamMemberMobile1'].dirty || teammemberform.controls['teamMemberMobile1'].touched)">Mobile no is <strong>not valid</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Mobile 2</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="teamMemberMobile2"  />
+                        <mat-error *ngIf="teammemberform.controls.teamMemberMobile2  && (teammemberform.controls['teamMemberMobile2'].dirty || teammemberform.controls['teamMemberMobile2'].touched)">Mobile no is <strong>not valid</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Email 1</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="teamMemberEmail1"  />
+                        <mat-error *ngIf="teammemberform.controls.teamMemberEmail1 && (teammemberform.controls['teamMemberEmail1'].dirty || teammemberform.controls['teamMemberEmail1'].touched)">Email is <strong>not valid</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Email 2</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="teamMemberEmail2"  />
+                        <mat-error *ngIf="teammemberform.controls.teamMemberEmail2 && (teammemberform.controls['teamMemberEmail2'].dirty || teammemberform.controls['teamMemberEmail2'].touched)">Email is <strong>not valid</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Date of Birth</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="fill">
+                     
+                        <input matInput [matDatepicker]="dateofbirth" formControlName="teamMemberDOB">
+                        <mat-datepicker-toggle matSuffix [for]="dateofbirth"></mat-datepicker-toggle>
+                        <mat-datepicker #dateofbirth></mat-datepicker>
+                      
+                      </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Date of Joining</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="fill">
+                      
+                        <input matInput [matDatepicker]="dateofjoining" formControlName="teamMemberDOJ">
+                        <mat-datepicker-toggle matSuffix [for]="dateofjoining"></mat-datepicker-toggle>
+                        <mat-datepicker #dateofjoining></mat-datepicker>
+                      
+                      </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    Vertical
+                </div>
+                <div class="col-lg-1">
+
+                    <mat-checkbox color="primary" formControlName="isMotor">Motor</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <mat-checkbox color="primary" formControlName="isHealth">Health</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <mat-checkbox color="primary" formControlName="isCommercial">Commercial</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <mat-checkbox color="primary" formControlName="isLife">Life</mat-checkbox>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+
+                    <mat-checkbox color="primary" formControlName="isTelecaller">Telecaller</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <mat-checkbox color="primary" formControlName="isFos">Fos</mat-checkbox>
+
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+
+                    <mat-checkbox color="primary" formControlName="isActive">Is Active</mat-checkbox>
+
+                </div>
+                
+            </div>
+            <div class="row">
+                
+                <div class="col-lg-1">
+                    <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createTeamMember()" [disabled]="!teammemberform.valid">
+                        <mat-icon style="font-size: 22px;">save</mat-icon>Save
+                    </button>
+                </div>
+                <div class="col-lg-1">
+                    <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb7e'}"
+                        (click)="reset()">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </form>
+ <div class="col-lg-12">
+            <div class="row" [hidden]="_length == 0">
+                <div class="col-lg-12">
+                    <table id="teamMemberData" mat-table [dataSource]="_teamMemberData" style="width: 100%;">
+                        
+                        <ng-container matColumnDef="TeamMemberName">
+                            <th mat-header-cell *matHeaderCellDef> Name </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.TeamMemberName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="TeamMemberPhone1">
+                            <th mat-header-cell *matHeaderCellDef>Phone 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.TeamMemberPhone1}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="TeamMemberPhone2">
+                            <th mat-header-cell *matHeaderCellDef>Phone 2 </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.TeamMemberPhone2
+                                }}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="TeamMemberEmail1">
+                            <th mat-header-cell *matHeaderCellDef>Email 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.TeamMemberEmail1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="TeamMemberEmail2">
+                            <th mat-header-cell *matHeaderCellDef>Email 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.TeamMemberEmail2}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ISTelecaller">
+                            <th mat-header-cell *matHeaderCellDef>Telecaller</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ISTelecaller}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ISFos">
+                            <th mat-header-cell *matHeaderCellDef>Fos</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ISFos}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsCommercial">
+                            <th mat-header-cell *matHeaderCellDef>Commercial</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsCommercial}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsHealth">
+                            <th mat-header-cell *matHeaderCellDef>Health</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsHealth}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsMotor">
+                            <th mat-header-cell *matHeaderCellDef>Motor</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsMotor}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="DepartmentId">
+                            <th mat-header-cell *matHeaderCellDef>Department</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.DepartmentName}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="DesignationId">
+                            <th mat-header-cell *matHeaderCellDef>Designation</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.DesignationName}}</td>
+                        </ng-container>
+                       
+                        <ng-container matColumnDef="AgencyName">
+                            <th mat-header-cell *matHeaderCellDef>Agency Name</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.AgencyName}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="AgencyCode">
+                            <th mat-header-cell *matHeaderCellDef>Agency Code</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.AgencyCode}}</td>
+                        </ng-container>
+                       
+                        <ng-container matColumnDef="Modify">
+                            <th mat-header-cell *matHeaderCellDef>Modify</th>
+                            <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{'text-align':'end'}">
+                                <div class="row">
+                                   
+                                    <div class="col-lg-1">
+
+                                        <button mat-icon-button (click)="editTeamMember(row)">
+                                            <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+                <mat-paginator [length]="_length" [pageSize]="_pageSize" (page)="pageChanged($event)"></mat-paginator>
+            </div>
+            <div class="row" [hidden]="_length != 0">
+                <div class="col-lg-12" style="text-align: center; color: red;">
+                    No records found
+                </div>
+            </div>
+        </div> -->
+    </mat-card-content>

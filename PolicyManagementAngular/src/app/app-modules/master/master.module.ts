@@ -9,12 +9,14 @@ import { CustomerComponent } from './customer/customer.component';
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { InsurancebranchComponent } from './insurancebranch/insurancebranch.component';
 import { MasterService } from 'src/app/app-services/master-service/master.service';
+import { TeammemberComponent } from './teammember/teammember.component';
 
 @NgModule({
   declarations: [  
     CustomerComponent,
     AddCustomerComponent,
     InsurancebranchComponent,
+    TeammemberComponent,
   ],
   imports: [
     CommonModule,

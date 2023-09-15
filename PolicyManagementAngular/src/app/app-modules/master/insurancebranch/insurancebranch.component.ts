@@ -27,6 +27,10 @@ export class InsurancebranchComponent implements OnInit {
     isActive: new FormControl(true),  
     branchId:new FormControl(''),
     insuranceCompanyBranchId :new FormControl(0),
+    isMotor: new FormControl(true),  
+    isHealth: new FormControl(true),  
+    isCommercial: new FormControl(true),  
+    isLife: new FormControl(true),  
   });
 
   public _insuranceCompanies: IDropDownDto<number>[] = [];
@@ -135,7 +139,6 @@ export class InsurancebranchComponent implements OnInit {
   }
 
   editInusranceBranch(data:any){
-    debugger
     this.insurancebranchform.patchValue({
       insuranceCompanyId: data.InsuranceCompanyId,
       insuranceCompanyBranchName:  data.InsuranceCompanyBranchName,
@@ -145,6 +148,10 @@ export class InsurancebranchComponent implements OnInit {
       isActive:  data.IsActive,  
       branchId: data.BranchId,
       insuranceCompanyBranchId : data.InsuranceCompanyBranchId,
+      isMotor: data.isMotor,  
+      isHealth: data.isHealth,  
+      isCommercial: data.isCommercial,  
+      isLife: data.isLife
     })
   }
 }

@@ -88,5 +88,7 @@ namespace PolicyManagement.Services.Common.Interface
         Task<DataTableDto<List<UserDetailDto>>> FindAllUser(int branchId);
         Task<List<DropDownDto<int>>> FindAllTeamMember(int branchId);
         Task<dynamic> FindTeamMemberById(int teamMemberId);
+        Task<List<DropDownDto<int>>> FindAllDesignation();
+        Task<List<DropDownDto<int>>> FindAllDepartment();
     }
 }

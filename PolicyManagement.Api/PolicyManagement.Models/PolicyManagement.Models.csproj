@@ -57,6 +57,7 @@
     <Compile Include="Customer\AddUpdateCustomerModel.cs" />
     <Compile Include="Customer\CustomerFormDataModel.cs" />
     <Compile Include="Commercial\CommercialPolicyFormDataModel.cs" />
+    <Compile Include="Master\TeamMemberUserModel.cs" />
     <Compile Include="Retail\InsuredPersonModel.cs" />
     <Compile Include="Retail\RetailPolicyFormDataModel.cs" />
     <Compile Include="Inspection\AddUpdateInspectionModel.cs" />
@@ -100,8 +101,6 @@
       <Name>PolicyManagement.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Master\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

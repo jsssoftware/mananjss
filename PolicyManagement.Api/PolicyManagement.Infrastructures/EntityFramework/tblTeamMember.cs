@@ -88,9 +88,6 @@ public partial class tblTeamMember
     public Nullable<bool> IsLocked { get; set; }
 
     public Nullable<bool> IsInspection { get; set; }
-
-
-
     public virtual tblDepartment tblDepartment { get; set; }
 
     public virtual tblDesignation tblDesignation { get; set; }

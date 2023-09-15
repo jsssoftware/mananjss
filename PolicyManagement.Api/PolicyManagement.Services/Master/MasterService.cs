@@ -27,6 +27,7 @@ using log4net;
 using System.Security.Cryptography;
 using PolicyManagement.Services.Master.Interface;
 using PolicyManagement.Dtos.Customer;
+using PolicyManagement.Models.Master;
 
 namespace PolicyManagement.Services.Master
 {
@@ -38,7 +39,8 @@ namespace PolicyManagement.Services.Master
                             
                             IMapper mapper) : base(dataContext, mapper)
         {
-           
+            dataContext.Configuration.ProxyCreationEnabled = false;
+
         }
 
         public async Task<DataTableDto<List<dynamic>>> GetInsuranceBranch(int branchId)
@@ -65,6 +67,51 @@ namespace PolicyManagement.Services.Master
                 {
                     IsSuccess = true,
                     Message = $"Insurance Branch is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetTeamMember(int branchId)
+        {
+
+            var tblTeamMembers = await _dataContext.tblTeamMember.Where(w => w.BranchId == branchId && w.IsActive == true).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = tblTeamMembers.Count(),
+                Data = tblTeamMembers
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateTeamMember(tblTeamMember teamMember, BaseModel baseModel)
+        {
+            try
+            {
+                tblUser tblUser =  new tblUser();
+
+                teamMember.CreatedBy = baseModel.LoginUserId;
+                teamMember.CreatedTime = DateTime.Now;
+                teamMember.ModifiedBy = baseModel.LoginUserId;
+                teamMember.ModifiedTime = DateTime.Now;
+                 tblUser = teamMember.tblUser.FirstOrDefault();
+                teamMember.tblUser = null;
+                 _dataContext.tblTeamMember.AddOrUpdate(teamMember);
+                 _dataContext.SaveChanges();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Team member is created or edited successfully",
                     // Response = users
                 };
             }
