@@ -94,6 +94,9 @@ export abstract class ICommonService {
     abstract getDesignation(): Observable<IDropDownDto<number>[]>;
     abstract getDepartment(): Observable<IDropDownDto<number>[]>;
     abstract getUserRole(BranchId:number): Observable<IDropDownDto<number>[]>;
+    abstract getPosTitle(): Observable<IDropDownDto<number>[]>;
+    abstract getType(): Observable<IDropDownDto<number>[]>;
+    abstract getCategory(): Observable<IDropDownDto<number>[]>;
 
 
 }

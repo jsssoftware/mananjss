@@ -31,7 +31,13 @@ namespace PolicyManagement.Api.Controllers.Master
         [HttpPost]
         public async Task<IHttpActionResult> CreateTeamMember(tblTeamMember teamMember) => Json(await _masterService.CreateTeamMember(teamMember, new BaseModel()));
 
+        [Route("pos/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreatePos(tblPOS pos) => Json(await _masterService.CreatePos(pos, new BaseModel()));
 
+        [Route("pos/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetPos(int branchId) => Json(await _masterService.GetPos(branchId));
 
     }
 }

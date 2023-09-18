@@ -23,4 +23,7 @@ export class MasterService extends IMasterService {
     getTeamMember= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetTeamMember}/${branchId}`);
     createTeamMember = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreateTeamMember, model);
 
+    getPosData= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetPos}/${branchId}`);
+    createPosData = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreatePos, model);
+
 }

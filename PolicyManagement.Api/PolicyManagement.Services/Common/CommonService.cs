@@ -1630,5 +1630,26 @@ namespace PolicyManagement.Services.Common
                                                                                                    Value = s.DepartmentId
                                                                                                })
                                                                                                .ToListAsync();
+        public async Task<List<DropDownDto<int>>> FindAllPosTitle() => await _dataContext.tblTitle.Where(w => w.IsActive == true)
+                                                                                       .Select(s => new DropDownDto<int>
+                                                                                       {
+                                                                                           Name = s.TitleName,
+                                                                                           Value = s.TitleId
+                                                                                       })
+                                                                                       .ToListAsync();
+        public async Task<List<DropDownDto<int>>> FindAllCategory() => await _dataContext.tblCategory.Where(w => w.IsActive == true)
+                                                                                      .Select(s => new DropDownDto<int>
+                                                                                      {
+                                                                                          Name = s.CategoryName,
+                                                                                          Value = s.CategoryId
+                                                                                      })
+                                                                                      .ToListAsync();
+        public async Task<List<DropDownDto<int>>> FindAllType() => await _dataContext.tblType.Where(w => w.IsActive == true)
+                                                                              .Select(s => new DropDownDto<int>
+                                                                              {
+                                                                                  Name = s.TypeName,
+                                                                                  Value = s.TypeId
+                                                                              })
+                                                                              .ToListAsync();
     }
 }

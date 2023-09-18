@@ -520,6 +520,7 @@ namespace PolicyManagement.Services.Commercial
                                                                where T1.PolicyId == policyId
                                                               select  new CommercialPolicyFormDataModel
                                                   {
+
                                                       PolicyId = T1.PolicyId,
                                                       BranchId = T1.BranchId.ToString(),
                                                       CoverNoteIssueDate = T1.CoverNoteDate,
@@ -666,7 +667,7 @@ namespace PolicyManagement.Services.Commercial
                                                       Marine = new MarineFormDataModel
                                                       {
                                                           CoverageInland = T14.CoverageInlandId,
-                                                          EndroseSumInsured = T14.MarineEndroseSumInsured?? 0,
+                                                          EndroseSumInsured = T14.MarineEndroseSumInsured ?? 0,
                                                           TotalSumInsured = T14.MarineTotalSumInsured ?? 0,
                                                           SumInsured = T14.MarineSumInsured ?? 0,
                                                           FromTransitDomestic = T14.TransitFromDomestic,
@@ -675,11 +676,11 @@ namespace PolicyManagement.Services.Commercial
                                                           Rate = T14.MarineRate??0,
                                                           PerSendingLimit = T14.PerSendingLimit??0,
                                                           PerLocationLimit= T14.PerLocationLimit??0,
-                                                          MarineTermId= T14.MarineTermId
+                                                          MarineTermId = T14.MarineTermId
                                                       },
-                                                      Enginnering = T8,
-                                                      Liability = T10,
-                                                       Gmc = T12,
+                                                      Enginnering = T8??null,
+                                                      Liability = T10 ?? null,
+                                                       Gmc = T12 ?? null,
                                                         Misc = new MiscFromDataModel
                                                         {
                                                           Misc1 = T1.MiscInfo1,
@@ -1206,7 +1207,7 @@ namespace PolicyManagement.Services.Commercial
             if (model.Marine != null && model.VerticalId == (short)Vertical.Marine)
             {
                 tblMarineTerm marineTerm = new tblMarineTerm();
-                marineTerm.MarineTermId = model.Marine.MarineTermId;
+                marineTerm.MarineTermId = (int)model.Marine.MarineTermId;
                 marineTerm.PolicyDetailId = motorPolicyData.PolicyId;
                 marineTerm.VoyageTypeId = model.Marine.VoyageType;
                 marineTerm.CoverageInlandId = model.Marine.CoverageInland;

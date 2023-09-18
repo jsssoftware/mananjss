@@ -13,6 +13,8 @@ namespace PolicyManagement.Services.Master.Interface
         Task<CommonDto<object>> CreateInsuranceBranch(tblInsuranceCompanyBranch users, BaseModel baseModel);
         Task<CommonDto<object>> CreateTeamMember(tblTeamMember teamMember, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetTeamMember(int branchId);
+        Task<CommonDto<object>> CreatePos(tblPOS teamMember, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetPos(int branchId);
 
     }
 }

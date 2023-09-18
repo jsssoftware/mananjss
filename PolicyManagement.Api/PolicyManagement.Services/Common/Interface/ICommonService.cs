@@ -90,5 +90,9 @@ namespace PolicyManagement.Services.Common.Interface
         Task<dynamic> FindTeamMemberById(int teamMemberId);
         Task<List<DropDownDto<int>>> FindAllDesignation();
         Task<List<DropDownDto<int>>> FindAllDepartment();
+        Task<List<DropDownDto<int>>> FindAllCategory();
+        Task<List<DropDownDto<int>>> FindAllType();
+        Task<List<DropDownDto<int>>> FindAllPosTitle();
+
     }
 }

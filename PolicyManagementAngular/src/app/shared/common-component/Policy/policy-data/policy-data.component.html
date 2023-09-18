@@ -251,7 +251,7 @@
               Policy Term
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <form [formGroup]="policyTermForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
+          <form [formGroup]="policyTermForm" [ngClass]="{disabledDiv: _isViewPolicyActive}" autocomplete="off">
             <hr style="margin-top: 0px;" />
             <div class="row">
               <div class="col-lg-6">
@@ -333,7 +333,7 @@
               Policy Details
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <form [formGroup]="policyForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
+          <form [formGroup]="policyForm" [ngClass]="{disabledDiv: _isViewPolicyActive}" autocomplete="off">
             <hr style="margin-top: 0px;" />
             <div class="row">
               <div class="col-lg-6">
@@ -682,7 +682,7 @@
                 Product & Plan Type
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <form [formGroup]="productPlanForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
+            <form [formGroup]="productPlanForm" [ngClass]="{disabledDiv: _isViewPolicyActive}" autocomplete="off">
               <hr style="margin-top: 0px;" />
               <div class="row">
                 <div class="col-lg-4">
@@ -734,7 +734,7 @@
                 Vehicle Details
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <form [formGroup]="vehicleForm" autocomplete="off" [ngClass]="{disabledDiv: _isViewPolicyActive}">
+            <form [formGroup]="vehicleForm" autocomplete="off" [ngClass]="{disabledDiv: _isViewPolicyActive}" >
               <hr style="margin-top: 0px;" />
 
               <div class="row">
@@ -985,7 +985,7 @@
               Premium Details
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <form [formGroup]="premiumForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
+          <form [formGroup]="premiumForm" [ngClass]="{disabledDiv: _isViewPolicyActive}" autocomplete="off">
             <hr style="margin-top: 0px;" />
             <div class="row" [ngClass]="{disabledDiv: _isTpPremiumDetailsDisabled}">
               <div class="col-lg-3">
@@ -1304,7 +1304,7 @@
                 Nomination Details
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <form [formGroup]="nominationForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
+            <form [formGroup]="nominationForm" [ngClass]="{disabledDiv: _isViewPolicyActive}" autocomplete="off">
               <hr style="margin-top: 0px;" />
               <div class="row">
                 <div class="col-lg-4">
@@ -1352,7 +1352,7 @@
               Policy Source Details
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <form [formGroup]="policySourceForm" [ngClass]="{disabledDiv: _isViewPolicyActive}">
+          <form [formGroup]="policySourceForm" [ngClass]="{disabledDiv: _isViewPolicyActive}" autocomplete="off">
             <hr style="margin-top: 0px;" />
             <div class="row">
               <div class="col-lg-6">

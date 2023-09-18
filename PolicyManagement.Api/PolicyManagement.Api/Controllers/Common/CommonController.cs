@@ -335,5 +335,18 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("roles")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAllRole() => Json(await _commonService.FindAllDepartment());
+
+
+        [Route("postitle")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetTitle() => Json(await _commonService.FindAllPosTitle());
+
+        [Route("type")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetType() => Json(await _commonService.FindAllType());
+
+        [Route("category")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCategory() => Json(await _commonService.FindAllCategory());
     }
 }

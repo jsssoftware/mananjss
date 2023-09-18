@@ -75,5 +75,8 @@ export class Common {
     public static readonly TeaMemberId = "api/common/teammemberId";
     public static readonly Designation = "api/common/designation";
     public static readonly Department = "api/common/department";
+    public static readonly Postitle = "api/common/postitle";
+    public static readonly Type = "api/common/type";
+    public static readonly Category = "api/common/category";
 
 }

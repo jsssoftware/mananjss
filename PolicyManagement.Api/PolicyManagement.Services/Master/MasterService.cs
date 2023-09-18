@@ -94,6 +94,17 @@ namespace PolicyManagement.Services.Master
             };
         }
 
+        public async Task<DataTableDto<List<dynamic>>> GetPos(int branchId)
+        {
+
+            var pos = await _dataContext.tblPOS.Where(w => w.BranchId == branchId && w.IsActive == true).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
         public async Task<CommonDto<object>> CreateTeamMember(tblTeamMember teamMember, BaseModel baseModel)
         {
             try
@@ -127,5 +138,35 @@ namespace PolicyManagement.Services.Master
             }
 
         }
+        public async Task<CommonDto<object>> CreatePos(tblPOS pos, BaseModel baseModel)
+        {
+            try
+            {
+                pos.CreatedBy = baseModel.LoginUserId;
+                pos.CreatedTime = DateTime.Now;
+                pos.ModifiedBy = baseModel.LoginUserId;
+                pos.ModifiedTime = DateTime.Now;
+                _dataContext.tblPOS.AddOrUpdate(pos);
+                _dataContext.SaveChanges();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"POS is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
     }
 }

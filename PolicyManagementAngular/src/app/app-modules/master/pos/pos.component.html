@@ -1,0 +1,461 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header class="card-container" style="display: flow-root">
+        <mat-card-title style="width: 50%; float: left;">
+            <p>Pos Master</p>
+        </mat-card-title>
+        <mat-card-title style="width: 10%; float: right;">
+            <!--         <p><button  class="btn-block" style="background: cadetblue;" mat-raised-button color="blue" (click)="backToMaster()">Back</button></p> 
+ -->
+        </mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+        <form [formGroup]="posform" autocomplete="off" style="padding-bottom:10px ;">
+           
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Pos Name</mat-label>
+                </div>
+                <div class="col-lg-8">
+                    <div class="row">
+                      <div class="col-md-2">
+                        <mat-form-field>
+                          <mat-select formControlName="POSTitleId" required>
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let postitle of _postitle" [value]="postitle.Value">{{postitle.Name}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-md-8">
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="POSName" required />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  
+                
+            </div>
+            <div class="row">
+                    <div class="col-lg-2">
+                        <mat-label>Address (Off) </mat-label>
+                    </div>
+                    <div class="col-lg-2">
+                        <mat-form-field>
+                            <input type="text" matInput formControlName="POSAddress1"  />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-1">
+                        <mat-label>City 1</mat-label>
+                    </div>
+                    <div class="col-lg-3">
+                        <mat-form-field>
+                            <mat-select formControlName="POSCityId1"  >
+                                <mat-option>City</mat-option>
+                                <mat-option *ngFor="let city of _city" [value]="city.Value" >
+                                    {{city.Name}}
+                                </mat-option>
+                            </mat-select>                    
+                        </mat-form-field>
+                    </div>
+                   
+                    <div class="col-lg-1">
+                        <mat-label>Pincode 1</mat-label>
+    
+                    </div>
+                    <div class="col-lg-3">
+                        <mat-form-field>
+                            <input type="text" matInput formControlName="POSPinCode1"  numbersOnlyWithOutDecimal/>
+                        </mat-form-field>
+                    </div>
+                   
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Address (Res) </mat-label>
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSAddress2"  />
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-1">
+                    <mat-label>City 2</mat-label>
+
+                </div>
+                <div class="col-lg-3">
+                    <mat-form-field>
+                        <mat-select formControlName="POSCityId2"  >
+                            <mat-option>City 2</mat-option>
+                            <mat-option *ngFor="let city of _city" [value]="city.Value" >
+                                {{city.Name}}
+                            </mat-option>
+                        </mat-select>                    
+                    </mat-form-field>
+                </div>
+               
+                <div class="col-lg-1">
+                    <mat-label>Pincode 2</mat-label>
+
+                </div>
+                <div class="col-lg-3">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSPinCode2"  numbersOnlyWithOutDecimal/>
+                    </mat-form-field>
+                </div>
+               
+        </div>
+         
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Mobile 1</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSMobile1"  numbersOnlyWithOutDecimal/>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Mobile 2</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSMobile2"  />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Phone 1</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSPhone1"  />
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Phone 2</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSPhone2"  />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Email 1</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSEmail1"  />
+                        <mat-error *ngIf="posform.controls.POSEmail1 && (posform.controls['POSEmail1'].dirty || posform.controls['POSEmail1'].touched)">Email is <strong>not valid</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Email 2</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSEmail2"  />
+                        <mat-error *ngIf="posform.controls.POSEmail2 && (posform.controls['POSEmail2'].dirty || posform.controls['POSEmail2'].touched)">Email is <strong>not valid</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                   
+                <div class="col-lg-2">
+                    <mat-label>Category </mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="CategoryId"  >
+                            <mat-option>Category</mat-option>
+                            <mat-option *ngFor="let category of _category" [value]="category.Value" >
+                                {{category.Name}}
+                            </mat-option>
+                        </mat-select>                    
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Managed By </mat-label>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="POSManagedBy"  >
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let teammembers of _teammembers" [value]="teammembers.Value" >
+                                {{teammembers.Name}}
+                            </mat-option>
+                        </mat-select>                    
+                    </mat-form-field>
+                </div>
+             </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Date of Birth</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="fill">
+                     
+                        <input matInput [matDatepicker]="dateofbirth" formControlName="POSDOB">
+                        <mat-datepicker-toggle matSuffix [for]="dateofbirth"></mat-datepicker-toggle>
+                        <mat-datepicker #dateofbirth></mat-datepicker>
+                      
+                      </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Date of Joining</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="fill">
+                      
+                        <input matInput [matDatepicker]="dateofjoining" formControlName="POSDOJ">
+                        <mat-datepicker-toggle matSuffix [for]="dateofjoining"></mat-datepicker-toggle>
+                        <mat-datepicker #dateofjoining></mat-datepicker>
+                      
+                      </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                   
+                <div class="col-lg-2">
+                    <mat-label>POS Location </mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="CategoryId"  >
+                            <mat-option>Category</mat-option>
+                            <mat-option *ngFor="let category of _category" [value]="category.Value" >
+                                {{category.Name}}
+                            </mat-option>
+                        </mat-select>                    
+                    </mat-form-field>
+                </div>
+               
+                <div class="col-lg-2">
+                    <mat-label>Pos Type </mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="TypeId"  >
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let type of _type" [value]="type.Value" >
+                                {{type.Name}}
+                            </mat-option>
+                        </mat-select>                    
+                    </mat-form-field>
+                </div>
+               
+             </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    Vertical
+                </div>
+                <div class="col-lg-1">
+
+                    <mat-checkbox color="primary" formControlName="IsMotor">Motor</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <mat-checkbox color="primary" formControlName="IsHealth">Health</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <mat-checkbox color="primary" formControlName="IsCommercial">Commercial</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <mat-checkbox color="primary" formControlName="IsLife">Life</mat-checkbox>
+
+                </div>
+            </div>
+           
+            <div class="row">
+                <div class="col-lg-9">
+
+                    <mat-checkbox color="primary" formControlName="IsActive">Is Active</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createPosData()" [disabled]="!posform.valid">
+                        <mat-icon style="font-size: 22px;">save</mat-icon>Save
+                    </button>
+                </div>
+                <div class="col-lg-1">
+                    <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb7e'}"
+                        (click)="reset()">
+                        Reset
+                    </button>
+                </div>
+            </div>
+           
+        </form>
+ <div class="col-lg-12">
+            <div class="row" [hidden]="_length == 0">
+                <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Filter</mat-label>
+                      <input matInput (keyup)="iposFilter($event)" placeholder="Search" #input>
+                    </mat-form-field>
+                  </div>
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+
+                    <table id="posData" mat-table [dataSource]="_posData" style="width: 100%;">
+                        
+                        <ng-container matColumnDef="POSName">
+                            <th mat-header-cell *matHeaderCellDef> Name </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSManagedBy">
+                            <th mat-header-cell *matHeaderCellDef>Managed by</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ManagedBy}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSTitleId">
+                            <th mat-header-cell *matHeaderCellDef>Title</th>
+                            <td mat-cell *matCellDef="let element">{{element.Title}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSLocationId">
+                            <th mat-header-cell *matHeaderCellDef>Location</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSLocationId}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSAddress1">
+                            <th mat-header-cell *matHeaderCellDef>Address 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSAddress1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSCityId1">
+                            <th mat-header-cell *matHeaderCellDef>City 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.City1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSPinCode1">
+                            <th mat-header-cell *matHeaderCellDef>Pincode 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSPinCode1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSAddress2">
+                            <th mat-header-cell *matHeaderCellDef>Address 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSAddress2}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSCityId2">
+                            <th mat-header-cell *matHeaderCellDef>City 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.City2}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSPinCode2">
+                            <th mat-header-cell *matHeaderCellDef>Pincode 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSPinCode2}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSPhone1">
+                            <th mat-header-cell *matHeaderCellDef>Phone 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSPhone1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSPhone2">
+                            <th mat-header-cell *matHeaderCellDef>Phone 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSPhone2}}</td>
+                        </ng-container>
+                       
+                        <ng-container matColumnDef="POSEmail1">
+                            <th mat-header-cell *matHeaderCellDef>Email 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSEmail1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSEmail2">
+                            <th mat-header-cell *matHeaderCellDef>Email 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSEmail2}}</td>
+                        </ng-container>
+                       
+                        <ng-container matColumnDef="POSDOB">
+                            <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSDOB | date : 'dd/mm/yyyy'}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSDOJ">
+                            <th mat-header-cell *matHeaderCellDef>Date of Joining</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSDOJ | date : 'dd/mm/yyyy'}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="CategoryId">
+                            <th mat-header-cell *matHeaderCellDef>Category</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.Category}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="TypeId">
+                            <th mat-header-cell *matHeaderCellDef>Type</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.Type}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsMotor">
+                            <th mat-header-cell *matHeaderCellDef>Is Motor</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsMotor}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsHealth">
+                            <th mat-header-cell *matHeaderCellDef>Is Health</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsHealth}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsCommercial">
+                            <th mat-header-cell *matHeaderCellDef>Is Commercial</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsCommercial}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsActive">
+                            <th mat-header-cell *matHeaderCellDef>Is Active</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsActive}}</td>
+                        </ng-container>
+                       
+                        <ng-container matColumnDef="Modify">
+                            <th mat-header-cell *matHeaderCellDef>Modify</th>
+                            <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{'text-align':'end'}">
+                                <div class="row">
+                                   
+                                    <div class="col-lg-1">
+
+                                        <button mat-icon-button (click)="editPosData(row)">
+                                            <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    </div>
+                </div>
+                <mat-paginator [length]="_length" [pageSize]="_pageSize" (page)="pageChanged($event)"></mat-paginator>
+            </div>
+            <div class="row" [hidden]="_length != 0">
+                <div class="col-lg-12" style="text-align: center; color: red;">
+                    No records found
+                </div>
+            </div>
+        </div>
+    </mat-card-content>

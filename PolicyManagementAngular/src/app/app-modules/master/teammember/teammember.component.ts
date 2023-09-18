@@ -202,7 +202,11 @@ export class TeammemberComponent implements OnInit {
       isFos : data.ISFOS,
     });
     this.teammemberform.patchValue(lowerCaseFormValues);
-   
+  }
+
+  iTeamFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this._teamMemberData.filter = filterValue.trim().toLowerCase();
   }
 
 }

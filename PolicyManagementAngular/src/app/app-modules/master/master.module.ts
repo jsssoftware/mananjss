@@ -10,6 +10,7 @@ import { AddCustomerComponent } from './customer/add-customer/add-customer.compo
 import { InsurancebranchComponent } from './insurancebranch/insurancebranch.component';
 import { MasterService } from 'src/app/app-services/master-service/master.service';
 import { TeammemberComponent } from './teammember/teammember.component';
+import { PosComponent } from './pos/pos.component';
 
 @NgModule({
   declarations: [  
@@ -17,6 +18,7 @@ import { TeammemberComponent } from './teammember/teammember.component';
     AddCustomerComponent,
     InsurancebranchComponent,
     TeammemberComponent,
+    PosComponent,
   ],
   imports: [
     CommonModule,
