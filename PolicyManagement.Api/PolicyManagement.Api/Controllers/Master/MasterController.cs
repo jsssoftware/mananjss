@@ -48,5 +48,14 @@ namespace PolicyManagement.Api.Controllers.Master
         [HttpGet]
         public async Task<IHttpActionResult> GetPosContact(int branchId) => Json(await _masterService.GetPosContact(branchId));
 
+
+        [Route("insurancecompany/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateInsuranceCompany(tblInsuranceCompany insuranceCompany) => Json(await _masterService.CreateInsuranceCompany(insuranceCompany, new BaseModel()));
+
+        [Route("insurancecompany/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetInsuranceCompany(int branchId) => Json(await _masterService.GetInusranceCompany(branchId));
+
     }
 }

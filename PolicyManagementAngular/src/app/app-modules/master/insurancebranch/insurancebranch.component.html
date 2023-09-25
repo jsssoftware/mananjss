@@ -30,7 +30,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label>Primary Branch Name <span style="color:red">*</span></mat-label>
+                    <mat-label>Branch Name <span style="color:red">*</span></mat-label>
 
                 </div>
                 <div class="col-lg-4">
@@ -41,7 +41,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label>Primary Branch Code </mat-label>
+                    <mat-label>Branch Code </mat-label>
 
                 </div>
                 <div class="col-lg-4">
@@ -74,7 +74,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-2">
-                    Vertical
+                    Vertical <span style="color:red">*</span>
                 </div>
                 <div class="col-lg-1">
 
@@ -115,9 +115,20 @@
         </form>
      <div class="col-lg-12">
             <div class="row" [hidden]="_length == 0">
+                <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Filter</mat-label>
+                      <input matInput (keyup)="iInsurancebranch($event)" placeholder="Search" #input>
+                    </mat-form-field>
+                  </div>
                 <div class="col-lg-12">
                     <table id="tblinusranceBranch" mat-table [dataSource]="_insuranceBranchData" style="width: 100%;">
                         
+                        <ng-container matColumnDef="InsuranceCompanyId">
+                            <th mat-header-cell *matHeaderCellDef> Company Name </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.InsuranceCompanyName}} </td>
+                        </ng-container>
                         <ng-container matColumnDef="InsuranceCompanyBranchName">
                             <th mat-header-cell *matHeaderCellDef> Branch </th>
                             <td mat-cell *matCellDef="let element">
@@ -137,6 +148,26 @@
                             <th mat-header-cell *matHeaderCellDef> Agency Code</th>
                             <td mat-cell *matCellDef="let element">
                                 {{element.AgencyCode}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsMotor">
+                            <th mat-header-cell *matHeaderCellDef>Is Motor</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsMotor}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsHealth">
+                            <th mat-header-cell *matHeaderCellDef>Is Health</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsHealth}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsCommercial">
+                            <th mat-header-cell *matHeaderCellDef>Is Commercial</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsCommercial}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="IsLife">
+                            <th mat-header-cell *matHeaderCellDef>Is Life</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsLife}}</td>
                         </ng-container>
                         <ng-container matColumnDef="IsActive">
                             <th mat-header-cell *matHeaderCellDef>IsActive</th>

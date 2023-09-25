@@ -44,10 +44,15 @@ export class InsurancebranchComponent implements OnInit {
 
   
   displayedColumns: string[] = [
+    'InsuranceCompanyId',
     'InsuranceCompanyBranchName',
     'InsuranceCompanyBranchCode',
     'AgencyName',
     'AgencyCode',
+    'IsMotor',
+    'IsHealth',
+    'IsCommercial',
+    'IsLife',
     'IsActive',
     'Modify'
   ];
@@ -66,13 +71,19 @@ export class InsurancebranchComponent implements OnInit {
   getInsuranceCompanies(): any {
     this.commonService.getInsuranceCompanies(0).subscribe((response: IDropDownDto<number>[]) => {
       this._insuranceCompanies  = response;
+      
     });
   }
   getInsuranceBranch(): any {
     
     this.masterSerivice.getInsuranceBranch(this._branchId).subscribe((response: IDataTableDto<any[]>) => {
       this._length = response.TotalCount;
-      this._insuranceBranchData = new MatTableDataSource(response.Data);
+      
+      response.Data.forEach(y=>{
+        y.InsuranceCompanyName = this._insuranceCompanies.find(x=>x.Value ==  y.InsuranceCompanyId)?.Name
+      });
+     
+      this._insuranceBranchData = new MatTableDataSource( response.Data.sort(x=>x.InsuranceCompanyName));
       this._insuranceBranchData.paginator = this._paginator;
       this._insuranceBranchData._updateChangeSubscription(); // <-- Refresh the datasource
 
@@ -148,10 +159,15 @@ export class InsurancebranchComponent implements OnInit {
       isActive:  data.IsActive,  
       branchId: data.BranchId,
       insuranceCompanyBranchId : data.InsuranceCompanyBranchId,
-      isMotor: data.isMotor,  
-      isHealth: data.isHealth,  
-      isCommercial: data.isCommercial,  
-      isLife: data.isLife
+      isMotor: data.IsMotor,  
+      isHealth: data.IsHealth,  
+      isCommercial: data.IsCommercial,  
+      isLife: data.IsLife
     })
+  }
+
+  iInsurancebranch(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this._insuranceBranchData.filter = filterValue.trim().toLowerCase();
   }
 }

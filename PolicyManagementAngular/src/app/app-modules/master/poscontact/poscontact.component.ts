@@ -49,6 +49,7 @@ export class PoscontactComponent implements OnInit {
     'POSContactEmailID',
     'IsMotor',
     'IsHealth',
+    'IsLife',
     'IsCommercial',
     'IsActive',
     'IsMessageSend',
@@ -60,7 +61,7 @@ export class PoscontactComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     await this.getPos();
-    await this.getPosContactData();
+   // await this.getPosContactData();
   }
 
   
@@ -71,6 +72,7 @@ export class PoscontactComponent implements OnInit {
   getPos() :any {
     this.commonService.getPos(0, this._branchId).subscribe((response: IDropDownDto<number>[]) => {
       this._pos  = response;
+      this.getPosContactData();
     });
   }
 

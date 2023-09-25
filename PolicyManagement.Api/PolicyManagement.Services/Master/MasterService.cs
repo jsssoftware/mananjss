@@ -209,6 +209,47 @@ namespace PolicyManagement.Services.Master
 
         }
 
+        public async Task<DataTableDto<List<dynamic>>> GetInusranceCompany(int branchId)
+        {
+
+            var pos = await _dataContext.tblInsuranceCompany.Where(w => w.IsActive == true).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateInsuranceCompany(tblInsuranceCompany insuranceCompany, BaseModel baseModel)
+        {
+            try
+            {
+                insuranceCompany.CreatedBy = baseModel.LoginUserId;
+                insuranceCompany.CreatedTime = DateTime.Now;
+                insuranceCompany.ModifiedBy = baseModel.LoginUserId;
+                insuranceCompany.ModifiedTime = DateTime.Now;
+                _dataContext.tblInsuranceCompany.AddOrUpdate(insuranceCompany);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Insurance Company is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
 
     }
 }

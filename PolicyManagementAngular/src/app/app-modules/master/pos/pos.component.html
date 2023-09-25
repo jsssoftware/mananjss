@@ -1,7 +1,7 @@
 <mat-card class="mat-elevation-z2">
     <mat-card-header class="card-container" style="display: flow-root">
         <mat-card-title style="width: 50%; float: left;">
-            <p>Pos Master</p>
+            <p>POS Master</p>
         </mat-card-title>
         <mat-card-title style="width: 10%; float: right;">
             <!--         <p><button  class="btn-block" style="background: cadetblue;" mat-raised-button color="blue" (click)="backToMaster()">Back</button></p> 
@@ -14,19 +14,19 @@
            
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label>Pos Name</mat-label>
+                    <mat-label>POS Name</mat-label>
                 </div>
                 <div class="col-lg-8">
                     <div class="row">
-                      <div class="col-md-2">
-                        <mat-form-field>
+                       <!--  <div class="col-md-2">
+                      <mat-form-field>
                           <mat-select formControlName="POSTitleId" required>
                             <mat-option>Select</mat-option>
                             <mat-option *ngFor="let postitle of _postitle" [value]="postitle.Value">{{postitle.Name}}</mat-option>
                           </mat-select>
-                        </mat-form-field>
-                      </div>
-                      <div class="col-md-8">
+                        </mat-form-field> 
+                      </div>-->
+                      <div class="col-md-10">
                         <mat-form-field>
                           <input type="text" matInput formControlName="POSName" required />
                         </mat-form-field>
@@ -201,6 +201,39 @@
                     </mat-form-field>
                 </div>
              </div>
+             <div class="row">
+                   
+                <div class="col-lg-2">
+                    <mat-label>POS Location </mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="POSLocationId"  >
+                            <mat-option>Category</mat-option>
+                            <mat-option *ngFor="let location of _location" [value]="location.Value" >
+                                {{location.Name}}
+                            </mat-option>
+                        </mat-select>                    
+                    </mat-form-field>
+                </div>
+               
+                <div class="col-lg-2">
+                    <mat-label>POS Type </mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="TypeId"  >
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let type of _type" [value]="type.Value" >
+                                {{type.Name}}
+                            </mat-option>
+                        </mat-select>                    
+                    </mat-form-field>
+                </div>
+               
+             </div>
             <div class="row">
                 <div class="col-lg-2">
                     <mat-label>Date of Birth</mat-label>
@@ -229,39 +262,7 @@
                       </mat-form-field>
                 </div>
             </div>
-            <div class="row">
-                   
-                <div class="col-lg-2">
-                    <mat-label>POS Location </mat-label>
 
-                </div>
-                <div class="col-lg-4">
-                    <mat-form-field>
-                        <mat-select formControlName="POSLocationId"  >
-                            <mat-option>Category</mat-option>
-                            <mat-option *ngFor="let location of _location" [value]="location.Value" >
-                                {{location.Name}}
-                            </mat-option>
-                        </mat-select>                    
-                    </mat-form-field>
-                </div>
-               
-                <div class="col-lg-2">
-                    <mat-label>Pos Type </mat-label>
-
-                </div>
-                <div class="col-lg-4">
-                    <mat-form-field>
-                        <mat-select formControlName="TypeId"  >
-                            <mat-option>Select</mat-option>
-                            <mat-option *ngFor="let type of _type" [value]="type.Value" >
-                                {{type.Name}}
-                            </mat-option>
-                        </mat-select>                    
-                    </mat-form-field>
-                </div>
-               
-             </div>
             <div class="row">
                 <div class="col-lg-2">
                     Vertical
@@ -392,12 +393,12 @@
                         <ng-container matColumnDef="POSDOB">
                             <th mat-header-cell *matHeaderCellDef>Date of Birth</th>
                             <td mat-cell *matCellDef="let element">
-                                {{element.POSDOB | date : 'dd/mm/yyyy'}}</td>
+                                {{element.POSDOB | date : 'dd/MM/yyyy'}}</td>
                         </ng-container>
                         <ng-container matColumnDef="POSDOJ">
                             <th mat-header-cell *matHeaderCellDef>Date of Joining</th>
                             <td mat-cell *matCellDef="let element">
-                                {{element.POSDOJ | date : 'dd/mm/yyyy'}}</td>
+                                {{element.POSDOJ | date : 'dd/MM/yyyy'}}</td>
                         </ng-container>
                         <ng-container matColumnDef="CategoryId">
                             <th mat-header-cell *matHeaderCellDef>Category</th>
@@ -410,22 +411,27 @@
                                 {{element.Type}}</td>
                         </ng-container>
                         <ng-container matColumnDef="IsMotor">
-                            <th mat-header-cell *matHeaderCellDef>Is Motor</th>
+                            <th mat-header-cell *matHeaderCellDef>Motor</th>
                             <td mat-cell *matCellDef="let element">
                                 {{element.IsMotor}}</td>
                         </ng-container>
                         <ng-container matColumnDef="IsHealth">
-                            <th mat-header-cell *matHeaderCellDef>Is Health</th>
+                            <th mat-header-cell *matHeaderCellDef>Health</th>
                             <td mat-cell *matCellDef="let element">
                                 {{element.IsHealth}}</td>
                         </ng-container>
                         <ng-container matColumnDef="IsCommercial">
-                            <th mat-header-cell *matHeaderCellDef>Is Commercial</th>
+                            <th mat-header-cell *matHeaderCellDef>Commercial</th>
                             <td mat-cell *matCellDef="let element">
                                 {{element.IsCommercial}}</td>
                         </ng-container>
+                        <ng-container matColumnDef="IsLife">
+                            <th mat-header-cell *matHeaderCellDef>Life</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsLife}}</td>
+                        </ng-container>
                         <ng-container matColumnDef="IsActive">
-                            <th mat-header-cell *matHeaderCellDef>Is Active</th>
+                            <th mat-header-cell *matHeaderCellDef>Active</th>
                             <td mat-cell *matCellDef="let element">
                                 {{element.IsActive}}</td>
                         </ng-container>

@@ -31,7 +31,7 @@ export class TeammemberComponent implements OnInit {
     teamMemberPhone1: new FormControl(''),  
     teamMemberPhone2: new FormControl(''),  
     teamMemberMobile1: new FormControl('',[Validators.required,Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),  
-    teamMemberMobile2: new FormControl('',[Validators.required,Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),  
+    teamMemberMobile2: new FormControl('',[Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),  
     teamMemberEmail1: new FormControl('',[Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]),  
     teamMemberEmail2: new FormControl('',[Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]),  
     isMotor: new FormControl(''),  
@@ -61,6 +61,8 @@ export class TeammemberComponent implements OnInit {
   public _showAll: boolean =false;
   displayedColumns: string[] = [
     'TeamMemberName',
+    'TeamMemberMobile2',
+    'TeamMemberMobile1',
     'TeamMemberPhone1',
     'TeamMemberPhone2',
     'TeamMemberEmail1',
@@ -69,23 +71,23 @@ export class TeammemberComponent implements OnInit {
     'IsCommercial',
     'IsHealth',
     'IsMotor',
+    'IsLife',
     'DepartmentId',
     'DesignationId',
-    'AgencyName',
-    'AgencyCode',
+    'teamMemberDOJ',
+    
+    'teamMemberDOB',
     'Modify'
   ];
   constructor(private commonService : ICommonService, private masterSerivice :MasterService,private  commonFunction :CommonFunction) { }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this._branchId = parseInt(sessionStorage.getItem("branchId") as string);
-  
-    this.getTeamMember();
-    this.getDepartment();
-    this.getDesignation();
-    this.getAllTeamMembers();
-    this.getUserRole();
-
+    await this.getDepartment();
+    await this.getDesignation();
+    await this.getAllTeamMembers();
+    await this.getUserRole();
+    await this.getTeamMember();
   }
 
   

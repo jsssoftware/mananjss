@@ -7,5 +7,6 @@ export class Master {
     public static readonly CreatePos = "api/master/pos/create";
     public static readonly GetPosContact = "api/master/poscontact";
     public static readonly CreatePosContact =  "api/master/poscontact/create";
- 
+    public static readonly GetInusranceCompany = "api/master/insurancecompany";
+    public static readonly CreateInusranceCompany =  "api/master/insurancecompany/create";
 }

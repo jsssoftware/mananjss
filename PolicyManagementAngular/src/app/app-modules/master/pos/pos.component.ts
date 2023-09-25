@@ -65,7 +65,6 @@ export class PosComponent implements OnInit {
   displayedColumns: string[] = [
     'POSName',
     'POSManagedBy',
-    'POSTitleId',
     'POSLocationId',
     'POSAddress1',
     'POSCityId1',
@@ -84,6 +83,7 @@ export class PosComponent implements OnInit {
     'IsMotor',
     'IsHealth',
     'IsCommercial',
+    'IsLife',
     'IsActive',
     'Modify'
   ];
