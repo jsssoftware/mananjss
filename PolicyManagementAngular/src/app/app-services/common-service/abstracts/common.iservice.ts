@@ -97,6 +97,7 @@ export abstract class ICommonService {
     abstract getPosTitle(): Observable<IDropDownDto<number>[]>;
     abstract getType(): Observable<IDropDownDto<number>[]>;
     abstract getCategory(): Observable<IDropDownDto<number>[]>;
+    abstract getTerritory(): Observable<IDropDownDto<number>[]>;
 
 
 }

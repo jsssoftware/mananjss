@@ -1651,5 +1651,12 @@ namespace PolicyManagement.Services.Common
                                                                                   Value = s.TypeId
                                                                               })
                                                                               .ToListAsync();
+        public async Task<List<DropDownDto<int>>> FindTerritory() => await _dataContext.tblTerritory.Where(w => w.IsActive == true)
+                                                                      .Select(s => new DropDownDto<int>
+                                                                      {
+                                                                          Name = s.TerritoryName,
+                                                                          Value = s.TerritoryId
+                                                                      })
+                                                                      .ToListAsync();
     }
 }

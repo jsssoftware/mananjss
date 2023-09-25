@@ -1,0 +1,121 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header class="card-container" style="display: flow-root">
+        <mat-card-title style="width: 50%; float: left;">
+            <p>Insurance Company</p>
+        </mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+        <form [formGroup]="insuranceCompanyform" autocomplete="off" style="padding-bottom:10px ;">
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Pos</mat-label>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="POSId" required>
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let pos of _pos" [value]="pos.Value">{{pos.Name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Pos Name</mat-label>
+                </div>
+                <div class="col-md-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSContactName" required />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Mobile 1</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSContactMobile1" numbersOnlyWithOutDecimal />
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Mobile 2</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSContactMobile2" numbersOnlyWithOutDecimal />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Email Id</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="POSContactEmailID" />
+                        <mat-error
+                            *ngIf="posContactform.controls.POSContactEmailID && (posContactform.controls['POSContactEmailID'].dirty || posContactform.controls['POSContactEmailID'].touched)">
+                            Email is <strong>not valid</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    Vertical
+                </div>
+                <div class="col-lg-1">
+
+                    <mat-checkbox color="primary" formControlName="IsMotor">Motor</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <mat-checkbox color="primary" formControlName="IsHealth">Health</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <mat-checkbox color="primary" formControlName="IsCommercial">Commercial</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <mat-checkbox color="primary" formControlName="IsLife">Life</mat-checkbox>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                </div>
+                <div class="col-lg-2">
+
+                    <mat-checkbox color="primary" formControlName="IsMessageSend"> Message Send</mat-checkbox>
+
+                </div>
+
+                <div class="col-lg-1">
+
+                    <mat-checkbox color="primary" formControlName="IsActive">Active</mat-checkbox>
+                </div>
+                <div class="col-lg-2">
+                </div>
+                <div class="col-lg-1">
+                    <button type="button" class="btn-block" mat-raised-button color="primary"
+                        (click)="createPosContactData()" [disabled]="!posContactform.valid">
+                        <mat-icon style="font-size: 22px;">save</mat-icon>Save
+                    </button>
+                </div>
+                <div class="col-lg-1">
+                    <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb7e'}"
+                        (click)="reset()">
+                        Reset
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>

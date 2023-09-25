@@ -93,6 +93,8 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindAllCategory();
         Task<List<DropDownDto<int>>> FindAllType();
         Task<List<DropDownDto<int>>> FindAllPosTitle();
+        Task<List<DropDownDto<int>>> FindTerritory();
+
 
     }
 }

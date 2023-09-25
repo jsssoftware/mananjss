@@ -118,7 +118,7 @@ namespace PolicyManagement.Services.Master
                  tblUser = teamMember.tblUser.FirstOrDefault();
                 teamMember.tblUser = null;
                  _dataContext.tblTeamMember.AddOrUpdate(teamMember);
-                 _dataContext.SaveChanges();
+                 await _dataContext.SaveChangesAsync();
                 return new CommonDto<object>
                 {
                     IsSuccess = true,
@@ -147,7 +147,7 @@ namespace PolicyManagement.Services.Master
                 pos.ModifiedBy = baseModel.LoginUserId;
                 pos.ModifiedTime = DateTime.Now;
                 _dataContext.tblPOS.AddOrUpdate(pos);
-                _dataContext.SaveChanges();
+                await _dataContext.SaveChangesAsync();
                 return new CommonDto<object>
                 {
                     IsSuccess = true,
@@ -167,6 +167,48 @@ namespace PolicyManagement.Services.Master
             }
 
         }
+
+        public async Task<DataTableDto<List<dynamic>>> GetPosContact(int branchId)
+        {
+
+            var pos = await _dataContext.tblPOSContact.Where(w =>w.IsActive == true).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreatePosContact(tblPOSContact posContact, BaseModel baseModel)
+        {
+            try
+            {
+                posContact.CreatedBy = baseModel.LoginUserId;
+                posContact.CreatedDateTime = DateTime.Now;
+                posContact.ModifiedBy = baseModel.LoginUserId;
+                posContact.ModifiedDateTime = DateTime.Now;
+                _dataContext.tblPOSContact.AddOrUpdate(posContact);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"POS Contact is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
 
     }
 }

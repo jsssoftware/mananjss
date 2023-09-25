@@ -51,6 +51,7 @@ export class PosComponent implements OnInit {
   public _city: IDropDownDto<number>[] = [];
   public _postitle: IDropDownDto<number>[] = [];
   public _category: IDropDownDto<number>[] = [];
+  public _location: IDropDownDto<number>[] = [];
   public _type: IDropDownDto<number>[] = [];
   public _posTitle: IDropDownDto<number>[] = [];
   public _teammembers: IDropDownDto<number>[] = [];
@@ -96,6 +97,7 @@ export class PosComponent implements OnInit {
       await  this.getPosCategory();
       await  this.getTeamMembers();
       await  this.getPosData();
+      await  this.getLocation();
 
   }
 
@@ -116,6 +118,12 @@ export class PosComponent implements OnInit {
   getPosCategory(): any {
     this.commonService.getCategory().subscribe((response: IDropDownDto<number>[]) => {
       this._category  = response;
+    });
+  }
+  
+  getLocation(): any {
+    this.commonService.getTerritory().subscribe((response: IDropDownDto<number>[]) => {
+      this._location  = response;
     });
   }
   
@@ -204,6 +212,7 @@ export class PosComponent implements OnInit {
         y.Title = this._posTitle.find(x=>x.Value ==  y.POSTitleId)?.Name,
         y.Category = this._type.find(x=>x.Value ==  y.CategoryId)?.Name,
         y.ManagedBy = this._teammembers.find(x=>x.Value ==  y.POSManagedBy)?.Name
+        y.Location = this._location.find(x=>x.Value ==  y.POSLocationId)?.Name
       })
       this._posData = new MatTableDataSource(response.Data);
       this._posData.paginator = this._paginator;

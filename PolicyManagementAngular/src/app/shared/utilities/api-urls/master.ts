@@ -5,5 +5,7 @@ export class Master {
     public static readonly CreateTeamMember = "api/master/teammember/create";
     public static readonly GetPos = "api/master/pos";
     public static readonly CreatePos = "api/master/pos/create";
+    public static readonly GetPosContact = "api/master/poscontact";
+    public static readonly CreatePosContact =  "api/master/poscontact/create";
  
 }

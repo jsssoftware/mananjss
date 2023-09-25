@@ -4,7 +4,9 @@ import { AuthGuard } from 'src/app/shared/auth-guard/auth.guard';
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { CustomerComponent } from './customer/customer.component';
 import { InsurancebranchComponent } from './insurancebranch/insurancebranch.component';
+import { InsurancecompanyComponent } from './insurancecompany/insurancecompany.component';
 import { PosComponent } from './pos/pos.component';
+import { PoscontactComponent } from './poscontact/poscontact.component';
 import { TeammemberComponent } from './teammember/teammember.component';
 
 const routes: Routes = [
@@ -42,6 +44,14 @@ const routes: Routes = [
             {
                 path: 'posmaster',
                 component: PosComponent
+            },
+            {
+                path: 'poscontact',
+                component: PoscontactComponent
+            },
+            {
+                path: 'insurancecompany',
+                component: InsurancecompanyComponent
             }
         ]
     }

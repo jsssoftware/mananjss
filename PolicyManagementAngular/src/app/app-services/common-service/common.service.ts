@@ -197,5 +197,6 @@ export class CommonService extends ICommonService {
     getPosTitle = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.Postitle}`);
     getType = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.Type}`);
     getCategory = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.Category}`);
+    getTerritory = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.Territory}`);
 
 }

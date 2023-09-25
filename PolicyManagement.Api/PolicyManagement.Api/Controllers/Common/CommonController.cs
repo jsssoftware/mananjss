@@ -348,5 +348,9 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("category")]
         [HttpGet]
         public async Task<IHttpActionResult> GetCategory() => Json(await _commonService.FindAllCategory());
+
+        [Route("territory")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetTerritory() => Json(await _commonService.FindTerritory());
     }
 }

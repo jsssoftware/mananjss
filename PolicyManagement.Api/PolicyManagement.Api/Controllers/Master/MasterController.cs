@@ -39,5 +39,14 @@ namespace PolicyManagement.Api.Controllers.Master
         [HttpGet]
         public async Task<IHttpActionResult> GetPos(int branchId) => Json(await _masterService.GetPos(branchId));
 
+
+        [Route("poscontact/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreatePosContact(tblPOSContact pos) => Json(await _masterService.CreatePosContact(pos, new BaseModel()));
+
+        [Route("poscontact/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetPosContact(int branchId) => Json(await _masterService.GetPosContact(branchId));
+
     }
 }

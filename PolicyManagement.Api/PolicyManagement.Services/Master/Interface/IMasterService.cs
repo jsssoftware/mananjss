@@ -15,6 +15,8 @@ namespace PolicyManagement.Services.Master.Interface
         Task<DataTableDto<List<dynamic>>> GetTeamMember(int branchId);
         Task<CommonDto<object>> CreatePos(tblPOS teamMember, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetPos(int branchId);
+        Task<CommonDto<object>> CreatePosContact(tblPOSContact tblPOSContact, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetPosContact(int branchId);
 
     }
 }

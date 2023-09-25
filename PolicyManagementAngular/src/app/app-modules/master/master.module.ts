@@ -11,6 +11,8 @@ import { InsurancebranchComponent } from './insurancebranch/insurancebranch.comp
 import { MasterService } from 'src/app/app-services/master-service/master.service';
 import { TeammemberComponent } from './teammember/teammember.component';
 import { PosComponent } from './pos/pos.component';
+import { PoscontactComponent } from './poscontact/poscontact.component';
+import { InsurancecompanyComponent } from './insurancecompany/insurancecompany.component';
 
 @NgModule({
   declarations: [  
@@ -19,6 +21,8 @@ import { PosComponent } from './pos/pos.component';
     InsurancebranchComponent,
     TeammemberComponent,
     PosComponent,
+    PoscontactComponent,
+    InsurancecompanyComponent,
   ],
   imports: [
     CommonModule,
