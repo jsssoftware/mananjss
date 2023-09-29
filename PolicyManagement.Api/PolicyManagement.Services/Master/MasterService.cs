@@ -211,7 +211,6 @@ namespace PolicyManagement.Services.Master
 
         public async Task<DataTableDto<List<dynamic>>> GetInusranceCompany(int branchId)
         {
-
             var pos = await _dataContext.tblInsuranceCompany.Where(w => w.IsActive == true).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
@@ -250,6 +249,83 @@ namespace PolicyManagement.Services.Master
 
         }
 
+        public async Task<DataTableDto<List<dynamic>>> GetCluster(int branchId)
+        {
+            var pos = await _dataContext.tblCluster.Where(w => w.IsActive == true).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
 
+        public async Task<CommonDto<object>> CreateCluster(tblCluster cluster, BaseModel baseModel)
+        {
+            try
+            {
+                cluster.CreatedBy = baseModel.LoginUserId;
+                cluster.CreatedTime = DateTime.Now;
+                cluster.ModifiedBy = baseModel.LoginUserId;
+                cluster.ModifiedTime = DateTime.Now;
+                _dataContext.tblCluster.AddOrUpdate(cluster);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Cluster is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+        public async Task<DataTableDto<List<dynamic>>> GetPlan(int branchId)
+        {
+            var pos = await _dataContext.tblPlan.Where(w => w.IsActive == true).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreatePlan(tblPlan plan, BaseModel baseModel)
+        {
+            try
+            {
+                plan.CreatedBy = baseModel.LoginUserId;
+                plan.CreatedTime = DateTime.Now;
+                plan.ModifiedBy = baseModel.LoginUserId;
+                plan.ModifiedTime = DateTime.Now;
+                _dataContext.tblPlan.AddOrUpdate(plan);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Plan is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
     }
 }

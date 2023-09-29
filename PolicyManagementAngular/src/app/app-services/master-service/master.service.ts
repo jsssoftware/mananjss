@@ -32,4 +32,10 @@ export class MasterService extends IMasterService {
     getInsuranceCompanyData= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetInusranceCompany}/${branchId}`);
     createInusraanceComanyData = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreateInusranceCompany, model);
 
+    getClusterData= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetCluster}/${branchId}`);
+    createClusterData = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreateCluster, model);
+
+    getPlans= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetPlan}/${branchId}`);
+    createPlan = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreatePlan, model);
+
 }

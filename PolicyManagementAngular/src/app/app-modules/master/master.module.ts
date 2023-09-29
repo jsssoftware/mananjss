@@ -13,6 +13,9 @@ import { TeammemberComponent } from './teammember/teammember.component';
 import { PosComponent } from './pos/pos.component';
 import { PoscontactComponent } from './poscontact/poscontact.component';
 import { InsurancecompanyComponent } from './insurancecompany/insurancecompany.component';
+import { ClusterComponent } from './cluster/cluster.component';
+import { PlanComponent } from './plan/plan.component';
+import { AddonplanComponent } from './addonplan/addonplan.component';
 
 @NgModule({
   declarations: [  
@@ -23,6 +26,9 @@ import { InsurancecompanyComponent } from './insurancecompany/insurancecompany.c
     PosComponent,
     PoscontactComponent,
     InsurancecompanyComponent,
+    ClusterComponent,
+    PlanComponent,
+    AddonplanComponent,
   ],
   imports: [
     CommonModule,

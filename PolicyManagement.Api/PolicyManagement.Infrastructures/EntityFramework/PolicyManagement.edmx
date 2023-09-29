@@ -878,6 +878,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="CreatedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
+          <Property Name="TollFreeNo" Type="bigint" />
         </EntityType>
         <EntityType Name="tblInsuranceCompanyBranch">
           <Key>
@@ -5308,6 +5309,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="CreatedTime" Type="DateTime" Precision="0" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
+          <Property Name="TollFreeNo" Type="Int64" />
         </EntityType>
         <EntityType Name="tblInsuranceCompanyBranch">
           <Key>
@@ -7878,6 +7880,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblInsuranceCompany">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblInsuranceCompany">
               <MappingFragment StoreEntitySet="tblInsuranceCompany">
+                <ScalarProperty Name="TollFreeNo" ColumnName="TollFreeNo" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />

@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/auth-guard/auth.guard';
+import { ClusterComponent } from './cluster/cluster.component';
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { CustomerComponent } from './customer/customer.component';
 import { InsurancebranchComponent } from './insurancebranch/insurancebranch.component';
 import { InsurancecompanyComponent } from './insurancecompany/insurancecompany.component';
+import { PlanComponent } from './plan/plan.component';
 import { PosComponent } from './pos/pos.component';
 import { PoscontactComponent } from './poscontact/poscontact.component';
 import { TeammemberComponent } from './teammember/teammember.component';
@@ -52,6 +54,14 @@ const routes: Routes = [
             {
                 path: 'insurancecompany',
                 component: InsurancecompanyComponent
+            },
+            {
+                path: 'cluster',
+                component: ClusterComponent
+            },
+            {
+                path: 'plan',
+                component: PlanComponent
             }
         ]
     }

@@ -1,0 +1,332 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header class="card-container" style="display: flow-root">
+        <mat-card-title style="width: 50%; float: left;">
+            <p>CLuster Master</p>
+        </mat-card-title>
+        <mat-card-title style="width: 10%; float: right;">
+            <!--         <p><button  class="btn-block" style="background: cadetblue;" mat-raised-button color="blue" (click)="backToMaster()">Back</button></p> 
+ -->
+        </mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+        <form [formGroup]="clusterform" autocomplete="off" style="padding-bottom:10px ;">
+           
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>CLuster Name<span style="color:red">*</span></mat-label>
+                </div>
+                <div class="col-lg-8">
+                      
+                      <div class="col-md-10">
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="ClusterName" required />
+                        </mat-form-field>
+                      </div>
+                  </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Cluster Contact</mat-label>
+                </div>
+                <div class="col-lg-8">
+                    <div class="row">
+                      
+                      <div class="col-md-10">
+                        <mat-form-field>
+                          <input type="text" matInput formControlName="ClusterContact" required />
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                  
+                
+            </div>
+            <div class="row">
+                    <div class="col-lg-2">
+                        <mat-label>Address (Off) </mat-label>
+                    </div>
+                    <div class="col-lg-2">
+                        <mat-form-field>
+                            <input type="text" matInput formControlName="ClusterAddress1"  />
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-1">
+                        <mat-label>City 1</mat-label>
+                    </div>
+                    <div class="col-lg-3">
+                        <mat-form-field>
+                            <mat-select formControlName="ClusterCityId1"  >
+                                <mat-option>City</mat-option>
+                                <mat-option *ngFor="let city of _city" [value]="city.Value" >
+                                    {{city.Name}}
+                                </mat-option>
+                            </mat-select>                    
+                        </mat-form-field>
+                    </div>
+                   
+                    <div class="col-lg-1">
+                        <mat-label>Pincode 1</mat-label>
+    
+                    </div>
+                    <div class="col-lg-3">
+                        <mat-form-field>
+                            <input type="text" matInput formControlName="ClusterPinCode1"  numbersOnlyWithOutDecimal/>
+                        </mat-form-field>
+                    </div>
+                   
+            </div>
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Address (Res) </mat-label>
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="ClusterAddress2"  />
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-1">
+                    <mat-label>City 2</mat-label>
+                </div>
+                <div class="col-lg-3">
+                    <mat-form-field>
+                        <mat-select formControlName="ClusterCityId2"  >
+                            <mat-option>City 2</mat-option>
+                            <mat-option *ngFor="let city of _city" [value]="city.Value" >
+                                {{city.Name}}
+                            </mat-option>
+                        </mat-select>                    
+                    </mat-form-field>
+                </div>
+               
+                <div class="col-lg-1">
+                    <mat-label>Pincode 2</mat-label>
+
+                </div>
+                <div class="col-lg-3">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="ClusterPinCode2"  numbersOnlyWithOutDecimal/>
+                    </mat-form-field>
+                </div>
+               
+        </div>
+         
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Mobile 1</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="ClusterMobile1"  numbersOnlyWithOutDecimal/>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Mobile 2</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="ClusterMobile2"  />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Phone 1</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="ClusterPhone1"  />
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Phone 2</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="ClusterPhone2"  />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Email 1</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="ClusterEmail1"  />
+                        <mat-error *ngIf="clusterform.controls.ClusterEmail1 && (clusterform.controls['ClusterEmail1'].dirty || clusterform.controls['ClusterEmail1'].touched)">Email is <strong>not valid</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-2">
+                    <mat-label>Email 2</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="ClusterEmail2"  />
+                        <mat-error *ngIf="clusterform.controls.ClusterEmail2 && (clusterform.controls['ClusterEmail2'].dirty || clusterform.controls['ClusterEmail2'].touched)">Email is <strong>not valid</strong>
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+  
+
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Cluster Profile</mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field appearance="fill">
+                        <textarea type="text" matInput formControlName="ClusterProfile" ></textarea>
+
+                      
+                      
+                      </mat-form-field>
+                </div>
+                
+            </div>
+           
+            <div class="row">
+                <div class="col-lg-9">
+
+                    <mat-checkbox color="primary" formControlName="IsActive">Is Active</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createClusterData()" [disabled]="!clusterform.valid">
+                        <mat-icon style="font-size: 22px;">save</mat-icon>Save
+                    </button>
+                </div>
+                <div class="col-lg-1">
+                    <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb7e'}"
+                        (click)="reset()">
+                        Reset
+                    </button>
+                </div>
+            </div>
+           
+        </form>
+ <div class="col-lg-12">
+            <div class="row" [hidden]="_length == 0">
+                <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Filter</mat-label>
+                      <input matInput (keyup)="iclusterFilter($event)" placeholder="Search" #input>
+                    </mat-form-field>
+                  </div>
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+
+                    <table id="posData" mat-table [dataSource]="_clusterData" style="width: 100%;">
+                        
+                        <ng-container matColumnDef="ClusterName">
+                            <th mat-header-cell *matHeaderCellDef> Name </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterContact">
+                            <th mat-header-cell *matHeaderCellDef>Contact</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterContact}} </td>
+                        </ng-container>
+                       
+                        <ng-container matColumnDef="ClusterAddress1">
+                            <th mat-header-cell *matHeaderCellDef>Address 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterAddress1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterCityId1">
+                            <th mat-header-cell *matHeaderCellDef>City 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.City1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterPinCode1">
+                            <th mat-header-cell *matHeaderCellDef>Pincode 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterPinCode1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterAddress2">
+                            <th mat-header-cell *matHeaderCellDef>Address 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterAddress2}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterCityId2">
+                            <th mat-header-cell *matHeaderCellDef>City 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.City2}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterPinCode2">
+                            <th mat-header-cell *matHeaderCellDef>Pincode 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterPinCode2}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterPhone1">
+                            <th mat-header-cell *matHeaderCellDef>Phone 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterPhone1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterPhone2">
+                            <th mat-header-cell *matHeaderCellDef>Phone 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterPhone2}}</td>
+                        </ng-container>
+                       
+                        <ng-container matColumnDef="ClusterEmail1">
+                            <th mat-header-cell *matHeaderCellDef>Email 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterEmail1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterEmail2">
+                            <th mat-header-cell *matHeaderCellDef>Email 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterEmail2}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterProfile">
+                            <th mat-header-cell *matHeaderCellDef>Profile</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterProfile}}</td>
+                        </ng-container>
+                       
+                        <ng-container matColumnDef="IsActive">
+                            <th mat-header-cell *matHeaderCellDef>Active</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsActive}}</td>
+                        </ng-container>
+                       
+                        <ng-container matColumnDef="Modify">
+                            <th mat-header-cell *matHeaderCellDef>Modify</th>
+                            <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{'text-align':'end'}">
+                                <div class="row">
+                                   
+                                    <div class="col-lg-1">
+
+                                        <button mat-icon-button (click)="editClusterData(row)">
+                                            <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    </div>
+                </div>
+                <mat-paginator [length]="_length" [pageSize]="_pageSize" (page)="pageChanged($event)"></mat-paginator>
+            </div>
+            <div class="row" [hidden]="_length != 0">
+                <div class="col-lg-12" style="text-align: center; color: red;">
+                    No records found
+                </div>
+            </div>
+        </div>
+    </mat-card-content>

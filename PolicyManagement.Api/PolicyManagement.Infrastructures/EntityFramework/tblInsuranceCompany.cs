@@ -54,6 +54,8 @@ public partial class tblInsuranceCompany
 
     public Nullable<System.DateTime> ModifiedTime { get; set; }
 
+    public Nullable<long> TollFreeNo { get; set; }
+
 }
 
 }

@@ -27,6 +27,26 @@
             </div>
             <div class="row">
                 <div class="col-lg-2">
+                    <mat-label>Company Short Name</mat-label>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="InsCompShortName"  />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Toll free No </mat-label>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="TollFreeNo" required />
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">
                     <mat-label>Website 1</mat-label>
                 </div>
                 <div class="col-lg-4">
@@ -124,6 +144,15 @@
                             <th mat-header-cell *matHeaderCellDef>Website 2</th>
                             <td mat-cell *matCellDef="let element">
                                 {{element.Website2}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="InsCompShortName">
+                            <th mat-header-cell *matHeaderCellDef>Company Short Name</th>
+                            <td mat-cell *matCellDef="let element">{{element.InsCompShortName}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="Website2">
+                            <th mat-header-cell *matHeaderCellDef>Toll Free No</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.TollFreeNo}}</td>
                         </ng-container>
                        
                         <ng-container matColumnDef="IsMotor">

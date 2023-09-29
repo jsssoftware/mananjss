@@ -28,6 +28,8 @@ export class InsurancecompanyComponent implements OnInit {
     BranchId:new FormControl(''),
     Website1:new FormControl(''),
     Website2:new FormControl(''),
+    InsCompShortName:new FormControl(''),
+    TollFreeNo:new FormControl(''),
     IsActive:new FormControl(true),
   })
 

@@ -57,5 +57,20 @@ namespace PolicyManagement.Api.Controllers.Master
         [HttpGet]
         public async Task<IHttpActionResult> GetInsuranceCompany(int branchId) => Json(await _masterService.GetInusranceCompany(branchId));
 
+        [Route("cluster/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateCluster(tblCluster cluster) => Json(await _masterService.CreateCluster(cluster, new BaseModel()));
+
+        [Route("cluster/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCluster(int branchId) => Json(await _masterService.GetCluster(branchId));
+
+        [Route("plan/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreatePlan(tblPlan plan) => Json(await _masterService.CreatePlan(plan, new BaseModel()));
+
+        [Route("plan/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetPlan(int branchId) => Json(await _masterService.GetPlan(branchId));
     }
 }

@@ -19,6 +19,10 @@ namespace PolicyManagement.Services.Master.Interface
         Task<DataTableDto<List<dynamic>>> GetPosContact(int branchId);
         Task<CommonDto<object>> CreateInsuranceCompany(tblInsuranceCompany tblPOSContact, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetInusranceCompany(int branchId);
+        Task<CommonDto<object>> CreateCluster(tblCluster tblPOSContact, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetCluster(int branchId);
+        Task<CommonDto<object>> CreatePlan(tblPlan tblPOSContact, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetPlan(int branchId);
 
     }
 }

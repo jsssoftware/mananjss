@@ -9,4 +9,8 @@ export class Master {
     public static readonly CreatePosContact =  "api/master/poscontact/create";
     public static readonly GetInusranceCompany = "api/master/insurancecompany";
     public static readonly CreateInusranceCompany =  "api/master/insurancecompany/create";
+    public static readonly GetCluster = "api/master/cluster";
+    public static readonly CreateCluster =  "api/master/cluster/create";
+    public static readonly GetPlan = "api/master/plan";
+    public static readonly CreatePlan =  "api/master/plan/create";
 }
