@@ -13,4 +13,6 @@ export class Master {
     public static readonly CreateCluster =  "api/master/cluster/create";
     public static readonly GetPlan = "api/master/plan";
     public static readonly CreatePlan =  "api/master/plan/create";
+    public static readonly GetAddonPlan = "api/master/addonplan";
+    public static readonly CreateAddonPlan =  "api/master/addonplan/create";
 }

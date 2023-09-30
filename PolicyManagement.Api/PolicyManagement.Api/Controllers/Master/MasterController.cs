@@ -72,5 +72,13 @@ namespace PolicyManagement.Api.Controllers.Master
         [Route("plan/{branchId}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetPlan(int branchId) => Json(await _masterService.GetPlan(branchId));
+
+        [Route("addonplan/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateAddonPlan(tblAddonPlanOption plan) => Json(await _masterService.CreateAddonPlan(plan, new BaseModel()));
+
+        [Route("addonplan/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAddonPlan(int branchId) => Json(await _masterService.GetAddonPlan(branchId));
     }
 }

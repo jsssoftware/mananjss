@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/auth-guard/auth.guard';
+import { AddonplanComponent } from './addonplan/addonplan.component';
 import { ClusterComponent } from './cluster/cluster.component';
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { CustomerComponent } from './customer/customer.component';
@@ -62,6 +63,10 @@ const routes: Routes = [
             {
                 path: 'plan',
                 component: PlanComponent
+            },
+            {
+                path: 'addonplan',
+                component: AddonplanComponent
             }
         ]
     }

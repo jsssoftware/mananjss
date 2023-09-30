@@ -24,5 +24,8 @@ namespace PolicyManagement.Services.Master.Interface
         Task<CommonDto<object>> CreatePlan(tblPlan tblPOSContact, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetPlan(int branchId);
 
+        Task<CommonDto<object>> CreateAddonPlan(tblAddonPlanOption tblPOSContact, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetAddonPlan(int branchId);
+
     }
 }

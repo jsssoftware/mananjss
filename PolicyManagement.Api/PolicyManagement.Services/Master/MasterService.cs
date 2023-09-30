@@ -327,5 +327,42 @@ namespace PolicyManagement.Services.Master
             }
 
         }
+
+        public async Task<DataTableDto<List<dynamic>>> GetAddonPlan(int branchId)
+        {
+            var pos = await _dataContext.tblAddonPlanOption.Where(w => w.IsActive == true).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateAddonPlan(tblAddonPlanOption plan, BaseModel baseModel)
+        {
+            try
+            {
+    
+                _dataContext.tblAddonPlanOption.AddOrUpdate(plan);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Add on Plan is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
     }
 }

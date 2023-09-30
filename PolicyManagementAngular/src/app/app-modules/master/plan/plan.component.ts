@@ -73,7 +73,6 @@ export class PlanComponent implements OnInit {
       this._length = response.TotalCount;
       
       response.Data.forEach(y=>{
-
         y.InsuranceCompanyName = this._insuranceCompanies.find(x=>x.Value ==  y.InsuranceCompanyId)?.Name,
         y.Vertical = this._verticals.find(x=>x.VerticalId ==  y.VerticalId)?.VerticalName,
         y.Products = this._products.find(x=>x.Value ==  y.ProductId)?.Name
