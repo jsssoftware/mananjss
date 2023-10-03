@@ -22,7 +22,7 @@ export class PoscontactComponent implements OnInit {
     POSContactName: new FormControl('',[Validators.required]),
     POSContactMobile1: new FormControl('',[Validators.required ,Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),
     POSContactMobile2: new FormControl(''),
-    POSContactEmailID: new FormControl('',[Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]),
+    POSContactEmailID: new FormControl(''),
     IsMessageSend: new FormControl(''),
     IsMotor: new FormControl(''),  
     IsHealth:new FormControl(''),

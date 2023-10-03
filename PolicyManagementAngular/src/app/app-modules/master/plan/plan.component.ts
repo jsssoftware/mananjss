@@ -20,9 +20,9 @@ export class PlanComponent implements OnInit {
   planform = new FormGroup({
     PlanId: new FormControl(''),
     PlanName: new FormControl('',[Validators.required]),
-    VerticalId: new FormControl(''),
-    ProductId: new FormControl(''),
-    InsuranceCompanyId: new FormControl(''),
+    VerticalId: new FormControl('',[Validators.required]),
+    ProductId: new FormControl('',[Validators.required]),
+    InsuranceCompanyId: new FormControl('',[Validators.required]),
     IsActive: new FormControl(true),  
     branchId:new FormControl(''),
   });

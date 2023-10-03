@@ -46,7 +46,8 @@ namespace PolicyManagement.Services.Master
         public async Task<DataTableDto<List<dynamic>>> GetInsuranceBranch(int branchId)
         {
        
-            List<tblInsuranceCompanyBranch> insuranceCompanyBranches = await _dataContext.tblInsuranceCompanyBranch.Where(w => w.BranchId == branchId && w.IsActive == true).ToListAsync();
+            List<tblInsuranceCompanyBranch> insuranceCompanyBranches = await _dataContext.tblInsuranceCompanyBranch.Where(w => w.BranchId == branchId)
+                .OrderBy(x=>x.IsActive).ThenBy(x => x.InsuranceCompanyBranchName).ToListAsync();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount= insuranceCompanyBranches.Count(),
@@ -86,7 +87,8 @@ namespace PolicyManagement.Services.Master
         public async Task<DataTableDto<List<dynamic>>> GetTeamMember(int branchId)
         {
 
-            var tblTeamMembers = await _dataContext.tblTeamMember.Where(w => w.BranchId == branchId && w.IsActive == true).ToListAsync<dynamic>();
+            var tblTeamMembers = await _dataContext.tblTeamMember.Where(w => w.BranchId == branchId)
+                .OrderBy(x => x.IsActive == true).ThenBy(x => x.TeamMemberName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = tblTeamMembers.Count(),
@@ -97,7 +99,8 @@ namespace PolicyManagement.Services.Master
         public async Task<DataTableDto<List<dynamic>>> GetPos(int branchId)
         {
 
-            var pos = await _dataContext.tblPOS.Where(w => w.BranchId == branchId && w.IsActive == true).ToListAsync<dynamic>();
+            var pos = await _dataContext.tblPOS.Where(w => w.BranchId == branchId)
+                .OrderBy(x => x.IsActive == true).ThenBy(x => x.POSName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -171,7 +174,8 @@ namespace PolicyManagement.Services.Master
         public async Task<DataTableDto<List<dynamic>>> GetPosContact(int branchId)
         {
 
-            var pos = await _dataContext.tblPOSContact.Where(w =>w.IsActive == true).ToListAsync<dynamic>();
+            var pos = await _dataContext.tblPOSContact
+                .OrderBy(x => x.IsActive == true).ThenBy(x => x.POSContactName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -211,7 +215,8 @@ namespace PolicyManagement.Services.Master
 
         public async Task<DataTableDto<List<dynamic>>> GetInusranceCompany(int branchId)
         {
-            var pos = await _dataContext.tblInsuranceCompany.Where(w => w.IsActive == true).ToListAsync<dynamic>();
+            var pos = await _dataContext.tblInsuranceCompany
+                .OrderBy(x => x.IsActive == true).ThenBy(x => x.InsuranceCompanyName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -251,7 +256,8 @@ namespace PolicyManagement.Services.Master
 
         public async Task<DataTableDto<List<dynamic>>> GetCluster(int branchId)
         {
-            var pos = await _dataContext.tblCluster.Where(w => w.IsActive == true).ToListAsync<dynamic>();
+            var pos = await _dataContext.tblCluster.Where(w => w.BranchId == branchId)
+                .OrderBy(x => x.IsActive == true).ThenBy(x => x.ClusterName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -290,7 +296,8 @@ namespace PolicyManagement.Services.Master
         }
         public async Task<DataTableDto<List<dynamic>>> GetPlan(int branchId)
         {
-            var pos = await _dataContext.tblPlan.Where(w => w.IsActive == true).ToListAsync<dynamic>();
+            var pos = await _dataContext.tblPlan
+                .OrderBy(x => x.IsActive == true).ThenBy(x => x.PlanName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -330,7 +337,7 @@ namespace PolicyManagement.Services.Master
 
         public async Task<DataTableDto<List<dynamic>>> GetAddonPlan(int branchId)
         {
-            var pos = await _dataContext.tblAddonPlanOption.Where(w => w.IsActive == true).ToListAsync<dynamic>();
+            var pos = await _dataContext.tblAddonPlanOption.OrderBy(x => x.IsActive == true).ThenBy(x => x.AddonPlanOptionName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),

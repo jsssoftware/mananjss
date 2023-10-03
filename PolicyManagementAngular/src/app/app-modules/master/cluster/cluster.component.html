@@ -27,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label>Cluster Contact</mat-label>
+                    <mat-label>Cluster Contact<span style="color:red">*</span></mat-label>
                 </div>
                 <div class="col-lg-8">
                     <div class="row">
@@ -267,6 +267,16 @@
                             <th mat-header-cell *matHeaderCellDef>Pincode 2</th>
                             <td mat-cell *matCellDef="let element">
                                 {{element.ClusterPinCode2}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterMobile1">
+                            <th mat-header-cell *matHeaderCellDef>Mobile 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterMobile1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="ClusterMobile2">
+                            <th mat-header-cell *matHeaderCellDef>Mobile 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ClusterMobile2}}</td>
                         </ng-container>
                         <ng-container matColumnDef="ClusterPhone1">
                             <th mat-header-cell *matHeaderCellDef>Phone 1</th>

@@ -14,7 +14,7 @@
            
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label>POS Name</mat-label>
+                    <mat-label>POS Name<span style="color:red">*</span></mat-label>
                 </div>
                 <div class="col-lg-8">
                     <div class="row">
@@ -367,6 +367,16 @@
                             <th mat-header-cell *matHeaderCellDef>Pincode 2</th>
                             <td mat-cell *matCellDef="let element">
                                 {{element.POSPinCode2}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSMobile1">
+                            <th mat-header-cell *matHeaderCellDef>Mobile 1</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSMobile1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="POSMobile2">
+                            <th mat-header-cell *matHeaderCellDef>Mobile 2</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.POSMobile2}}</td>
                         </ng-container>
                         <ng-container matColumnDef="POSPhone1">
                             <th mat-header-cell *matHeaderCellDef>Phone 1</th>

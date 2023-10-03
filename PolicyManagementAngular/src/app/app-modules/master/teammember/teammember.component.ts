@@ -22,7 +22,7 @@ export class TeammemberComponent implements OnInit {
   @ViewChild(MatPaginator) _paginator!: MatPaginator;
     teammemberform = new FormGroup({
     teamMemberName: new FormControl('',[Validators.required]),
-    designationId: new FormControl('',[Validators.required]),
+    designationId: new FormControl(''),
     userRoleId: new FormControl(''),
     departmentId: new FormControl(''),
     reportedToId: new FormControl(''),
@@ -31,9 +31,9 @@ export class TeammemberComponent implements OnInit {
     teamMemberPhone1: new FormControl(''),  
     teamMemberPhone2: new FormControl(''),  
     teamMemberMobile1: new FormControl('',[Validators.required,Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),  
-    teamMemberMobile2: new FormControl('',[Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),  
-    teamMemberEmail1: new FormControl('',[Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]),  
-    teamMemberEmail2: new FormControl('',[Validators.pattern('[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}')]),  
+    teamMemberMobile2: new FormControl(''),  
+    teamMemberEmail1: new FormControl(''),  
+    teamMemberEmail2: new FormControl(''),  
     isMotor: new FormControl(''),  
     isHealth: new FormControl(''),  
     isCommercial: new FormControl(''),  
@@ -75,7 +75,7 @@ export class TeammemberComponent implements OnInit {
     'DepartmentId',
     'DesignationId',
     'teamMemberDOJ',
-    
+    'IsActive',
     'teamMemberDOB',
     'Modify'
   ];

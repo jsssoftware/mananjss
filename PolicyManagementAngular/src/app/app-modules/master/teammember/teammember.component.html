@@ -292,6 +292,11 @@
                             <td mat-cell *matCellDef="let element">
                                 {{element.ISTelecaller}}</td>
                         </ng-container>
+                        <ng-container matColumnDef="IsActive">
+                            <th mat-header-cell *matHeaderCellDef>Active</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsActive}}</td>
+                        </ng-container>
                         <ng-container matColumnDef="ISFos">
                             <th mat-header-cell *matHeaderCellDef>Fos</th>
                             <td mat-cell *matCellDef="let element">
