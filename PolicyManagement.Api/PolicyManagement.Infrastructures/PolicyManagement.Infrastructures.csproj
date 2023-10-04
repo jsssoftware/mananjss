@@ -401,6 +401,9 @@
     <Compile Include="EntityFramework\tblVehicleClass.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\tblVehicleClassType.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\tblVehicleSegment.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>

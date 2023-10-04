@@ -16,6 +16,8 @@ import { InsurancecompanyComponent } from './insurancecompany/insurancecompany.c
 import { ClusterComponent } from './cluster/cluster.component';
 import { PlanComponent } from './plan/plan.component';
 import { AddonplanComponent } from './addonplan/addonplan.component';
+import { ManufactureComponent } from './manufacture/manufacture.component';
+import { VehiclemodelComponent } from './vehiclemodel/vehiclemodel.component';
 
 @NgModule({
   declarations: [  
@@ -29,6 +31,8 @@ import { AddonplanComponent } from './addonplan/addonplan.component';
     ClusterComponent,
     PlanComponent,
     AddonplanComponent,
+    ManufactureComponent,
+    VehiclemodelComponent,
   ],
   imports: [
     CommonModule,

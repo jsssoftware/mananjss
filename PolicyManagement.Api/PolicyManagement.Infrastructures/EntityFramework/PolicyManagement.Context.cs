@@ -135,8 +135,6 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<tblMakeYear> tblMakeYear { get; set; }
 
-    public virtual DbSet<tblManufacturer> tblManufacturer { get; set; }
-
     public virtual DbSet<tblMaritalStatus> tblMaritalStatus { get; set; }
 
     public virtual DbSet<tblMenuItem> tblMenuItem { get; set; }
@@ -280,6 +278,10 @@ public partial class DataContext : DbContext
     public virtual DbSet<tblEnginneringTerm> tblEnginneringTerms { get; set; }
 
     public virtual DbSet<tblMarineTerm> tblMarineTerms { get; set; }
+
+    public virtual DbSet<tblVehicleClassType> tblVehicleClassTypes { get; set; }
+
+    public virtual DbSet<tblManufacturer> tblManufacturers { get; set; }
 
 
     public virtual int GetOtherHelathPolicy(Nullable<int> policyId, Nullable<int> customerID)

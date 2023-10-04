@@ -79,5 +79,6 @@ export class Common {
     public static readonly Type = "api/common/type";
     public static readonly Category = "api/common/category";
     public static readonly Territory = "api/common/territory";
+    public static readonly VehicleClassType = "api/common/vehicleclasstype";
 
 }

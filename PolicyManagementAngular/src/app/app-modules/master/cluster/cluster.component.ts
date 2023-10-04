@@ -27,7 +27,7 @@ export class ClusterComponent implements OnInit {
     ClusterAddress2: new FormControl(''),  
     ClusterCityId2: new FormControl(''),  
     ClusterPinCode2: new FormControl(''),  
-    ClusterMobile1: new FormControl('',[Validators.required,Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),  
+    ClusterMobile1: new FormControl('',[Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),  
     ClusterMobile2: new FormControl('',[Validators.pattern('^[1-9][0-9]+$'),Validators.minLength(10), Validators.maxLength(10)]),  
     ClusterEmail1: new FormControl(''),  
     ClusterEmail2: new FormControl(''),  

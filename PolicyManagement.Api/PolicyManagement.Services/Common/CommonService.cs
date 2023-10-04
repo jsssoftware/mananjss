@@ -398,7 +398,7 @@ namespace PolicyManagement.Services.Common
 
         public async Task<List<DropDownDto<int>>> FindAllManufacturers()
         {
-            List<tblManufacturer> result = await _dataContext.tblManufacturer.Where(w => w.IsActive).OrderBy(o => o.ManufacturerName).ToListAsync();
+            List<tblManufacturer> result = await _dataContext.tblManufacturers.Where(w => w.IsActive).OrderBy(o => o.ManufacturerName).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
 
@@ -1658,5 +1658,13 @@ namespace PolicyManagement.Services.Common
                                                                           Value = s.TerritoryId
                                                                       })
                                                                       .ToListAsync();
+
+        public async Task<List<DropDownDto<int>>> FindVehicleClassType() => await _dataContext.tblVehicleClassTypes.Where(w => w.IsActive == true)
+                                                              .Select(s => new DropDownDto<int>
+                                                              {
+                                                                  Name = s.VehicleClassTypeName,
+                                                                  Value = s.VehicleClassTypeId
+                                                              })
+                                                              .ToListAsync();
     }
 }

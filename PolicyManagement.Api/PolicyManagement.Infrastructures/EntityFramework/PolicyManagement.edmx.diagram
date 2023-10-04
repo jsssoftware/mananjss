@@ -55,7 +55,6 @@
         <EntityTypeShape EntityType="PolicyManagerModel.tblInsuranceCompanyBranch" Width="1.5" PointX="22.75" PointY="10.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblInsuredPerson" Width="1.5" PointX="13.75" PointY="23.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblMakeYear" Width="1.5" PointX="22.75" PointY="16.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.tblManufacturer" Width="1.5" PointX="5.75" PointY="1" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblMaritalStatus" Width="1.5" PointX="23.75" PointY="20.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblMenuItem" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblModel" Width="1.5" PointX="8" PointY="1" />
@@ -127,7 +126,6 @@
         <AssociationConnector Association="PolicyManagerModel.FK_tblUser_tblBranch" />
         <AssociationConnector Association="PolicyManagerModel.FK_tblEmployee_tblDepartment" />
         <AssociationConnector Association="PolicyManagerModel.FK_tblEmployee_tblDesignation" />
-        <AssociationConnector Association="PolicyManagerModel.FK_tblModal_tblManufacturer" />
         <AssociationConnector Association="PolicyManagerModel.FK_tblMenuItem_tblMenuItem" />
         <AssociationConnector Association="PolicyManagerModel.FK_tblUser_tblEmployee" />
         <AssociationConnector Association="PolicyManagerModel.FK_tblUser_tblUserRole" />
@@ -137,6 +135,9 @@
         <EntityTypeShape EntityType="PolicyManagerModel.tblGmcTerm" Width="1.5" PointX="20.375" PointY="36.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblEnginneringTerm" Width="1.5" PointX="26.375" PointY="36.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblMarineTerm" Width="1.5" PointX="32.375" PointY="36.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblVehicleClassType" Width="1.5" PointX="34.375" PointY="36.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblManufacturer" Width="1.5" PointX="5.75" PointY="0.75" />
+        <AssociationConnector Association="PolicyManagerModel.FK_tblModal_tblManufacturer" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

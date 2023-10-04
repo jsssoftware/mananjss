@@ -386,12 +386,6 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblCompanyDetails">
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
-        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -989,6 +983,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="CreatedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
+          <Property Name="VehicleClassTypeId" Type="int" />
         </EntityType>
         <EntityType Name="tblMarineTerms">
           <Key>
@@ -1045,6 +1040,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="CreatedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
+          <Property Name="VehicleClassTypeId" Type="int" />
         </EntityType>
         <EntityType Name="tblMonthCycle">
           <Key>
@@ -1958,8 +1954,21 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           </Key>
           <Property Name="VehicleClassId" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="VehicleClass" Type="nvarchar" MaxLength="40" />
+          <Property Name="VehicleClassTypeId" Type="smallint" />
           <Property Name="VehicleMainClass" Type="nvarchar" MaxLength="50" />
           <Property Name="VehicleMainClassId" Type="smallint" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreatedTime" Type="smalldatetime" />
+          <Property Name="ModifiedBy" Type="int" />
+          <Property Name="ModifiedTime" Type="smalldatetime" />
+        </EntityType>
+        <EntityType Name="tblVehicleClassType">
+          <Key>
+            <PropertyRef Name="VehicleClassTypeId" />
+          </Key>
+          <Property Name="VehicleClassTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VehicleClassTypeName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="CreatedBy" Type="int" />
           <Property Name="CreatedTime" Type="smalldatetime" />
@@ -1993,13 +2002,6 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblVersion">
-          <Property Name="Major" Type="tinyint" />
-          <Property Name="Minor" Type="tinyint" />
-          <Property Name="Revision" Type="tinyint" />
-        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -2913,6 +2915,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySet Name="tblUserType" EntityType="Self.tblUserType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblVariant" EntityType="Self.tblVariant" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblVehicleClass" EntityType="Self.tblVehicleClass" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblVehicleClassType" EntityType="Self.tblVehicleClassType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblVehicleSegment" EntityType="Self.tblVehicleSegment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblVehicleUsage" EntityType="Self.tblVehicleUsage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblVertical" EntityType="Self.tblVertical" Schema="dbo" store:Type="Tables" />
@@ -3760,7 +3763,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySet Name="tblInsuranceCompanyBranch" EntityType="PolicyManagerModel.tblInsuranceCompanyBranch" />
           <EntitySet Name="tblInsuredPerson" EntityType="PolicyManagerModel.tblInsuredPerson" />
           <EntitySet Name="tblMakeYear" EntityType="PolicyManagerModel.tblMakeYear" />
-          <EntitySet Name="tblManufacturer" EntityType="PolicyManagerModel.tblManufacturer" />
           <EntitySet Name="tblMaritalStatus" EntityType="PolicyManagerModel.tblMaritalStatus" />
           <EntitySet Name="tblMenuItem" EntityType="PolicyManagerModel.tblMenuItem" />
           <EntitySet Name="tblModel" EntityType="PolicyManagerModel.tblModel" />
@@ -3846,10 +3848,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <AssociationSet Name="FK_tblEmployee_tblDesignation" Association="PolicyManagerModel.FK_tblEmployee_tblDesignation">
             <End Role="tblDesignation" EntitySet="tblDesignation" />
             <End Role="tblTeamMember" EntitySet="tblTeamMember" />
-          </AssociationSet>
-          <AssociationSet Name="FK_tblModal_tblManufacturer" Association="PolicyManagerModel.FK_tblModal_tblManufacturer">
-            <End Role="tblManufacturer" EntitySet="tblManufacturer" />
-            <End Role="tblModel" EntitySet="tblModel" />
           </AssociationSet>
           <AssociationSet Name="FK_tblMenuItem_tblMenuItem" Association="PolicyManagerModel.FK_tblMenuItem_tblMenuItem">
             <End Role="tblMenuItem" EntitySet="tblMenuItem" />
@@ -4419,6 +4417,12 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySet Name="tblGmcTerms" EntityType="PolicyManagerModel.tblGmcTerm" />
           <EntitySet Name="tblEnginneringTerms" EntityType="PolicyManagerModel.tblEnginneringTerm" />
           <EntitySet Name="tblMarineTerms" EntityType="PolicyManagerModel.tblMarineTerm" />
+          <EntitySet Name="tblVehicleClassTypes" EntityType="PolicyManagerModel.tblVehicleClassType" />
+          <EntitySet Name="tblManufacturers" EntityType="PolicyManagerModel.tblManufacturer" />
+          <AssociationSet Name="FK_tblModal_tblManufacturer" Association="PolicyManagerModel.FK_tblModal_tblManufacturer">
+            <End Role="tblManufacturer" EntitySet="tblManufacturers" />
+            <End Role="tblModel" EntitySet="tblModel" />
+          </AssociationSet>
         </EntityContainer>
         <ComplexType Name="GetPolicyFamilyDtl_Result">
           <Property Type="String" Name="InsuredPersonName" Nullable="true" MaxLength="50" />
@@ -5381,21 +5385,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
         </EntityType>
-        <EntityType Name="tblManufacturer">
-          <Key>
-            <PropertyRef Name="ManufacturerId" />
-          </Key>
-          <Property Name="ManufacturerId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Branch2ManufacturerId" Type="Int16" />
-          <Property Name="ManufacturerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ManufacturerCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" Nullable="false" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="CreatedTime" Type="DateTime" Precision="0" />
-          <Property Name="ModifiedBy" Type="Int32" />
-          <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="tblModel" Relationship="PolicyManagerModel.FK_tblModal_tblManufacturer" FromRole="tblManufacturer" ToRole="tblModel" />
-        </EntityType>
         <EntityType Name="tblMaritalStatus">
           <Key>
             <PropertyRef Name="CustomerMaritalStatusId" />
@@ -5437,6 +5426,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
           <NavigationProperty Name="tblManufacturer" Relationship="PolicyManagerModel.FK_tblModal_tblManufacturer" FromRole="tblModel" ToRole="tblManufacturer" />
+          <Property Name="VehicleClassTypeId" Type="Int32" />
         </EntityType>
         <EntityType Name="tblMonthCycle">
           <Key>
@@ -6177,6 +6167,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="CreatedTime" Type="DateTime" Precision="0" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
+          <Property Name="VehicleClassTypeId" Type="Int16" />
         </EntityType>
         <EntityType Name="tblVehicleSegment">
           <Key>
@@ -6645,18 +6636,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_tblModal_tblManufacturer">
-          <End Type="PolicyManagerModel.tblManufacturer" Role="tblManufacturer" Multiplicity="1" />
-          <End Type="PolicyManagerModel.tblModel" Role="tblModel" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="tblManufacturer">
-              <PropertyRef Name="ManufacturerId" />
-            </Principal>
-            <Dependent Role="tblModel">
-              <PropertyRef Name="ManufacturerId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_tblMenuItem_tblMenuItem">
           <End Type="PolicyManagerModel.tblMenuItem" Role="tblMenuItem" Multiplicity="0..1" />
           <End Type="PolicyManagerModel.tblMenuItem" Role="tblMenuItem1" Multiplicity="*" />
@@ -7007,6 +6986,46 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="PerSendingLimit" Type="Int32" />
           <Property Name="PerLocationLimit" Type="Int32" />
         </EntityType>
+        <EntityType Name="tblVehicleClassType">
+          <Key>
+            <PropertyRef Name="VehicleClassTypeId" />
+          </Key>
+          <Property Name="VehicleClassTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VehicleClassTypeName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="tblManufacturer">
+          <Key>
+            <PropertyRef Name="ManufacturerId" />
+          </Key>
+          <Property Name="ManufacturerId" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Branch2ManufacturerId" Type="Int16" />
+          <Property Name="ManufacturerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ManufacturerCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="0" />
+          <Property Name="ModifiedBy" Type="Int32" />
+          <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
+          <Property Name="VehicleClassTypeId" Type="Int32" />
+          <NavigationProperty Name="tblModels" Relationship="PolicyManagerModel.FK_tblModal_tblManufacturer" FromRole="tblManufacturer" ToRole="tblModel" />
+        </EntityType>
+        <Association Name="FK_tblModal_tblManufacturer">
+          <End Type="PolicyManagerModel.tblManufacturer" Role="tblManufacturer" Multiplicity="1" />
+          <End Type="PolicyManagerModel.tblModel" Role="tblModel" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblManufacturer">
+              <PropertyRef Name="ManufacturerId" />
+            </Principal>
+            <Dependent Role="tblModel">
+              <PropertyRef Name="ManufacturerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -7975,21 +7994,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblManufacturer">
-            <EntityTypeMapping TypeName="PolicyManagerModel.tblManufacturer">
-              <MappingFragment StoreEntitySet="tblManufacturer">
-                <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
-                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="ManufacturerCode" ColumnName="ManufacturerCode" />
-                <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
-                <ScalarProperty Name="Branch2ManufacturerId" ColumnName="Branch2ManufacturerId" />
-                <ScalarProperty Name="ManufacturerId" ColumnName="ManufacturerId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblMaritalStatus">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblMaritalStatus">
               <MappingFragment StoreEntitySet="tblMaritalStatus">
@@ -8020,6 +8024,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblModel">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblModel">
               <MappingFragment StoreEntitySet="tblModel">
+                <ScalarProperty Name="VehicleClassTypeId" ColumnName="VehicleClassTypeId" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
@@ -8799,6 +8804,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblVehicleClass">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblVehicleClass">
               <MappingFragment StoreEntitySet="tblVehicleClass">
+                <ScalarProperty Name="VehicleClassTypeId" ColumnName="VehicleClassTypeId" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
@@ -9549,6 +9555,35 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
                 <ScalarProperty Name="VoyageTypeId" ColumnName="VoyageTypeId" />
                 <ScalarProperty Name="PolicyDetailId" ColumnName="PolicyDetailId" />
                 <ScalarProperty Name="MarineTermId" ColumnName="MarineTermId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblVehicleClassTypes">
+            <EntityTypeMapping TypeName="PolicyManagerModel.tblVehicleClassType">
+              <MappingFragment StoreEntitySet="tblVehicleClassType">
+                <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="VehicleClassTypeName" ColumnName="VehicleClassTypeName" />
+                <ScalarProperty Name="VehicleClassTypeId" ColumnName="VehicleClassTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblManufacturers">
+            <EntityTypeMapping TypeName="PolicyManagerModel.tblManufacturer">
+              <MappingFragment StoreEntitySet="tblManufacturer">
+                <ScalarProperty Name="VehicleClassTypeId" ColumnName="VehicleClassTypeId" />
+                <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
+                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ManufacturerCode" ColumnName="ManufacturerCode" />
+                <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
+                <ScalarProperty Name="Branch2ManufacturerId" ColumnName="Branch2ManufacturerId" />
+                <ScalarProperty Name="ManufacturerId" ColumnName="ManufacturerId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

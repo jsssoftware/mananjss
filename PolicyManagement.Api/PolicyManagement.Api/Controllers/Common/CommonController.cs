@@ -352,5 +352,10 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("territory")]
         [HttpGet]
         public async Task<IHttpActionResult> GetTerritory() => Json(await _commonService.FindTerritory());
+
+
+        [Route("vehicleclasstype")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetVehicleClassType() => Json(await _commonService.FindVehicleClassType());
     }
 }

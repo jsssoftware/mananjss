@@ -80,5 +80,21 @@ namespace PolicyManagement.Api.Controllers.Master
         [Route("addonplan/{branchId}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAddonPlan(int branchId) => Json(await _masterService.GetAddonPlan(branchId));
+
+        [Route("manufacture/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateManufacture(tblManufacturer manufacturer) => Json(await _masterService.CreateManufacture(manufacturer, new BaseModel()));
+
+        [Route("manufacture/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetManufacture(int branchId) => Json(await _masterService.GetManufacture(branchId));
+
+        [Route("vehiclemodel/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetVehicleModel(int branchId) => Json(await _masterService.GetVehicleModel(branchId));
+
+        [Route("vehiclemodel/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateVehicleModel(tblModel model) => Json(await _masterService.CreateVehicleModel(model, new BaseModel()));
     }
 }

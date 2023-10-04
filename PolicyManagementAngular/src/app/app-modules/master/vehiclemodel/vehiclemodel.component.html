@@ -1,0 +1,139 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header class="card-container" style="display: flow-root">
+        <mat-card-title style="width: 50%; float: left;">
+            <p>Vehicle Model</p>
+        </mat-card-title>
+        <mat-card-title style="width: 10%; float: right;">
+      
+        </mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+        <form [formGroup]="vehiclemodelform" autocomplete="off" style="padding-bottom:10px ;">
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Vehicle Class Type </mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="VehicleClassTypeId" required >
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let vehicleClassType of _vehicleClassType" [value]="vehicleClassType.Value" >
+                                {{vehicleClassType.Name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Manufacture <span style="color:red">*</span></mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <mat-select formControlName="ManufacturerId" required >
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let _manufacture of _manufactures" [value]="_manufacture.Value" >
+                                {{_manufacture.Name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+           
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>Model <span style="color:red">*</span></mat-label>
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="ModelName"  />
+                    </mat-form-field>
+                </div>
+                
+            </div>
+           
+            <div class="row">
+                <div class="col-lg-3">
+
+                    <mat-checkbox color="primary" formControlName="IsActive">Is Active</mat-checkbox>
+
+                </div>
+                <div class="col-lg-1">
+                    <button type="button" class="btn-block" mat-raised-button color="primary" (click)="creatVehicleModel()" [disabled]="!vehiclemodelform.valid">
+                        <mat-icon style="font-size: 22px;">save</mat-icon>Save
+                    </button>
+                </div>
+                <div class="col-lg-1">
+                    <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb7e'}"
+                        (click)="reset()">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </form>
+     <div class="col-lg-12">
+            <div class="row" [hidden]="_length == 0">
+                <div class="col-lg-4">
+                    <mat-form-field>
+                      <mat-label>Filter</mat-label>
+                      <input matInput (keyup)="IVehicleClass($event)" placeholder="Search" #input>
+                    </mat-form-field>
+                  </div>
+                <div class="col-lg-12">
+                    <table id="tblplan" mat-table [dataSource]="_vehicleClassData" style="width: 100%;">
+                        
+                        <ng-container matColumnDef="ModelName">
+                            <th mat-header-cell *matHeaderCellDef> Model </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ModelName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="ManufacturerName">
+                            <th mat-header-cell *matHeaderCellDef> Manufacture Name </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.ManufacturerName}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="VehicleClassTypeId">
+                            <th mat-header-cell *matHeaderCellDef> Vehicle Class Type </th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.VehicleClassType}} </td>
+                        </ng-container>
+                       
+                        <ng-container matColumnDef="IsActive">
+                            <th mat-header-cell *matHeaderCellDef>IsActive</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.IsActive}}</td>
+                        </ng-container>
+                        
+
+                        <ng-container matColumnDef="Modify">
+                            <th mat-header-cell *matHeaderCellDef>Modify</th>
+                            <td mat-cell *matCellDef="let row; let i = index" [ngStyle]="{'text-align':'end'}">
+                                <div class="row">
+                                   
+                                    <div class="col-lg-1">
+
+                                        <button mat-icon-button (click)="editVehicleClass(row)">
+                                            <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                </div>
+                <mat-paginator [length]="_length" [pageSize]="_pageSize" (page)="pageChanged($event)"></mat-paginator>
+            </div>
+            <div class="row" [hidden]="_length != 0">
+                <div class="col-lg-12" style="text-align: center; color: red;">
+                    No records found
+                </div>
+            </div>
+        </div>
+    </mat-card-content>

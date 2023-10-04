@@ -17,15 +17,20 @@ namespace PolicyManagement.Services.Master.Interface
         Task<DataTableDto<List<dynamic>>> GetPos(int branchId);
         Task<CommonDto<object>> CreatePosContact(tblPOSContact tblPOSContact, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetPosContact(int branchId);
-        Task<CommonDto<object>> CreateInsuranceCompany(tblInsuranceCompany tblPOSContact, BaseModel baseModel);
+        Task<CommonDto<object>> CreateInsuranceCompany(tblInsuranceCompany tblInsuranceCompany, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetInusranceCompany(int branchId);
-        Task<CommonDto<object>> CreateCluster(tblCluster tblPOSContact, BaseModel baseModel);
+        Task<CommonDto<object>> CreateCluster(tblCluster tblCluster, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetCluster(int branchId);
-        Task<CommonDto<object>> CreatePlan(tblPlan tblPOSContact, BaseModel baseModel);
+        Task<CommonDto<object>> CreatePlan(tblPlan tblPlan, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetPlan(int branchId);
 
-        Task<CommonDto<object>> CreateAddonPlan(tblAddonPlanOption tblPOSContact, BaseModel baseModel);
+        Task<CommonDto<object>> CreateAddonPlan(tblAddonPlanOption tblAddonPlanOption, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetAddonPlan(int branchId);
+        Task<CommonDto<object>> CreateManufacture(tblManufacturer tblManufacturer, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetManufacture(int branchId);
+
+        Task<CommonDto<object>> CreateVehicleModel(tblModel tblModel, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetVehicleModel(int branchId);
 
     }
 }

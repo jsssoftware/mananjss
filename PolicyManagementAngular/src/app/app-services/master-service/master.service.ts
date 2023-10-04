@@ -41,4 +41,10 @@ export class MasterService extends IMasterService {
     getAddonPlans= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetAddonPlan}/${branchId}`);
     createAddonPlan = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreateAddonPlan, model);
 
+    getManufacture= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetManufacture}/${branchId}`);
+    createManufacture = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreateManufacture, model);
+
+    getVehicleModel= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetVehicleModel}/${branchId}`);
+    creatVehicleModel = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreateVehicleModel, model);
+
 }

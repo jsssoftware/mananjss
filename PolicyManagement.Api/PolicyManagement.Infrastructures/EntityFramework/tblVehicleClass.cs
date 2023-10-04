@@ -36,6 +36,8 @@ public partial class tblVehicleClass
 
     public Nullable<System.DateTime> ModifiedTime { get; set; }
 
+    public Nullable<short> VehicleClassTypeId { get; set; }
+
 }
 
 }

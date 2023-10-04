@@ -28,6 +28,7 @@ using System.Security.Cryptography;
 using PolicyManagement.Services.Master.Interface;
 using PolicyManagement.Dtos.Customer;
 using PolicyManagement.Models.Master;
+using System.Numerics;
 
 namespace PolicyManagement.Services.Master
 {
@@ -356,6 +357,86 @@ namespace PolicyManagement.Services.Master
                 {
                     IsSuccess = true,
                     Message = $"Add on Plan is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetManufacture(int branchId)
+        {
+            var pos = await _dataContext.tblManufacturers.OrderBy(x => x.IsActive == true).ThenBy(x => x.ManufacturerName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateManufacture(tblManufacturer manufacturer, BaseModel baseModel)
+        {
+            try
+            {
+                manufacturer.CreatedBy = baseModel.LoginUserId;
+                manufacturer.CreatedTime = DateTime.Now;
+                manufacturer.ModifiedBy = baseModel.LoginUserId;
+                manufacturer.ModifiedTime = DateTime.Now;
+                _dataContext.tblManufacturers.AddOrUpdate(manufacturer);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Manufacture is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetVehicleModel(int branchId)
+        {
+            var pos = await _dataContext.tblModel.OrderBy(x => x.IsActive == true).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateVehicleModel(tblModel model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblModel.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Model is created or edited successfully",
                     // Response = users
                 };
             }

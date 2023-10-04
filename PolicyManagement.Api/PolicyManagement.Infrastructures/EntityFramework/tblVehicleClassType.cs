@@ -15,27 +15,14 @@ namespace PolicyManagement.Infrastructures.EntityFramework
 using System;
     using System.Collections.Generic;
     
-public partial class tblManufacturer
+public partial class tblVehicleClassType
 {
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-    public tblManufacturer()
-    {
+    public int VehicleClassTypeId { get; set; }
 
-        this.tblModels = new HashSet<tblModel>();
+    public string VehicleClassTypeName { get; set; }
 
-    }
-
-
-    public short ManufacturerId { get; set; }
-
-    public Nullable<short> Branch2ManufacturerId { get; set; }
-
-    public string ManufacturerName { get; set; }
-
-    public string ManufacturerCode { get; set; }
-
-    public bool IsActive { get; set; }
+    public Nullable<bool> IsActive { get; set; }
 
     public Nullable<int> CreatedBy { get; set; }
 
@@ -44,14 +31,6 @@ public partial class tblManufacturer
     public Nullable<int> ModifiedBy { get; set; }
 
     public Nullable<System.DateTime> ModifiedTime { get; set; }
-
-    public Nullable<int> VehicleClassTypeId { get; set; }
-
-
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-
-    public virtual ICollection<tblModel> tblModels { get; set; }
 
 }
 

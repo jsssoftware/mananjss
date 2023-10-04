@@ -7,10 +7,12 @@ import { AddCustomerComponent } from './customer/add-customer/add-customer.compo
 import { CustomerComponent } from './customer/customer.component';
 import { InsurancebranchComponent } from './insurancebranch/insurancebranch.component';
 import { InsurancecompanyComponent } from './insurancecompany/insurancecompany.component';
+import { ManufactureComponent } from './manufacture/manufacture.component';
 import { PlanComponent } from './plan/plan.component';
 import { PosComponent } from './pos/pos.component';
 import { PoscontactComponent } from './poscontact/poscontact.component';
 import { TeammemberComponent } from './teammember/teammember.component';
+import { VehiclemodelComponent } from './vehiclemodel/vehiclemodel.component';
 
 const routes: Routes = [
     {
@@ -67,6 +69,14 @@ const routes: Routes = [
             {
                 path: 'addonplan',
                 component: AddonplanComponent
+            },
+            {
+                path: 'manufacture',
+                component: ManufactureComponent
+            },
+            {
+                path: 'vehiclemodel',
+                component: VehiclemodelComponent
             }
         ]
     }
