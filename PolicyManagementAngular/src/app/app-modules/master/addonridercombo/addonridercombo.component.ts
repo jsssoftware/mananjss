@@ -46,6 +46,7 @@ export class AddonridercomboComponent implements OnInit {
     'AddonRiderName',
     'VerticalId',
     'InsuranceCompanyId',
+    'AddonPlan',
     'IsActive',
     'Modify'
   ];
@@ -75,6 +76,9 @@ export class AddonridercomboComponent implements OnInit {
       response.Data.forEach(y=>{
         y.InsuranceCompanyName = this._insuranceCompanies.find(x=>x.Value ==  y.InsuranceCompanyId)?.Name,
         y.Vertical = this._verticals.find(x=>x.VerticalId ==  y.VerticalId)?.VerticalName
+        y.AddonPlan = y.AddOnPlanOptionList?.filter((y: any)=>y.IsPlanAvailable ==  true).map((x: any)=> {
+          return x.AddonPlanOptionName
+        })?.join(' , ');
       });
      
       this._addonPlanComboData = new MatTableDataSource( response.Data.sort(x=>x.InsuranceCompanyName));
@@ -147,7 +151,6 @@ export class AddonridercomboComponent implements OnInit {
   }
 
   editAddonPlanCombo(data:any){
-    debugger
     let obj = Object.assign({}, data);
     this.addonplancomboform.patchValue(obj);
     this.addonplancomboform.patchValue({ AddOnPlanOptionList

@@ -120,6 +120,11 @@
                             <td mat-cell *matCellDef="let element">
                                 {{element.InsuranceCompanyName}}</td>
                         </ng-container>
+                        <ng-container matColumnDef="AddonPlan">
+                            <th mat-header-cell *matHeaderCellDef>Add on Plan</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.AddonPlan}}</td>
+                        </ng-container>
                        
                         <ng-container matColumnDef="IsActive">
                             <th mat-header-cell *matHeaderCellDef>IsActive</th>
