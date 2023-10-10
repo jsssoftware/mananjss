@@ -10,6 +10,7 @@ import { ICommonService } from 'src/app/app-services/common-service/abstracts/co
 import { MasterService } from 'src/app/app-services/master-service/master.service';
 import Swal from 'sweetalert2';
 
+
 @Component({
   selector: 'app-insurancebranch',
   templateUrl: './insurancebranch.component.html',
@@ -83,7 +84,7 @@ export class InsurancebranchComponent implements OnInit {
         y.InsuranceCompanyName = this._insuranceCompanies.find(x=>x.Value ==  y.InsuranceCompanyId)?.Name
       });
      
-      this._insuranceBranchData = new MatTableDataSource( response.Data.sort(x=>x.InsuranceCompanyName));
+      this._insuranceBranchData = new MatTableDataSource( response.Data);
       this._insuranceBranchData.paginator = this._paginator;
       this._insuranceBranchData._updateChangeSubscription(); // <-- Refresh the datasource
 

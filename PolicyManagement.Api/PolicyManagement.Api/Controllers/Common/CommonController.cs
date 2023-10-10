@@ -357,5 +357,18 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("vehicleclasstype")]
         [HttpGet]
         public async Task<IHttpActionResult> GetVehicleClassType() => Json(await _commonService.FindVehicleClassType());
+
+        [Route("fueltype")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetFuelType() => Json(await _commonService.FindFuelType());
+
+        [Route("vehiclesegment")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetVehicleSegments() => Json(await _commonService.FindVehicleSegments());
+
+
+        [Route("manufacturersVehicleclasstype/{vehicleClassTypeId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetManufacturersVehicleclassType(int vehicleClassTypeId) => Json(await _commonService.FindManufacturersVehicleclassType(vehicleClassTypeId));
     }
 }

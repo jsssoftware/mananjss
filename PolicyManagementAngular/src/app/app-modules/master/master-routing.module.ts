@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/auth-guard/auth.guard';
 import { AddonplanComponent } from './addonplan/addonplan.component';
+import { AddonridercomboComponent } from './addonridercombo/addonridercombo.component';
 import { ClusterComponent } from './cluster/cluster.component';
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { CustomerComponent } from './customer/customer.component';
@@ -12,6 +13,7 @@ import { PlanComponent } from './plan/plan.component';
 import { PosComponent } from './pos/pos.component';
 import { PoscontactComponent } from './poscontact/poscontact.component';
 import { TeammemberComponent } from './teammember/teammember.component';
+import { VariantmasterComponent } from './variantmaster/variantmaster.component';
 import { VehiclemodelComponent } from './vehiclemodel/vehiclemodel.component';
 
 const routes: Routes = [
@@ -77,6 +79,14 @@ const routes: Routes = [
             {
                 path: 'vehiclemodel',
                 component: VehiclemodelComponent
+            },
+            {
+                path: 'addonridercombo',
+                component: AddonridercomboComponent
+            },
+            {
+                path: 'varient',
+                component: VariantmasterComponent
             }
         ]
     }

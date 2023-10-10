@@ -95,6 +95,8 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindAllPosTitle();
         Task<List<DropDownDto<int>>> FindTerritory();
         Task<List<DropDownDto<int>>> FindVehicleClassType();
-
+        Task<List<DropDownDto<int>>> FindFuelType();
+        Task<List<DropDownDto<int>>> FindVehicleSegments();
+        Task<List<DropDownDto<int>>> FindManufacturersVehicleclassType(int VehileClasstypeId);
     }
 }

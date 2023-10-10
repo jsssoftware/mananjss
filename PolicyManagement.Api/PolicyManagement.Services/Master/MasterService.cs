@@ -48,7 +48,7 @@ namespace PolicyManagement.Services.Master
         {
        
             List<tblInsuranceCompanyBranch> insuranceCompanyBranches = await _dataContext.tblInsuranceCompanyBranch.Where(w => w.BranchId == branchId)
-                .OrderBy(x=>x.IsActive).ThenBy(x => x.InsuranceCompanyBranchName).ToListAsync();
+                .OrderBy(x=>x.IsActive == false).ThenBy(x => x.InsuranceCompanyBranchName).ToListAsync();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount= insuranceCompanyBranches.Count(),
@@ -89,7 +89,7 @@ namespace PolicyManagement.Services.Master
         {
 
             var tblTeamMembers = await _dataContext.tblTeamMember.Where(w => w.BranchId == branchId)
-                .OrderBy(x => x.IsActive == true).ThenBy(x => x.TeamMemberName).ToListAsync<dynamic>();
+                .OrderBy(x => x.IsActive == false).ThenBy(x => x.TeamMemberName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = tblTeamMembers.Count(),
@@ -101,7 +101,7 @@ namespace PolicyManagement.Services.Master
         {
 
             var pos = await _dataContext.tblPOS.Where(w => w.BranchId == branchId)
-                .OrderBy(x => x.IsActive == true).ThenBy(x => x.POSName).ToListAsync<dynamic>();
+                .OrderBy(x => x.IsActive == false).ThenBy(x => x.POSName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -176,7 +176,7 @@ namespace PolicyManagement.Services.Master
         {
 
             var pos = await _dataContext.tblPOSContact
-                .OrderBy(x => x.IsActive == true).ThenBy(x => x.POSContactName).ToListAsync<dynamic>();
+                .OrderBy(x => x.IsActive == false).ThenBy(x => x.POSContactName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -217,7 +217,7 @@ namespace PolicyManagement.Services.Master
         public async Task<DataTableDto<List<dynamic>>> GetInusranceCompany(int branchId)
         {
             var pos = await _dataContext.tblInsuranceCompany
-                .OrderBy(x => x.IsActive == true).ThenBy(x => x.InsuranceCompanyName).ToListAsync<dynamic>();
+                .OrderBy(x => x.IsActive == false).ThenBy(x => x.InsuranceCompanyName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -258,7 +258,7 @@ namespace PolicyManagement.Services.Master
         public async Task<DataTableDto<List<dynamic>>> GetCluster(int branchId)
         {
             var pos = await _dataContext.tblCluster.Where(w => w.BranchId == branchId)
-                .OrderBy(x => x.IsActive == true).ThenBy(x => x.ClusterName).ToListAsync<dynamic>();
+                .OrderBy(x => x.IsActive == false).ThenBy(x => x.ClusterName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -298,7 +298,7 @@ namespace PolicyManagement.Services.Master
         public async Task<DataTableDto<List<dynamic>>> GetPlan(int branchId)
         {
             var pos = await _dataContext.tblPlan
-                .OrderBy(x => x.IsActive == true).ThenBy(x => x.PlanName).ToListAsync<dynamic>();
+                .OrderBy(x => x.IsActive == false).ThenBy(x => x.PlanName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -338,7 +338,7 @@ namespace PolicyManagement.Services.Master
 
         public async Task<DataTableDto<List<dynamic>>> GetAddonPlan(int branchId)
         {
-            var pos = await _dataContext.tblAddonPlanOption.OrderBy(x => x.IsActive == true).ThenBy(x => x.AddonPlanOptionName).ToListAsync<dynamic>();
+            var pos = await _dataContext.tblAddonPlanOption.OrderBy(x => x.IsActive == false).ThenBy(x => x.AddonPlanOptionName).ThenBy(x=>x.VerticalId).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -375,7 +375,7 @@ namespace PolicyManagement.Services.Master
 
         public async Task<DataTableDto<List<dynamic>>> GetManufacture(int branchId)
         {
-            var pos = await _dataContext.tblManufacturers.OrderBy(x => x.IsActive == true).ThenBy(x => x.ManufacturerName).ToListAsync<dynamic>();
+            var pos = await _dataContext.tblManufacturers.OrderBy(x => x.IsActive == false).ThenBy(x => x.ManufacturerName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -415,7 +415,7 @@ namespace PolicyManagement.Services.Master
 
         public async Task<DataTableDto<List<dynamic>>> GetVehicleModel(int branchId)
         {
-            var pos = await _dataContext.tblModel.OrderBy(x => x.IsActive == true).ToListAsync<dynamic>();
+            var pos = await _dataContext.tblModel.OrderBy(x => x.IsActive == false).ThenBy(x=>x.ModelName).ToListAsync<dynamic>();
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = pos.Count(),
@@ -437,6 +437,143 @@ namespace PolicyManagement.Services.Master
                 {
                     IsSuccess = true,
                     Message = $"Model is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetAddOnRiderCombo(int branchId)
+        {
+            var addonPlan = await (from T1 in _dataContext.tblAddonRider
+                                   join T3  in _dataContext.tblInsuranceCompany on T1.InsuranceCompanyId equals T3.InsuranceCompanyId 
+                                   join T4 in _dataContext.tblVertical on T1.VerticalId equals T4.VerticalId into verticalJoin
+                                   from T9 in verticalJoin.DefaultIfEmpty()
+                                   select new 
+                                     {
+                                       InsuranceCompanyId = T1.InsuranceCompanyId,
+                                       InsuranceCompanyName = T3.InsuranceCompanyName,
+                                       VerticalId =  T1.VerticalId,
+                                       VerticalName = T9.VerticalName,
+                                       AddonRiderName = T1.AddonRiderName,
+                                       IsActive = T1.IsActive,
+                                       AddonRiderId =  T1.AddonRiderId,
+                                       AddOnPlanOptionList = (from tbladdonplan in _dataContext.tblAddonPlanOption
+                                                             join tbladdonplanmapping in _dataContext.tblAddonPlanOptionMapping.Where(x=>x.AddonPlanRiderId == T1.AddonRiderId) on tbladdonplan.AddonPlanOptionId equals tbladdonplanmapping.AddonPlanOptionId into planOptionMapping
+                                                             from tbladdonplanmappings in planOptionMapping.DefaultIfEmpty() select new
+                                                             {
+                                                                 AddonPlanOptionName =  tbladdonplan.AddonPlanOptionName,
+                                                                 AddonPlanOptionId = tbladdonplan.AddonPlanOptionId,
+                                                                 IsPlanAvailable = tbladdonplanmappings.AddonPlanRiderId == null ? false : true,
+                                                                 AddonPlanOptionDescripation=tbladdonplan.AddonPlanOptionDescripation                                                             
+                                                             }).Distinct().ToList(),
+                                   }).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = addonPlan.Count(),
+                Data = addonPlan
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateAddOnRiderCombo(AddOnRider model, BaseModel baseModel)
+        {
+            try
+            {
+                var tblAddonRider = new tblAddonRider
+                {
+                    AddonRiderId = model.AddonRiderId,
+                    InsuranceCompanyId = model.InsuranceCompanyId,
+                    AddonRiderName = model.AddonRiderName,
+                    VerticalId = model.VerticalId,
+                    IsActive = model.IsActive,
+                    CreatedBy = baseModel.LoginUserId,
+                    CreatedTime = DateTime.Now,
+                    ModifiedBy = baseModel.LoginUserId,
+                    ModifiedTime = DateTime.Now
+            };
+               _dataContext.tblAddonRider.AddOrUpdate(tblAddonRider);
+                await _dataContext.SaveChangesAsync();
+                List<tblAddonPlanOptionMapping> addonPlanOptionMappings = new List<tblAddonPlanOptionMapping>();
+                var length = model.AddOnPlanOptionList.Count();
+                var addPlanOptions = model.AddOnPlanOptionList;
+                if (length > 0)
+                {
+                    List<tblAddonPlanOptionMapping> previousAddOnPlanOption = await _dataContext.tblAddonPlanOptionMapping.Where(w => w.AddonPlanRiderId == tblAddonRider.AddonRiderId).ToListAsync();
+                    if (previousAddOnPlanOption.Any())
+                    {
+                        _dataContext.tblAddonPlanOptionMapping.RemoveRange(previousAddOnPlanOption);
+                        await _dataContext.SaveChangesAsync();
+                    }
+                    foreach (var item in addPlanOptions)
+                    {
+                        if (item.IsPlanAvailable ==  true)
+                        {
+                            var data = new tblAddonPlanOptionMapping();
+                            data.AddonPlanRiderId = tblAddonRider.AddonRiderId;
+                            data.AddonPlanOptionId = item.AddonPlanOptionId;
+                            data.IsActive= true;
+                            _dataContext.tblAddonPlanOptionMapping.Add(data);
+                        }
+
+                    }
+                }
+
+
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Add on Rider is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetVarient(int branchId)
+        {
+            var pos = await _dataContext.tblVariant.OrderBy(x => x.IsActive == false).ThenBy(x=>x.VariantName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateVarient(tblVariant model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblVariant.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Varient is created or edited successfully",
                     // Response = users
                 };
             }

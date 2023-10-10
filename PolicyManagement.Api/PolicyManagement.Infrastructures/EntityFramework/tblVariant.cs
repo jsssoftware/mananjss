@@ -56,6 +56,8 @@ public partial class tblVariant
 
     public Nullable<System.DateTime> ModifiedTime { get; set; }
 
+    public Nullable<int> VehicleClassTypeId { get; set; }
+
 }
 
 }

@@ -4,6 +4,7 @@ using PolicyManagement.Models;
 using System.Threading.Tasks;
 using PolicyManagement.Infrastructures.EntityFramework;
 using System.Collections.Generic;
+using PolicyManagement.Models.Master;
 
 namespace PolicyManagement.Services.Master.Interface
 {
@@ -28,9 +29,12 @@ namespace PolicyManagement.Services.Master.Interface
         Task<DataTableDto<List<dynamic>>> GetAddonPlan(int branchId);
         Task<CommonDto<object>> CreateManufacture(tblManufacturer tblManufacturer, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetManufacture(int branchId);
-
         Task<CommonDto<object>> CreateVehicleModel(tblModel tblModel, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetVehicleModel(int branchId);
+        Task<CommonDto<object>> CreateAddOnRiderCombo(AddOnRider addOnRider, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetAddOnRiderCombo(int branchId);
+        Task<CommonDto<object>> CreateVarient(tblVariant variant, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetVarient(int branchId);
 
     }
 }

@@ -46,5 +46,13 @@ export class MasterService extends IMasterService {
 
     getVehicleModel= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetVehicleModel}/${branchId}`);
     creatVehicleModel = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreateVehicleModel, model);
+    
+    getAddonPlanCombo= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetAddonPlanCombo}/${branchId}`);
+    createAddonPlanCombo = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreateAddonPlanCombo, model);
+
+     
+    getVarient= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetVarient}/${branchId}`);
+    createVarient = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreateVarient, model);
+
 
 }

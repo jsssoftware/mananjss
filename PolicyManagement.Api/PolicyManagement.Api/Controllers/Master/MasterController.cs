@@ -96,5 +96,21 @@ namespace PolicyManagement.Api.Controllers.Master
         [Route("vehiclemodel/create")]
         [HttpPost]
         public async Task<IHttpActionResult> CreateVehicleModel(tblModel model) => Json(await _masterService.CreateVehicleModel(model, new BaseModel()));
+
+        [Route("addonplancombo/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAddOnRiderCombo(int branchId) => Json(await _masterService.GetAddOnRiderCombo(branchId));
+
+        [Route("addonplancombo/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateAddOnRiderCombo(AddOnRider model) => Json(await _masterService.CreateAddOnRiderCombo(model, new BaseModel()));
+
+        [Route("varient/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetVarient(int branchId) => Json(await _masterService.GetVarient(branchId));
+
+        [Route("varient/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateVarient(tblVariant model) => Json(await _masterService.CreateVarient(model, new BaseModel()));
     }
 }

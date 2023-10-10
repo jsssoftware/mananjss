@@ -18,6 +18,8 @@ import { PlanComponent } from './plan/plan.component';
 import { AddonplanComponent } from './addonplan/addonplan.component';
 import { ManufactureComponent } from './manufacture/manufacture.component';
 import { VehiclemodelComponent } from './vehiclemodel/vehiclemodel.component';
+import { AddonridercomboComponent } from './addonridercombo/addonridercombo.component';
+import { VariantmasterComponent } from './variantmaster/variantmaster.component';
 
 @NgModule({
   declarations: [  
@@ -33,6 +35,8 @@ import { VehiclemodelComponent } from './vehiclemodel/vehiclemodel.component';
     AddonplanComponent,
     ManufactureComponent,
     VehiclemodelComponent,
+    AddonridercomboComponent,
+    VariantmasterComponent,
   ],
   imports: [
     CommonModule,

@@ -1666,5 +1666,30 @@ namespace PolicyManagement.Services.Common
                                                                   Value = s.VehicleClassTypeId
                                                               })
                                                               .ToListAsync();
+
+
+        public async Task<List<DropDownDto<int>>> FindFuelType() => await _dataContext.tblFuelType.Select(s => new DropDownDto<int>
+        {
+            Name = s.FuelTypeName,
+            Value = s.FuelTypeId
+        })
+        .OrderBy(o => o.Name)
+        .ToListAsync();
+
+        public async Task<List<DropDownDto<int>>> FindVehicleSegments() => await _dataContext.tblVehicleSegment.Select(s => new DropDownDto<int>
+        {
+            Name = s.VehicleSegment,
+            Value = s.VehicleSegmentId
+        })
+     .OrderBy(o => o.Name)
+     .ToListAsync();
+
+        public async Task<List<DropDownDto<int>>> FindManufacturersVehicleclassType(int VehicleClassTypeId)
+        {
+            List<tblManufacturer> result = await _dataContext.tblManufacturers.Where(w => w.IsActive == true && w.VehicleClassTypeId == VehicleClassTypeId).OrderBy(o => o.ManufacturerName).ToListAsync();
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
+
+
     }
 }

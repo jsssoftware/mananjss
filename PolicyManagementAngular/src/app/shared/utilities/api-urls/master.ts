@@ -19,4 +19,8 @@ export class Master {
     public static readonly CreateManufacture =  "api/master/manufacture/create";
     public static readonly GetVehicleModel = "api/master/vehiclemodel";
     public static readonly CreateVehicleModel =  "api/master/vehiclemodel/create";
+    public static readonly GetAddonPlanCombo = "api/master/addonplancombo";
+    public static readonly CreateAddonPlanCombo =  "api/master/addonplancombo/create";
+    public static readonly GetVarient = "api/master/varient";
+    public static readonly CreateVarient =  "api/master/varient/create";
 }

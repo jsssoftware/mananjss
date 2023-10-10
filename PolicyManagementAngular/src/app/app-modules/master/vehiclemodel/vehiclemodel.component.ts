@@ -20,9 +20,9 @@ export class VehiclemodelComponent implements OnInit {
   vehiclemodelform = new FormGroup({
     ManufacturerId: new FormControl('',[Validators.required]),
     ModelName: new FormControl('',[Validators.required]),
-    VehicleClassTypeId: new FormControl(''),
+    VehicleClassTypeId: new FormControl('',[Validators.required]),
     IsActive: new FormControl(true),  
-    Branch2ManufacturerId:new FormControl(''),
+    Branch2ModelId:new FormControl(''),
     ModelId:new FormControl(''),
   });
 
@@ -49,9 +49,8 @@ export class VehiclemodelComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this._branchId = parseInt(sessionStorage.getItem("branchId") as string);
     this.vehiclemodelform.patchValue({
-      Branch2ManufacturerId : this._branchId
+      Branch2ModelId : this._branchId
     })
-    await this.getManufacture();
     await this.getVehicleClassType();
     await this.getVehicleModel()
 
@@ -152,8 +151,8 @@ export class VehiclemodelComponent implements OnInit {
     });
   }
   
-  getManufacture(): void {
-    this.commonService.getManufacturers().subscribe((response: any) => {
+  getManufactureByVehicleClass(): void {
+    this.commonService.getManufactureByVehicleClassType(this.vehiclemodelform.value.VehicleClassTypeId).subscribe((response: any) => {
       this._manufactures = response;
     });
   }

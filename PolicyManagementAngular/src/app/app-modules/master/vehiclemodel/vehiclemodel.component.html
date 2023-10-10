@@ -12,12 +12,12 @@
         <form [formGroup]="vehiclemodelform" autocomplete="off" style="padding-bottom:10px ;">
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label>Vehicle Class Type </mat-label>
+                    <mat-label>Vehicle Class Type<span style="color:red">*</span> </mat-label>
 
                 </div>
                 <div class="col-lg-4">
                     <mat-form-field>
-                        <mat-select formControlName="VehicleClassTypeId" required >
+                        <mat-select formControlName="VehicleClassTypeId" required (selectionChange)="getManufactureByVehicleClass()">
                             <mat-option>Select</mat-option>
                             <mat-option *ngFor="let vehicleClassType of _vehicleClassType" [value]="vehicleClassType.Value" >
                                 {{vehicleClassType.Name}}

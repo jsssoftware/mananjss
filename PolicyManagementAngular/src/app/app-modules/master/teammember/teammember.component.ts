@@ -72,11 +72,13 @@ export class TeammemberComponent implements OnInit {
     'IsHealth',
     'IsMotor',
     'IsLife',
+    'ISFos',
+    'ReportedTo',
     'DepartmentId',
     'DesignationId',
     'teamMemberDOJ',
-    'IsActive',
     'teamMemberDOB',
+    'IsActive',
     'Modify'
   ];
   constructor(private commonService : ICommonService, private masterSerivice :MasterService,private  commonFunction :CommonFunction) { }
@@ -185,6 +187,7 @@ export class TeammemberComponent implements OnInit {
       response.Data.forEach(y=>{
         y.DepartmentName = this._department.find(x=>x.Value ==  y.DepartmentId)?.Name,
         y.DesignationName = this._department.find(x=>x.Value ==  y.DesignationId)?.Name
+        y.ReportedTo = this._teammembers.find(x=>x.Value ==  y.ReportedToId)?.Name
       })
       this._teamMemberData = new MatTableDataSource(response.Data);
       
