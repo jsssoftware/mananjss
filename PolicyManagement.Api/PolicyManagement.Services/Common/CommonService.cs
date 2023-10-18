@@ -1690,6 +1690,14 @@ namespace PolicyManagement.Services.Common
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
 
+        public async Task<List<DropDownDto<int>>> FindState() => await _dataContext.tblState.Select(s => new DropDownDto<int>
+        {
+            Name = s.StateName,
+            Value = s.StateId
+        })
+        .OrderBy(o => o.Name)
+        .ToListAsync();
+
 
     }
 }

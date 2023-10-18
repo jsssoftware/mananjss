@@ -102,5 +102,6 @@ export abstract class ICommonService {
     abstract getVehicleSegment(): Observable<IDropDownDto<number>[]>;
     abstract getFuelType(): Observable<IDropDownDto<number>[]>;
     abstract getManufactureByVehicleClassType(VehicleClassId :number): Observable<any>;
+    abstract getState(): Observable<IDropDownDto<number>[]>;
 
 }

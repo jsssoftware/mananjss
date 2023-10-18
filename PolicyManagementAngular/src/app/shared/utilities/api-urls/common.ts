@@ -83,6 +83,7 @@ export class Common {
     public static readonly FuelType = "api/common/fueltype";
     public static readonly VehicleClassSegment= "api/common/vehiclesegment";
     public static readonly ManufacturersVehicleClassType = "api/common/manufacturersVehicleclasstype";
+    public static readonly State = "api/common/state";
 
 
 }

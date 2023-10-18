@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/auth-guard/auth.guard';
 import { AddonplanComponent } from './addonplan/addonplan.component';
 import { AddonridercomboComponent } from './addonridercombo/addonridercombo.component';
+import { BankmasterComponent } from './bankmaster/bankmaster.component';
+import { CitymasterComponent } from './citymaster/citymaster.component';
 import { ClusterComponent } from './cluster/cluster.component';
 import { AddCustomerComponent } from './customer/add-customer/add-customer.component';
 import { CustomerComponent } from './customer/customer.component';
@@ -87,6 +89,14 @@ const routes: Routes = [
             {
                 path: 'varient',
                 component: VariantmasterComponent
+            },
+            {
+                path: 'bank',
+                component: BankmasterComponent
+            },
+            {
+                path: 'city',
+                component: CitymasterComponent
             }
         ]
     }

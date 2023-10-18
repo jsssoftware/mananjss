@@ -23,4 +23,8 @@ export class Master {
     public static readonly CreateAddonPlanCombo =  "api/master/addonplancombo/create";
     public static readonly GetVarient = "api/master/varient";
     public static readonly CreateVarient =  "api/master/varient/create";
+    public static readonly GetBank = "api/master/bank";
+    public static readonly CreateBank =  "api/master/bank/create";
+    public static readonly GetCity = "api/master/city";
+    public static readonly CreateCity =  "api/master/city/create";
 }

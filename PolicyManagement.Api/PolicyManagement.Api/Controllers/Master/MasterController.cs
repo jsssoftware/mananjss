@@ -112,5 +112,22 @@ namespace PolicyManagement.Api.Controllers.Master
         [Route("varient/create")]
         [HttpPost]
         public async Task<IHttpActionResult> CreateVarient(tblVariant model) => Json(await _masterService.CreateVarient(model, new BaseModel()));
+
+        [Route("bank/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetBank(int branchId) => Json(await _masterService.GetBank(branchId));
+
+        [Route("bank/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateBank(tblBank model) => Json(await _masterService.CreateBank(model, new BaseModel()));
+
+
+        [Route("city/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCity(int branchId) => Json(await _masterService.GetCity(branchId));
+
+        [Route("city/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateCity(tblCity model) => Json(await _masterService.CreateCity(model, new BaseModel()));
     }
 }

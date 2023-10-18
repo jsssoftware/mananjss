@@ -573,8 +573,88 @@ namespace PolicyManagement.Services.Master
                 return new CommonDto<object>
                 {
                     IsSuccess = true,
+                    Message = $"Bank is created or edited successfully",
+                    // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+
+        public async Task<DataTableDto<List<dynamic>>> GetBank(int branchId)
+        {
+            var pos = await _dataContext.tblBank.OrderBy(x => x.IsActive == false).ThenBy(x => x.BankName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateBank(tblBank model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblBank.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
                     Message = $"Varient is created or edited successfully",
                     // Response = users
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetCity(int branchId)
+        {
+            var pos = await _dataContext.tblCity.OrderBy(x => x.IsActive == false).ThenBy(x => x.CityName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateCity(tblCity model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblCity.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"City is created or edited successfully",
                 };
             }
             catch (Exception ex)

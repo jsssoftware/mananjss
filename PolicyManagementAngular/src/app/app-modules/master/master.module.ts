@@ -20,6 +20,9 @@ import { ManufactureComponent } from './manufacture/manufacture.component';
 import { VehiclemodelComponent } from './vehiclemodel/vehiclemodel.component';
 import { AddonridercomboComponent } from './addonridercombo/addonridercombo.component';
 import { VariantmasterComponent } from './variantmaster/variantmaster.component';
+import { BankmasterComponent } from './bankmaster/bankmaster.component';
+import { CitymasterComponent } from './citymaster/citymaster.component';
+import { ProductmasterComponent } from './productmaster/productmaster.component';
 
 @NgModule({
   declarations: [  
@@ -37,6 +40,9 @@ import { VariantmasterComponent } from './variantmaster/variantmaster.component'
     VehiclemodelComponent,
     AddonridercomboComponent,
     VariantmasterComponent,
+    BankmasterComponent,
+    CitymasterComponent,
+    ProductmasterComponent,
   ],
   imports: [
     CommonModule,

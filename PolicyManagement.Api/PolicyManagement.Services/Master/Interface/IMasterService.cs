@@ -35,6 +35,9 @@ namespace PolicyManagement.Services.Master.Interface
         Task<DataTableDto<List<dynamic>>> GetAddOnRiderCombo(int branchId);
         Task<CommonDto<object>> CreateVarient(tblVariant variant, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetVarient(int branchId);
-
+        Task<CommonDto<object>> CreateBank(tblBank bank, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetBank(int branchId);
+        Task<CommonDto<object>> CreateCity(tblCity city, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetCity(int branchId);
     }
 }

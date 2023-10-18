@@ -370,5 +370,9 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("manufacturersVehicleclasstype/{vehicleClassTypeId}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetManufacturersVehicleclassType(int vehicleClassTypeId) => Json(await _commonService.FindManufacturersVehicleclassType(vehicleClassTypeId));
+
+        [Route("state")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetState() => Json(await _commonService.FindState());
     }
 }
