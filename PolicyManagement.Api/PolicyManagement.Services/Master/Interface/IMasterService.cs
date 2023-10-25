@@ -39,5 +39,32 @@ namespace PolicyManagement.Services.Master.Interface
         Task<DataTableDto<List<dynamic>>> GetBank(int branchId);
         Task<CommonDto<object>> CreateCity(tblCity city, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetCity(int branchId);
+        Task<CommonDto<object>> CreateProduct(tblProduct product, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetProduct(int branchId);
+        Task<CommonDto<object>> CreateInspectionCompany(tblInspectionCompany product, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetInspectionCompany(int branchId);
+
+        Task<CommonDto<object>> CreatePosType(tblType postype, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetPosType(int branchId);
+
+        Task<CommonDto<object>> CreatePosCategory(tblCategory poscategory, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetPosCategory(int branchId);
+        Task<CommonDto<object>> CreateRtoZone(tblRTOZone poscategory, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetRtoZone(int branchId);
+
+        Task<CommonDto<object>> CreateFinance(tblFinancer poscategory, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetFinance(int branchId);
+
+        Task<CommonDto<object>> CreateDepartment(tblDepartment poscategory, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetDepartment(int branchId);
+
+        Task<CommonDto<object>> CreateDesignation(tblDesignation poscategory, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetDesignation(int branchId);
+
+        Task<CommonDto<object>> CreateIndustry(tblIndustry poscategory, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetIndustry(int branchId);
+
+        Task<CommonDto<object>> CreateProfession(tblProfession poscategory, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetProfession(int branchId);
     }
 }

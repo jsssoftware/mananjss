@@ -129,5 +129,88 @@ namespace PolicyManagement.Api.Controllers.Master
         [Route("city/create")]
         [HttpPost]
         public async Task<IHttpActionResult> CreateCity(tblCity model) => Json(await _masterService.CreateCity(model, new BaseModel()));
+
+        [Route("product/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetProduct(int branchId) => Json(await _masterService.GetProduct(branchId));
+
+        [Route("product/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateProduct(tblProduct model) => Json(await _masterService.CreateProduct(model, new BaseModel()));
+
+        [Route("inspection/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetInspectionCompany(int branchId) => Json(await _masterService.GetInspectionCompany(branchId));
+
+        [Route("inspection/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateInspectionCompany(tblInspectionCompany model) => Json(await _masterService.CreateInspectionCompany(model, new BaseModel()));
+
+        [Route("postype/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetPosType(int branchId) => Json(await _masterService.GetPosType(branchId));
+
+        [Route("postype/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreatePosType(tblType model) => Json(await _masterService.CreatePosType(model, new BaseModel()));
+
+
+        [Route("poscategory/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetPosCategory(int branchId) => Json(await _masterService.GetPosCategory(branchId));
+
+        [Route("poscategory/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreatePosCategory(tblCategory model) => Json(await _masterService.CreatePosCategory(model, new BaseModel()));
+
+
+        [Route("rtozone/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetRtoZone(int branchId) => Json(await _masterService.GetRtoZone(branchId));
+
+        [Route("rtozone/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateRtoZone(tblRTOZone model) => Json(await _masterService.CreateRtoZone(model, new BaseModel()));
+
+        [Route("finance/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetFinance(int branchId) => Json(await _masterService.GetFinance(branchId));
+
+        [Route("finance/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateFinance(tblFinancer model) => Json(await _masterService.CreateFinance(model, new BaseModel()));
+
+        [Route("department/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetDepartment(int branchId) => Json(await _masterService.GetDepartment(branchId));
+
+        [Route("department/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateDepartment(tblDepartment model) => Json(await _masterService.CreateDepartment(model, new BaseModel()));
+
+
+        [Route("designation/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetDesignation(int branchId) => Json(await _masterService.GetDesignation(branchId));
+
+        [Route("designation/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateDesignation(tblDesignation model) => Json(await _masterService.CreateDesignation(model, new BaseModel()));
+
+        [Route("industry/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetIndustry(int branchId) => Json(await _masterService.GetIndustry(branchId));
+
+        [Route("industry/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateIndustry(tblIndustry model) => Json(await _masterService.CreateIndustry(model, new BaseModel()));
+
+        [Route("profession/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetProfession(int branchId) => Json(await _masterService.GetProfession(branchId));
+
+        [Route("profession/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateProfession(tblProfession model) => Json(await _masterService.CreateProfession(model, new BaseModel()));
     }
 }

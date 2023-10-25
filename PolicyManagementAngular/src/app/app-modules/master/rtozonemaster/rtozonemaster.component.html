@@ -1,7 +1,7 @@
 <mat-card class="mat-elevation-z2">
     <mat-card-header class="card-container" style="display: flow-root">
         <mat-card-title style="width: 50%; float: left;">
-            <p>Product Master</p>
+            <p>RTO Zone Master</p>
         </mat-card-title>
         <mat-card-title style="width: 10%; float: right;">
       
@@ -9,18 +9,18 @@
     </mat-card-header>
     <hr class="hrClass" />
     <mat-card-content>
-        <form [formGroup]="productmasterform" autocomplete="off" style="padding-bottom:10px ;">
+        <form [formGroup]="rtozoneform" autocomplete="off" style="padding-bottom:10px ;">
            
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label>Vertical <span style="color:red">*</span></mat-label>
+                    <mat-label>State</mat-label>
                 </div>
                 <div class="col-lg-4">
                     <mat-form-field>
-                        <mat-select formControlName="VerticalId" required >
+                        <mat-select formControlName="State"  >
                             <mat-option>Select</mat-option>
-                            <mat-option *ngFor="let _vertical of _verticals" [value]="_vertical.VerticalId" >
-                                {{_vertical.VerticalName}}
+                            <mat-option *ngFor="let state of _state" [value]="state.Value" >
+                                {{state.Name}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
@@ -29,24 +29,50 @@
             </div>
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label>Product  <span style="color:red">*</span></mat-label>
+                    <mat-label>RTO Zone Code <span style="color:red">*</span></mat-label>
 
                 </div>
                 <div class="col-lg-4">
                     <mat-form-field>
-                        <input type="text" matInput formControlName="ProductName"  />
+                        <input type="text" matInput formControlName="RTOZoneCode"  />
+                    </mat-form-field>
+                </div>
+            </div>
+
+           
+            <div class="row">
+                <div class="col-lg-2">
+                    <mat-label>RTO Zone Name <span style="color:red">*</span></mat-label>
+
+                </div>
+                <div class="col-lg-4">
+                    <mat-form-field>
+                        <input type="text" matInput formControlName="RTOZoneName"  />
                     </mat-form-field>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-2">
-                    <mat-label>Product Description</mat-label>
+                    <mat-label>Risk Zone</mat-label>
 
                 </div>
                 <div class="col-lg-4">
-                    <mat-form-field>
-                        <input type="text" matInput formControlName="ProductDescription"  />
-                    </mat-form-field>
+                    <mat-radio-group formControlName="RiskZone" >
+                        <div class="row">
+                         
+                          <div class="col-lg-2">
+                            <mat-radio-button [value]="'A'" color="primary" >
+                              Zone A
+                            </mat-radio-button>
+                          </div>
+                          <div class="col-lg-2">
+                            <mat-radio-button [value]="'B'" color="primary">
+                             Zone B
+                            </mat-radio-button>
+                          </div>
+                         
+                        </div>
+                      </mat-radio-group>
                 </div>
             </div>
           
@@ -58,7 +84,7 @@
 
                 </div>
                 <div class="col-lg-1">
-                    <button type="button" class="btn-block" mat-raised-button color="primary" (click)="createProducts()" [disabled]="!productmasterform.valid">
+                    <button type="button" class="btn-block" mat-raised-button color="primary" (click)="create()" [disabled]="!rtozoneform.valid">
                         <mat-icon style="font-size: 22px;">save</mat-icon>Save
                     </button>
                 </div>
@@ -75,26 +101,31 @@
                 <div class="col-lg-4">
                     <mat-form-field>
                       <mat-label>Filter</mat-label>
-                      <input matInput (keyup)="IProductMaster($event)" placeholder="Search" #input>
+                      <input matInput (keyup)="iFilter($event)" placeholder="Search" #input>
                     </mat-form-field>
                   </div>
                 <div class="col-lg-12">
-                    <table id="tblproduct" mat-table [dataSource]="_productsData" style="width: 100%;">
+                    <table id="tblrto" mat-table [dataSource]="_rtozoneData" style="width: 100%;">
                         
-                        <ng-container matColumnDef="ProductName">
-                            <th mat-header-cell *matHeaderCellDef> Product </th>
+                        <ng-container matColumnDef="RTOZoneCode">
+                            <th mat-header-cell *matHeaderCellDef> RTO Zone Code </th>
                             <td mat-cell *matCellDef="let element">
-                                {{element.ProductName}} </td>
+                                {{element.RTOZoneCode}} </td>
                         </ng-container>
-                        <ng-container matColumnDef="ProductDescription">
-                            <th mat-header-cell *matHeaderCellDef> Product Description </th>
+                        <ng-container matColumnDef="RTOZoneName">
+                            <th mat-header-cell *matHeaderCellDef>RTO Zone Name </th>
                             <td mat-cell *matCellDef="let element">
-                                {{element.ProductDescription}} </td>
+                                {{element.RTOZoneName}} </td>
                         </ng-container>
-                        <ng-container matColumnDef="VerticalId">
-                            <th mat-header-cell *matHeaderCellDef> Vertical</th>
+                        <ng-container matColumnDef="RiskZone">
+                            <th mat-header-cell *matHeaderCellDef> Risk Zone</th>
                             <td mat-cell *matCellDef="let element">
-                                {{element.Vertical}} </td>
+                                {{element.RiskZone}} </td>
+                        </ng-container>
+                        <ng-container matColumnDef="State">
+                            <th mat-header-cell *matHeaderCellDef> State</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{element.StateName}} </td>
                         </ng-container>
                        
                         <ng-container matColumnDef="IsActive">
@@ -111,7 +142,7 @@
                                    
                                     <div class="col-lg-1">
 
-                                        <button mat-icon-button (click)="editProduct(row)">
+                                        <button mat-icon-button (click)="edit(row)">
                                             <mat-icon color="warn" style="font-size: 20px;">edit</mat-icon>
                                         </button>
                                     </div>

@@ -165,6 +165,7 @@
           <Property Name="CreatedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
+          <Property Name="Description" Type="text" />
         </EntityType>
         <EntityType Name="tblChequeFromAccount">
           <Key>
@@ -191,6 +192,7 @@
           <Property Name="CreatedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
+          <Property Name="PinCode" Type="bigint" />
         </EntityType>
         <EntityType Name="tblClaimData">
           <Key>
@@ -1695,6 +1697,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="CreatedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
+          <Property Name="State" Type="int" />
         </EntityType>
         <EntityType Name="tblServiceProvider">
           <Key>
@@ -1843,6 +1846,7 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="CreatedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
+          <Property Name="Description" Type="text" />
         </EntityType>
         <EntityType Name="tblUploadedDocuments">
           <Key>
@@ -4643,6 +4647,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="CreatedTime" Type="DateTime" Precision="0" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblChequeFromAccount">
           <Key>
@@ -4669,6 +4674,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="CreatedTime" Type="DateTime" Precision="0" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
+          <Property Name="PinCode" Type="Int64" />
         </EntityType>
         <EntityType Name="tblClaimData">
           <Key>
@@ -5902,6 +5908,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="CreatedTime" Type="DateTime" Precision="0" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
+          <Property Name="State" Type="Int32" />
         </EntityType>
         <EntityType Name="tblServiceProvider">
           <Key>
@@ -6053,6 +6060,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="CreatedTime" Type="DateTime" Precision="0" />
           <Property Name="ModifiedBy" Type="Int32" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblUploadedDocuments">
           <Key>
@@ -7209,6 +7217,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblCategory">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblCategory">
               <MappingFragment StoreEntitySet="tblCategory">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
@@ -7235,6 +7244,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblCity">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblCity">
               <MappingFragment StoreEntitySet="tblCity">
+                <ScalarProperty Name="PinCode" ColumnName="PinCode" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
@@ -8530,6 +8540,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblRTOZone">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblRTOZone">
               <MappingFragment StoreEntitySet="tblRTOZone">
+                <ScalarProperty Name="State" ColumnName="State" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
@@ -8690,6 +8701,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblType">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblType">
               <MappingFragment StoreEntitySet="tblType">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
                 <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />

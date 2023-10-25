@@ -23,6 +23,16 @@ import { VariantmasterComponent } from './variantmaster/variantmaster.component'
 import { BankmasterComponent } from './bankmaster/bankmaster.component';
 import { CitymasterComponent } from './citymaster/citymaster.component';
 import { ProductmasterComponent } from './productmaster/productmaster.component';
+import { InspectionMasterComponent } from './inspection/inspection.component';
+import { PostypeComponent } from './postype/postype.component';
+import { PoscategoryComponent } from './poscategory/poscategory.component';
+import { RefrencemasterComponent } from './refrencemaster/refrencemaster.component';
+import { RtozonemasterComponent } from './rtozonemaster/rtozonemaster.component';
+import { FinancemasterComponent } from './financemaster/financemaster.component';
+import { DepartmentComponent } from './department/department.component';
+import { DesignationComponent } from './designation/designation.component';
+import { IndustryComponent } from './industry/industry.component';
+import { ProfessionComponent } from './profession/profession.component';
 
 @NgModule({
   declarations: [  
@@ -43,6 +53,16 @@ import { ProductmasterComponent } from './productmaster/productmaster.component'
     BankmasterComponent,
     CitymasterComponent,
     ProductmasterComponent,
+    InspectionMasterComponent,
+    PostypeComponent,
+    PoscategoryComponent,
+    RefrencemasterComponent,
+    RtozonemasterComponent,
+    FinancemasterComponent,
+    DepartmentComponent,
+    DesignationComponent,
+    IndustryComponent,
+    ProfessionComponent,
   ],
   imports: [
     CommonModule,

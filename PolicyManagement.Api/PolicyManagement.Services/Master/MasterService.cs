@@ -669,5 +669,400 @@ namespace PolicyManagement.Services.Master
             }
 
         }
+
+        public async Task<DataTableDto<List<dynamic>>> GetProduct(int branchId)
+        {
+            var pos = await _dataContext.tblProduct.OrderBy(x => x.IsActive == false).ThenBy(x => x.ProductName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateProduct(tblProduct model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblProduct.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Product is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetInspectionCompany(int branchId)
+        {
+            var pos = await _dataContext.tblInspectionCompany.OrderBy(x => x.IsActive == false).ThenBy(x => x.InspectionCompanyName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateInspectionCompany(tblInspectionCompany model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblInspectionCompany.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Inspection Company is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetPosType(int branchId)
+        {
+            var pos = await _dataContext.tblType.OrderBy(x => x.IsActive == false).ThenBy(x => x.TypeName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreatePosType(tblType model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblType.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Pos Type is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+
+        public async Task<DataTableDto<List<dynamic>>> GetPosCategory(int branchId)
+        {
+            var pos = await _dataContext.tblCategory.OrderBy(x => x.IsActive == false).ThenBy(x => x.CategoryName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreatePosCategory(tblCategory model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblCategory.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Pos Category is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+
+        public async Task<DataTableDto<List<dynamic>>> GetRtoZone(int branchId)
+        {
+            var pos = await _dataContext.tblRTOZone.OrderBy(x => x.IsActive == false).ThenBy(x => x.RTOZoneName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateRtoZone(tblRTOZone model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblRTOZone.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"RTO Zone is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+
+        public async Task<DataTableDto<List<dynamic>>> GetFinance(int branchId)
+        {
+            var pos = await _dataContext.tblFinancer.OrderBy(x => x.IsActive == false).ThenBy(x => x.FinancerName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateFinance(tblFinancer model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblFinancer.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Finance is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+
+        public async Task<CommonDto<object>> CreateIndustry(tblIndustry model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblIndustry.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Indusry is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+
+        public async Task<DataTableDto<List<dynamic>>> GetIndustry(int branchId)
+        {
+            var pos = await _dataContext.tblIndustry.OrderBy(x => x.IsActive == false).ThenBy(x => x.IndustryName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateDepartment(tblDepartment model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblDepartment.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Department is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetDepartment(int branchId)
+        {
+            var pos = await _dataContext.tblDepartment.OrderBy(x => x.IsActive == false).ThenBy(x => x.DepartmentName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateDesignation(tblDesignation model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblDesignation.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Designation is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetDesignation(int branchId)
+        {
+            var pos = await _dataContext.tblDesignation.OrderBy(x => x.IsActive == false).ThenBy(x => x.DesignationName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
+
+        public async Task<CommonDto<object>> CreateProfession(tblProfession model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblProfession.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Profession is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetProfession(int branchId)
+        {
+            var pos = await _dataContext.tblProfession.OrderBy(x => x.IsActive == false).ThenBy(x => x.ProfessionName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
     }
 }

@@ -10,25 +10,22 @@ import { ICommonService } from 'src/app/app-services/common-service/abstracts/co
 import { MasterService } from 'src/app/app-services/master-service/master.service';
 import Swal from 'sweetalert2';
 @Component({
-  selector: 'app-productmaster',
-  templateUrl: './productmaster.component.html',
-  styleUrls: ['./productmaster.component.css']
+  selector: 'app-poscategory',
+  templateUrl: './poscategory.component.html',
+  styleUrls: ['./poscategory.component.css']
 })
-export class ProductmasterComponent implements OnInit {
+export class PoscategoryComponent implements OnInit {
 
   @ViewChild(MatPaginator) _paginator!: MatPaginator;
-  productmasterform = new FormGroup({
-    ProductId: new FormControl(''),
-    ProductDescription: new FormControl(''),
-    ProductName: new FormControl('',[Validators.required]),
-    VerticalId: new FormControl('',[Validators.required]),
+  poscategorymasterform = new FormGroup({
+    CategoryId: new FormControl(''),
+    CategoryName: new FormControl('',[Validators.required]),
+    Description: new FormControl(''),
     IsActive: new FormControl(true),  
-    branchId:new FormControl(''),
   });
 
-  public _verticals: any[] = [];
   public  _branchId: number;
-  public _productsData: MatTableDataSource<any> = new MatTableDataSource<any>();
+  public _poscategorydata: MatTableDataSource<any> = new MatTableDataSource<any>();
   public _length: number = 0;
   public _pageSize: number = 20;
   public _pageNumber: number = 0;
@@ -37,32 +34,41 @@ export class ProductmasterComponent implements OnInit {
 
   
   displayedColumns: string[] = [
-    'ProductName',
-    'ProductDescription',
-    'VerticalId',
+    'PosType',
+    'PosTypeDescription',
     'IsActive',
     'Modify'
   ];
   constructor(private commonService : ICommonService, private masterSerivice :MasterService) { }
 
-  async ngOnInit(): Promise<void> {
-    this._branchId = parseInt(sessionStorage.getItem("branchId") as string);
-    this.productmasterform.patchValue({
-      branchId : this._branchId
-    })
-   await this.getVerticals()
-   await this.getProducts()
+  async ngOnInit(): Promise<void> {   
+    this._branchId = parseInt(sessionStorage.getItem("branchId") as string); 
+    await this.getPosCategory()
+
   }
 
+
+  
+  getPosCategory(): any {
+    
+    this.masterSerivice.getPosCategory(this._branchId).subscribe((response: IDataTableDto<any[]>) => {
+      this._length = response.TotalCount;
+      
+      this._poscategorydata = new MatTableDataSource( response.Data);
+      this._poscategorydata.paginator = this._paginator;
+      this._poscategorydata._updateChangeSubscription(); // <-- Refresh the datasource
+
+    });
+  }
 
   reset(){
-    this.productmasterform.reset();
+    this.poscategorymasterform.reset();
   }
 
-  createProducts(){
-    this.masterSerivice.createProducts(this.productmasterform.getRawValue()).subscribe((response: ICommonDto<any>) => {
+  createPosCategory(){
+    this.masterSerivice.createPosCategory(this.poscategorymasterform.getRawValue()).subscribe((response: ICommonDto<any>) => {
       if (response.IsSuccess) {
-        this.getProducts();
+        this.getPosCategory();
         Swal.fire({
           icon: 'success',
           title: 'Done',
@@ -114,35 +120,13 @@ export class ProductmasterComponent implements OnInit {
     this._pageNumber = event.pageIndex;
   }
 
-  editProduct(data:any){
+  editPosCategory(data:any){
     let obj = Object.assign({}, data);;
-    this.productmasterform.patchValue(obj);
+    this.poscategorymasterform.patchValue(obj);
   }
 
-  IProductMaster(event: Event) {
+  iPosCategory(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this._productsData.filter = filterValue.trim().toLowerCase();
+    this._poscategorydata.filter = filterValue.trim().toLowerCase();
   }
-
-  getVerticals(): void {
-    this.commonService.getVerticals().subscribe((response: any) => {
-      this._verticals = response;
-    });
-  }
-
-  getProducts(): void {
-    this.masterSerivice.getProducts(this._branchId).subscribe((response: IDataTableDto<any[]>) => {
-      this._length = response.TotalCount;
-      
-      response.Data.forEach(y=>{
-        y.Vertical = this._verticals.find(x=>x.VerticalId ==  y.VerticalId)?.VerticalName
-      });
-     
-      this._productsData = new MatTableDataSource( response.Data.sort(x=>x.InsuranceCompanyName));
-      this._productsData.paginator = this._paginator;
-      this._productsData._updateChangeSubscription(); // <-- Refresh the datasource
-    });
-
-  }
-
 }

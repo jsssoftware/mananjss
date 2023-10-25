@@ -27,4 +27,24 @@ export class Master {
     public static readonly CreateBank =  "api/master/bank/create";
     public static readonly GetCity = "api/master/city";
     public static readonly CreateCity =  "api/master/city/create";
+    public static readonly GetProduct = "api/master/product";
+    public static readonly CreateProduct =  "api/master/product/create";
+    public static readonly Getinspection = "api/master/inspection";
+    public static readonly CreateInspection =  "api/master/inspection/create";
+    public static readonly GetPostype = "api/master/postype";
+    public static readonly CreatePostype =  "api/master/postype/create";
+    public static readonly GetPosCategory = "api/master/poscategory";
+    public static readonly CreatePosCategory =  "api/master/poscategory/create";
+    public static readonly GetRtoZone = "api/master/rtozone";
+    public static readonly CreateRtoZone =  "api/master/rtozone/create";
+    public static readonly GetFinance = "api/finance/rtozone";
+    public static readonly CreateFinance =  "api/master/finance/create";
+    public static readonly GetDepartment = "api/master/department";
+    public static readonly CreateDepartment =  "api/master/department/create";
+    public static readonly GetIndustry = "api/master/industry";
+    public static readonly CreateIndustry =  "api/master/industry/create";
+    public static readonly GetProfession = "api/master/profession";
+    public static readonly CreateProfession =  "api/master/profession/create";
+    public static readonly GetDesignation = "api/master/designation";
+    public static readonly CreateDesignation =  "api/master/designation/create";
 }

@@ -32,6 +32,8 @@ public partial class tblCategory
 
     public Nullable<System.DateTime> ModifiedTime { get; set; }
 
+    public string Description { get; set; }
+
 }
 
 }

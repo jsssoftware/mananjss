@@ -10,59 +10,81 @@ import { ICommonService } from 'src/app/app-services/common-service/abstracts/co
 import { MasterService } from 'src/app/app-services/master-service/master.service';
 import Swal from 'sweetalert2';
 @Component({
-  selector: 'app-productmaster',
-  templateUrl: './productmaster.component.html',
-  styleUrls: ['./productmaster.component.css']
+  selector: 'app-rtozonemaster',
+  templateUrl: './rtozonemaster.component.html',
+  styleUrls: ['./rtozonemaster.component.css']
 })
-export class ProductmasterComponent implements OnInit {
+export class RtozonemasterComponent implements OnInit {
 
   @ViewChild(MatPaginator) _paginator!: MatPaginator;
-  productmasterform = new FormGroup({
-    ProductId: new FormControl(''),
-    ProductDescription: new FormControl(''),
-    ProductName: new FormControl('',[Validators.required]),
-    VerticalId: new FormControl('',[Validators.required]),
+  rtozoneform = new FormGroup({
+    RTOZoneName: new FormControl('',[Validators.required]),
+    RTOZoneId: new FormControl(''),
+    State: new FormControl(''),
+    RTOZoneCode: new FormControl('',[Validators.required]),
+    RiskZone: new FormControl(''),
     IsActive: new FormControl(true),  
-    branchId:new FormControl(''),
   });
 
-  public _verticals: any[] = [];
   public  _branchId: number;
-  public _productsData: MatTableDataSource<any> = new MatTableDataSource<any>();
+  public _rtozoneData: MatTableDataSource<any> = new MatTableDataSource<any>();
   public _length: number = 0;
   public _pageSize: number = 20;
   public _pageNumber: number = 0;
   public _input: string = "";
   public _showAll: boolean =false;
+  public _state: IDropDownDto<number>[] = [];
 
   
   displayedColumns: string[] = [
-    'ProductName',
-    'ProductDescription',
-    'VerticalId',
+    'RTOZoneCode',
+    'RTOZoneName',
+    'RiskZone',
+    'State',
     'IsActive',
     'Modify'
   ];
   constructor(private commonService : ICommonService, private masterSerivice :MasterService) { }
 
-  async ngOnInit(): Promise<void> {
-    this._branchId = parseInt(sessionStorage.getItem("branchId") as string);
-    this.productmasterform.patchValue({
-      branchId : this._branchId
-    })
-   await this.getVerticals()
-   await this.getProducts()
+  async ngOnInit(): Promise<void> {   
+    this._branchId = parseInt(sessionStorage.getItem("branchId") as string); 
+    await this.getState()
+    await this.getRtoZone()
+
   }
 
+
+ 
+  getState(): any {
+    this.commonService.getState().subscribe((response: IDropDownDto<number>[]) => {
+      this._state  = response;
+    });
+  }
+  
+  getRtoZone(): any {
+    
+    this.masterSerivice.getRtoZone(this._branchId).subscribe((response: IDataTableDto<any[]>) => {
+      this._length = response.TotalCount;
+      
+      response.Data.forEach(y=>{
+        y.StateName = this._state.find(x=>x.Value ==  y.State)?.Name
+      });
+     
+      this._rtozoneData = new MatTableDataSource( response.Data);
+      this._rtozoneData.paginator = this._paginator;
+      this._rtozoneData._updateChangeSubscription(); // <-- Refresh the datasource
+
+    });
+  }
 
   reset(){
-    this.productmasterform.reset();
+    this.rtozoneform.reset();
   }
 
-  createProducts(){
-    this.masterSerivice.createProducts(this.productmasterform.getRawValue()).subscribe((response: ICommonDto<any>) => {
+  create(){
+    this.masterSerivice.createRtoZone(this.rtozoneform.getRawValue()).subscribe((response: ICommonDto<any>) => {
       if (response.IsSuccess) {
-        this.getProducts();
+        this.getRtoZone();
         Swal.fire({
           icon: 'success',
           title: 'Done',
@@ -114,35 +136,14 @@ export class ProductmasterComponent implements OnInit {
     this._pageNumber = event.pageIndex;
   }
 
-  editProduct(data:any){
+  edit(data:any){
     let obj = Object.assign({}, data);;
-    this.productmasterform.patchValue(obj);
+    this.rtozoneform.patchValue(obj);
   }
 
-  IProductMaster(event: Event) {
+  iFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this._productsData.filter = filterValue.trim().toLowerCase();
-  }
-
-  getVerticals(): void {
-    this.commonService.getVerticals().subscribe((response: any) => {
-      this._verticals = response;
-    });
-  }
-
-  getProducts(): void {
-    this.masterSerivice.getProducts(this._branchId).subscribe((response: IDataTableDto<any[]>) => {
-      this._length = response.TotalCount;
-      
-      response.Data.forEach(y=>{
-        y.Vertical = this._verticals.find(x=>x.VerticalId ==  y.VerticalId)?.VerticalName
-      });
-     
-      this._productsData = new MatTableDataSource( response.Data.sort(x=>x.InsuranceCompanyName));
-      this._productsData.paginator = this._paginator;
-      this._productsData._updateChangeSubscription(); // <-- Refresh the datasource
-    });
-
+    this._rtozoneData.filter = filterValue.trim().toLowerCase();
   }
 
 }

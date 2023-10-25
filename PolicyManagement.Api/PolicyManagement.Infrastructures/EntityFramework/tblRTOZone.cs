@@ -36,6 +36,8 @@ public partial class tblRTOZone
 
     public Nullable<System.DateTime> ModifiedTime { get; set; }
 
+    public Nullable<int> State { get; set; }
+
 }
 
 }

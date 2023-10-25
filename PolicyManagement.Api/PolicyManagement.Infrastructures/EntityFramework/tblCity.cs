@@ -36,6 +36,8 @@ public partial class tblCity
 
     public Nullable<System.DateTime> ModifiedTime { get; set; }
 
+    public Nullable<long> PinCode { get; set; }
+
 }
 
 }
