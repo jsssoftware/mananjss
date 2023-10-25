@@ -136,6 +136,10 @@ export class CustomerComponent implements OnInit {
       this.router.navigate(["/pms/gmc/" ,  this.Verticaltype ,this._policyTypeId ,{ customerId, policyTypeId: this._policyTypeId }]);
     }
 
+    if(this.Verticaltype == 0){
+      this.editCustomer(customerId);
+    }
+
   }
 
  
