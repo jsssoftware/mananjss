@@ -66,5 +66,7 @@ namespace PolicyManagement.Services.Master.Interface
 
         Task<CommonDto<object>> CreateProfession(tblProfession poscategory, BaseModel baseModel);
         Task<DataTableDto<List<dynamic>>> GetProfession(int branchId);
+        Task<CommonDto<object>> CreateOccupation(tblOccupation poscategory, BaseModel baseModel);
+        Task<DataTableDto<List<dynamic>>> GetOccupation(int branchId);
     }
 }

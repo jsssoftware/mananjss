@@ -10,24 +10,22 @@ import { ICommonService } from 'src/app/app-services/common-service/abstracts/co
 import { MasterService } from 'src/app/app-services/master-service/master.service';
 import Swal from 'sweetalert2';
 @Component({
-  selector: 'app-rtozonemaster',
-  templateUrl: './rtozonemaster.component.html',
-  styleUrls: ['./rtozonemaster.component.css']
+  selector: 'app-lineofbusiness',
+  templateUrl: './lineofbusiness.component.html',
+  styleUrls: ['./lineofbusiness.component.css']
 })
-export class RtozonemasterComponent implements OnInit {
+export class LineofbusinessComponent implements OnInit {
 
   @ViewChild(MatPaginator) _paginator!: MatPaginator;
-  rtozoneform = new FormGroup({
-    RTOZoneName: new FormControl('',[Validators.required]),
-    RTOZoneId: new FormControl(''),
-    State: new FormControl(''),
-    RTOZoneCode: new FormControl('',[Validators.required]),
-    RiskZone: new FormControl('',[Validators.required]),
+  form = new FormGroup({
+    OccupationName: new FormControl('',[Validators.required]),
+    OccupationId: new FormControl(''),
+    Branch2FinancerId: new FormControl(''),
     IsActive: new FormControl(true),  
   });
 
   public  _branchId: number;
-  public _rtozoneData: MatTableDataSource<any> = new MatTableDataSource<any>();
+  public _matData: MatTableDataSource<any> = new MatTableDataSource<any>();
   public _length: number = 0;
   public _pageSize: number = 20;
   public _pageNumber: number = 0;
@@ -37,10 +35,7 @@ export class RtozonemasterComponent implements OnInit {
 
   
   displayedColumns: string[] = [
-    'RTOZoneCode',
-    'RTOZoneName',
-    'RiskZone',
-    'State',
+    'Name',
     'IsActive',
     'Modify'
   ];
@@ -48,43 +43,34 @@ export class RtozonemasterComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {   
     this._branchId = parseInt(sessionStorage.getItem("branchId") as string); 
-    await this.getState()
-    await this.getRtoZone()
+    await this.get()
 
   }
 
-
- 
-  getState(): any {
-    this.commonService.getState().subscribe((response: IDropDownDto<number>[]) => {
-      this._state  = response;
-    });
-  }
   
-  getRtoZone(): any {
+  get(): any {
     
-    this.masterSerivice.getRtoZone(this._branchId).subscribe((response: IDataTableDto<any[]>) => {
+    this.masterSerivice.getOccupation(this._branchId).subscribe((response: IDataTableDto<any[]>) => {
       this._length = response.TotalCount;
-      
-      response.Data.forEach(y=>{
-        y.StateName = this._state.find(x=>x.Value ==  y.State)?.Name
-      });
      
-      this._rtozoneData = new MatTableDataSource( response.Data);
-      this._rtozoneData.paginator = this._paginator;
-      this._rtozoneData._updateChangeSubscription(); // <-- Refresh the datasource
+      this._matData = new MatTableDataSource( response.Data);
+      this._matData.paginator = this._paginator;
+      this._matData._updateChangeSubscription(); // <-- Refresh the datasource
 
     });
   }
 
   reset(){
-    this.rtozoneform.reset();
+    this.form.reset();
   }
 
   create(){
-    this.masterSerivice.createRtoZone(this.rtozoneform.getRawValue()).subscribe((response: ICommonDto<any>) => {
+    this.form.patchValue({
+      Branch2FinancerId : this._branchId
+    });
+    this.masterSerivice.createOccupation(this.form.getRawValue()).subscribe((response: ICommonDto<any>) => {
       if (response.IsSuccess) {
-        this.getRtoZone();
+        this.get();
         Swal.fire({
           icon: 'success',
           title: 'Done',
@@ -138,12 +124,11 @@ export class RtozonemasterComponent implements OnInit {
 
   edit(data:any){
     let obj = Object.assign({}, data);;
-    this.rtozoneform.patchValue(obj);
+    this.form.patchValue(obj);
   }
 
   iFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this._rtozoneData.filter = filterValue.trim().toLowerCase();
+    this._matData.filter = filterValue.trim().toLowerCase();
   }
-
 }

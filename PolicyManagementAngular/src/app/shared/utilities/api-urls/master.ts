@@ -37,7 +37,7 @@ export class Master {
     public static readonly CreatePosCategory =  "api/master/poscategory/create";
     public static readonly GetRtoZone = "api/master/rtozone";
     public static readonly CreateRtoZone =  "api/master/rtozone/create";
-    public static readonly GetFinance = "api/finance/rtozone";
+    public static readonly GetFinance = "api/master/finance";
     public static readonly CreateFinance =  "api/master/finance/create";
     public static readonly GetDepartment = "api/master/department";
     public static readonly CreateDepartment =  "api/master/department/create";
@@ -47,4 +47,6 @@ export class Master {
     public static readonly CreateProfession =  "api/master/profession/create";
     public static readonly GetDesignation = "api/master/designation";
     public static readonly CreateDesignation =  "api/master/designation/create";
+    public static readonly GetOccupation = "api/master/occupation";
+    public static readonly CreateOccupation =  "api/master/occupation/create";
 }

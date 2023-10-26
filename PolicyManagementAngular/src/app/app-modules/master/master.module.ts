@@ -33,6 +33,7 @@ import { DepartmentComponent } from './department/department.component';
 import { DesignationComponent } from './designation/designation.component';
 import { IndustryComponent } from './industry/industry.component';
 import { ProfessionComponent } from './profession/profession.component';
+import { LineofbusinessComponent } from './lineofbusiness/lineofbusiness.component';
 
 @NgModule({
   declarations: [  
@@ -63,6 +64,7 @@ import { ProfessionComponent } from './profession/profession.component';
     DesignationComponent,
     IndustryComponent,
     ProfessionComponent,
+    LineofbusinessComponent,
   ],
   imports: [
     CommonModule,

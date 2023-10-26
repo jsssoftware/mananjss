@@ -212,5 +212,13 @@ namespace PolicyManagement.Api.Controllers.Master
         [Route("profession/create")]
         [HttpPost]
         public async Task<IHttpActionResult> CreateProfession(tblProfession model) => Json(await _masterService.CreateProfession(model, new BaseModel()));
+
+        [Route("occupation/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetOccupation(int branchId) => Json(await _masterService.GetOccupation(branchId));
+
+        [Route("occupation/create")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateOccupation(tblOccupation model) => Json(await _masterService.CreateOccupation(model, new BaseModel()));
     }
 }

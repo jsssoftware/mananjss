@@ -15,6 +15,7 @@ import { IndustryComponent } from './industry/industry.component';
 import { InspectionMasterComponent } from './inspection/inspection.component';
 import { InsurancebranchComponent } from './insurancebranch/insurancebranch.component';
 import { InsurancecompanyComponent } from './insurancecompany/insurancecompany.component';
+import { LineofbusinessComponent } from './lineofbusiness/lineofbusiness.component';
 import { ManufactureComponent } from './manufacture/manufacture.component';
 import { PlanComponent } from './plan/plan.component';
 import { PosComponent } from './pos/pos.component';
@@ -152,6 +153,10 @@ const routes: Routes = [
             {
                 path: 'profession',
                 component: ProfessionComponent
+            },
+            {
+                path: 'lineofbusiness',
+                component: LineofbusinessComponent
             }
         ]
     }

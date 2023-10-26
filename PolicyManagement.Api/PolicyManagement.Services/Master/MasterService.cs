@@ -1064,5 +1064,45 @@ namespace PolicyManagement.Services.Master
                 Data = pos
             };
         }
+
+
+        public async Task<CommonDto<object>> CreateOccupation(tblOccupation model, BaseModel baseModel)
+        {
+            try
+            {
+                model.CreatedBy = baseModel.LoginUserId;
+                model.CreatedTime = DateTime.Now;
+                model.ModifiedBy = baseModel.LoginUserId;
+                model.ModifiedTime = DateTime.Now;
+                _dataContext.tblOccupation.AddOrUpdate(model);
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Occupation is created or edited successfully",
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+
+            }
+
+        }
+
+        public async Task<DataTableDto<List<dynamic>>> GetOccupation(int branchId)
+        {
+            var pos = await _dataContext.tblOccupation.OrderBy(x => x.IsActive == false).ThenBy(x => x.OccupationName).ToListAsync<dynamic>();
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = pos.Count(),
+                Data = pos
+            };
+        }
     }
 }

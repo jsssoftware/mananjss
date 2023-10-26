@@ -99,5 +99,9 @@ export class MasterService extends IMasterService {
     getProfession= (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetProfession}/${branchId}`);
     createProfession = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreateProfession, model);
 
+    
+    getOccupation = (branchId:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.getRequest<IDataTableDto<any[]>>(`${Master.GetOccupation}/${branchId}`);
+    createOccupation = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Master.CreateOccupation, model);
+
 
 }
