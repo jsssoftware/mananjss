@@ -59,6 +59,7 @@
     <Compile Include="Commercial\CommercialPolicyFormDataModel.cs" />
     <Compile Include="Master\AddonRider.cs" />
     <Compile Include="Master\TeamMemberUserModel.cs" />
+    <Compile Include="Report\ReportModel.cs" />
     <Compile Include="Retail\InsuredPersonModel.cs" />
     <Compile Include="Retail\RetailPolicyFormDataModel.cs" />
     <Compile Include="Inspection\AddUpdateInspectionModel.cs" />

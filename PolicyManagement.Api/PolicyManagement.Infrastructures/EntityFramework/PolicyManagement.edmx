@@ -388,12 +388,6 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblCompanyDetails">
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
-        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -2013,13 +2007,6 @@ warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblVersion">
-          <Property Name="Major" Type="tinyint" />
-          <Property Name="Minor" Type="tinyint" />
-          <Property Name="Revision" Type="tinyint" />
-        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -2725,6 +2712,10 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Parameter Name="Vertical" Type="int" Mode="In" />
           <Parameter Name="DataTypeId" Type="int" Mode="In" />
           <Parameter Name="BranchId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Usp_ReconDataDownload" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PolicyStartDate" Type="varchar" Mode="In" />
+          <Parameter Name="BranchId" Type="varchar" Mode="In" />
         </Function>
         <Function Name="Usp_ReferenceTelecallerDashboard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="FromDate" Type="datetime" Mode="In" />
@@ -4441,6 +4432,10 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
             <End Role="tblManufacturer" EntitySet="tblManufacturers" />
             <End Role="tblModel" EntitySet="tblModel" />
           </AssociationSet>
+          <FunctionImport Name="Usp_ReconDataDownload" ReturnType="Collection(PolicyManagerModel.Usp_ReconDataDownload_Result)">
+            <Parameter Name="PolicyStartDate" Mode="In" Type="String" />
+            <Parameter Name="BranchId" Mode="In" Type="String" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetPolicyFamilyDtl_Result">
           <Property Type="String" Name="InsuredPersonName" Nullable="true" MaxLength="50" />
@@ -7049,6 +7044,45 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="Usp_ReconDataDownload_Result">
+          <Property Type="Int32" Name="PolicyId" Nullable="true" />
+          <Property Type="String" Name="ControlNo" Nullable="true" MaxLength="12" />
+          <Property Type="Decimal" Name="TPPremium" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="DateTime" Name="RegistrationDate" Nullable="true" Precision="16" />
+          <Property Type="String" Name="MakeYear" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="InsuranceCompanyName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="NameInPolicy" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="PolicyNo" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="OD" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="Decimal" Name="GrossPremium" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="String" Name="EndorsementReason" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ModelName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="RegistrationNo" Nullable="true" MaxLength="12" />
+          <Property Type="Decimal" Name="EndorseOD" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="Int32" Name="TotalOD" Nullable="true" />
+          <Property Type="Decimal" Name="AddonOD" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="Decimal" Name="EndorseGrossPremium" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="Int32" Name="TotalGrossPremium" Nullable="true" />
+          <Property Type="String" Name="EngineNo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="ChassisNo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="VehicleClass" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="PolicyStatus" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PolicyType" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="PolicyStartDate" Nullable="true" Precision="16" />
+          <Property Type="Int16" Name="PolicyTypeId" Nullable="true" />
+          <Property Type="String" Name="BusinessDoneBy" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="CommRecived" Nullable="false" MaxLength="3" />
+          <Property Type="String" Name="MonthCycle" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="MonthCycleId" Nullable="true" />
+          <Property Type="DateTime" Name="PolicyEndDate" Nullable="true" Precision="16" />
+          <Property Type="String" Name="PolicyNoOD" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PolicyPackageType" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PolicyTermName" Nullable="false" MaxLength="30" />
+          <Property Type="DateTime" Name="PolicyStartDateOD" Nullable="true" Precision="16" />
+          <Property Type="DateTime" Name="PolicyEndDateOD" Nullable="true" Precision="16" />
+          <Property Type="String" Name="ODCompany" Nullable="true" MaxLength="100" />
+          <Property Type="Int16" Name="InsuranceCompanyODId" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -9615,6 +9649,49 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="Usp_ReconDataDownload" FunctionName="PolicyManagerModel.Store.Usp_ReconDataDownload">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PolicyManagerModel.Usp_ReconDataDownload_Result">
+                <ScalarProperty Name="PolicyId" ColumnName="PolicyId" />
+                <ScalarProperty Name="ControlNo" ColumnName="ControlNo" />
+                <ScalarProperty Name="TPPremium" ColumnName="TPPremium" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+                <ScalarProperty Name="MakeYear" ColumnName="MakeYear" />
+                <ScalarProperty Name="InsuranceCompanyName" ColumnName="InsuranceCompanyName" />
+                <ScalarProperty Name="NameInPolicy" ColumnName="NameInPolicy" />
+                <ScalarProperty Name="PolicyNo" ColumnName="PolicyNo" />
+                <ScalarProperty Name="OD" ColumnName="OD" />
+                <ScalarProperty Name="GrossPremium" ColumnName="GrossPremium" />
+                <ScalarProperty Name="EndorsementReason" ColumnName="EndorsementReason" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="RegistrationNo" ColumnName="RegistrationNo" />
+                <ScalarProperty Name="EndorseOD" ColumnName="EndorseOD" />
+                <ScalarProperty Name="TotalOD" ColumnName="TotalOD" />
+                <ScalarProperty Name="AddonOD" ColumnName="AddonOD" />
+                <ScalarProperty Name="EndorseGrossPremium" ColumnName="EndorseGrossPremium" />
+                <ScalarProperty Name="TotalGrossPremium" ColumnName="TotalGrossPremium" />
+                <ScalarProperty Name="EngineNo" ColumnName="EngineNo" />
+                <ScalarProperty Name="ChassisNo" ColumnName="ChassisNo" />
+                <ScalarProperty Name="VehicleClass" ColumnName="VehicleClass" />
+                <ScalarProperty Name="PolicyStatus" ColumnName="PolicyStatus" />
+                <ScalarProperty Name="PolicyType" ColumnName="PolicyType" />
+                <ScalarProperty Name="PolicyStartDate" ColumnName="PolicyStartDate" />
+                <ScalarProperty Name="PolicyTypeId" ColumnName="PolicyTypeId" />
+                <ScalarProperty Name="BusinessDoneBy" ColumnName="BusinessDoneBy" />
+                <ScalarProperty Name="CommRecived" ColumnName="CommRecived" />
+                <ScalarProperty Name="MonthCycle" ColumnName="MonthCycle" />
+                <ScalarProperty Name="MonthCycleId" ColumnName="MonthCycleId" />
+                <ScalarProperty Name="PolicyEndDate" ColumnName="PolicyEndDate" />
+                <ScalarProperty Name="PolicyNoOD" ColumnName="PolicyNoOD" />
+                <ScalarProperty Name="PolicyPackageType" ColumnName="PolicyPackageType" />
+                <ScalarProperty Name="PolicyTermName" ColumnName="PolicyTermName" />
+                <ScalarProperty Name="PolicyStartDateOD" ColumnName="PolicyStartDateOD" />
+                <ScalarProperty Name="PolicyEndDateOD" ColumnName="PolicyEndDateOD" />
+                <ScalarProperty Name="ODCompany" ColumnName="ODCompany" />
+                <ScalarProperty Name="InsuranceCompanyODId" ColumnName="InsuranceCompanyODId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -9629,8 +9706,8 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="True" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>

@@ -22,6 +22,8 @@ import { PolicyManagementModule } from './app-modules/policy-management/policyma
 import { LoaderInterceptor } from './shared/common-component/loader/loaderInterceptor';
 import {MatListModule} from '@angular/material/list';
 import { UserManagementModule } from './app-modules/user-management/user-management.module';
+import { RecondownloadComponent } from './app-modules/reports/motor/recondownload/recondownload.component';
+import { ReportsModule } from './app-modules/reports/reports.module';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { UserManagementModule } from './app-modules/user-management/user-managem
     HeaderComponent,
     TopMenuComponent,
     MenuItemComponent,
+    RecondownloadComponent,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,8 @@ import { UserManagementModule } from './app-modules/user-management/user-managem
     SubSystemModule,
     MasterModule,
     MaterialFileInputModule,
-    UserManagementModule
+    UserManagementModule,
+    ReportsModule
   ],
   providers: [CommonFunction, Services, AuthGuard, { provide: JWT_OPTIONS, useValue: JWT_OPTIONS }, JwtHelperService,
     {  

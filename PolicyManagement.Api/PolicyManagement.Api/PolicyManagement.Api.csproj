@@ -220,6 +220,7 @@
     <Compile Include="Controllers\Inspection\InspectionController.cs" />
     <Compile Include="Controllers\Master\MasterController.cs" />
     <Compile Include="Controllers\Motor\MotorController.cs" />
+    <Compile Include="Controllers\Reports\ReportController.cs" />
     <Compile Include="Controllers\UserManagerment\UserManagementController.cs" />
     <Compile Include="Controllers\Voucher\VoucherController.cs" />
     <Compile Include="Mapper\AutoMapperConfiguration.cs" />

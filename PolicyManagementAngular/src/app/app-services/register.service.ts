@@ -26,6 +26,8 @@ import { IUserService } from "./user-management-service/abstracts/user.iservice"
 import { UserService } from "./user-management-service/user.service";
 import { IMasterService } from "./master-service/abstracts/master.iservice";
 import { MasterService } from "./master-service/master.service";
+import { IReportService } from "./report-service/abstracts/report.iservice";
+import { ReportService } from "./report-service/report.service";
 export const Services = [
   { provide: IApiManagerService, useClass: ApiManagerService },
   { provide: IAccountService, useClass: AccountService },
@@ -39,6 +41,8 @@ export const Services = [
   { provide: ICommercialService, useClass: CommercialService },
   { provide: IUserService, useClass: UserService },
   { provide: IMasterService, useClass: MasterService },
+  { provide: IReportService, useClass: ReportService },
+
   { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMAT },
   { provide: HTTP_INTERCEPTORS, useClass: OAuthTokenInterceptor, multi: true }
 ];

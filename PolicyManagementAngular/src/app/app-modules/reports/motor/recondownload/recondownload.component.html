@@ -1,0 +1,72 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header>
+      <mat-card-title>Recon Download</mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <form [formGroup]="reconDownloadform" autocomplete="off" style="padding-bottom:10px ;">
+
+    <mat-card-content>
+        <div class="row">
+            <div class="col-lg-2">
+                <mat-label>Month Cycle <span style="color:red">*</span></mat-label>
+            </div>
+            <div class="col-lg-4">
+            <mat-form-field>
+                <mat-select formControlName="MonthCycle" required >
+                    <mat-option>Select</mat-option>
+                    <mat-option *ngFor="let monthCycle of _monthCycle" [value]="monthCycle.MonthCycleId" >
+                        {{monthCycle.MonthCycle}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-2">
+                <mat-label>Insurance Company <span style="color:red">*</span></mat-label>
+            </div>
+            <div class="col-lg-4">
+                <mat-form-field>
+                    <mat-select formControlName="InsuranceCompanyId" required >
+                        <mat-option>Select</mat-option>
+                        <mat-option *ngFor="let insuranceCompanies of _insuranceCompanies" [value]="insuranceCompanies.Value" >
+                            {{insuranceCompanies.Name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            
+        </div>
+        <div class="row">
+            <mat-radio-group formControlName="DataType" >
+                <div class="row">
+                
+                  <div class="col-lg-2">
+                    <mat-radio-button [value]="1" color="primary" >
+                      Policy Data
+                    </mat-radio-button>
+                  </div>
+                  <div class="col-lg-2">
+                    <mat-radio-button [value]="2" color="primary">
+                     Endrosement Data
+                    </mat-radio-button>
+                  </div>
+                 
+                </div>
+              </mat-radio-group>
+            
+        </div>
+        <div class="row">
+            
+            <div class="col-lg-1">
+                <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb7e'}"
+                    (click)="ongenerateExcel()">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </mat-card-content>
+    </form>
+</mat-card>
+
+

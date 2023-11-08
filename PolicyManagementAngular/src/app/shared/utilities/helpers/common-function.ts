@@ -64,4 +64,13 @@ export class CommonFunction {
     }
     return null;
   }
+
+  public formatDateString(d: Date) {
+    if(d&& d!= null){
+    d = new Date(d);   
+    var convertDate = new Date(d.getFullYear(), d.getMonth(), d.getDate(), d.getHours(), d.getMinutes() - d.getTimezoneOffset()).toISOString();
+    return convertDate
+    }
+    return null;
+  }
 }

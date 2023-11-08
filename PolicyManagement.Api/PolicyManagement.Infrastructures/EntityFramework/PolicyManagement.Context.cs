@@ -5291,6 +5291,23 @@ public partial class DataContext : DbContext
         return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_InspectionByPolicyId_Result1>("Usp_InspectionByPolicyId", policyIdParameter);
     }
 
+
+    public virtual ObjectResult<Usp_ReconDataDownload_Result> Usp_ReconDataDownload(string policyStartDate, string branchId)
+    {
+
+        var policyStartDateParameter = policyStartDate != null ?
+            new ObjectParameter("PolicyStartDate", policyStartDate) :
+            new ObjectParameter("PolicyStartDate", typeof(string));
+
+
+        var branchIdParameter = branchId != null ?
+            new ObjectParameter("BranchId", branchId) :
+            new ObjectParameter("BranchId", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_ReconDataDownload_Result>("Usp_ReconDataDownload", policyStartDateParameter, branchIdParameter);
+    }
+
 }
 
 }

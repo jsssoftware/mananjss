@@ -374,5 +374,10 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("state")]
         [HttpGet]
         public async Task<IHttpActionResult> GetState() => Json(await _commonService.FindState());
+
+
+        [Route("monthcycle")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetMonthCycle() => Json(await _commonService.FindMonthCycle());
     }
 }

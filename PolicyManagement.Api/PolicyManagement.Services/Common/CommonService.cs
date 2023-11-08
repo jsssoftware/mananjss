@@ -1698,6 +1698,6 @@ namespace PolicyManagement.Services.Common
         .OrderBy(o => o.Name)
         .ToListAsync();
 
-
+        public async Task<List<tblMonthCycle>> FindMonthCycle() => await _dataContext.tblMonthCycle.OrderBy(o => o.MonthCycle).ToListAsync();
     }
 }

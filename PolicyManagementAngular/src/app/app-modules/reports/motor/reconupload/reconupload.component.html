@@ -1,0 +1,51 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header>
+      <mat-card-title>Recon Upload</mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+
+    <mat-card-content>
+        <form [formGroup]="reconUploadForm"  autocomplete="off">
+            <hr style="margin-top: 0px;" />
+            <div class="row">
+              <div class="col-lg-12">
+                <h4>Upload Documents <span style="color:red; font-style: italic;">(File type should be PDF and Images
+                    file and max
+                    size 2 MB)</span></h4>
+              </div>
+            </div>
+            <div class="row">
+              
+              <div class="col-lg-6">
+                <mat-form-field>
+                  <ngx-mat-file-input placeholder="Browse" formControlName="browse" [errorStateMatcher]="matcher"
+                    style="line-height: 20px;" [accept]="listAccepts">
+                  </ngx-mat-file-input>
+                  <!--   <ngx-doc-viewer [url]="DemoDoc" [viewer]="viewer" style="width:100%;height:100vh;"></ngx-doc-viewer>  -->
+                  <mat-icon matSuffix>folder</mat-icon>
+                </mat-form-field>
+              </div>
+            
+
+            </div>
+            <hr style="margin-top: 0px;" />
+            <div class="row">
+            
+              <div class="col-lg-2">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <button class="btn-block" mat-raised-button color="primary" (click)="onUploadExcel()" >
+                      <mat-icon>note_add</mat-icon> Add
+                    </button>
+                  </div>
+                </div>
+                <hr style="margin-top: 4px; margin-bottom: 4px;" />
+              
+              </div>
+            </div>
+          </form>
+       
+    </mat-card-content>
+</mat-card>
+
+
