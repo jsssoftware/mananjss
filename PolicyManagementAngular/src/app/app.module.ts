@@ -22,7 +22,6 @@ import { PolicyManagementModule } from './app-modules/policy-management/policyma
 import { LoaderInterceptor } from './shared/common-component/loader/loaderInterceptor';
 import {MatListModule} from '@angular/material/list';
 import { UserManagementModule } from './app-modules/user-management/user-management.module';
-import { RecondownloadComponent } from './app-modules/reports/motor/recondownload/recondownload.component';
 import { ReportsModule } from './app-modules/reports/reports.module';
 
 @NgModule({
@@ -31,8 +30,7 @@ import { ReportsModule } from './app-modules/reports/reports.module';
     LoginComponent,  
     HeaderComponent,
     TopMenuComponent,
-    MenuItemComponent,
-    RecondownloadComponent,
+    MenuItemComponent
   ],
   imports: [
     BrowserModule,
