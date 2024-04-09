@@ -2536,7 +2536,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     if (input === undefined)
       return;
     this._filteredInsuranceCompaniesOptions = this._insuranceCompanies.filter(item => {
-      return item.Name.toLowerCase().indexOf(input.toLowerCase()) > -1
+      return item.Name?.toLowerCase().indexOf(input.toLowerCase()) > -1
     });
   }
 
@@ -2544,7 +2544,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     if (input === undefined)
       return;
     this._filteredInsuranceCompaniesLastOptions = this._lastInsuranceCompanies.filter(item => {
-      return item.Name.toLowerCase().indexOf(input.toLowerCase()) > -1
+      return item.Name?.toLowerCase().indexOf(input.toLowerCase()) > -1
     });
   }
 
@@ -2552,7 +2552,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     if (input === undefined)
       return;
     this._filteredInsuranceCompaniesOdOptions = this._odInsuranceCompanies.filter(item => {
-      return item.Name.toLowerCase().indexOf(input.toLowerCase()) > -1
+      return item.Name?.toLowerCase().indexOf(input.toLowerCase()) > -1
     });
   }
 
@@ -2560,7 +2560,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     if (input === undefined)
       return;
     this._filteredPosOptions = this._posDatas.filter(item => {
-      return item.Name.toLowerCase().indexOf(input.toLowerCase()) > -1
+      return item?.Name?.toLowerCase().indexOf(input.toLowerCase()) > -1
     });
   }
 
@@ -2568,7 +2568,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
     if (input === undefined)
       return;
     this._filteredManufacturerOptions = this._manufacturers.filter(item => {
-      return item.Name.toLowerCase().indexOf(input.toLowerCase()) > -1
+      return item.Name?.toLowerCase().indexOf(input.toLowerCase()) > -1
     });
   }
 

@@ -188,11 +188,8 @@ export class VariantmasterComponent implements OnInit {
   }
 
   editAddonPlanCombo(data:any){
-    debugger
     let obj = Object.assign({}, data);
     this.variantform.patchValue(obj);
-    
-
   }
 
   IVariant(event: Event) {

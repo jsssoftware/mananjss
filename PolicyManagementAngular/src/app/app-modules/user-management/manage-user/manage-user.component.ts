@@ -55,7 +55,8 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
     reportedTo: new FormControl('',[Validators.required]),
     userName: new FormControl('',[Validators.required]),  
     userId: new FormControl('',[Validators.required]),  
-    isLocked: new FormControl(''),  
+    userFullName: new FormControl(''),  
+    isLocked: new FormControl(false),  
     isActive: new FormControl(true),  
   });
   constructor(
@@ -126,7 +127,6 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
   }
 
   editUser(data :any){
-    debugger
       let teamdata =  this.savedTeamMember.find(x=>x.Value == data?.TeamMemberId)
       this._teamMember.push(teamdata)
       this.manageuserform.patchValue({
@@ -139,6 +139,7 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
         userName: data?.UserName,  
         userId: data?.UserId,  
         isLocked: data?.IsLocked,  
+        userFullName: this._teamMember.find(x =>x.Value == data?.TeamMemberId).Name,
         isActive: data?.IsActive 
     });
     this.manageuserform.controls.teamMemberId.disable();
@@ -159,6 +160,10 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
   }
 
   createUser(){
+   let x=  this._teamMember.find(x =>x.Value == this.manageuserform.value.teamMemberId).Name
+    this.manageuserform.patchValue({
+      userFullName: this._teamMember.find(x =>x.Value == this.manageuserform.value.teamMemberId).Name,
+    });
     this._userService.createUser(this.manageuserform.getRawValue()).subscribe((response: ICommonDto<any>) => {
       if (response.IsSuccess) {
         this.getUsers();

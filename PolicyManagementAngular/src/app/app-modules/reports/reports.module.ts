@@ -12,8 +12,6 @@ import { RecondownloadComponent } from './motor/recondownload/recondownload.comp
 import { RecondownloadRetailComponent } from './retail/recondownload/recondownload.component';
 import { ReconuploadRetailComponent } from './retail/reconupload/reconupload.component';
 
-
-
 @NgModule({
   declarations: [
     ReconuploadComponent,
