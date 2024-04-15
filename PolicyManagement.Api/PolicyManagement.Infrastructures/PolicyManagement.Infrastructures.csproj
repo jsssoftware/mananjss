@@ -455,6 +455,21 @@
     <Compile Include="EntityFramework\Usp_PolicyDocuments_Result1.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\Usp_ReconDataDownloadRetailCommerceWithCom_Result.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Usp_ReconDataDownloadRetailCommerceWithoutCom_Result.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Usp_ReconDataDownloadWithEndrosmentCompany_Result.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Usp_ReconDataDownloadWithEndrosmentRecon_Result.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Usp_ReconDataDownloadWithoutCompany_Result.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\Usp_ReconDataDownload_Result.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>

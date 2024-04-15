@@ -1600,7 +1600,7 @@ namespace PolicyManagement.Services.Common
 
         public async Task<List<DropDownDto<int>>> FindAllTeamMember(int branchId)
         {
-            List<DropDownDto<int>> result = await _dataContext.tblTeamMember.Where(x => x.BranchId == branchId).Select(s => new DropDownDto<int>
+            List<DropDownDto<int>> result = await _dataContext.tblTeamMember.Where(x => x.BranchId == branchId && x.IsActive == true).Select(s => new DropDownDto<int>
             {
                 Name = s.TeamMemberName,
                 Value = s.TeamMemberId
@@ -1610,7 +1610,7 @@ namespace PolicyManagement.Services.Common
 
         public async Task<dynamic> FindTeamMemberById(int teamMemberId)
         {
-           var team =  await _dataContext.tblTeamMember.Where(w => w.IsActive && w.TeamMemberId == teamMemberId).Select(s => new{
+           var team =  await _dataContext.tblTeamMember.Where(w => w.IsActive ==  true && w.TeamMemberId == teamMemberId).Select(s => new{
                s.TeamMemberEmail1,s.TeamMemberMobile1
                }).FirstOrDefaultAsync();
            return team;

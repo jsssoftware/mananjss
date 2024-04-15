@@ -4,8 +4,9 @@ namespace PolicyManagement.Models.Report {
 
     public class ReportModel
     {
-        public short InsuranceCompanyId { get; set; }
+        public string InsuranceCompanyId { get; set; }
         public string MonthCycle { get; set; }
+        public int? DataType { get; set; }
         public string BranchId { get; set; }
     }
 

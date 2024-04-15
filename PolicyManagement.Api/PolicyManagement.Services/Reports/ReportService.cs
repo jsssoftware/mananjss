@@ -29,6 +29,7 @@ using System.Data.SqlClient;
 using ClosedXML.Excel;
 using System.Data;
 using DocumentFormat.OpenXml.EMMA;
+using DocumentFormat.OpenXml.Office2010.Ink;
 
 namespace PolicyManagement.Services.Reports
 {
@@ -73,6 +74,7 @@ namespace PolicyManagement.Services.Reports
         }
         public async Task<CommonDto<object>> GetMotorReconDownload(ReportModel reportModel)
         {
+            var dataRecon =  new List<dynamic>();
             DataTable data = new DataTable();
             data.TableName = "Recon List";
             data.Columns.Add("PolicyId", typeof(string));
@@ -112,9 +114,37 @@ namespace PolicyManagement.Services.Reports
             data.Columns.Add("PolicyEndDateOD", typeof(string));
             data.Columns.Add("ODCompany", typeof(string));
             data.Columns.Add("InsuranceCompanyODId", typeof(string));
+            if (reportModel.DataType == 1)
+            {
+                if(reportModel.InsuranceCompanyId != null)
+                {
+                    dataRecon =_dataContext.Usp_ReconDataDownloadRetailCommerceWithCom(reportModel.InsuranceCompanyId,reportModel.BranchId,reportModel.MonthCycle).ToList<dynamic>(); ;
 
-            var dataRecon = _dataContext.Usp_ReconDataDownload(reportModel.MonthCycle, reportModel.BranchId).ToList();
-            if (dataRecon.Count > 0)
+                }
+                else
+                {
+                    dataRecon = (dynamic)_dataContext.Usp_ReconDataDownloadRetailCommerceWithoutCom(reportModel.BranchId, reportModel.MonthCycle).ToList();
+                }
+
+            }
+            else if (reportModel.DataType == 2)
+            {
+                if (reportModel.InsuranceCompanyId != null)
+                {
+                    dataRecon = (dynamic)_dataContext.Usp_ReconDataDownloadWithEndrosmentCompany(reportModel.InsuranceCompanyId, reportModel.BranchId, reportModel.MonthCycle).ToList();
+                }
+                else
+                {
+                    dataRecon = (dynamic)_dataContext.Usp_ReconDataDownloadWithEndrosmentRecon(reportModel.BranchId, reportModel.MonthCycle).ToList();
+                }
+            }
+            else
+            {
+                dataRecon = (dynamic)_dataContext.Usp_ReconDataDownload(reportModel.MonthCycle, reportModel.BranchId).ToList();
+
+            }
+
+            if (dataRecon.Count>0)
             {
                 dataRecon.ForEach(x =>
                 {
@@ -124,9 +154,15 @@ namespace PolicyManagement.Services.Reports
                     , x.CommRecived, x.MonthCycle, x.MonthCycleId, x.PolicyEndDate, x.PolicyNoOD, x.PolicyPackageType, x.PolicyTermName
                     , x.PolicyStartDateOD, x.PolicyEndDateOD, x.ODCompany, x.InsuranceCompanyODId);
                 });
+                var response = await GenrateReconExcel(data, "MotorRecon.xlsx");
+                return response;
             }
-            var response = await GenrateReconExcel(data, "MotorRecon.xlsx");
-            return response;
+            return new CommonDto<object>
+            {
+                Message = "No Data",
+                IsSuccess = true,
+                Response  = "No Data"
+            };
 
         }
 
@@ -146,19 +182,64 @@ namespace PolicyManagement.Services.Reports
 
                 var rows = worksheet.RowsUsed().Skip(1); // Skip the first row (header row)
 
-                foreach (var row in rows)
+                var range = worksheet.RangeUsed();
+
+                for (int rowNum = range.FirstRow().RowNumber() + 1 ; rowNum <= range.LastRow().RowNumber(); rowNum++)
                 {
+                    var row = worksheet.Row(rowNum);
                     List<string> rowValues = new List<string>();
-                    foreach (var cell in row.Cells())
+
+                    for (int colNum = range.FirstColumn().ColumnNumber(); colNum <= range.LastColumn().ColumnNumber(); colNum++)
                     {
-                        rowValues.Add(cell.GetString());
+                        var cell = row.Cell(colNum);
+                        string cellValue = cell.GetString();
+
+                        // Check if the cell value is null or empty
+                        if (string.IsNullOrEmpty(cellValue))
+                        {
+                            // Add your default value here
+                            cellValue = null;
+                        }
+
+                        // Add the cell value to the rowValues list
+                        rowValues.Add(cellValue);
                     }
+
+                    // Add the rowValues list to allCellValues
                     allCellValues.Add(rowValues);
                 }
-                foreach(var cell in allCellValues)
+                foreach (var cell in allCellValues)
                 {
+                     
+                    int policyId = int.TryParse(cell[0], out policyId) ? policyId : default;
 
+                    tblMotorPolicyData policyData = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => f.PolicyId == policyId);
+                  
+                    short irdaCommissionReceived, irDaCommMonthCycleId, policyNoOD;
+                    decimal od, addonOD, endroseOD, grossPremium, endroseGrossPremium;
+            
+                   
+                    if (policyData != null)
+                    {
+                        endroseOD = decimal.TryParse(cell[14], out endroseOD) ? endroseOD : default;
+                        endroseGrossPremium = decimal.TryParse(cell[15], out endroseGrossPremium) ? endroseOD : default;
+                        policyData.OD = decimal.TryParse(cell[9], out od) ? od : default(decimal);
+                        policyData.AddonOD = decimal.TryParse(cell[16], out addonOD) ? addonOD : default(decimal);
+                        policyData.TotalOD =  Convert.ToInt32(od + addonOD + endroseOD);
+                        policyData.GrossPremium = decimal.TryParse(cell[10], out grossPremium) ? grossPremium : default(decimal);
+                        policyData.TotalGrossPremium = Convert.ToInt32(grossPremium + endroseGrossPremium);
+                        policyData.PolicyNo = cell[8];
+                        policyData.PolicyNoOD = cell[31];
+                        policyData.IRDACommissionReceived = short.TryParse(cell[26], out irdaCommissionReceived) ? irdaCommissionReceived : default(short);
+                        policyData.IRDACommMonthCycleId = short.TryParse(cell[27], out irDaCommMonthCycleId) ? irDaCommMonthCycleId : default(short);
+
+                        _dataContext.Entry(policyData).State = EntityState.Modified;
+                    }
+                   
                 }
+
+                await _dataContext.SaveChangesAsync();
+
 
                 return new CommonDto<object>
                 {

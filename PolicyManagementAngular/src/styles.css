@@ -189,4 +189,8 @@ tr.mat-row {
   border: 1px solid ;
 }
 
+.mat-form-field-appearance-legacy .mat-form-field-infix {
+  background-color: aliceblue !important;
+}
+
 

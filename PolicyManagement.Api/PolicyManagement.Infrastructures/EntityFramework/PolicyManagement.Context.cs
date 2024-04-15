@@ -5308,6 +5308,106 @@ public partial class DataContext : DbContext
         return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_ReconDataDownload_Result>("Usp_ReconDataDownload", policyStartDateParameter, branchIdParameter);
     }
 
+
+    public virtual ObjectResult<Usp_ReconDataDownloadRetailCommerceWithCom_Result> Usp_ReconDataDownloadRetailCommerceWithCom(string varInsureCompanyId, string varBranchId, string vardtpTo)
+    {
+
+        var varInsureCompanyIdParameter = varInsureCompanyId != null ?
+            new ObjectParameter("varInsureCompanyId", varInsureCompanyId) :
+            new ObjectParameter("varInsureCompanyId", typeof(string));
+
+
+        var varBranchIdParameter = varBranchId != null ?
+            new ObjectParameter("varBranchId", varBranchId) :
+            new ObjectParameter("varBranchId", typeof(string));
+
+
+        var vardtpToParameter = vardtpTo != null ?
+            new ObjectParameter("vardtpTo", vardtpTo) :
+            new ObjectParameter("vardtpTo", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_ReconDataDownloadRetailCommerceWithCom_Result>("Usp_ReconDataDownloadRetailCommerceWithCom", varInsureCompanyIdParameter, varBranchIdParameter, vardtpToParameter);
+    }
+
+
+    public virtual ObjectResult<Usp_ReconDataDownloadRetailCommerceWithoutCom_Result> Usp_ReconDataDownloadRetailCommerceWithoutCom(string varBranchId, string vardtpTo)
+    {
+
+        var varBranchIdParameter = varBranchId != null ?
+            new ObjectParameter("varBranchId", varBranchId) :
+            new ObjectParameter("varBranchId", typeof(string));
+
+
+        var vardtpToParameter = vardtpTo != null ?
+            new ObjectParameter("vardtpTo", vardtpTo) :
+            new ObjectParameter("vardtpTo", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_ReconDataDownloadRetailCommerceWithoutCom_Result>("Usp_ReconDataDownloadRetailCommerceWithoutCom", varBranchIdParameter, vardtpToParameter);
+    }
+
+
+    public virtual ObjectResult<Usp_ReconDataDownloadWithEndrosmentCompany_Result> Usp_ReconDataDownloadWithEndrosmentCompany(string varBranchId, string varInsureCompanyId, string vardtpTo)
+    {
+
+        var varBranchIdParameter = varBranchId != null ?
+            new ObjectParameter("varBranchId", varBranchId) :
+            new ObjectParameter("varBranchId", typeof(string));
+
+
+        var varInsureCompanyIdParameter = varInsureCompanyId != null ?
+            new ObjectParameter("varInsureCompanyId", varInsureCompanyId) :
+            new ObjectParameter("varInsureCompanyId", typeof(string));
+
+
+        var vardtpToParameter = vardtpTo != null ?
+            new ObjectParameter("vardtpTo", vardtpTo) :
+            new ObjectParameter("vardtpTo", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_ReconDataDownloadWithEndrosmentCompany_Result>("Usp_ReconDataDownloadWithEndrosmentCompany", varBranchIdParameter, varInsureCompanyIdParameter, vardtpToParameter);
+    }
+
+
+    public virtual ObjectResult<Usp_ReconDataDownloadWithEndrosmentRecon_Result> Usp_ReconDataDownloadWithEndrosmentRecon(string varBranchId, string vardtpTo)
+    {
+
+        var varBranchIdParameter = varBranchId != null ?
+            new ObjectParameter("varBranchId", varBranchId) :
+            new ObjectParameter("varBranchId", typeof(string));
+
+
+        var vardtpToParameter = vardtpTo != null ?
+            new ObjectParameter("vardtpTo", vardtpTo) :
+            new ObjectParameter("vardtpTo", typeof(string));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_ReconDataDownloadWithEndrosmentRecon_Result>("Usp_ReconDataDownloadWithEndrosmentRecon", varBranchIdParameter, vardtpToParameter);
+    }
+
+
+    public virtual ObjectResult<Usp_ReconDataDownloadWithoutCompany_Result> Usp_ReconDataDownloadWithoutCompany(string policyStartDate, string branchIds, Nullable<int> insuranceCompanyODId)
+    {
+
+        var policyStartDateParameter = policyStartDate != null ?
+            new ObjectParameter("PolicyStartDate", policyStartDate) :
+            new ObjectParameter("PolicyStartDate", typeof(string));
+
+
+        var branchIdsParameter = branchIds != null ?
+            new ObjectParameter("BranchIds", branchIds) :
+            new ObjectParameter("BranchIds", typeof(string));
+
+
+        var insuranceCompanyODIdParameter = insuranceCompanyODId.HasValue ?
+            new ObjectParameter("InsuranceCompanyODId", insuranceCompanyODId) :
+            new ObjectParameter("InsuranceCompanyODId", typeof(int));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_ReconDataDownloadWithoutCompany_Result>("Usp_ReconDataDownloadWithoutCompany", policyStartDateParameter, branchIdsParameter, insuranceCompanyODIdParameter);
+    }
+
 }
 
 }
