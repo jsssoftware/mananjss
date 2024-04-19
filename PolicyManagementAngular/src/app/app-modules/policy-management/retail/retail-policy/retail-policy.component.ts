@@ -2339,7 +2339,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     if (input === undefined)
       return;
     this._filteredInsuranceCompaniesLastOptions = this._lastInsuranceCompanies.filter(item => {
-      return item.Name.toLowerCase().indexOf(input.toLowerCase()) > -1
+      return item.Name?.toLowerCase().indexOf(input.toLowerCase()) > -1
     });
   }
 
@@ -2347,7 +2347,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     if (input === undefined)
       return;
     this._filteredInsuranceCompaniesOdOptions = this._odInsuranceCompanies.filter(item => {
-      return item.Name.toLowerCase().indexOf(input.toLowerCase()) > -1
+      return item.Name?.toLowerCase().indexOf(input.toLowerCase()) > -1
     });
   }
 
@@ -2355,7 +2355,7 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
     if (input === undefined)
       return;
     this._filteredPosOptions = this._posDatas.filter(item => {
-      return item.Name.toLowerCase().indexOf(input.toLowerCase()) > -1
+      return item.Name?.toLowerCase().indexOf(input.toLowerCase()) > -1
     });
   }
 
@@ -2848,6 +2848,12 @@ export class RetailPolicyComponent implements OnInit, AfterViewInit {
       ccustomerId: element.CustomerId,
       ccustomerUid: element.uid
     });
+
+    if (this.productPlanForm.value.planTypes == ProductPlanType.Floater && !element.SumInsuredFloater && element.SumInsuredFloater != 0) {
+      this.insuranceCustomerForm.get("csuminsuredfloater")?.enable();
+    }else{
+      this.insuranceCustomerForm.get("csuminsuredfloater")?.disable();
+    }
     if(element.SumInsuredFloater && element.SumInsuredFloater != 0){
       this.insuranceCustomerForm.get("csuminsuredfloater")?.enable();
     }
