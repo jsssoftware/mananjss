@@ -1,0 +1,344 @@
+<div>
+    <mat-card-content>
+          <mat-accordion>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Filter
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <form [formGroup]="fmotherreport" autocomplete="off"  (ngSubmit)="submit()">
+                    <hr style="margin-top: 0px;" />
+      
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Policy Inspection Date From</mat-label>
+                            <input matInput [matDatepicker]="PolicyInspectionDateFrom" formControlName="policyInspectionDateFrom">
+                            <mat-datepicker-toggle matSuffix [for]="PolicyInspectionDateFrom"></mat-datepicker-toggle>
+                            <mat-datepicker #PolicyInspectionDateFrom></mat-datepicker>
+                          </mat-form-field>
+                      </div>
+                      <div class="col-lg-6">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Policy Inspection Date To</mat-label>
+                            <input matInput [matDatepicker]="PolicyInspectionDateTo" formControlName="policyInspectionDateTo">
+                            <mat-datepicker-toggle matSuffix [for]="PolicyInspectionDateTo"></mat-datepicker-toggle>
+                            <mat-datepicker #PolicyInspectionDateTo></mat-datepicker>
+                          </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-4">
+                            <mat-form-field appearance="fill">
+                            <mat-label>Insurance Company</mat-label>
+                            <input type="text" placeholder="Insurance Company" aria-label="Insurance Company" matInput required
+                                formControlName="insuranceCompanyId" [matAutocomplete]="insuranceCompany">
+                            <mat-autocomplete autoActiveFirstOption #insuranceCompany="matAutocomplete"
+                                [displayWith]="getInsuranceCompanies.bind(this)" >
+                                <mat-option *ngFor="let insuranceCompanies of _filteredInsuranceCompaniesOptions"
+                                [value]="insuranceCompanies.Value">
+                                {{insuranceCompanies.Name}}
+                                </mat-option>
+                            </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4">
+                            <mat-form-field appearance="fill">
+                            <mat-label>Package Type</mat-label>
+                            <mat-select formControlName="packageTypeId" required (selectionChange)="getAllPolicyTerms()">
+                                <mat-option>Select</mat-option>
+                                <mat-option *ngFor="let packageType of _packageTypes" [value]="packageType.Value">
+                                {{packageType.Name}}
+                                </mat-option>
+                            </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg-4">
+                            <mat-form-field appearance="fill">
+                              <mat-label>Policy Term</mat-label>
+                              <mat-select formControlName="policyTermId" required>
+                                <mat-option [value]="">Select</mat-option>
+                                <mat-option *ngFor="let policyTerm of _getPolicyTerms" [value]="policyTerm">
+                                  {{policyTerm.PolicyTermName}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                                <mat-label>Policy Type</mat-label>
+                                <div class="col-lg-2"  >
+                                  <mat-checkbox color="primary" formControlName="policyType1" >New Vehicle</mat-checkbox>
+                                </div>
+                                <div class="col-lg-2"  >
+                                  <mat-checkbox color="primary" formControlName="policyType2"  >Same Co. Retention</mat-checkbox>
+                                </div>
+                                <div class="col-lg-2"  >
+                                  <mat-checkbox color="primary" formControlName="policyType3"  >Rollover</mat-checkbox>
+                                </div>
+                                <div class="col-lg-2"  >
+                                  <mat-checkbox color="primary" formControlName="policyType4" >Other Co. Retention</mat-checkbox>
+                                </div>
+                                <div class="col-lg-2"  >
+                                  <mat-checkbox color="primary" formControlName="policyType5"  >TP</mat-checkbox>
+                                </div>
+                    </div> 
+                    <div class="row">
+                          
+                                  <mat-label>NCB %</mat-label>
+                                  <div class="col-lg-2"  >
+                                    <mat-checkbox color="primary" formControlName="ncb1"  >0</mat-checkbox>
+                                  </div>
+                                  <div class="col-lg-2"  >
+                                    <mat-checkbox color="primary" formControlName="ncb2" >20</mat-checkbox>
+                                  </div>
+                                  <div class="col-lg-2"  >
+                                    <mat-checkbox color="primary" formControlName="ncb3" >25 above</mat-checkbox>
+                                  </div>
+                            </div>
+                          
+                    <div class="row">
+       
+                                  <mat-label>Vehicle Class</mat-label>
+                                  <div class="col-lg-2"  >
+                                    <mat-checkbox color="primary" formControlName="ncb1"  >Private</mat-checkbox>
+                                  </div>
+                                  <div class="col-lg-2"  >
+                                    <mat-checkbox color="primary" formControlName="ncb2" >GCV</mat-checkbox>
+                                  </div>
+                                  <div class="col-lg-2"  >
+                                    <mat-checkbox color="primary" formControlName="ncb3" >PCV</mat-checkbox>
+                                  </div>
+                                  <div class="col-lg-2"  >
+                                    <mat-checkbox color="primary" formControlName="ncb3" >Two Wheeler</mat-checkbox>
+                                  </div>
+                                  <div class="col-lg-2"  >
+                                    <mat-checkbox color="primary" formControlName="ncb3" >Misc.</mat-checkbox>
+                                  </div>
+                          
+                        </div>
+                    <div class="row">
+                        <div class="col-lg-4">
+
+                            <mat-form-field appearance="fill">
+                              <mat-label>Manufacturer</mat-label>
+                              <input type="text" placeholder="Manufacturer" aria-label="Manufacturer" matInput required
+                                formControlName="manufacturerId" [matAutocomplete]="autoManufacturer" (selectionChange) = "getModels()">
+                              <mat-autocomplete autoActiveFirstOption #autoManufacturer="matAutocomplete"
+                                [displayWith]="getManufacturerForBind.bind(this)" (optionSelected)="getModels()">
+                                <mat-option *ngFor="let manufacturer of _filteredManufacturerOptions"
+                                  [value]="manufacturer.Value">
+                                  {{manufacturer.Name}}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
+          
+                          </div>
+                          <div class="col-lg-4">
+                            <mat-form-field appearance="fill">
+                              <mat-label>Model</mat-label>
+                              <mat-select formControlName="modelId">
+                                <mat-option>Select</mat-option>
+                                <mat-option *ngFor="let model of _models" [value]="model.Value">{{model.Name}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-4">
+                            <mat-form-field appearance="fill">
+                              <mat-label>RTO Zone</mat-label>
+                              <mat-select formControlName="rtoZoneId" >
+                                <mat-option>Select</mat-option>
+                                <mat-option *ngFor="let rtoZone of _rtoZones" [value]="rtoZone">{{rtoZone.Name}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12">
+
+                            <mat-radio-group formControlName="businessDoneBy" >
+                                <div class="row">
+                                  <div class="col-lg-4">
+                                    Business Done By
+                                  </div>
+                                  <div class="col-lg-1">
+                                    <mat-radio-button [value]="1" color="primary" [checked]="_selectedBusinessDoneBy == 1">
+                                      All Record
+                                    </mat-radio-button>
+                                  </div>
+                                  <div class="col-lg-1">
+                                    <mat-radio-button [value]="2" color="primary" [checked]="_selectedBusinessDoneBy == 2">
+                                        All POS
+                                    </mat-radio-button>
+                                  </div>
+                                  <div class="col-lg-1">
+                                    <mat-radio-button [value]="3" color="primary" [checked]="_selectedBusinessDoneBy == 2">
+                                        All InHouse
+                                    </mat-radio-button>
+                                  </div>
+                                  <div class="col-lg-1">
+                                    <mat-radio-button [value]="4" color="primary" [checked]="_selectedBusinessDoneBy == 3">
+                                        All Joint
+                                    </mat-radio-button>
+                                  </div>
+                                  <div class="col-lg-1">
+                                    <mat-radio-button [value]="5" color="primary" [checked]="_selectedBusinessDoneBy == 3">
+                                        All FDS
+                                    </mat-radio-button>
+                                  </div>
+                                  <div class="col-lg-1">
+                                    <mat-radio-button [value]="6" color="primary" [checked]="_selectedBusinessDoneBy == 3">
+                                        All TeleCaller
+                                    </mat-radio-button>
+                                  </div>
+                                  <div class="col-lg-1">
+                                    <mat-radio-button [value]="7" color="primary" [checked]="_selectedBusinessDoneBy == 3">
+                                        All Reference
+                                    </mat-radio-button>
+                                  </div>
+                                </div>
+                              </mat-radio-group>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <mat-form-field appearance="fill">
+                            <mat-label>Pos Name</mat-label>
+                            <mat-select formControlName="posManagedBy">
+                              <mat-option>Select</mat-option>
+                              <mat-option *ngFor="let _posData of _posDatas" [value]="_posData.Value">{{_posData.Name}}
+                              </mat-option>
+                            </mat-select>                          
+                          </mat-form-field>
+                        </div>
+                        <div class="col-lg-4">
+                          <mat-form-field appearance="fill">
+                            <mat-label>Pos Managed By</mat-label>
+                            <mat-select formControlName="posManagedBy">
+                              <mat-option>Select</mat-option>
+                              <mat-option *ngFor="let reference of _references" [value]="reference.Value">{{reference.Name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-4">
+                            <mat-form-field appearance="fill">
+                              <mat-label>Reference</mat-label>
+                              <mat-select formControlName="referenceId">
+                                <mat-option>Select</mat-option>
+                                <mat-option *ngFor="let reference of _references" [value]="reference.Value">{{reference.Name}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-4">
+                            <mat-form-field appearance="fill">
+                              <mat-label>Tele Caller</mat-label>
+                              <mat-select formControlName="teleCallerId" >
+                                <mat-option>Select</mat-option>
+                                <mat-option *ngFor="let telecaller of _teleCallers" [value]="telecaller.Value">{{telecaller.Name}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-lg-4">
+                            <mat-form-field appearance="fill">
+                              <mat-label>FOS Name</mat-label>
+                              <mat-select formControlName="fosId" >
+                                <mat-option value="0">Select</mat-option>
+                                <mat-option *ngFor="let fosname of _fosNames" [value]="fosname.Value">{{fosname.Name}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12">
+
+                            <mat-radio-group formControlName="addonRiderId" >
+                                <div class="row">
+                                  <div class="col-lg-3">
+                                    Add on Plan Rider
+                                  </div>
+                                  <div class="col-lg-3">
+                                    <mat-radio-button [value]="2" color="primary" >
+                                      All
+                                    </mat-radio-button>
+                                  </div>
+                                  <div class="col-lg-3">
+                                    <mat-radio-button [value]="3" color="primary">
+                                        With Add on
+                                    </mat-radio-button>
+                                  </div>
+                                  <div class="col-lg-3">
+                                    <mat-radio-button [value]="2" color="primary">
+                                        Without Add on
+                                    </mat-radio-button>
+                                  </div>
+                                  
+                                </div>
+                              </mat-radio-group>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <button mat-flat-button color="primary" [ngStyle]="{'background-color':  '#fdcb6e'}"  type="submit">
+                           Filter
+                          </button>
+                        </div>
+                      </div>
+                  </form>
+                 
+                </mat-expansion-panel>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Selected Columns
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div class="row">
+                    <div class="col-md-12">
+                        <div class="selected-column">
+                            <h4>Available Columns</h4>
+                            <div class="row">
+                                <div class="col-md-3" *ngFor="let col of allColumns">
+                                  <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" [id]="col.name" (click)="toggle(col)" [checked]="isChecked(col)" />
+                                    <label class="custom-control-label" [attr.for]="col.name">{{ col.name }}</label>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </mat-expansion-panel>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      Mother Report
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <ngx-datatable
+                      [rows]="rows"
+                      [loadingIndicator]="loadingIndicator"
+                      [columns]="columns"
+                      class='bootstrap material'
+                      [columnMode]="'force'"
+                      [headerHeight]="50"
+                      [footerHeight]="50"
+                      [rowHeight]="50"
+                      [limit]="20"
+                      [scrollbarV]="true" [scrollbarH]="true"
+                      [reorderable]="true"  
+                    >
+                    </ngx-datatable>                        </div>
+                  </div>
+                </mat-expansion-panel>
+          </mat-accordion>
+    </mat-card-content>
+</div>

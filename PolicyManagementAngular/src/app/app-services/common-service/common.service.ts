@@ -204,5 +204,6 @@ export class CommonService extends ICommonService {
     getManufactureByVehicleClassType = (vehicleclasstypeId : number): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.ManufacturersVehicleClassType}/${vehicleclasstypeId}`);
     getState = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.State}`);
     getMonthCycle = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.MonthCycle}`);
+    getAllPolicyTerms = (policyPackageTypeId : number): Observable<any[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.AllPolicyTerms}/${policyPackageTypeId}`);
 
 }

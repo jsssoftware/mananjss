@@ -21,5 +21,9 @@ namespace PolicyManagement.Api.Controllers.Reports
         [HttpPost]
         public async Task<IHttpActionResult> GetMotorReconUpload(UploadReconFile uploadReconFile) => Json(await _reportService.GetMotorReconUpload(uploadReconFile));
 
+        [Route("motormotherreport")]
+        [HttpPost]
+        public async Task<IHttpActionResult> GetMotorMotherReport(MotherReport motherReport) => Json(await _reportService.GetMotorMotherReport(motherReport));
+
     }
 }

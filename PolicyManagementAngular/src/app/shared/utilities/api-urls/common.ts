@@ -85,6 +85,5 @@ export class Common {
     public static readonly ManufacturersVehicleClassType = "api/common/manufacturersVehicleclasstype";
     public static readonly State = "api/common/state";
     public static readonly MonthCycle = "api/common/monthcycle";
-
-
+    public static readonly AllPolicyTerms = "api/common/get-all-policyTerms";
 }

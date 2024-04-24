@@ -43,6 +43,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { HasClaimDirective } from '../directives/has-claim.directive';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
     declarations: [
@@ -93,7 +94,8 @@ import { HasClaimDirective } from '../directives/has-claim.directive';
         ScrollingModule,
         MatDatepickerModule,
         MatMomentDateModule,
-        HasClaimDirective
+        HasClaimDirective,
+        NgxDatatableModule
     ]
 })
 export class MaterialModule { }

@@ -138,6 +138,8 @@
         <EntityTypeShape EntityType="PolicyManagerModel.tblVehicleClassType" Width="1.5" PointX="34.375" PointY="36.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblManufacturer" Width="1.5" PointX="5.75" PointY="0.75" />
         <AssociationConnector Association="PolicyManagerModel.FK_tblModal_tblManufacturer" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblRefrenceSource" Width="1.5" PointX="37.375" PointY="0.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.ReconDataDownload" Width="1.5" PointX="16.375" PointY="37.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

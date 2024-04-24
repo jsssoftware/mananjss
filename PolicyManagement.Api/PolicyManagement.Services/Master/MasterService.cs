@@ -29,6 +29,7 @@ using PolicyManagement.Services.Master.Interface;
 using PolicyManagement.Dtos.Customer;
 using PolicyManagement.Models.Master;
 using System.Numerics;
+using System.Data.Entity.Infrastructure;
 
 namespace PolicyManagement.Services.Master
 {
@@ -60,6 +61,7 @@ namespace PolicyManagement.Services.Master
         {
             try
             {
+
                 insuranceCompanyBranch.CreatedBy = baseModel.LoginUserId;
                 insuranceCompanyBranch.CreatedDateTime = DateTime.Now;
                 _dataContext.tblInsuranceCompanyBranch.AddOrUpdate(insuranceCompanyBranch);
@@ -70,6 +72,15 @@ namespace PolicyManagement.Services.Master
                     IsSuccess = true,
                     Message = $"Insurance Branch is created or edited successfully",
                     // Response = users
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
                 };
             }
             catch (Exception ex)
@@ -130,6 +141,15 @@ namespace PolicyManagement.Services.Master
                     // Response = users
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -157,6 +177,15 @@ namespace PolicyManagement.Services.Master
                     IsSuccess = true,
                     Message = $"POS is created or edited successfully",
                     // Response = users
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
                 };
             }
             catch (Exception ex)
@@ -201,6 +230,15 @@ namespace PolicyManagement.Services.Master
                     // Response = users
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -240,6 +278,15 @@ namespace PolicyManagement.Services.Master
                     IsSuccess = true,
                     Message = $"Insurance Company is created or edited successfully",
                     // Response = users
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
                 };
             }
             catch (Exception ex)
@@ -283,6 +330,15 @@ namespace PolicyManagement.Services.Master
                     // Response = users
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -323,6 +379,15 @@ namespace PolicyManagement.Services.Master
                     // Response = users
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -358,6 +423,15 @@ namespace PolicyManagement.Services.Master
                     IsSuccess = true,
                     Message = $"Add on Plan is created or edited successfully",
                     // Response = users
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
                 };
             }
             catch (Exception ex)
@@ -400,6 +474,15 @@ namespace PolicyManagement.Services.Master
                     // Response = users
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -438,6 +521,15 @@ namespace PolicyManagement.Services.Master
                     IsSuccess = true,
                     Message = $"Model is created or edited successfully",
                     // Response = users
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
                 };
             }
             catch (Exception ex)
@@ -577,6 +669,15 @@ namespace PolicyManagement.Services.Master
                     // Response = users
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -618,6 +719,15 @@ namespace PolicyManagement.Services.Master
                     // Response = users
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -655,6 +765,15 @@ namespace PolicyManagement.Services.Master
                 {
                     IsSuccess = true,
                     Message = $"City is created or edited successfully",
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
                 };
             }
             catch (Exception ex)
@@ -696,6 +815,15 @@ namespace PolicyManagement.Services.Master
                     Message = $"Product is created or edited successfully",
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -735,6 +863,15 @@ namespace PolicyManagement.Services.Master
                     Message = $"Inspection Company is created or edited successfully",
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -772,6 +909,15 @@ namespace PolicyManagement.Services.Master
                 {
                     IsSuccess = true,
                     Message = $"Pos Type is created or edited successfully",
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
                 };
             }
             catch (Exception ex)
@@ -814,6 +960,15 @@ namespace PolicyManagement.Services.Master
                     Message = $"Pos Category is created or edited successfully",
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -852,6 +1007,15 @@ namespace PolicyManagement.Services.Master
                 {
                     IsSuccess = true,
                     Message = $"RTO Zone is created or edited successfully",
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
                 };
             }
             catch (Exception ex)
@@ -894,6 +1058,15 @@ namespace PolicyManagement.Services.Master
                     Message = $"Finance is created or edited successfully",
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -922,6 +1095,15 @@ namespace PolicyManagement.Services.Master
                 {
                     IsSuccess = true,
                     Message = $"Indusry is created or edited successfully",
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
                 };
             }
             catch (Exception ex)
@@ -964,6 +1146,15 @@ namespace PolicyManagement.Services.Master
                     Message = $"Department is created or edited successfully",
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -1001,6 +1192,15 @@ namespace PolicyManagement.Services.Master
                 {
                     IsSuccess = true,
                     Message = $"Designation is created or edited successfully",
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
                 };
             }
             catch (Exception ex)
@@ -1042,6 +1242,15 @@ namespace PolicyManagement.Services.Master
                     Message = $"Profession is created or edited successfully",
                 };
             }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
             catch (Exception ex)
             {
                 log.Error(ex);
@@ -1080,6 +1289,15 @@ namespace PolicyManagement.Services.Master
                 {
                     IsSuccess = true,
                     Message = $"Occupation is created or edited successfully",
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
                 };
             }
             catch (Exception ex)

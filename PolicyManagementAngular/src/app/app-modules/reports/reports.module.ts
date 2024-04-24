@@ -11,13 +11,15 @@ import { ReconuploadComponent } from './motor/reconupload/reconupload.component'
 import { RecondownloadComponent } from './motor/recondownload/recondownload.component';
 import { RecondownloadRetailComponent } from './retail/recondownload/recondownload.component';
 import { ReconuploadRetailComponent } from './retail/reconupload/reconupload.component';
+import { MotherreportComponent } from './motor/motherreport/motherreport.component';
 
 @NgModule({
   declarations: [
     ReconuploadComponent,
     RecondownloadComponent,
     RecondownloadRetailComponent,
-    ReconuploadRetailComponent
+    ReconuploadRetailComponent,
+    MotherreportComponent
   ],
 
   imports: [

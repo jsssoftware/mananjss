@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/auth-guard/auth.guard';
+import { MotherreportComponent } from './motor/motherreport/motherreport.component';
 import { RecondownloadComponent } from './motor/recondownload/recondownload.component';
 import { ReconuploadComponent } from './motor/reconupload/reconupload.component';
 import { RecondownloadRetailComponent } from './retail/recondownload/recondownload.component';
@@ -25,6 +26,10 @@ const routes: Routes = [
             {
                 path: 'reconuploadretail',
                 component: ReconuploadRetailComponent,
+            },
+            {
+                path: 'motherreportmotor',
+                component: MotherreportComponent,
             },
           
         ]

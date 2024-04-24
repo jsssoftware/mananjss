@@ -123,7 +123,7 @@ namespace PolicyManagement.Services.Reports
                 }
                 else
                 {
-                    dataRecon = (dynamic)_dataContext.Usp_ReconDataDownloadRetailCommerceWithoutCom(reportModel.BranchId, reportModel.MonthCycle).ToList();
+                    dataRecon = _dataContext.Usp_ReconDataDownloadRetailCommerceWithoutCom(reportModel.BranchId, reportModel.MonthCycle).ToList<dynamic>(); ;
                 }
 
             }
@@ -131,16 +131,16 @@ namespace PolicyManagement.Services.Reports
             {
                 if (reportModel.InsuranceCompanyId != null)
                 {
-                    dataRecon = (dynamic)_dataContext.Usp_ReconDataDownloadWithEndrosmentCompany(reportModel.InsuranceCompanyId, reportModel.BranchId, reportModel.MonthCycle).ToList();
+                    dataRecon = _dataContext.Usp_ReconDataDownloadWithEndrosmentCompany(reportModel.InsuranceCompanyId, reportModel.BranchId, reportModel.MonthCycle).ToList<dynamic>(); ;
                 }
                 else
                 {
-                    dataRecon = (dynamic)_dataContext.Usp_ReconDataDownloadWithEndrosmentRecon(reportModel.BranchId, reportModel.MonthCycle).ToList();
+                    dataRecon = _dataContext.Usp_ReconDataDownloadWithEndrosmentRecon(reportModel.BranchId, reportModel.MonthCycle).ToList<dynamic>(); ;
                 }
             }
             else
             {
-                dataRecon = (dynamic)_dataContext.Usp_ReconDataDownload(reportModel.MonthCycle, reportModel.BranchId).ToList();
+                dataRecon = _dataContext.Usp_ReconDataDownload(reportModel.MonthCycle, reportModel.BranchId).ToList<dynamic>();
 
             }
 
@@ -248,7 +248,21 @@ namespace PolicyManagement.Services.Reports
 
             }
 
+        }
 
+        public async Task<CommonDto<object>> GetMotorMotherReport(MotherReport motherReport)
+        {
+
+            var dateto = DateTime.ParseExact(motherReport.PolicyInspectionDateTo, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            var datefrom = DateTime.ParseExact(motherReport.PolicyInspectionDateFrom, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+            var dataRecon = _dataContext.usp_GetMotorPolicyData(motherReport.BranchId, dateto, datefrom, motherReport.InsuranceCompanyId,motherReport.PackageTypeId,motherReport.ManufacturerId,motherReport.ModelId,motherReport.RtoZoneId, motherReport.PosNameId, motherReport.BusinessDoneBy,motherReport.AddonRideId,motherReport.Ncb1,motherReport.Ncb2,motherReport.Ncb3,motherReport.PolicyType1,motherReport.PolicyType2,motherReport.PolicyType3,motherReport.PolicyType4,motherReport.PolicyType5,0,0,0,0 ).ToList<dynamic>();
+            return new CommonDto<object>
+            {
+                Message = "No Data",
+                IsSuccess = true,
+                Response = dataRecon
+            };
 
         }
     }

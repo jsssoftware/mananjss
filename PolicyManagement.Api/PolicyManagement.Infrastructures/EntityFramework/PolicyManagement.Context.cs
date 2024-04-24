@@ -283,6 +283,10 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<tblManufacturer> tblManufacturers { get; set; }
 
+    public virtual DbSet<tblRefrenceSource> tblRefrenceSource { get; set; }
+
+    public virtual DbSet<ReconDataDownload> ReconDataDownload { get; set; }
+
 
     public virtual int GetOtherHelathPolicy(Nullable<int> policyId, Nullable<int> customerID)
     {
@@ -5406,6 +5410,128 @@ public partial class DataContext : DbContext
 
 
         return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_ReconDataDownloadWithoutCompany_Result>("Usp_ReconDataDownloadWithoutCompany", policyStartDateParameter, branchIdsParameter, insuranceCompanyODIdParameter);
+    }
+
+
+    public virtual ObjectResult<usp_GetMotorPolicyData_Result> usp_GetMotorPolicyData(Nullable<int> varBranchId, Nullable<System.DateTime> globalvardtpIssueFrom, Nullable<System.DateTime> globalvardtpIssueTo, Nullable<int> globalvarInsureCompanyId, Nullable<int> globalvarPolicyPackageTypeId, Nullable<int> globalvarManufacturerId, Nullable<int> globalvarModelId, Nullable<int> globalvarRTOZoneId, Nullable<int> globalvarDSAId, Nullable<int> globalvarDSACategoryId, Nullable<int> globalvaroptBusinessDoneId, Nullable<int> globalvarAddonId, Nullable<int> tempvarNCB1, Nullable<int> tempvarNCB2, Nullable<int> tempvarNCB3, Nullable<int> tempvarPolicyType1, Nullable<int> tempvarPolicyType2, Nullable<int> tempvarPolicyType3, Nullable<int> tempvarPolicyType4, Nullable<int> tempvarPolicyType5, Nullable<int> tempvarIsClaimed, Nullable<int> tempvarIsShortTerm, Nullable<int> globalvarPolicyStatus)
+    {
+
+        var varBranchIdParameter = varBranchId.HasValue ?
+            new ObjectParameter("varBranchId", varBranchId) :
+            new ObjectParameter("varBranchId", typeof(int));
+
+
+        var globalvardtpIssueFromParameter = globalvardtpIssueFrom.HasValue ?
+            new ObjectParameter("GlobalvardtpIssueFrom", globalvardtpIssueFrom) :
+            new ObjectParameter("GlobalvardtpIssueFrom", typeof(System.DateTime));
+
+
+        var globalvardtpIssueToParameter = globalvardtpIssueTo.HasValue ?
+            new ObjectParameter("GlobalvardtpIssueTo", globalvardtpIssueTo) :
+            new ObjectParameter("GlobalvardtpIssueTo", typeof(System.DateTime));
+
+
+        var globalvarInsureCompanyIdParameter = globalvarInsureCompanyId.HasValue ?
+            new ObjectParameter("GlobalvarInsureCompanyId", globalvarInsureCompanyId) :
+            new ObjectParameter("GlobalvarInsureCompanyId", typeof(int));
+
+
+        var globalvarPolicyPackageTypeIdParameter = globalvarPolicyPackageTypeId.HasValue ?
+            new ObjectParameter("GlobalvarPolicyPackageTypeId", globalvarPolicyPackageTypeId) :
+            new ObjectParameter("GlobalvarPolicyPackageTypeId", typeof(int));
+
+
+        var globalvarManufacturerIdParameter = globalvarManufacturerId.HasValue ?
+            new ObjectParameter("GlobalvarManufacturerId", globalvarManufacturerId) :
+            new ObjectParameter("GlobalvarManufacturerId", typeof(int));
+
+
+        var globalvarModelIdParameter = globalvarModelId.HasValue ?
+            new ObjectParameter("GlobalvarModelId", globalvarModelId) :
+            new ObjectParameter("GlobalvarModelId", typeof(int));
+
+
+        var globalvarRTOZoneIdParameter = globalvarRTOZoneId.HasValue ?
+            new ObjectParameter("GlobalvarRTOZoneId", globalvarRTOZoneId) :
+            new ObjectParameter("GlobalvarRTOZoneId", typeof(int));
+
+
+        var globalvarDSAIdParameter = globalvarDSAId.HasValue ?
+            new ObjectParameter("GlobalvarDSAId", globalvarDSAId) :
+            new ObjectParameter("GlobalvarDSAId", typeof(int));
+
+
+        var globalvarDSACategoryIdParameter = globalvarDSACategoryId.HasValue ?
+            new ObjectParameter("GlobalvarDSACategoryId", globalvarDSACategoryId) :
+            new ObjectParameter("GlobalvarDSACategoryId", typeof(int));
+
+
+        var globalvaroptBusinessDoneIdParameter = globalvaroptBusinessDoneId.HasValue ?
+            new ObjectParameter("GlobalvaroptBusinessDoneId", globalvaroptBusinessDoneId) :
+            new ObjectParameter("GlobalvaroptBusinessDoneId", typeof(int));
+
+
+        var globalvarAddonIdParameter = globalvarAddonId.HasValue ?
+            new ObjectParameter("GlobalvarAddonId", globalvarAddonId) :
+            new ObjectParameter("GlobalvarAddonId", typeof(int));
+
+
+        var tempvarNCB1Parameter = tempvarNCB1.HasValue ?
+            new ObjectParameter("tempvarNCB1", tempvarNCB1) :
+            new ObjectParameter("tempvarNCB1", typeof(int));
+
+
+        var tempvarNCB2Parameter = tempvarNCB2.HasValue ?
+            new ObjectParameter("tempvarNCB2", tempvarNCB2) :
+            new ObjectParameter("tempvarNCB2", typeof(int));
+
+
+        var tempvarNCB3Parameter = tempvarNCB3.HasValue ?
+            new ObjectParameter("tempvarNCB3", tempvarNCB3) :
+            new ObjectParameter("tempvarNCB3", typeof(int));
+
+
+        var tempvarPolicyType1Parameter = tempvarPolicyType1.HasValue ?
+            new ObjectParameter("tempvarPolicyType1", tempvarPolicyType1) :
+            new ObjectParameter("tempvarPolicyType1", typeof(int));
+
+
+        var tempvarPolicyType2Parameter = tempvarPolicyType2.HasValue ?
+            new ObjectParameter("tempvarPolicyType2", tempvarPolicyType2) :
+            new ObjectParameter("tempvarPolicyType2", typeof(int));
+
+
+        var tempvarPolicyType3Parameter = tempvarPolicyType3.HasValue ?
+            new ObjectParameter("tempvarPolicyType3", tempvarPolicyType3) :
+            new ObjectParameter("tempvarPolicyType3", typeof(int));
+
+
+        var tempvarPolicyType4Parameter = tempvarPolicyType4.HasValue ?
+            new ObjectParameter("tempvarPolicyType4", tempvarPolicyType4) :
+            new ObjectParameter("tempvarPolicyType4", typeof(int));
+
+
+        var tempvarPolicyType5Parameter = tempvarPolicyType5.HasValue ?
+            new ObjectParameter("tempvarPolicyType5", tempvarPolicyType5) :
+            new ObjectParameter("tempvarPolicyType5", typeof(int));
+
+
+        var tempvarIsClaimedParameter = tempvarIsClaimed.HasValue ?
+            new ObjectParameter("tempvarIsClaimed", tempvarIsClaimed) :
+            new ObjectParameter("tempvarIsClaimed", typeof(int));
+
+
+        var tempvarIsShortTermParameter = tempvarIsShortTerm.HasValue ?
+            new ObjectParameter("tempvarIsShortTerm", tempvarIsShortTerm) :
+            new ObjectParameter("tempvarIsShortTerm", typeof(int));
+
+
+        var globalvarPolicyStatusParameter = globalvarPolicyStatus.HasValue ?
+            new ObjectParameter("GlobalvarPolicyStatus", globalvarPolicyStatus) :
+            new ObjectParameter("GlobalvarPolicyStatus", typeof(int));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetMotorPolicyData_Result>("usp_GetMotorPolicyData", varBranchIdParameter, globalvardtpIssueFromParameter, globalvardtpIssueToParameter, globalvarInsureCompanyIdParameter, globalvarPolicyPackageTypeIdParameter, globalvarManufacturerIdParameter, globalvarModelIdParameter, globalvarRTOZoneIdParameter, globalvarDSAIdParameter, globalvarDSACategoryIdParameter, globalvaroptBusinessDoneIdParameter, globalvarAddonIdParameter, tempvarNCB1Parameter, tempvarNCB2Parameter, tempvarNCB3Parameter, tempvarPolicyType1Parameter, tempvarPolicyType2Parameter, tempvarPolicyType3Parameter, tempvarPolicyType4Parameter, tempvarPolicyType5Parameter, tempvarIsClaimedParameter, tempvarIsShortTermParameter, globalvarPolicyStatusParameter);
     }
 
 }

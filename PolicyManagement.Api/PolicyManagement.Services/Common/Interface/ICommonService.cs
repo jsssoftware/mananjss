@@ -100,6 +100,6 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindManufacturersVehicleclassType(int VehileClasstypeId);
         Task<List<DropDownDto<int>>> FindState();
         Task<List<tblMonthCycle>> FindMonthCycle();
-
+        Task<List<tblPolicyTerm>> GetPolicyTerms(short policyPackagetypeId);
     }
 }

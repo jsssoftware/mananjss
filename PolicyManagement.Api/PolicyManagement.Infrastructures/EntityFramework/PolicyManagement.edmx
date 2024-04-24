@@ -388,6 +388,12 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblCompanyDetails">
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -1653,6 +1659,15 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PolicyManagerQA.dbo.tblRefrenceSource' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="tblRefrenceSource">
+          <Key>
+            <PropertyRef Name="SourceId" />
+          </Key>
+          <Property Name="SourceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SourceName" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="tblRelationShip">
           <Key>
             <PropertyRef Name="RelationShipId" />
@@ -2007,6 +2022,13 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblVersion">
+          <Property Name="Major" Type="tinyint" />
+          <Property Name="Minor" Type="tinyint" />
+          <Property Name="Revision" Type="tinyint" />
+        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -2125,6 +2147,51 @@
           <Property Name="CreatedTime" Type="smalldatetime" />
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'PolicyManagerQA.dbo.ReconDataDownload' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="ReconDataDownload">
+          <Key>
+            <PropertyRef Name="CommRecived" />
+            <PropertyRef Name="PolicyTermName" />
+          </Key>
+          <Property Name="PolicyId" Type="int" />
+          <Property Name="ControlNo" Type="nvarchar" MaxLength="12" />
+          <Property Name="TPPremium" Type="decimal" Precision="30" Scale="2" />
+          <Property Name="RegistrationDate" Type="smalldatetime" />
+          <Property Name="MakeYear" Type="nvarchar" MaxLength="4" />
+          <Property Name="InsuranceCompanyName" Type="nvarchar" MaxLength="100" />
+          <Property Name="NameInPolicy" Type="nvarchar" MaxLength="100" />
+          <Property Name="PolicyNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="OD" Type="decimal" Precision="30" Scale="2" />
+          <Property Name="GrossPremium" Type="decimal" Precision="30" Scale="2" />
+          <Property Name="EndorsementReason" Type="nvarchar" MaxLength="100" />
+          <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RegistrationNo" Type="nvarchar" MaxLength="12" />
+          <Property Name="EndorseOD" Type="decimal" Precision="30" Scale="2" />
+          <Property Name="TotalOD" Type="int" />
+          <Property Name="AddonOD" Type="decimal" Precision="30" Scale="2" />
+          <Property Name="EndorseGrossPremium" Type="decimal" Precision="30" Scale="2" />
+          <Property Name="TotalGrossPremium" Type="int" />
+          <Property Name="EngineNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="ChassisNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="VehicleClass" Type="nvarchar" MaxLength="40" />
+          <Property Name="PolicyStatus" Type="nvarchar" MaxLength="50" />
+          <Property Name="PolicyType" Type="nvarchar" MaxLength="50" />
+          <Property Name="PolicyStartDate" Type="smalldatetime" />
+          <Property Name="PolicyTypeId" Type="smallint" />
+          <Property Name="BusinessDoneBy" Type="nvarchar" MaxLength="20" />
+          <Property Name="CommRecived" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="MonthCycle" Type="nvarchar" MaxLength="30" />
+          <Property Name="MonthCycleId" Type="int" />
+          <Property Name="PolicyEndDate" Type="smalldatetime" />
+          <Property Name="PolicyNoOD" Type="nvarchar" MaxLength="50" />
+          <Property Name="PolicyPackageType" Type="nvarchar" MaxLength="50" />
+          <Property Name="PolicyTermName" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="PolicyStartDateOD" Type="smalldatetime" />
+          <Property Name="PolicyEndDateOD" Type="smalldatetime" />
+          <Property Name="ODCompany" Type="nvarchar" MaxLength="100" />
+          <Property Name="InsuranceCompanyODId" Type="smallint" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'PolicyManagerQA.dbo.SearchClaims' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2561,6 +2628,31 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
         <Function Name="Usp_GetManufacturer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="int" Mode="In" />
         </Function>
+        <Function Name="usp_GetMotorPolicyData" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="varBranchId" Type="int" Mode="In" />
+          <Parameter Name="GlobalvardtpIssueFrom" Type="date" Mode="In" />
+          <Parameter Name="GlobalvardtpIssueTo" Type="date" Mode="In" />
+          <Parameter Name="GlobalvarInsureCompanyId" Type="int" Mode="In" />
+          <Parameter Name="GlobalvarPolicyPackageTypeId" Type="int" Mode="In" />
+          <Parameter Name="GlobalvarManufacturerId" Type="int" Mode="In" />
+          <Parameter Name="GlobalvarModelId" Type="int" Mode="In" />
+          <Parameter Name="GlobalvarRTOZoneId" Type="int" Mode="In" />
+          <Parameter Name="GlobalvarDSAId" Type="int" Mode="In" />
+          <Parameter Name="GlobalvarDSACategoryId" Type="int" Mode="In" />
+          <Parameter Name="GlobalvaroptBusinessDoneId" Type="int" Mode="In" />
+          <Parameter Name="GlobalvarAddonId" Type="int" Mode="In" />
+          <Parameter Name="tempvarNCB1" Type="int" Mode="In" />
+          <Parameter Name="tempvarNCB2" Type="int" Mode="In" />
+          <Parameter Name="tempvarNCB3" Type="int" Mode="In" />
+          <Parameter Name="tempvarPolicyType1" Type="int" Mode="In" />
+          <Parameter Name="tempvarPolicyType2" Type="int" Mode="In" />
+          <Parameter Name="tempvarPolicyType3" Type="int" Mode="In" />
+          <Parameter Name="tempvarPolicyType4" Type="int" Mode="In" />
+          <Parameter Name="tempvarPolicyType5" Type="int" Mode="In" />
+          <Parameter Name="tempvarIsClaimed" Type="int" Mode="In" />
+          <Parameter Name="tempvarIsShortTerm" Type="int" Mode="In" />
+          <Parameter Name="GlobalvarPolicyStatus" Type="int" Mode="In" />
+        </Function>
         <Function Name="Usp_InspectionByPolicyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="policyId" Type="int" Mode="In" />
         </Function>
@@ -2957,6 +3049,53 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySet Name="tblVoucherType" EntityType="Self.tblVoucherType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblVoyageOverseasType" EntityType="Self.tblVoyageOverseasType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblVoyageType" EntityType="Self.tblVoyageType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblRefrenceSource" EntityType="Self.tblRefrenceSource" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [tblRefrenceSource].[SourceId] AS [SourceId], 
+    [tblRefrenceSource].[SourceName] AS [SourceName]
+    FROM [dbo].[tblRefrenceSource] AS [tblRefrenceSource]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="ReconDataDownload" EntityType="Self.ReconDataDownload" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [ReconDataDownload].[PolicyId] AS [PolicyId], 
+    [ReconDataDownload].[ControlNo] AS [ControlNo], 
+    [ReconDataDownload].[TPPremium] AS [TPPremium], 
+    [ReconDataDownload].[RegistrationDate] AS [RegistrationDate], 
+    [ReconDataDownload].[MakeYear] AS [MakeYear], 
+    [ReconDataDownload].[InsuranceCompanyName] AS [InsuranceCompanyName], 
+    [ReconDataDownload].[NameInPolicy] AS [NameInPolicy], 
+    [ReconDataDownload].[PolicyNo] AS [PolicyNo], 
+    [ReconDataDownload].[OD] AS [OD], 
+    [ReconDataDownload].[GrossPremium] AS [GrossPremium], 
+    [ReconDataDownload].[EndorsementReason] AS [EndorsementReason], 
+    [ReconDataDownload].[ModelName] AS [ModelName], 
+    [ReconDataDownload].[RegistrationNo] AS [RegistrationNo], 
+    [ReconDataDownload].[EndorseOD] AS [EndorseOD], 
+    [ReconDataDownload].[TotalOD] AS [TotalOD], 
+    [ReconDataDownload].[AddonOD] AS [AddonOD], 
+    [ReconDataDownload].[EndorseGrossPremium] AS [EndorseGrossPremium], 
+    [ReconDataDownload].[TotalGrossPremium] AS [TotalGrossPremium], 
+    [ReconDataDownload].[EngineNo] AS [EngineNo], 
+    [ReconDataDownload].[ChassisNo] AS [ChassisNo], 
+    [ReconDataDownload].[VehicleClass] AS [VehicleClass], 
+    [ReconDataDownload].[PolicyStatus] AS [PolicyStatus], 
+    [ReconDataDownload].[PolicyType] AS [PolicyType], 
+    [ReconDataDownload].[PolicyStartDate] AS [PolicyStartDate], 
+    [ReconDataDownload].[PolicyTypeId] AS [PolicyTypeId], 
+    [ReconDataDownload].[BusinessDoneBy] AS [BusinessDoneBy], 
+    [ReconDataDownload].[CommRecived] AS [CommRecived], 
+    [ReconDataDownload].[MonthCycle] AS [MonthCycle], 
+    [ReconDataDownload].[MonthCycleId] AS [MonthCycleId], 
+    [ReconDataDownload].[PolicyEndDate] AS [PolicyEndDate], 
+    [ReconDataDownload].[PolicyNoOD] AS [PolicyNoOD], 
+    [ReconDataDownload].[PolicyPackageType] AS [PolicyPackageType], 
+    [ReconDataDownload].[PolicyTermName] AS [PolicyTermName], 
+    [ReconDataDownload].[PolicyStartDateOD] AS [PolicyStartDateOD], 
+    [ReconDataDownload].[PolicyEndDateOD] AS [PolicyEndDateOD], 
+    [ReconDataDownload].[ODCompany] AS [ODCompany], 
+    [ReconDataDownload].[InsuranceCompanyODId] AS [InsuranceCompanyODId]
+    FROM [dbo].[ReconDataDownload] AS [ReconDataDownload]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="SearchClaims" EntityType="Self.SearchClaims" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [SearchClaims].[ClaimsId] AS [ClaimsId], 
@@ -4481,6 +4620,33 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
             <Parameter Name="PolicyStartDate" Mode="In" Type="String" />
             <Parameter Name="BranchIds" Mode="In" Type="String" />
             <Parameter Name="InsuranceCompanyODId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="tblRefrenceSource" EntityType="PolicyManagerModel.tblRefrenceSource" />
+          <EntitySet Name="ReconDataDownload" EntityType="PolicyManagerModel.ReconDataDownload" />
+          <FunctionImport Name="usp_GetMotorPolicyData" ReturnType="Collection(PolicyManagerModel.usp_GetMotorPolicyData_Result)">
+            <Parameter Name="varBranchId" Mode="In" Type="Int32" />
+            <Parameter Name="GlobalvardtpIssueFrom" Mode="In" Type="DateTime" />
+            <Parameter Name="GlobalvardtpIssueTo" Mode="In" Type="DateTime" />
+            <Parameter Name="GlobalvarInsureCompanyId" Mode="In" Type="Int32" />
+            <Parameter Name="GlobalvarPolicyPackageTypeId" Mode="In" Type="Int32" />
+            <Parameter Name="GlobalvarManufacturerId" Mode="In" Type="Int32" />
+            <Parameter Name="GlobalvarModelId" Mode="In" Type="Int32" />
+            <Parameter Name="GlobalvarRTOZoneId" Mode="In" Type="Int32" />
+            <Parameter Name="GlobalvarDSAId" Mode="In" Type="Int32" />
+            <Parameter Name="GlobalvarDSACategoryId" Mode="In" Type="Int32" />
+            <Parameter Name="GlobalvaroptBusinessDoneId" Mode="In" Type="Int32" />
+            <Parameter Name="GlobalvarAddonId" Mode="In" Type="Int32" />
+            <Parameter Name="tempvarNCB1" Mode="In" Type="Int32" />
+            <Parameter Name="tempvarNCB2" Mode="In" Type="Int32" />
+            <Parameter Name="tempvarNCB3" Mode="In" Type="Int32" />
+            <Parameter Name="tempvarPolicyType1" Mode="In" Type="Int32" />
+            <Parameter Name="tempvarPolicyType2" Mode="In" Type="Int32" />
+            <Parameter Name="tempvarPolicyType3" Mode="In" Type="Int32" />
+            <Parameter Name="tempvarPolicyType4" Mode="In" Type="Int32" />
+            <Parameter Name="tempvarPolicyType5" Mode="In" Type="Int32" />
+            <Parameter Name="tempvarIsClaimed" Mode="In" Type="Int32" />
+            <Parameter Name="tempvarIsShortTerm" Mode="In" Type="Int32" />
+            <Parameter Name="GlobalvarPolicyStatus" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="GetPolicyFamilyDtl_Result">
@@ -7290,6 +7456,166 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Type="Int16" Name="InsuranceCompanyODId" Nullable="true" />
           <Property Type="String" Name="PolicyPackageType" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="tblRefrenceSource">
+          <Key>
+            <PropertyRef Name="SourceId" />
+          </Key>
+          <Property Name="SourceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SourceName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="ReconDataDownload">
+          <Key>
+            <PropertyRef Name="CommRecived" />
+            <PropertyRef Name="PolicyTermName" />
+          </Key>
+          <Property Name="PolicyId" Type="Int32" />
+          <Property Name="ControlNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="TPPremium" Type="Decimal" Precision="30" Scale="2" />
+          <Property Name="RegistrationDate" Type="DateTime" Precision="0" />
+          <Property Name="MakeYear" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="InsuranceCompanyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NameInPolicy" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OD" Type="Decimal" Precision="30" Scale="2" />
+          <Property Name="GrossPremium" Type="Decimal" Precision="30" Scale="2" />
+          <Property Name="EndorsementReason" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationNo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="EndorseOD" Type="Decimal" Precision="30" Scale="2" />
+          <Property Name="TotalOD" Type="Int32" />
+          <Property Name="AddonOD" Type="Decimal" Precision="30" Scale="2" />
+          <Property Name="EndorseGrossPremium" Type="Decimal" Precision="30" Scale="2" />
+          <Property Name="TotalGrossPremium" Type="Int32" />
+          <Property Name="EngineNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ChassisNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="VehicleClass" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyStartDate" Type="DateTime" Precision="0" />
+          <Property Name="PolicyTypeId" Type="Int16" />
+          <Property Name="BusinessDoneBy" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CommRecived" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="MonthCycle" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="MonthCycleId" Type="Int32" />
+          <Property Name="PolicyEndDate" Type="DateTime" Precision="0" />
+          <Property Name="PolicyNoOD" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyPackageType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyTermName" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyStartDateOD" Type="DateTime" Precision="0" />
+          <Property Name="PolicyEndDateOD" Type="DateTime" Precision="0" />
+          <Property Name="ODCompany" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="InsuranceCompanyODId" Type="Int16" />
+        </EntityType>
+        <ComplexType Name="usp_GetMotorPolicyData_Result">
+          <Property Type="String" Name="controlno" Nullable="false" MaxLength="12" />
+          <Property Type="Int16" Name="loyaltycounter" Nullable="true" />
+          <Property Type="Int32" Name="POSId" Nullable="false" />
+          <Property Type="String" Name="customercode" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="InsuranceCompanyName" Nullable="true" MaxLength="100" />
+          <Property Type="Int16" Name="policytypeid" Nullable="false" />
+          <Property Type="String" Name="policytype" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="nameinpolicy" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="customertype" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="customeraddress1" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="cityname" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="customerpincode1" Nullable="true" MaxLength="6" />
+          <Property Type="String" Name="clustername" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="clustercode" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="territoryname" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="customerphone1" Nullable="true" MaxLength="13" />
+          <Property Type="String" Name="customerphone2" Nullable="true" MaxLength="13" />
+          <Property Type="String" Name="customermobile1" Nullable="true" MaxLength="13" />
+          <Property Type="String" Name="customermobile2" Nullable="true" MaxLength="13" />
+          <Property Type="Boolean" Name="inactivemobile1" Nullable="true" />
+          <Property Type="Boolean" Name="inactivemobile2" Nullable="true" />
+          <Property Type="Boolean" Name="isdecisionmaker" Nullable="true" />
+          <Property Type="DateTime" Name="policystartdateod" Nullable="true" Precision="16" />
+          <Property Type="DateTime" Name="policyenddateod" Nullable="true" Precision="16" />
+          <Property Type="String" Name="NoofYearOD" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="policytermname" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="policypackagetype" Nullable="true" MaxLength="50" />
+          <Property Type="Int16" Name="policypackagetypeid" Nullable="true" />
+          <Property Type="String" Name="customeremail1" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="aadhaarno" Nullable="true" MaxLength="12" />
+          <Property Type="String" Name="customeremail2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="covernoteno" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="policyno" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="policystartdate" Nullable="true" Precision="16" />
+          <Property Type="DateTime" Name="policyenddate" Nullable="true" Precision="16" />
+          <Property Type="String" Name="noofyear" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="financername" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PrevInsCompany" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="previouspolicyno" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="PreviousPolicyEndDate" Nullable="true" Precision="16" />
+          <Property Type="String" Name="nomineename" Nullable="true" MaxLength="30" />
+          <Property Type="Int16" Name="nomineeage" Nullable="true" />
+          <Property Type="Int16" Name="NomineeGenderId" Nullable="true" />
+          <Property Type="String" Name="NomineeRelation" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="manufacturername" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="modelname" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="variantname" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="fueltype" Nullable="true" MaxLength="20" />
+          <Property Type="Decimal" Name="tppremium" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="Int32" Name="CubicCapacity" Nullable="true" />
+          <Property Type="Int32" Name="seatingcapacity" Nullable="true" />
+          <Property Type="String" Name="makeyear" Nullable="false" MaxLength="4" />
+          <Property Type="String" Name="registrationno" Nullable="true" MaxLength="12" />
+          <Property Type="String" Name="engineno" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="chassisno" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="rtozonename" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="vehicleclass" Nullable="true" MaxLength="40" />
+          <Property Type="Decimal" Name="grosspremium" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="Int32" Name="vehicleidv" Nullable="true" />
+          <Property Type="Int32" Name="cngidv" Nullable="true" />
+          <Property Type="Int32" Name="ElectricAssessoriesIDV" Nullable="true" />
+          <Property Type="Int32" Name="NonElectricAssessoriesIDV" Nullable="true" />
+          <Property Type="Int32" Name="totalidv" Nullable="true" />
+          <Property Type="Decimal" Name="od" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="Int32" Name="ncbpercentage" Nullable="true" />
+          <Property Type="Decimal" Name="specialdiscount" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="Int32" Name="totalod" Nullable="true" />
+          <Property Type="Int32" Name="totalgrosspremium" Nullable="true" />
+          <Property Type="Decimal" Name="Loading" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="String" Name="VoucherNo" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="addonridername" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="pan" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="gstin" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="TeleCaller" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="POSName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FOS" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="businessdoneby" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="policyremarks" Nullable="true" MaxLength="250" />
+          <Property Type="String" Name="policystatus" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="EndorsementReason" Nullable="true" MaxLength="100" />
+          <Property Type="DateTime" Name="policycanceldate" Nullable="true" Precision="16" />
+          <Property Type="String" Name="referencename" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="endorsegrosspremium" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="Decimal" Name="endorseod" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="Decimal" Name="addonod" Nullable="true" Precision="30" Scale="2" />
+          <Property Type="Int32" Name="gvw" Nullable="true" />
+          <Property Type="Int32" Name="exshowroom" Nullable="true" />
+          <Property Type="DateTime" Name="registrationdate" Nullable="true" Precision="16" />
+          <Property Type="Int16" Name="irdacommissionreceived" Nullable="true" />
+          <Property Type="String" Name="monthcycle" Nullable="true" MaxLength="30" />
+          <Property Type="Int16" Name="POSCommissionReceived" Nullable="true" />
+          <Property Type="String" Name="commMonth" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="PosManageByName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="customercontact" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="customerdob" Nullable="true" Precision="16" />
+          <Property Type="Int32" Name="clusterid" Nullable="true" />
+          <Property Type="Int16" Name="territoryid" Nullable="true" />
+          <Property Type="String" Name="businesstypename" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="industryname" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="designationname" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="professionname" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="akgslipno" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="akgslipissuedate" Nullable="true" Precision="16" />
+          <Property Type="String" Name="ODInsCompany" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="commissionpaytypename" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="policynood" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="vehicleusagename" Nullable="true" MaxLength="50" />
+          <Property Type="Decimal" Name="commissionablepremium" Nullable="true" Precision="30" Scale="2" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -10077,6 +10403,171 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
                 <ScalarProperty Name="ODCompany" ColumnName="ODCompany" />
                 <ScalarProperty Name="InsuranceCompanyODId" ColumnName="InsuranceCompanyODId" />
                 <ScalarProperty Name="PolicyPackageType" ColumnName="PolicyPackageType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="tblRefrenceSource">
+            <EntityTypeMapping TypeName="PolicyManagerModel.tblRefrenceSource">
+              <MappingFragment StoreEntitySet="tblRefrenceSource">
+                <ScalarProperty Name="SourceName" ColumnName="SourceName" />
+                <ScalarProperty Name="SourceId" ColumnName="SourceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReconDataDownload">
+            <EntityTypeMapping TypeName="PolicyManagerModel.ReconDataDownload">
+              <MappingFragment StoreEntitySet="ReconDataDownload">
+                <ScalarProperty Name="InsuranceCompanyODId" ColumnName="InsuranceCompanyODId" />
+                <ScalarProperty Name="ODCompany" ColumnName="ODCompany" />
+                <ScalarProperty Name="PolicyEndDateOD" ColumnName="PolicyEndDateOD" />
+                <ScalarProperty Name="PolicyStartDateOD" ColumnName="PolicyStartDateOD" />
+                <ScalarProperty Name="PolicyTermName" ColumnName="PolicyTermName" />
+                <ScalarProperty Name="PolicyPackageType" ColumnName="PolicyPackageType" />
+                <ScalarProperty Name="PolicyNoOD" ColumnName="PolicyNoOD" />
+                <ScalarProperty Name="PolicyEndDate" ColumnName="PolicyEndDate" />
+                <ScalarProperty Name="MonthCycleId" ColumnName="MonthCycleId" />
+                <ScalarProperty Name="MonthCycle" ColumnName="MonthCycle" />
+                <ScalarProperty Name="CommRecived" ColumnName="CommRecived" />
+                <ScalarProperty Name="BusinessDoneBy" ColumnName="BusinessDoneBy" />
+                <ScalarProperty Name="PolicyTypeId" ColumnName="PolicyTypeId" />
+                <ScalarProperty Name="PolicyStartDate" ColumnName="PolicyStartDate" />
+                <ScalarProperty Name="PolicyType" ColumnName="PolicyType" />
+                <ScalarProperty Name="PolicyStatus" ColumnName="PolicyStatus" />
+                <ScalarProperty Name="VehicleClass" ColumnName="VehicleClass" />
+                <ScalarProperty Name="ChassisNo" ColumnName="ChassisNo" />
+                <ScalarProperty Name="EngineNo" ColumnName="EngineNo" />
+                <ScalarProperty Name="TotalGrossPremium" ColumnName="TotalGrossPremium" />
+                <ScalarProperty Name="EndorseGrossPremium" ColumnName="EndorseGrossPremium" />
+                <ScalarProperty Name="AddonOD" ColumnName="AddonOD" />
+                <ScalarProperty Name="TotalOD" ColumnName="TotalOD" />
+                <ScalarProperty Name="EndorseOD" ColumnName="EndorseOD" />
+                <ScalarProperty Name="RegistrationNo" ColumnName="RegistrationNo" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="EndorsementReason" ColumnName="EndorsementReason" />
+                <ScalarProperty Name="GrossPremium" ColumnName="GrossPremium" />
+                <ScalarProperty Name="OD" ColumnName="OD" />
+                <ScalarProperty Name="PolicyNo" ColumnName="PolicyNo" />
+                <ScalarProperty Name="NameInPolicy" ColumnName="NameInPolicy" />
+                <ScalarProperty Name="InsuranceCompanyName" ColumnName="InsuranceCompanyName" />
+                <ScalarProperty Name="MakeYear" ColumnName="MakeYear" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+                <ScalarProperty Name="TPPremium" ColumnName="TPPremium" />
+                <ScalarProperty Name="ControlNo" ColumnName="ControlNo" />
+                <ScalarProperty Name="PolicyId" ColumnName="PolicyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_GetMotorPolicyData" FunctionName="PolicyManagerModel.Store.usp_GetMotorPolicyData">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PolicyManagerModel.usp_GetMotorPolicyData_Result">
+                <ScalarProperty Name="controlno" ColumnName="controlno" />
+                <ScalarProperty Name="loyaltycounter" ColumnName="loyaltycounter" />
+                <ScalarProperty Name="POSId" ColumnName="POSId" />
+                <ScalarProperty Name="customercode" ColumnName="customercode" />
+                <ScalarProperty Name="InsuranceCompanyName" ColumnName="InsuranceCompanyName" />
+                <ScalarProperty Name="policytypeid" ColumnName="policytypeid" />
+                <ScalarProperty Name="policytype" ColumnName="policytype" />
+                <ScalarProperty Name="nameinpolicy" ColumnName="nameinpolicy" />
+                <ScalarProperty Name="customertype" ColumnName="customertype" />
+                <ScalarProperty Name="customeraddress1" ColumnName="customeraddress1" />
+                <ScalarProperty Name="cityname" ColumnName="cityname" />
+                <ScalarProperty Name="customerpincode1" ColumnName="customerpincode1" />
+                <ScalarProperty Name="clustername" ColumnName="clustername" />
+                <ScalarProperty Name="clustercode" ColumnName="clustercode" />
+                <ScalarProperty Name="territoryname" ColumnName="territoryname" />
+                <ScalarProperty Name="customerphone1" ColumnName="customerphone1" />
+                <ScalarProperty Name="customerphone2" ColumnName="customerphone2" />
+                <ScalarProperty Name="customermobile1" ColumnName="customermobile1" />
+                <ScalarProperty Name="customermobile2" ColumnName="customermobile2" />
+                <ScalarProperty Name="inactivemobile1" ColumnName="inactivemobile1" />
+                <ScalarProperty Name="inactivemobile2" ColumnName="inactivemobile2" />
+                <ScalarProperty Name="isdecisionmaker" ColumnName="isdecisionmaker" />
+                <ScalarProperty Name="policystartdateod" ColumnName="policystartdateod" />
+                <ScalarProperty Name="policyenddateod" ColumnName="policyenddateod" />
+                <ScalarProperty Name="NoofYearOD" ColumnName="NoofYearOD" />
+                <ScalarProperty Name="policytermname" ColumnName="policytermname" />
+                <ScalarProperty Name="policypackagetype" ColumnName="policypackagetype" />
+                <ScalarProperty Name="policypackagetypeid" ColumnName="policypackagetypeid" />
+                <ScalarProperty Name="customeremail1" ColumnName="customeremail1" />
+                <ScalarProperty Name="aadhaarno" ColumnName="aadhaarno" />
+                <ScalarProperty Name="customeremail2" ColumnName="customeremail2" />
+                <ScalarProperty Name="covernoteno" ColumnName="covernoteno" />
+                <ScalarProperty Name="policyno" ColumnName="policyno" />
+                <ScalarProperty Name="policystartdate" ColumnName="policystartdate" />
+                <ScalarProperty Name="policyenddate" ColumnName="policyenddate" />
+                <ScalarProperty Name="noofyear" ColumnName="noofyear" />
+                <ScalarProperty Name="financername" ColumnName="financername" />
+                <ScalarProperty Name="PrevInsCompany" ColumnName="PrevInsCompany" />
+                <ScalarProperty Name="previouspolicyno" ColumnName="previouspolicyno" />
+                <ScalarProperty Name="PreviousPolicyEndDate" ColumnName="PreviousPolicyEndDate" />
+                <ScalarProperty Name="nomineename" ColumnName="nomineename" />
+                <ScalarProperty Name="nomineeage" ColumnName="nomineeage" />
+                <ScalarProperty Name="NomineeGenderId" ColumnName="NomineeGenderId" />
+                <ScalarProperty Name="NomineeRelation" ColumnName="NomineeRelation" />
+                <ScalarProperty Name="manufacturername" ColumnName="manufacturername" />
+                <ScalarProperty Name="modelname" ColumnName="modelname" />
+                <ScalarProperty Name="variantname" ColumnName="variantname" />
+                <ScalarProperty Name="fueltype" ColumnName="fueltype" />
+                <ScalarProperty Name="tppremium" ColumnName="tppremium" />
+                <ScalarProperty Name="CubicCapacity" ColumnName="CubicCapacity" />
+                <ScalarProperty Name="seatingcapacity" ColumnName="seatingcapacity" />
+                <ScalarProperty Name="makeyear" ColumnName="makeyear" />
+                <ScalarProperty Name="registrationno" ColumnName="registrationno" />
+                <ScalarProperty Name="engineno" ColumnName="engineno" />
+                <ScalarProperty Name="chassisno" ColumnName="chassisno" />
+                <ScalarProperty Name="rtozonename" ColumnName="rtozonename" />
+                <ScalarProperty Name="vehicleclass" ColumnName="vehicleclass" />
+                <ScalarProperty Name="grosspremium" ColumnName="grosspremium" />
+                <ScalarProperty Name="vehicleidv" ColumnName="vehicleidv" />
+                <ScalarProperty Name="cngidv" ColumnName="cngidv" />
+                <ScalarProperty Name="ElectricAssessoriesIDV" ColumnName="ElectricAssessoriesIDV" />
+                <ScalarProperty Name="NonElectricAssessoriesIDV" ColumnName="NonElectricAssessoriesIDV" />
+                <ScalarProperty Name="totalidv" ColumnName="totalidv" />
+                <ScalarProperty Name="od" ColumnName="od" />
+                <ScalarProperty Name="ncbpercentage" ColumnName="ncbpercentage" />
+                <ScalarProperty Name="specialdiscount" ColumnName="specialdiscount" />
+                <ScalarProperty Name="totalod" ColumnName="totalod" />
+                <ScalarProperty Name="totalgrosspremium" ColumnName="totalgrosspremium" />
+                <ScalarProperty Name="Loading" ColumnName="Loading" />
+                <ScalarProperty Name="VoucherNo" ColumnName="VoucherNo" />
+                <ScalarProperty Name="addonridername" ColumnName="addonridername" />
+                <ScalarProperty Name="pan" ColumnName="pan" />
+                <ScalarProperty Name="gstin" ColumnName="gstin" />
+                <ScalarProperty Name="TeleCaller" ColumnName="TeleCaller" />
+                <ScalarProperty Name="POSName" ColumnName="POSName" />
+                <ScalarProperty Name="FOS" ColumnName="FOS" />
+                <ScalarProperty Name="businessdoneby" ColumnName="businessdoneby" />
+                <ScalarProperty Name="policyremarks" ColumnName="policyremarks" />
+                <ScalarProperty Name="policystatus" ColumnName="policystatus" />
+                <ScalarProperty Name="EndorsementReason" ColumnName="EndorsementReason" />
+                <ScalarProperty Name="policycanceldate" ColumnName="policycanceldate" />
+                <ScalarProperty Name="referencename" ColumnName="referencename" />
+                <ScalarProperty Name="endorsegrosspremium" ColumnName="endorsegrosspremium" />
+                <ScalarProperty Name="endorseod" ColumnName="endorseod" />
+                <ScalarProperty Name="addonod" ColumnName="addonod" />
+                <ScalarProperty Name="gvw" ColumnName="gvw" />
+                <ScalarProperty Name="exshowroom" ColumnName="exshowroom" />
+                <ScalarProperty Name="registrationdate" ColumnName="registrationdate" />
+                <ScalarProperty Name="irdacommissionreceived" ColumnName="irdacommissionreceived" />
+                <ScalarProperty Name="monthcycle" ColumnName="monthcycle" />
+                <ScalarProperty Name="POSCommissionReceived" ColumnName="POSCommissionReceived" />
+                <ScalarProperty Name="commMonth" ColumnName="commMonth" />
+                <ScalarProperty Name="PosManageByName" ColumnName="PosManageByName" />
+                <ScalarProperty Name="customercontact" ColumnName="customercontact" />
+                <ScalarProperty Name="customerdob" ColumnName="customerdob" />
+                <ScalarProperty Name="clusterid" ColumnName="clusterid" />
+                <ScalarProperty Name="territoryid" ColumnName="territoryid" />
+                <ScalarProperty Name="businesstypename" ColumnName="businesstypename" />
+                <ScalarProperty Name="industryname" ColumnName="industryname" />
+                <ScalarProperty Name="designationname" ColumnName="designationname" />
+                <ScalarProperty Name="professionname" ColumnName="professionname" />
+                <ScalarProperty Name="akgslipno" ColumnName="akgslipno" />
+                <ScalarProperty Name="akgslipissuedate" ColumnName="akgslipissuedate" />
+                <ScalarProperty Name="ODInsCompany" ColumnName="ODInsCompany" />
+                <ScalarProperty Name="commissionpaytypename" ColumnName="commissionpaytypename" />
+                <ScalarProperty Name="policynood" ColumnName="policynood" />
+                <ScalarProperty Name="vehicleusagename" ColumnName="vehicleusagename" />
+                <ScalarProperty Name="commissionablepremium" ColumnName="commissionablepremium" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

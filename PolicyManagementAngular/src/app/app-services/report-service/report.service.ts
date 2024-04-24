@@ -18,6 +18,7 @@ export class ReportService extends IReportService {
  
     motorDownloadExcel = (model:any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Report.motorDownloadExcel,model);
     motorUploadExcel = (model:any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Report.motorUploadExcel,model);
+    getMotorMotherReport = (model:any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Report.getMotorMotherReport,model);
 
   
 }

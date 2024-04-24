@@ -379,5 +379,9 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("monthcycle")]
         [HttpGet]
         public async Task<IHttpActionResult> GetMonthCycle() => Json(await _commonService.FindMonthCycle());
+
+        [Route("get-all-policyTerms/{policyPackagetypeId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetPolicyTerms(short policyPackagetypeId) => Json(await _commonService.GetPolicyTerms(policyPackagetypeId));
     }
 }

@@ -1699,5 +1699,8 @@ namespace PolicyManagement.Services.Common
         .ToListAsync();
 
         public async Task<List<tblMonthCycle>> FindMonthCycle() => await _dataContext.tblMonthCycle.OrderBy(o => o.MonthCycle).ToListAsync();
+
+        public async Task<List<tblPolicyTerm>> GetPolicyTerms(short policyPackagetypeId) => await _dataContext.tblPolicyTerm.ToListAsync();
+
     }
 }
