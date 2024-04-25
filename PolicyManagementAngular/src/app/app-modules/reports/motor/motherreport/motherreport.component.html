@@ -32,7 +32,7 @@
                       <div class="col-lg-4">
                             <mat-form-field appearance="fill">
                             <mat-label>Insurance Company</mat-label>
-                            <input type="text" placeholder="Insurance Company" aria-label="Insurance Company" matInput required
+                            <input type="text" placeholder="Insurance Company" aria-label="Insurance Company" matInput 
                                 formControlName="insuranceCompanyId" [matAutocomplete]="insuranceCompany">
                             <mat-autocomplete autoActiveFirstOption #insuranceCompany="matAutocomplete"
                                 [displayWith]="getInsuranceCompanies.bind(this)" >
@@ -43,31 +43,36 @@
                             </mat-autocomplete>
                             </mat-form-field>
                         </div>
-                        <div class="col-lg-4">
-                            <mat-form-field appearance="fill">
-                            <mat-label>Package Type</mat-label>
-                            <mat-select formControlName="packageTypeId" required (selectionChange)="getAllPolicyTerms()">
-                                <mat-option>Select</mat-option>
-                                <mat-option *ngFor="let packageType of _packageTypes" [value]="packageType.Value">
-                                {{packageType.Name}}
-                                </mat-option>
-                            </mat-select>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-lg-4">
-                            <mat-form-field appearance="fill">
-                              <mat-label>Policy Term</mat-label>
-                              <mat-select formControlName="policyTermId" required>
-                                <mat-option [value]="">Select</mat-option>
-                                <mat-option *ngFor="let policyTerm of _getPolicyTerms" [value]="policyTerm">
-                                  {{policyTerm.PolicyTermName}}
-                                </mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                        </div>
+
                     </div>
                     <div class="row">
-                                <mat-label>Policy Type</mat-label>
+                      <div class="col-lg-4">
+                        <mat-form-field appearance="fill">
+                        <mat-label>Package Type</mat-label>
+                        <mat-select formControlName="packageTypeId"  (selectionChange)="getAllPolicyTerms()">
+                            <mat-option>Select</mat-option>
+                            <mat-option *ngFor="let packageType of _packageTypes" [value]="packageType.Value">
+                            {{packageType.Name}}
+                            </mat-option>
+                        </mat-select>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-lg-4">
+                        <mat-form-field appearance="fill">
+                          <mat-label>Policy Term</mat-label>
+                          <mat-select formControlName="policyTermId" >
+                            <mat-option [value]="">Select</mat-option>
+                            <mat-option *ngFor="let policyTerm of _getPolicyTerms" [value]="policyTerm">
+                              {{policyTerm.PolicyTermName}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                    </div>
+                    </div>
+                    <div class="row" >
+                      <div class="col-lg-2"  >
+                          <mat-label>Policy Type</mat-label>
+                      </div>
                                 <div class="col-lg-2"  >
                                   <mat-checkbox color="primary" formControlName="policyType1" >New Vehicle</mat-checkbox>
                                 </div>
@@ -85,8 +90,9 @@
                                 </div>
                     </div> 
                     <div class="row">
-                          
-                                  <mat-label>NCB %</mat-label>
+                      <div class="col-lg-2"  >
+                          <mat-label>NCB %</mat-label>
+                      </div>
                                   <div class="col-lg-2"  >
                                     <mat-checkbox color="primary" formControlName="ncb1"  >0</mat-checkbox>
                                   </div>
@@ -99,8 +105,10 @@
                             </div>
                           
                     <div class="row">
-       
-                                  <mat-label>Vehicle Class</mat-label>
+                      <div class="col-lg-2"  >
+                          <mat-label>Vehicle Class</mat-label>
+                      </div>
+                                
                                   <div class="col-lg-2"  >
                                     <mat-checkbox color="primary" formControlName="ncb1"  >Private</mat-checkbox>
                                   </div>
@@ -123,7 +131,7 @@
 
                             <mat-form-field appearance="fill">
                               <mat-label>Manufacturer</mat-label>
-                              <input type="text" placeholder="Manufacturer" aria-label="Manufacturer" matInput required
+                              <input type="text" placeholder="Manufacturer" aria-label="Manufacturer" matInput 
                                 formControlName="manufacturerId" [matAutocomplete]="autoManufacturer" (selectionChange) = "getModels()">
                               <mat-autocomplete autoActiveFirstOption #autoManufacturer="matAutocomplete"
                                 [displayWith]="getManufacturerForBind.bind(this)" (optionSelected)="getModels()">
@@ -144,15 +152,17 @@
                               </mat-select>
                             </mat-form-field>
                           </div>
-                          <div class="col-lg-4">
-                            <mat-form-field appearance="fill">
-                              <mat-label>RTO Zone</mat-label>
-                              <mat-select formControlName="rtoZoneId" >
-                                <mat-option>Select</mat-option>
-                                <mat-option *ngFor="let rtoZone of _rtoZones" [value]="rtoZone">{{rtoZone.Name}}</mat-option>
-                              </mat-select>
-                            </mat-form-field>
-                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <mat-form-field appearance="fill">
+                            <mat-label>RTO Zone</mat-label>
+                            <mat-select formControlName="rtoZoneId" >
+                              <mat-option>Select</mat-option>
+                              <mat-option *ngFor="let rtoZone of _rtoZones" [value]="rtoZone">{{rtoZone.Name}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
                       </div>
                       <div class="row">
                         <div class="col-lg-12">
@@ -284,11 +294,17 @@
                           </div>
                       </div>
                       <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-4">
                           <button mat-flat-button color="primary" [ngStyle]="{'background-color':  '#fdcb6e'}"  type="submit">
                            Filter
                           </button>
                         </div>
+                        <div class="col-lg-4">
+                          <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb6e'}"  (click)="reset()" type="button">
+                           Reset
+                          </button>
+                        </div>
+                       
                       </div>
                   </form>
                  
@@ -322,21 +338,31 @@
                     </mat-panel-title>
                   </mat-expansion-panel-header>
                   <div class="row">
-                    <div class="col-md-12">
-                      <ngx-datatable
-                      [rows]="rows"
-                      [loadingIndicator]="loadingIndicator"
-                      [columns]="columns"
-                      class='bootstrap material'
-                      [columnMode]="'force'"
-                      [headerHeight]="50"
-                      [footerHeight]="50"
-                      [rowHeight]="50"
-                      [limit]="20"
-                      [scrollbarV]="true" [scrollbarH]="true"
-                      [reorderable]="true"  
-                    >
-                    </ngx-datatable>                        </div>
+
+                  <div class="col-lg-4">
+                    <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb6e'}"  (click)="exportexcel()" type="button">
+                     Export To Excel
+                    </button>
+                  </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-md-12">
+                        <ngx-datatable
+                        [rows]="rows"
+                        [loadingIndicator]="loadingIndicator"
+                        class='bootstrap material'
+                        [columnMode]="ColumnMode.force"
+                        [headerHeight]="50"
+                        [footerHeight]="50"
+                        [rowHeight]="50"
+                        [limit]="20"
+                        [scrollbarV]="true" 
+                        [scrollbarH]="true"
+                        [reorderable]="true"  
+                        style="height: 500px;"
+                        [columns]="columns">
+                        </ngx-datatable>
+                    </div>
                   </div>
                 </mat-expansion-panel>
           </mat-accordion>

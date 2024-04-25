@@ -9,6 +9,8 @@ import { IRtoZoneDto } from 'src/app/app-entites/dtos/motor/rto-zone-dto';
 import { ICommonService } from 'src/app/app-services/common-service/abstracts/common.iservice';
 import { ReportService } from 'src/app/app-services/report-service/report.service';
 import { SearchPolicyType, Vertical } from 'src/app/shared/utilities/enums/enum';
+import { WorkBook, WorkSheet, read, utils, writeFile } from 'xlsx';
+
 
 @Component({
   selector: 'app-motherreport',
@@ -423,25 +425,63 @@ export class MotherreportComponent implements OnInit {
 
   }
 
-  allColumns = JSON.parse(JSON.stringify(this.columns));
-  toggle(col) {
+  allColumns :any[] = JSON.parse(JSON.stringify(this.columns));
+  toggle(col:any) {
     const isChecked = this.isChecked(col);
-
+    if(col.name == 'Control No') return
     if (isChecked) {
       this.columns = this.columns.filter(c => {
         return c.name !== col.name;
       });
     } else {
-      this.columns = [...this.columns, col];
+      let index=  this.allColumns.findIndex(x=>x.name == col.name);
+      this.columns.splice(index, 0, col);
+      this.columns = [...this.columns]
     }
   }
 
-  isChecked(col) {
+  isChecked(col:any) {
     return (
       this.columns.find(c => {
         return c.name === col.name;
       }) !== undefined
     );
   }
+
+  reset(){
+    this.fmotherreport.reset()
+  }
+
+
+  exportexcel(): void
+  {
+    const fileData = this.getExcelData(this.rows);
+    /* pass here the data source */
+    const ws: WorkSheet =utils.json_to_sheet(fileData);
+    /* generate workbook and add the worksheet */
+    const wb: WorkBook = utils.book_new();
+    utils.book_append_sheet(wb, ws, 'Sheet1');
+    /* save to file */  
+    writeFile(wb, 'MotherReport.xlsx');
+  }
+
+  getExcelData(data:any) {
+    const excelData = [];
+
+    data.map((row:any) => {
+      const newRow = {};
+
+      this.columns.forEach((column) => {
+        newRow[column.name] = row[column.prop];
+      });
+      
+      excelData.push(newRow);
+    });
+
+    return excelData;
+  }
+
+
+  
 
 }
