@@ -14,7 +14,7 @@
                       <div class="col-lg-6">
                         <mat-form-field appearance="fill">
                             <mat-label>Policy Inspection Date From</mat-label>
-                            <input matInput [matDatepicker]="PolicyInspectionDateFrom" formControlName="policyInspectionDateFrom">
+                            <input matInput [matDatepicker]="PolicyInspectionDateFrom" formControlName="policyInspectionDateFromNew">
                             <mat-datepicker-toggle matSuffix [for]="PolicyInspectionDateFrom"></mat-datepicker-toggle>
                             <mat-datepicker #PolicyInspectionDateFrom></mat-datepicker>
                           </mat-form-field>
@@ -22,7 +22,7 @@
                       <div class="col-lg-6">
                         <mat-form-field appearance="fill">
                             <mat-label>Policy Inspection Date To</mat-label>
-                            <input matInput [matDatepicker]="PolicyInspectionDateTo" formControlName="policyInspectionDateTo">
+                            <input matInput [matDatepicker]="PolicyInspectionDateTo" formControlName="policyInspectionDateToNew">
                             <mat-datepicker-toggle matSuffix [for]="PolicyInspectionDateTo"></mat-datepicker-toggle>
                             <mat-datepicker #PolicyInspectionDateTo></mat-datepicker>
                           </mat-form-field>
@@ -214,7 +214,7 @@
                       <div class="row">
                         <div class="col-lg-4">
                           <mat-form-field appearance="fill">
-                            <mat-label>Pos Name</mat-label>
+                            <mat-label>POS Name</mat-label>
                             <mat-select formControlName="posManagedBy">
                               <mat-option>Select</mat-option>
                               <mat-option *ngFor="let _posData of _posDatas" [value]="_posData.Value">{{_posData.Name}}
@@ -224,7 +224,7 @@
                         </div>
                         <div class="col-lg-4">
                           <mat-form-field appearance="fill">
-                            <mat-label>Pos Managed By</mat-label>
+                            <mat-label>POS Managed By</mat-label>
                             <mat-select formControlName="posManagedBy">
                               <mat-option>Select</mat-option>
                               <mat-option *ngFor="let reference of _references" [value]="reference.Value">{{reference.Name}}

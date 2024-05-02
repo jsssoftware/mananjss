@@ -43,10 +43,8 @@ export class MotherreportComponent implements OnInit {
  columns = [
     { prop: 'controlno', name: 'Control No' },
     { prop: 'loyaltycounter', name: 'Loyalty Counter' },
-    { prop: 'POSId', name: 'POS ID' },
     { prop: 'customercode', name: 'Customer Code' },
     { prop: 'InsuranceCompanyName', name: 'Insurance Company' },
-    { prop: 'policytypeid', name: 'Policy Type ID' },
     { prop: 'policytype', name: 'Policy Type' },
     { prop: 'nameinpolicy', name: 'Name in Policy' },
     { prop: 'customertype', name: 'Customer Type' },
@@ -68,7 +66,6 @@ export class MotherreportComponent implements OnInit {
     { prop: 'NoofYearOD', name: 'No. of Year OD' },
     { prop: 'policytermname', name: 'Policy Term Name' },
     { prop: 'policypackagetype', name: 'Policy Package Type' },
-    { prop: 'policypackagetypeid', name: 'Policy Package Type ID' },
     { prop: 'customeremail1', name: 'Customer Email 1' },
     { prop: 'aadhaarno', name: 'Aadhaar No' },
     { prop: 'customeremail2', name: 'Customer Email 2' },
@@ -135,8 +132,6 @@ export class MotherreportComponent implements OnInit {
     { prop: 'PosManageByName', name: 'POS Managed By' },
     { prop: 'customercontact', name: 'Customer Contact' },
     { prop: 'customerdob', name: 'Customer DOB' },
-    { prop: 'clusterid', name: 'Cluster ID' },
-    { prop: 'territoryid', name: 'Territory ID' },
     { prop: 'businesstypename', name: 'Business Type Name' },
     { prop: 'industryname', name: 'Industry Name' },
     { prop: 'designationname', name: 'Designation Name' },
@@ -158,7 +153,9 @@ export class MotherreportComponent implements OnInit {
  fmotherreport = new FormGroup({
   insuranceCompanyId: new FormControl(''),
   policyInspectionDateFrom: new FormControl(''),
+  policyInspectionDateFromNew: new FormControl(''),
   policyInspectionDateTo: new FormControl(''),
+  policyInspectionDateToNew: new FormControl(''),
   packageTypeId: new FormControl(''),
   policyTermId: new FormControl(''),
   policyTypeId: new FormControl(''),
@@ -407,11 +404,8 @@ export class MotherreportComponent implements OnInit {
 
   submit(){
     this.fmotherreport.get("branchId").setValue(this._branchId);
-    debugger
-
-
-    let policyStartDate = this.commonService.getDateInString(new Date(this.fmotherreport.value.policyInspectionDateFrom));
-    let policyEndDate = this.commonService.getDateInString(new Date(this.fmotherreport.value.policyInspectionDateTo));
+    let policyStartDate = this.commonService.getDateInString(new Date(this.fmotherreport.value.policyInspectionDateFromNew));
+    let policyEndDate = this.commonService.getDateInString(new Date(this.fmotherreport.value.policyInspectionDateToNew));
 
     this.fmotherreport.patchValue({
       policyInspectionDateFrom: policyStartDate,
@@ -420,8 +414,7 @@ export class MotherreportComponent implements OnInit {
 
     this.reportService.getMotorMotherReport(this.fmotherreport.getRawValue()).subscribe((response: ICommonDto<any>) => {
       this.rows= response.Response
-    }
-    );
+    });
 
   }
 
@@ -462,7 +455,7 @@ export class MotherreportComponent implements OnInit {
     const wb: WorkBook = utils.book_new();
     utils.book_append_sheet(wb, ws, 'Sheet1');
     /* save to file */  
-    writeFile(wb, 'MotherReport.xlsx');
+    writeFile(wb, 'Motor-' + this.fmotherreport.value.policyInspectionDateFrom+ '-'  + this.fmotherreport.value.policyInspectionDateTo +'.xlsx');
   }
 
   getExcelData(data:any) {

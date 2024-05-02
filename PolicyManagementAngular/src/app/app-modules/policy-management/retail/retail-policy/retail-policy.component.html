@@ -1383,7 +1383,7 @@
   
                   <mat-form-field appearance="fill">
                     <mat-label>POS Name</mat-label>
-                    <input type="text" placeholder="POS Name" aria-label="POS Name" matInput formControlName="posNameId"
+                    <input type="text" placeholder="POS Name" aria-label="POS Name" matInput formControlName="posName"
                       [matAutocomplete]="autoPos" (change)="handleEmptyInput($event)">
                     <mat-autocomplete autoActiveFirstOption #autoPos="matAutocomplete"
                       [displayWith]="getPosForBind.bind(this)" (optionSelected)="businessDoneBy()">
