@@ -239,13 +239,13 @@ namespace PolicyManagement.Services.Commercial
                     //motorPolicyData.Flag1 = IsFlag1True(model);
                     motorPolicyData.Flag2 = IsFlag2True(model);
 
-                    _dataContext.tblMotorPolicyData.AddOrUpdate(motorPolicyData);
+                    _dataContext.tblMotorPolicyDatas.AddOrUpdate(motorPolicyData);
                     await _dataContext.SaveChangesAsync();
 
                     // Renewal Case
                     if (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4)
                     {
-                        tblMotorPolicyData data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => model.PreviousPolicyId.HasValue && f.PolicyId == model.PreviousPolicyId.Value);
+                        tblMotorPolicyData data = await _dataContext.tblMotorPolicyDatas.FirstOrDefaultAsync(f => model.PreviousPolicyId.HasValue && f.PolicyId == model.PreviousPolicyId.Value);
                         if (data == null)
                         {
                             return new CommonDto<object>
@@ -503,7 +503,7 @@ namespace PolicyManagement.Services.Commercial
 
         public async Task<CommercialPolicyFormDataModel> FindCommercialPolicyByPolicyId(int policyId)
         {
-            CommercialPolicyFormDataModel motorPolicy = await (from T1 in _dataContext.tblMotorPolicyData
+            CommercialPolicyFormDataModel motorPolicy = await (from T1 in _dataContext.tblMotorPolicyDatas
                                                               join T2 in _dataContext.tblCustomer on T1.CustomerId equals T2.CustomerId
                                                               join T3 in _dataContext.tblRTOZone on T1.RTOZoneId equals T3.RTOZoneId into rtoJoin
                                                               from T4 in rtoJoin.DefaultIfEmpty()
@@ -813,7 +813,7 @@ namespace PolicyManagement.Services.Commercial
             motorPolicy.PolicyStatus = (await _dataContext.tblPolicyStatus.AsNoTracking().FirstOrDefaultAsync(s => s.PolicyStatusId == motorPolicy.PolicyStatusId))?.PolicyStatus;
 
             if (motorPolicy.PreviousPolicyId != null && motorPolicy.PreviousPolicyId > 0)
-                motorPolicy.PreviousControlNumber = (await _dataContext.tblMotorPolicyData.AsNoTracking().FirstOrDefaultAsync(f => f.PolicyId == motorPolicy.PreviousPolicyId))?.ControlNo;
+                motorPolicy.PreviousControlNumber = (await _dataContext.tblMotorPolicyDatas.AsNoTracking().FirstOrDefaultAsync(f => f.PolicyId == motorPolicy.PreviousPolicyId))?.ControlNo;
 
             if (motorPolicy.PolicyCancelReasonId > 0)
                 motorPolicy.PolicyCancelReason = (await _dataContext.tblEndorsementReason.AsNoTracking().FirstOrDefaultAsync(f => f.EndorsementReasonId == motorPolicy.PolicyCancelReasonId && f.IsActive.HasValue && f.IsActive.Value)).EndorsementReason;
@@ -851,7 +851,7 @@ namespace PolicyManagement.Services.Commercial
         public async Task<CommonDto<object>> UpdateCommercialPolicy(int policyId, CommercialPolicyFormDataModel model, BaseModel baseModel)
         {
 
-            tblMotorPolicyData motorPolicyData = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => f.PolicyId == policyId);
+            tblMotorPolicyData motorPolicyData = await _dataContext.tblMotorPolicyDatas.FirstOrDefaultAsync(f => f.PolicyId == policyId);
 
             if (motorPolicyData == null) return new CommonDto<object>
             {

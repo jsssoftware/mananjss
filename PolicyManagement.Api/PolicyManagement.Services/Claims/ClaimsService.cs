@@ -456,7 +456,7 @@ namespace PolicyManagement.Services.Claims
                 data.ClaimsSubStatus = await _dataContext.tblClaimSubStatus.Where(w => w.ClaimSubStatusId == data.ClaimsSubStatusId).Select(s => s.ClaimSubStatus.ToUpper()).AsNoTracking().FirstOrDefaultAsync();
             }
 
-            data.RegistrationNumber = await _dataContext.tblMotorPolicyData.Where(w => w.PolicyId == data.PolicyId).Select(s => s.RegistrationNo).AsNoTracking().FirstOrDefaultAsync();
+            data.RegistrationNumber = await _dataContext.tblMotorPolicyDatas.Where(w => w.PolicyId == data.PolicyId).Select(s => s.RegistrationNo).AsNoTracking().FirstOrDefaultAsync();
 
             return data;
         }

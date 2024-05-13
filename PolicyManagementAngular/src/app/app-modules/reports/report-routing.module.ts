@@ -6,6 +6,8 @@ import { RecondownloadComponent } from './motor/recondownload/recondownload.comp
 import { ReconuploadComponent } from './motor/reconupload/reconupload.component';
 import { RecondownloadRetailComponent } from './retail/recondownload/recondownload.component';
 import { ReconuploadRetailComponent } from './retail/reconupload/reconupload.component';
+import { RetailMotherreportComponent } from './retail/retail-motherreport/retail-motherreport.component';
+import { RenewalPerfomanceMotorComponent } from './motor/renewal-perfomance-motor/renewal-perfomance-motor.component';
 
 const routes: Routes = [
     {
@@ -30,6 +32,14 @@ const routes: Routes = [
             {
                 path: 'motherreportmotor',
                 component: MotherreportComponent,
+            },
+            {
+                path: 'motherreportretail',
+                component: RetailMotherreportComponent,
+            },
+            {
+                path: 'renewalperfomancemotor',
+                component: RenewalPerfomanceMotorComponent,
             },
           
         ]

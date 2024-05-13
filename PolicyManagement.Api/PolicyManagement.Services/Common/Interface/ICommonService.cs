@@ -101,5 +101,6 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindState();
         Task<List<tblMonthCycle>> FindMonthCycle();
         Task<List<tblPolicyTerm>> GetPolicyTerms(short policyPackagetypeId);
+        Task<List<DropDownDto<int>>> GetAllPlans(int _productId, int insuranceCompanyId);
     }
 }

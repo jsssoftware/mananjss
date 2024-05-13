@@ -86,4 +86,6 @@ export class Common {
     public static readonly State = "api/common/state";
     public static readonly MonthCycle = "api/common/monthcycle";
     public static readonly AllPolicyTerms = "api/common/get-all-policyTerms";
+    public static readonly AllProduct = "api/common/get-all-products";
+    public static readonly AllPlans = "api/common/get-all-plans";
 }

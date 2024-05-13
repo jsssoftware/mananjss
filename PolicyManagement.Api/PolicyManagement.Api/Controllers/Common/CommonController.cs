@@ -383,5 +383,9 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("get-all-policyTerms/{policyPackagetypeId}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetPolicyTerms(short policyPackagetypeId) => Json(await _commonService.GetPolicyTerms(policyPackagetypeId));
+
+        [Route("get-all-plans")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetPlans(int productId, int insuranceCompanyId) => Json(await _commonService.GetAllPlans(productId, insuranceCompanyId));
     }
 }

@@ -30,6 +30,7 @@ using ClosedXML.Excel;
 using System.Data;
 using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Office2010.Ink;
+using DocumentFormat.OpenXml.InkML;
 
 namespace PolicyManagement.Services.Reports
 {
@@ -213,7 +214,7 @@ namespace PolicyManagement.Services.Reports
                      
                     int policyId = int.TryParse(cell[0], out policyId) ? policyId : default;
 
-                    tblMotorPolicyData policyData = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => f.PolicyId == policyId);
+                    tblMotorPolicyData policyData = await _dataContext.tblMotorPolicyDatas.FirstOrDefaultAsync(f => f.PolicyId == policyId);
                   
                     short irdaCommissionReceived, irDaCommMonthCycleId, policyNoOD;
                     decimal od, addonOD, endroseOD, grossPremium, endroseGrossPremium;
@@ -262,6 +263,60 @@ namespace PolicyManagement.Services.Reports
                 Message = "No Data",
                 IsSuccess = true,
                 Response = dataRecon
+            };
+
+        }
+
+        public async Task<CommonDto<object>> GetRetailCommercialMotherReport(RetailMotherReport motherReport)
+        {
+
+
+            var dateto = DateTime.ParseExact(motherReport.PolicyInspectionDateTo, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            var datefrom = DateTime.ParseExact(motherReport.PolicyInspectionDateFrom, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+           
+            var dataRecon = _dataContext.Usp_GetRetailCommercialPolicyData_NEW(motherReport.BranchId,datefrom, dateto, motherReport.InsuranceCompanyId, motherReport.Product, motherReport.Plan,motherReport.PlanTypes,motherReport.PosNameId,null,motherReport.PosmanagedBy,motherReport.FosId,motherReport.TeleCallerId,motherReport.ReferenceId,motherReport.BusinessDoneBy,motherReport.PolicyType1,motherReport.PolicyType2,motherReport.PolicyType3,motherReport.PolicyType4,motherReport.Vertical1,motherReport.Vertical2,motherReport.Vertical3,motherReport.Vertical4,motherReport.Vertical5,motherReport.Vertical6).ToList();
+            if (dataRecon.Any())
+            {
+                return new CommonDto<object>
+                {
+                    Message = "Record present",
+                    IsSuccess = true,
+                    Response = dataRecon
+                };
+            }
+
+            return new CommonDto<object>
+            {
+                Message = "No Data",
+                IsSuccess = true,
+                Response = null
+            };
+
+        }
+
+        public async Task<CommonDto<object>> GetRenewPerfomanceReport(RenewPerfomance renewPerfomance)
+        {
+
+
+            var dateto = DateTime.ParseExact(renewPerfomance.ExpiryDateTo, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+            var datefrom = DateTime.ParseExact(renewPerfomance.ExpiryDateFrom, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
+            var results = _dataContext.Usp_Report_RenewalPerfomanceReport(datefrom,dateto,renewPerfomance.BranchId,renewPerfomance.TeamMemberId,renewPerfomance.BusinessType,renewPerfomance.InsuranceCompanyId).ToList();
+            if (results.Any())
+            {
+                return new CommonDto<object>
+                {
+                    Message = "Record present",
+                    IsSuccess = true,
+                    Response = results
+                };
+            }
+
+            return new CommonDto<object>
+            {
+                Message = "No Data",
+                IsSuccess = true,
+                Response = null
             };
 
         }

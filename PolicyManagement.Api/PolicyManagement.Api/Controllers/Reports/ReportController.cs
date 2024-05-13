@@ -25,5 +25,13 @@ namespace PolicyManagement.Api.Controllers.Reports
         [HttpPost]
         public async Task<IHttpActionResult> GetMotorMotherReport(MotherReport motherReport) => Json(await _reportService.GetMotorMotherReport(motherReport));
 
+        [Route("retailcommercialmotherreport")]
+        [HttpPost]
+        public async Task<IHttpActionResult> GetRetailCommercialMotherReport(RetailMotherReport motherReport) => Json(await _reportService.GetRetailCommercialMotherReport(motherReport));
+
+        [Route("renewperfomancereport")]
+        [HttpPost]
+        public async Task<IHttpActionResult> GetRenewPerfomanceReport(RenewPerfomance renewPerfomance) => Json(await _reportService.GetRenewPerfomanceReport(renewPerfomance));
+
     }
 }

@@ -104,5 +104,6 @@ export abstract class ICommonService {
     abstract getManufactureByVehicleClassType(VehicleClassId :number): Observable<any>;
     abstract getState(): Observable<IDropDownDto<number>[]>;
     abstract getAllPolicyTerms(policyPackageTypeId:number): Observable<any>;
+    abstract getAllPlans(productId: number,insuranceCompanyId:number): Observable<IDropDownDto<number>[]>;
 
 }

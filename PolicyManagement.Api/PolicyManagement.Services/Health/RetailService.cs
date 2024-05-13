@@ -223,13 +223,13 @@ namespace PolicyManagement.Services.Health
                     //motorPolicyData.Flag1 = IsFlag1True(model);
                     motorPolicyData.Flag2 = IsFlag2True(model);
 
-                    _dataContext.tblMotorPolicyData.AddOrUpdate(motorPolicyData);
+                    _dataContext.tblMotorPolicyDatas.AddOrUpdate(motorPolicyData);
                     await _dataContext.SaveChangesAsync();
 
                     // Renewal Case
                     if (model.PolicyTerm.PolicyType == 2 || model.PolicyTerm.PolicyType == 4)
                     {
-                        tblMotorPolicyData data = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => model.PreviousPolicyId.HasValue && f.PolicyId == model.PreviousPolicyId.Value);
+                        tblMotorPolicyData data = await _dataContext.tblMotorPolicyDatas.FirstOrDefaultAsync(f => model.PreviousPolicyId.HasValue && f.PolicyId == model.PreviousPolicyId.Value);
                         if (data == null)
                         {
                             return new CommonDto<object>
@@ -432,7 +432,7 @@ namespace PolicyManagement.Services.Health
 
         public async Task<RetailPolicyFormDataModel> FindHealthPolicyByPolicyId(int policyId)
         {
-            RetailPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyData.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
+            RetailPolicyFormDataModel motorPolicy = await _dataContext.tblMotorPolicyDatas.Join(_dataContext.tblCustomer, T1 => T1.CustomerId, T2 => T2.CustomerId, (T1, T2) => new { T1, T2 })
                                                     .GroupJoin(_dataContext.tblRTOZone, T3 => T3.T1.RTOZoneId, T4 => T4.RTOZoneId, (T3, T4) => new { T3, T4 })
                                                     .SelectMany(s => s.T4.DefaultIfEmpty(), (policy, rtoZone) => new { policy.T3, T4 = rtoZone })
                                                     .GroupJoin(_dataContext.tblCluster, T5 => T5.T3.T2.ClusterId, T6 => T6.ClusterId, (T5, T6) => new { T5, T6 })
@@ -734,7 +734,7 @@ namespace PolicyManagement.Services.Health
             motorPolicy.PolicyStatus = (await _dataContext.tblPolicyStatus.AsNoTracking().FirstOrDefaultAsync(s => s.PolicyStatusId == motorPolicy.PolicyStatusId))?.PolicyStatus;
 
             if (motorPolicy.PreviousPolicyId != null && motorPolicy.PreviousPolicyId > 0)
-                motorPolicy.PreviousControlNumber = (await _dataContext.tblMotorPolicyData.AsNoTracking().FirstOrDefaultAsync(f => f.PolicyId == motorPolicy.PreviousPolicyId))?.ControlNo;
+                motorPolicy.PreviousControlNumber = (await _dataContext.tblMotorPolicyDatas.AsNoTracking().FirstOrDefaultAsync(f => f.PolicyId == motorPolicy.PreviousPolicyId))?.ControlNo;
 
             if (motorPolicy.PolicyCancelReasonId > 0)
                 motorPolicy.PolicyCancelReason = (await _dataContext.tblEndorsementReason.AsNoTracking().FirstOrDefaultAsync(f => f.EndorsementReasonId == motorPolicy.PolicyCancelReasonId && f.IsActive.HasValue && f.IsActive.Value)).EndorsementReason;
@@ -772,7 +772,7 @@ namespace PolicyManagement.Services.Health
         public async Task<CommonDto<object>> UpdateHealthPolicy(int policyId, RetailPolicyFormDataModel model, BaseModel baseModel)
         {
 
-            tblMotorPolicyData motorPolicyData = await _dataContext.tblMotorPolicyData.FirstOrDefaultAsync(f => f.PolicyId == policyId);
+            tblMotorPolicyData motorPolicyData = await _dataContext.tblMotorPolicyDatas.FirstOrDefaultAsync(f => f.PolicyId == policyId);
 
             if (motorPolicyData == null) return new CommonDto<object>
             {

@@ -1,0 +1,169 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header class="card-container" style="display: flow-root">
+        <mat-card-title style="width: 50%; float: left;">
+            <p>Renewal Perfomance Report</p>
+        </mat-card-title>
+        <mat-card-title style="width: 10%; float: right;">
+            <!--         <p><button  class="btn-block" style="background: cadetblue;" mat-raised-button color="blue" (click)="backToMaster()">Back</button></p> 
+ -->
+        </mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+<form [formGroup]="renewalperfomancemotor" autocomplete="off"  (ngSubmit)="submit()">
+    <hr style="margin-top: 0px;" />
+    <div class="row">
+        <div class="col-lg-12">
+            <mat-radio-group formControlName="insuranceType" >
+                <div class="row">
+                  <div class="col-lg-2">
+                   Insurance Company
+                  </div>
+                  <div class="col-lg-2">
+                    <mat-radio-button [value]="1" color="primary">
+                     All Insurance Company
+                    </mat-radio-button>
+                  </div>
+                  <div class="col-lg-2">
+                    <mat-radio-button [value]="1" color="primary">
+                     Selected Insurance Company
+                    </mat-radio-button>
+                  </div>
+                 
+                </div>
+              </mat-radio-group>
+          </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+          <mat-form-field appearance="fill" >
+              <mat-label>Insurance Company</mat-label>
+              <input type="text"
+                 matInput
+                formControlName="insuranceCompanyId" [matAutocomplete]="autoInsuranceCompany">
+              <mat-autocomplete autoActiveFirstOption #autoInsuranceCompany="matAutocomplete"
+                [displayWith]="getInsuranceCompanyName.bind(this)" >
+                <mat-option *ngFor="let insuranceCompany of _filteredInsuranceCompaniesOptions"
+                  [value]="insuranceCompany.Value">
+                  {{insuranceCompany.Name}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-6">
+          <mat-form-field appearance="fill">
+              <mat-label>Expiry Date From</mat-label>
+              <input matInput [matDatepicker]="ExpiryDateFrom" formControlName="expiryDateFrom_dump">
+              <mat-datepicker-toggle matSuffix [for]="ExpiryDateFrom"></mat-datepicker-toggle>
+              <mat-datepicker #ExpiryDateFrom></mat-datepicker>
+            </mat-form-field>
+        </div>
+        <div class="col-lg-6">
+          <mat-form-field appearance="fill">
+              <mat-label>Expiry Date To</mat-label>
+              <input matInput [matDatepicker]="ExpiryDateTo" formControlName="expiryDateTo_dump">
+              <mat-datepicker-toggle matSuffix [for]="ExpiryDateTo"></mat-datepicker-toggle>
+              <mat-datepicker #ExpiryDateTo></mat-datepicker>
+            </mat-form-field>
+        </div>
+      </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <mat-radio-group formControlName="businessType" >
+                <div class="row">
+                  <div class="col-lg-2">
+                    <mat-radio-button [value]="0" color="primary">
+                        All Business
+                       </mat-radio-button>
+                  </div>
+                  <div class="col-lg-2">
+                    <mat-radio-button [value]="2" color="primary">
+                     POS
+                    </mat-radio-button>
+                  </div>
+                  <div class="col-lg-2">
+                    <mat-radio-button [value]="3" color="primary">
+                    In House
+                    </mat-radio-button>
+                  </div>
+                </div>
+              </mat-radio-group>
+          </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <mat-radio-group formControlName="teamMemberType" >
+                <div class="row">
+                  <div class="col-lg-2">
+                   Team Member
+                  </div>
+                  <div class="col-lg-2">
+                    <mat-radio-button [value]="0" color="primary">
+                     All Team Member
+                    </mat-radio-button>
+                  </div>
+                  <div class="col-lg-2">
+                    <mat-radio-button [value]="2" color="primary">
+                     Selected Team Member
+                    </mat-radio-button>
+                  </div>
+                 
+                </div>
+              </mat-radio-group>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+          <mat-form-field appearance="fill" >
+              <mat-label>Team Member</mat-label>
+              <mat-select formControlName="teamMemberId" >
+                <mat-option>Select</mat-option>
+                <mat-option *ngFor="let teamMember of _teamMember" [value]="teamMember.Value" >
+                    {{teamMember.Name}}
+                </mat-option>
+            </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+                <button mat-flat-button color="primary" [ngStyle]="{'background-color':  '#fdcb6e'}"  type="submit"  [disabled]="!renewalperfomancemotor.valid">
+                 Filter
+                </button>
+              </div>
+            <div class="col-md-3">  
+                <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb6e'}"  (click)="reset()" type="button">
+                 Reset
+                </button>
+          </div>
+      </div>
+    <div class="row">
+
+        <div class="col-lg-4">
+          <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb6e'}"  (click)="exportexcel()" type="button">
+           Export To Excel
+          </button>
+        </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+              <ngx-datatable
+              [rows]="rows"
+              [loadingIndicator]="loadingIndicator"
+              class='bootstrap material'
+              [columnMode]="ColumnMode.force"
+              [headerHeight]="50"
+              [footerHeight]="50"
+              [rowHeight]="50"
+              [limit]="20"
+              [scrollbarV]="true" 
+              [scrollbarH]="true"
+              [reorderable]="true"  
+              style="height: 500px;"
+              [columns]="columns">
+              </ngx-datatable>
+          </div>
+        </div>
+ </form>
+ </mat-card-content>
+

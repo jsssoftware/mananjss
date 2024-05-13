@@ -859,7 +859,7 @@ namespace PolicyManagement.Services.Common
 
         public async Task<string> GenerateControlNumber(string branchCode, string verticalCode)
         {
-            string lastControlNumber = await _dataContext.tblMotorPolicyData.OrderByDescending(o => o.PolicyId).Select(s => s.ControlNo).FirstOrDefaultAsync();
+            string lastControlNumber = await _dataContext.tblMotorPolicyDatas.OrderByDescending(o => o.PolicyId).Select(s => s.ControlNo).FirstOrDefaultAsync();
 
             if (lastControlNumber == null)
                 return $"{DateTime.Now:yy}{branchCode}{verticalCode}000001";
@@ -1701,6 +1701,37 @@ namespace PolicyManagement.Services.Common
         public async Task<List<tblMonthCycle>> FindMonthCycle() => await _dataContext.tblMonthCycle.OrderBy(o => o.MonthCycle).ToListAsync();
 
         public async Task<List<tblPolicyTerm>> GetPolicyTerms(short policyPackagetypeId) => await _dataContext.tblPolicyTerm.ToListAsync();
+
+        public async Task<List<DropDownDto<int>>> GetAllPlans(int _productId, int insuranceCompanyId)
+        {
+            var data = new List<DropDownDto<int>>();
+            if (insuranceCompanyId != 0)
+            {
+                data = await _dataContext.tblPlan.
+                    Where(w => w.IsActive && w.ProductId == _productId && w.InsuranceCompanyId == insuranceCompanyId )
+               .Select(s => new DropDownDto<int>
+               {
+                   Name = s.PlanName,
+                   Value = s.PlanId
+               })
+               .OrderBy(o => o.Name)
+               .ToListAsync();
+            }
+            else
+            {
+                data = await _dataContext.tblPlan.
+                        Where(w => w.IsActive && w.ProductId == _productId)
+                   .Select(s => new DropDownDto<int>
+                   {
+                       Name = s.PlanName,
+                       Value = s.PlanId
+                   })
+                   .OrderBy(o => o.Name)
+                   .ToListAsync();
+            }
+            return data;
+        }
+
 
     }
 }

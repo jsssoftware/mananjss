@@ -7,13 +7,13 @@
                       Filter
                     </mat-panel-title>
                   </mat-expansion-panel-header>
-                  <form [formGroup]="fmotherreport" autocomplete="off"  (ngSubmit)="submit()">
+                  <form [formGroup]="fretailmotherreport" autocomplete="off"  (ngSubmit)="submit()">
                     <hr style="margin-top: 0px;" />
       
                     <div class="row">
                       <div class="col-lg-6">
                         <mat-form-field appearance="fill">
-                            <mat-label>Policy Inspection Date From</mat-label>
+                            <mat-label>Policy Inspection Date From*</mat-label>
                             <input matInput [matDatepicker]="PolicyInspectionDateFrom" formControlName="policyInspectionDateFromNew">
                             <mat-datepicker-toggle matSuffix [for]="PolicyInspectionDateFrom"></mat-datepicker-toggle>
                             <mat-datepicker #PolicyInspectionDateFrom></mat-datepicker>
@@ -21,7 +21,7 @@
                       </div>
                       <div class="col-lg-6">
                         <mat-form-field appearance="fill">
-                            <mat-label>Policy Inspection Date To</mat-label>
+                            <mat-label>Policy Inspection Date To*</mat-label>
                             <input matInput [matDatepicker]="PolicyInspectionDateTo" formControlName="policyInspectionDateToNew">
                             <mat-datepicker-toggle matSuffix [for]="PolicyInspectionDateTo"></mat-datepicker-toggle>
                             <mat-datepicker #PolicyInspectionDateTo></mat-datepicker>
@@ -30,45 +30,26 @@
                     </div>
                     <div class="row">
                       <div class="col-lg-6">
-                            <mat-form-field appearance="fill">
+                        <mat-form-field appearance="fill" >
                             <mat-label>Insurance Company</mat-label>
-                            <input type="text" placeholder="Insurance Company" aria-label="Insurance Company" matInput 
-                                formControlName="insuranceCompanyId" [matAutocomplete]="insuranceCompany">
-                            <mat-autocomplete autoActiveFirstOption #insuranceCompany="matAutocomplete"
-                                [displayWith]="getInsuranceCompanyName.bind(this)" >
-                                <mat-option *ngFor="let insuranceCompanies of _filteredInsuranceCompaniesOptions"
-                                [value]="insuranceCompanies.Value">
-                                {{insuranceCompanies.Name}}
-                                </mat-option>
+                            <input type="text"
+                               matInput
+                              formControlName="insuranceCompanyId" [matAutocomplete]="autoInsuranceCompany">
+                            <mat-autocomplete autoActiveFirstOption #autoInsuranceCompany="matAutocomplete"
+                              [displayWith]="getInsuranceCompanyName.bind(this)" >
+                              <mat-option *ngFor="let insuranceCompany of _filteredInsuranceCompaniesOptions"
+                                [value]="insuranceCompany.Value">
+                                {{insuranceCompany.Name}}
+                              </mat-option>
+          
                             </mat-autocomplete>
-                            </mat-form-field>
+          
+                          
+                          </mat-form-field>
                         </div>
 
                     </div>
-                    <div class="row">
-                      <div class="col-lg-4">
-                        <mat-form-field appearance="fill">
-                        <mat-label>Package Type</mat-label>
-                        <mat-select formControlName="packageTypeId"  (selectionChange)="getAllPolicyTerms()">
-                            <mat-option>Select</mat-option>
-                            <mat-option *ngFor="let packageType of _packageTypes" [value]="packageType.Value">
-                            {{packageType.Name}}
-                            </mat-option>
-                        </mat-select>
-                        </mat-form-field>
-                    </div>
-                    <div class="col-lg-4">
-                        <mat-form-field appearance="fill">
-                          <mat-label>Policy Term</mat-label>
-                          <mat-select formControlName="policyTermId" >
-                            <mat-option [value]="">Select</mat-option>
-                            <mat-option *ngFor="let policyTerm of _getPolicyTerms" [value]="policyTerm">
-                              {{policyTerm.PolicyTermName}}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>
-                    </div>
-                    </div>
+                   
                     <div class="row" >
                       <div class="col-lg-2"  >
                           <mat-label>Policy Type</mat-label>
@@ -85,83 +66,96 @@
                                 <div class="col-lg-2"  >
                                   <mat-checkbox color="primary" formControlName="policyType4" >Other Co. Retention</mat-checkbox>
                                 </div>
-                                <div class="col-lg-2"  >
-                                  <mat-checkbox color="primary" formControlName="policyType5"  >TP</mat-checkbox>
-                                </div>
                     </div> 
                     <div class="row">
-                      <div class="col-lg-2"  >
-                          <mat-label>NCB %</mat-label>
-                      </div>
-                                  <div class="col-lg-2"  >
-                                    <mat-checkbox color="primary" formControlName="ncb1"  >0</mat-checkbox>
+                        <div class="col-lg-12">
+                            <mat-radio-group formControlName="verticalTypeId" >
+                                <div class="row">
+                                  <div class="col-lg-2">
+                                   Vertical
                                   </div>
-                                  <div class="col-lg-2"  >
-                                    <mat-checkbox color="primary" formControlName="ncb2" >20</mat-checkbox>
+                                  <div class="col-lg-2">
+                                    <mat-radio-button [value]="1" color="primary">
+                                      Retail & Commercial
+                                    </mat-radio-button>
                                   </div>
-                                  <div class="col-lg-2"  >
-                                    <mat-checkbox color="primary" formControlName="ncb3" >25 above</mat-checkbox>
+                                  <div class="col-lg-2">
+                                    <mat-radio-button [value]="2" color="primary">
+                                      Retail
+                                    </mat-radio-button>
                                   </div>
-                            </div>
-                          
-                    <div class="row">
-                      <div class="col-lg-2"  >
-                          <mat-label>Vehicle Class</mat-label>
-                      </div>
-                                
-                                  <div class="col-lg-2"  >
-                                    <mat-checkbox color="primary" formControlName="ncb1"  >Private</mat-checkbox>
+                                  <div class="col-lg-2">
+                                    <mat-radio-button [value]="3" color="primary" >
+                                        Commercial
+                                    </mat-radio-button>
                                   </div>
-                                  <div class="col-lg-2"  >
-                                    <mat-checkbox color="primary" formControlName="ncb2" >GCV</mat-checkbox>
-                                  </div>
-                                  <div class="col-lg-2"  >
-                                    <mat-checkbox color="primary" formControlName="ncb3" >PCV</mat-checkbox>
-                                  </div>
-                                  <div class="col-lg-2"  >
-                                    <mat-checkbox color="primary" formControlName="ncb3" >Two Wheeler</mat-checkbox>
-                                  </div>
-                                  <div class="col-lg-2"  >
-                                    <mat-checkbox color="primary" formControlName="ncb3" >Misc.</mat-checkbox>
-                                  </div>
-                          
-                        </div>
-                    <div class="row">
-                        <div class="col-lg-4">
-
-                            <mat-form-field appearance="fill">
-                              <mat-label>Manufacturer</mat-label>
-                              <input type="text" placeholder="Manufacturer" aria-label="Manufacturer" matInput 
-                                formControlName="manufacturerId" [matAutocomplete]="autoManufacturer" (selectionChange) = "getModels()">
-                              <mat-autocomplete autoActiveFirstOption #autoManufacturer="matAutocomplete"
-                                [displayWith]="getManufacturerForBind.bind(this)" (optionSelected)="getModels()">
-                                <mat-option *ngFor="let manufacturer of _filteredManufacturerOptions"
-                                  [value]="manufacturer.Value">
-                                  {{manufacturer.Name}}
-                                </mat-option>
-                              </mat-autocomplete>
-                            </mat-form-field>
-          
+                                  
+                                </div>
+                              </mat-radio-group>
                           </div>
-                          <div class="col-lg-4">
+                          <div class="col-lg-12">
+                            <div class="row">
+                              <div class="col-lg-2"  >
+                              </div>
+                              <div class="col-lg-2"  >
+                                <mat-checkbox color="primary" formControlName="vertical1" >Health</mat-checkbox>
+                              </div>
+                              <div class="col-lg-2"  >
+                                <mat-checkbox color="primary" formControlName="vertical2"  >Travel</mat-checkbox>
+                              </div>
+                              <div class="col-lg-2"  >
+                                <mat-checkbox color="primary" formControlName="vertical3"  >PA</mat-checkbox>
+                              </div>
+                            </div>
+                         </div>
+                          <div class="col-lg-12">
+                            <div class="row">
+                              <div class="col-lg-2"  >
+                              </div>
+                              <div class="col-lg-2"  >
+                                <mat-checkbox color="primary" formControlName="vertical4" >Fire</mat-checkbox>
+                              </div>
+                              <div class="col-lg-2"  >
+                                <mat-checkbox color="primary" formControlName="vertical5"  >Marine</mat-checkbox>
+                              </div>
+                              <div class="col-lg-2"  >
+                                <mat-checkbox color="primary" formControlName="vertical6"  >Misc</mat-checkbox>
+                              </div>
+                            </div>
+                         </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-4">
                             <mat-form-field appearance="fill">
-                              <mat-label>Model</mat-label>
-                              <mat-select formControlName="modelId">
-                                <mat-option>Select</mat-option>
-                                <mat-option *ngFor="let model of _models" [value]="model.Value">{{model.Name}}</mat-option>
-                              </mat-select>
-                            </mat-form-field>
+                                <mat-label>Product</mat-label>
+                                <mat-select formControlName="product"  (selectionChange)="getPlan()">
+                                  <mat-option>Select</mat-option>
+                                  <mat-option *ngFor="let products of _products" [value]="products.Value">
+                                    {{products.Name}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
                           </div>
                       </div>
                       <div class="row">
                         <div class="col-lg-4">
-                          <mat-form-field appearance="fill">
-                            <mat-label>RTO Zone</mat-label>
-                            <mat-select formControlName="rtoZoneId" >
-                              <mat-option>Select</mat-option>
-                              <mat-option *ngFor="let rtoZone of _rtoZones" [value]="rtoZone">{{rtoZone.Name}}</mat-option>
-                            </mat-select>
-                          </mat-form-field>
+                            <mat-form-field appearance="fill">
+                                <mat-label>Plan</mat-label>
+                                <mat-select formControlName="plan" >
+                                  <mat-option>Select</mat-option>
+                                  <mat-option *ngFor="let plans of _plans" [value]="plans.Value">
+                                    {{plans.Name}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                          </div>
+                        <div class="col-lg-4">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Plan Type</mat-label>
+                                <mat-select formControlName="planTypes" >
+                                  <mat-option>Select</mat-option>
+                                  <mat-option *ngFor="let planTypes of _planTypes" [value]="planTypes.Value">
+                                    {{planTypes.Name}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
                         </div>
                       </div>
                       <div class="row">
@@ -215,7 +209,7 @@
                         <div class="col-lg-4">
                           <mat-form-field appearance="fill">
                             <mat-label>POS Name</mat-label>
-                            <mat-select formControlName="posManagedBy">
+                            <mat-select formControlName="posNameId">
                               <mat-option>Select</mat-option>
                               <mat-option *ngFor="let _posData of _posDatas" [value]="_posData.Value">{{_posData.Name}}
                               </mat-option>
@@ -266,36 +260,8 @@
                           </div>
                       </div>
                       <div class="row">
-                        <div class="col-lg-12">
-
-                            <mat-radio-group formControlName="addonRiderId" >
-                                <div class="row">
-                                  <div class="col-lg-3">
-                                    Add on Plan Rider
-                                  </div>
-                                  <div class="col-lg-3">
-                                    <mat-radio-button [value]="2" color="primary" >
-                                      All
-                                    </mat-radio-button>
-                                  </div>
-                                  <div class="col-lg-3">
-                                    <mat-radio-button [value]="3" color="primary">
-                                        With Add on
-                                    </mat-radio-button>
-                                  </div>
-                                  <div class="col-lg-3">
-                                    <mat-radio-button [value]="2" color="primary">
-                                        Without Add on
-                                    </mat-radio-button>
-                                  </div>
-                                  
-                                </div>
-                              </mat-radio-group>
-                          </div>
-                      </div>
-                      <div class="row">
                         <div class="col-lg-4">
-                          <button mat-flat-button color="primary" [ngStyle]="{'background-color':  '#fdcb6e'}"  type="submit" [disabled]="!fmotherreport.valid">
+                          <button mat-flat-button color="primary" [ngStyle]="{'background-color':  '#fdcb6e'}"  type="submit">
                            Filter
                           </button>
                         </div>
@@ -331,7 +297,7 @@
                     </div>
                 </div>
                 </mat-expansion-panel>
-                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                <mat-expansion-panel #reportpanel (opened)="reportpanelOpenState = true" (closed)="reportpanelOpenState = false">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                       Mother Report

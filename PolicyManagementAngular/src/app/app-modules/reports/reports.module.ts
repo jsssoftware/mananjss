@@ -12,6 +12,8 @@ import { RecondownloadComponent } from './motor/recondownload/recondownload.comp
 import { RecondownloadRetailComponent } from './retail/recondownload/recondownload.component';
 import { ReconuploadRetailComponent } from './retail/reconupload/reconupload.component';
 import { MotherreportComponent } from './motor/motherreport/motherreport.component';
+import { RetailMotherreportComponent } from './retail/retail-motherreport/retail-motherreport.component';
+import { RenewalPerfomanceMotorComponent } from './motor/renewal-perfomance-motor/renewal-perfomance-motor.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { MotherreportComponent } from './motor/motherreport/motherreport.compone
     RecondownloadComponent,
     RecondownloadRetailComponent,
     ReconuploadRetailComponent,
-    MotherreportComponent
+    MotherreportComponent,
+    RetailMotherreportComponent,
+    RenewalPerfomanceMotorComponent
   ],
 
   imports: [

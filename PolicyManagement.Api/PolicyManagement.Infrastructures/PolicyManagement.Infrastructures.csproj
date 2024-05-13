@@ -446,6 +446,12 @@
     <Compile Include="EntityFramework\usp_GetMotorPolicyData_Result.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\Usp_GetRetailCommercialPolicyData_NEW_Result.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Usp_GetRetailCommercialPolicyData_Result.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\Usp_InspectionByPolicyId1_Result.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
@@ -480,6 +486,9 @@
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Usp_ReconDataDownload_Result.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Usp_Report_RenewalPerfomanceReport_Result.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Usp_UploadedDocuments1_Result.cs">

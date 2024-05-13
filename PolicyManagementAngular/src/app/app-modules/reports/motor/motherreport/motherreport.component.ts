@@ -153,9 +153,9 @@ export class MotherreportComponent implements OnInit {
  fmotherreport = new FormGroup({
   insuranceCompanyId: new FormControl(''),
   policyInspectionDateFrom: new FormControl(''),
-  policyInspectionDateFromNew: new FormControl(''),
+  policyInspectionDateFromNew: new FormControl('',Validators.required),
   policyInspectionDateTo: new FormControl(''),
-  policyInspectionDateToNew: new FormControl(''),
+  policyInspectionDateToNew: new FormControl('',Validators.required),
   packageTypeId: new FormControl(''),
   policyTermId: new FormControl(''),
   policyTypeId: new FormControl(''),
@@ -332,6 +332,10 @@ export class MotherreportComponent implements OnInit {
      
       //  this.getPolicyTerms()
     });
+  }
+
+  getInsuranceCompanyName(value: number): string {
+    return value ? this._insuranceCompanies.filter(f => f.Value == value)[0].Name : '';
   }
 
   

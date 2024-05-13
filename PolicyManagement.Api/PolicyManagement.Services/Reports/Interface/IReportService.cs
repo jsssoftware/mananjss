@@ -10,5 +10,7 @@ namespace PolicyManagement.Services.Reports.Interface
         Task<CommonDto<object>> GetMotorReconDownload(ReportModel reportModel);
         Task<CommonDto<object>> GetMotorReconUpload(UploadReconFile uploadReconFile);
         Task<CommonDto<object>> GetMotorMotherReport(MotherReport motherReport);
+        Task<CommonDto<object>> GetRetailCommercialMotherReport(RetailMotherReport retailMotherReport);
+        Task<CommonDto<object>> GetRenewPerfomanceReport(RenewPerfomance renewPerfomance);
     }
 }

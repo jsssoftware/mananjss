@@ -267,7 +267,7 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<ViewPersonDataBirthdayWish> ViewPersonDataBirthdayWish { get; set; }
 
-    public virtual DbSet<tblMotorPolicyData> tblMotorPolicyData { get; set; }
+    public virtual DbSet<tblMotorPolicyData> tblMotorPolicyDatas { get; set; }
 
     public virtual DbSet<tblLog> tblLogs { get; set; }
 
@@ -5532,6 +5532,434 @@ public partial class DataContext : DbContext
 
 
         return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetMotorPolicyData_Result>("usp_GetMotorPolicyData", varBranchIdParameter, globalvardtpIssueFromParameter, globalvardtpIssueToParameter, globalvarInsureCompanyIdParameter, globalvarPolicyPackageTypeIdParameter, globalvarManufacturerIdParameter, globalvarModelIdParameter, globalvarRTOZoneIdParameter, globalvarDSAIdParameter, globalvarDSACategoryIdParameter, globalvaroptBusinessDoneIdParameter, globalvarAddonIdParameter, tempvarNCB1Parameter, tempvarNCB2Parameter, tempvarNCB3Parameter, tempvarPolicyType1Parameter, tempvarPolicyType2Parameter, tempvarPolicyType3Parameter, tempvarPolicyType4Parameter, tempvarPolicyType5Parameter, tempvarIsClaimedParameter, tempvarIsShortTermParameter, globalvarPolicyStatusParameter);
+    }
+
+
+    public virtual int GetRetailCommercialPolicyData(Nullable<int> branchId, Nullable<System.DateTime> issueDateFrom, Nullable<System.DateTime> issueDateTo, Nullable<System.DateTime> policyStartDateFrom, Nullable<System.DateTime> policyStartDateTo, Nullable<int> insuranceCompanyId, Nullable<int> productId, Nullable<int> planId, Nullable<int> planTypeId, Nullable<int> dSAId, Nullable<int> dSACategoryId, Nullable<int> dSAManagedBy, Nullable<int> fOSId, Nullable<int> telecallerId, Nullable<int> referenceId, string businessDoneBy, Nullable<bool> policyType1, Nullable<bool> policyType2, Nullable<bool> policyType3, Nullable<bool> policyType4, Nullable<bool> vertical1, Nullable<bool> vertical2, Nullable<bool> vertical3, Nullable<bool> vertical4, Nullable<bool> vertical5, Nullable<bool> vertical6)
+    {
+
+        var branchIdParameter = branchId.HasValue ?
+            new ObjectParameter("BranchId", branchId) :
+            new ObjectParameter("BranchId", typeof(int));
+
+
+        var issueDateFromParameter = issueDateFrom.HasValue ?
+            new ObjectParameter("IssueDateFrom", issueDateFrom) :
+            new ObjectParameter("IssueDateFrom", typeof(System.DateTime));
+
+
+        var issueDateToParameter = issueDateTo.HasValue ?
+            new ObjectParameter("IssueDateTo", issueDateTo) :
+            new ObjectParameter("IssueDateTo", typeof(System.DateTime));
+
+
+        var policyStartDateFromParameter = policyStartDateFrom.HasValue ?
+            new ObjectParameter("PolicyStartDateFrom", policyStartDateFrom) :
+            new ObjectParameter("PolicyStartDateFrom", typeof(System.DateTime));
+
+
+        var policyStartDateToParameter = policyStartDateTo.HasValue ?
+            new ObjectParameter("PolicyStartDateTo", policyStartDateTo) :
+            new ObjectParameter("PolicyStartDateTo", typeof(System.DateTime));
+
+
+        var insuranceCompanyIdParameter = insuranceCompanyId.HasValue ?
+            new ObjectParameter("InsuranceCompanyId", insuranceCompanyId) :
+            new ObjectParameter("InsuranceCompanyId", typeof(int));
+
+
+        var productIdParameter = productId.HasValue ?
+            new ObjectParameter("ProductId", productId) :
+            new ObjectParameter("ProductId", typeof(int));
+
+
+        var planIdParameter = planId.HasValue ?
+            new ObjectParameter("PlanId", planId) :
+            new ObjectParameter("PlanId", typeof(int));
+
+
+        var planTypeIdParameter = planTypeId.HasValue ?
+            new ObjectParameter("PlanTypeId", planTypeId) :
+            new ObjectParameter("PlanTypeId", typeof(int));
+
+
+        var dSAIdParameter = dSAId.HasValue ?
+            new ObjectParameter("DSAId", dSAId) :
+            new ObjectParameter("DSAId", typeof(int));
+
+
+        var dSACategoryIdParameter = dSACategoryId.HasValue ?
+            new ObjectParameter("DSACategoryId", dSACategoryId) :
+            new ObjectParameter("DSACategoryId", typeof(int));
+
+
+        var dSAManagedByParameter = dSAManagedBy.HasValue ?
+            new ObjectParameter("DSAManagedBy", dSAManagedBy) :
+            new ObjectParameter("DSAManagedBy", typeof(int));
+
+
+        var fOSIdParameter = fOSId.HasValue ?
+            new ObjectParameter("FOSId", fOSId) :
+            new ObjectParameter("FOSId", typeof(int));
+
+
+        var telecallerIdParameter = telecallerId.HasValue ?
+            new ObjectParameter("TelecallerId", telecallerId) :
+            new ObjectParameter("TelecallerId", typeof(int));
+
+
+        var referenceIdParameter = referenceId.HasValue ?
+            new ObjectParameter("ReferenceId", referenceId) :
+            new ObjectParameter("ReferenceId", typeof(int));
+
+
+        var businessDoneByParameter = businessDoneBy != null ?
+            new ObjectParameter("BusinessDoneBy", businessDoneBy) :
+            new ObjectParameter("BusinessDoneBy", typeof(string));
+
+
+        var policyType1Parameter = policyType1.HasValue ?
+            new ObjectParameter("PolicyType1", policyType1) :
+            new ObjectParameter("PolicyType1", typeof(bool));
+
+
+        var policyType2Parameter = policyType2.HasValue ?
+            new ObjectParameter("PolicyType2", policyType2) :
+            new ObjectParameter("PolicyType2", typeof(bool));
+
+
+        var policyType3Parameter = policyType3.HasValue ?
+            new ObjectParameter("PolicyType3", policyType3) :
+            new ObjectParameter("PolicyType3", typeof(bool));
+
+
+        var policyType4Parameter = policyType4.HasValue ?
+            new ObjectParameter("PolicyType4", policyType4) :
+            new ObjectParameter("PolicyType4", typeof(bool));
+
+
+        var vertical1Parameter = vertical1.HasValue ?
+            new ObjectParameter("Vertical1", vertical1) :
+            new ObjectParameter("Vertical1", typeof(bool));
+
+
+        var vertical2Parameter = vertical2.HasValue ?
+            new ObjectParameter("Vertical2", vertical2) :
+            new ObjectParameter("Vertical2", typeof(bool));
+
+
+        var vertical3Parameter = vertical3.HasValue ?
+            new ObjectParameter("Vertical3", vertical3) :
+            new ObjectParameter("Vertical3", typeof(bool));
+
+
+        var vertical4Parameter = vertical4.HasValue ?
+            new ObjectParameter("Vertical4", vertical4) :
+            new ObjectParameter("Vertical4", typeof(bool));
+
+
+        var vertical5Parameter = vertical5.HasValue ?
+            new ObjectParameter("Vertical5", vertical5) :
+            new ObjectParameter("Vertical5", typeof(bool));
+
+
+        var vertical6Parameter = vertical6.HasValue ?
+            new ObjectParameter("Vertical6", vertical6) :
+            new ObjectParameter("Vertical6", typeof(bool));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetRetailCommercialPolicyData", branchIdParameter, issueDateFromParameter, issueDateToParameter, policyStartDateFromParameter, policyStartDateToParameter, insuranceCompanyIdParameter, productIdParameter, planIdParameter, planTypeIdParameter, dSAIdParameter, dSACategoryIdParameter, dSAManagedByParameter, fOSIdParameter, telecallerIdParameter, referenceIdParameter, businessDoneByParameter, policyType1Parameter, policyType2Parameter, policyType3Parameter, policyType4Parameter, vertical1Parameter, vertical2Parameter, vertical3Parameter, vertical4Parameter, vertical5Parameter, vertical6Parameter);
+    }
+
+
+    public virtual ObjectResult<Usp_GetRetailCommercialPolicyData_Result> Usp_GetRetailCommercialPolicyData(Nullable<int> branchId, Nullable<System.DateTime> policyStartDateFrom, Nullable<System.DateTime> policyStartDateTo, Nullable<int> insuranceCompanyId, Nullable<int> productId, Nullable<int> planId, Nullable<int> planTypeId, Nullable<int> dSAId, Nullable<int> dSACategoryId, Nullable<int> dSAManagedBy, Nullable<int> fOSId, Nullable<int> telecallerId, Nullable<int> referenceId, Nullable<int> businessDoneBy, Nullable<bool> policyType1, Nullable<bool> policyType2, Nullable<bool> policyType3, Nullable<bool> policyType4, Nullable<bool> vertical1, Nullable<bool> vertical2, Nullable<bool> vertical3, Nullable<bool> vertical4, Nullable<bool> vertical5, Nullable<bool> vertical6)
+    {
+
+        var branchIdParameter = branchId.HasValue ?
+            new ObjectParameter("BranchId", branchId) :
+            new ObjectParameter("BranchId", typeof(int));
+
+
+        var policyStartDateFromParameter = policyStartDateFrom.HasValue ?
+            new ObjectParameter("PolicyStartDateFrom", policyStartDateFrom) :
+            new ObjectParameter("PolicyStartDateFrom", typeof(System.DateTime));
+
+
+        var policyStartDateToParameter = policyStartDateTo.HasValue ?
+            new ObjectParameter("PolicyStartDateTo", policyStartDateTo) :
+            new ObjectParameter("PolicyStartDateTo", typeof(System.DateTime));
+
+
+        var insuranceCompanyIdParameter = insuranceCompanyId.HasValue ?
+            new ObjectParameter("InsuranceCompanyId", insuranceCompanyId) :
+            new ObjectParameter("InsuranceCompanyId", typeof(int));
+
+
+        var productIdParameter = productId.HasValue ?
+            new ObjectParameter("ProductId", productId) :
+            new ObjectParameter("ProductId", typeof(int));
+
+
+        var planIdParameter = planId.HasValue ?
+            new ObjectParameter("PlanId", planId) :
+            new ObjectParameter("PlanId", typeof(int));
+
+
+        var planTypeIdParameter = planTypeId.HasValue ?
+            new ObjectParameter("PlanTypeId", planTypeId) :
+            new ObjectParameter("PlanTypeId", typeof(int));
+
+
+        var dSAIdParameter = dSAId.HasValue ?
+            new ObjectParameter("DSAId", dSAId) :
+            new ObjectParameter("DSAId", typeof(int));
+
+
+        var dSACategoryIdParameter = dSACategoryId.HasValue ?
+            new ObjectParameter("DSACategoryId", dSACategoryId) :
+            new ObjectParameter("DSACategoryId", typeof(int));
+
+
+        var dSAManagedByParameter = dSAManagedBy.HasValue ?
+            new ObjectParameter("DSAManagedBy", dSAManagedBy) :
+            new ObjectParameter("DSAManagedBy", typeof(int));
+
+
+        var fOSIdParameter = fOSId.HasValue ?
+            new ObjectParameter("FOSId", fOSId) :
+            new ObjectParameter("FOSId", typeof(int));
+
+
+        var telecallerIdParameter = telecallerId.HasValue ?
+            new ObjectParameter("TelecallerId", telecallerId) :
+            new ObjectParameter("TelecallerId", typeof(int));
+
+
+        var referenceIdParameter = referenceId.HasValue ?
+            new ObjectParameter("ReferenceId", referenceId) :
+            new ObjectParameter("ReferenceId", typeof(int));
+
+
+        var businessDoneByParameter = businessDoneBy.HasValue ?
+            new ObjectParameter("BusinessDoneBy", businessDoneBy) :
+            new ObjectParameter("BusinessDoneBy", typeof(int));
+
+
+        var policyType1Parameter = policyType1.HasValue ?
+            new ObjectParameter("PolicyType1", policyType1) :
+            new ObjectParameter("PolicyType1", typeof(bool));
+
+
+        var policyType2Parameter = policyType2.HasValue ?
+            new ObjectParameter("PolicyType2", policyType2) :
+            new ObjectParameter("PolicyType2", typeof(bool));
+
+
+        var policyType3Parameter = policyType3.HasValue ?
+            new ObjectParameter("PolicyType3", policyType3) :
+            new ObjectParameter("PolicyType3", typeof(bool));
+
+
+        var policyType4Parameter = policyType4.HasValue ?
+            new ObjectParameter("PolicyType4", policyType4) :
+            new ObjectParameter("PolicyType4", typeof(bool));
+
+
+        var vertical1Parameter = vertical1.HasValue ?
+            new ObjectParameter("Vertical1", vertical1) :
+            new ObjectParameter("Vertical1", typeof(bool));
+
+
+        var vertical2Parameter = vertical2.HasValue ?
+            new ObjectParameter("Vertical2", vertical2) :
+            new ObjectParameter("Vertical2", typeof(bool));
+
+
+        var vertical3Parameter = vertical3.HasValue ?
+            new ObjectParameter("Vertical3", vertical3) :
+            new ObjectParameter("Vertical3", typeof(bool));
+
+
+        var vertical4Parameter = vertical4.HasValue ?
+            new ObjectParameter("Vertical4", vertical4) :
+            new ObjectParameter("Vertical4", typeof(bool));
+
+
+        var vertical5Parameter = vertical5.HasValue ?
+            new ObjectParameter("Vertical5", vertical5) :
+            new ObjectParameter("Vertical5", typeof(bool));
+
+
+        var vertical6Parameter = vertical6.HasValue ?
+            new ObjectParameter("Vertical6", vertical6) :
+            new ObjectParameter("Vertical6", typeof(bool));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_GetRetailCommercialPolicyData_Result>("Usp_GetRetailCommercialPolicyData", branchIdParameter, policyStartDateFromParameter, policyStartDateToParameter, insuranceCompanyIdParameter, productIdParameter, planIdParameter, planTypeIdParameter, dSAIdParameter, dSACategoryIdParameter, dSAManagedByParameter, fOSIdParameter, telecallerIdParameter, referenceIdParameter, businessDoneByParameter, policyType1Parameter, policyType2Parameter, policyType3Parameter, policyType4Parameter, vertical1Parameter, vertical2Parameter, vertical3Parameter, vertical4Parameter, vertical5Parameter, vertical6Parameter);
+    }
+
+
+    public virtual ObjectResult<Usp_GetRetailCommercialPolicyData_NEW_Result> Usp_GetRetailCommercialPolicyData_NEW(Nullable<int> branchId, Nullable<System.DateTime> policyStartDateFrom, Nullable<System.DateTime> policyStartDateTo, Nullable<int> insuranceCompanyId, Nullable<int> productId, Nullable<int> planId, Nullable<int> planTypeId, Nullable<int> dSAId, Nullable<int> dSACategoryId, Nullable<int> dSAManagedBy, Nullable<int> fOSId, Nullable<int> telecallerId, Nullable<int> referenceId, Nullable<int> businessDoneBy, Nullable<bool> policyType1, Nullable<bool> policyType2, Nullable<bool> policyType3, Nullable<bool> policyType4, Nullable<bool> vertical1, Nullable<bool> vertical2, Nullable<bool> vertical3, Nullable<bool> vertical4, Nullable<bool> vertical5, Nullable<bool> vertical6)
+    {
+
+        var branchIdParameter = branchId.HasValue ?
+            new ObjectParameter("BranchId", branchId) :
+            new ObjectParameter("BranchId", typeof(int));
+
+
+        var policyStartDateFromParameter = policyStartDateFrom.HasValue ?
+            new ObjectParameter("PolicyStartDateFrom", policyStartDateFrom) :
+            new ObjectParameter("PolicyStartDateFrom", typeof(System.DateTime));
+
+
+        var policyStartDateToParameter = policyStartDateTo.HasValue ?
+            new ObjectParameter("PolicyStartDateTo", policyStartDateTo) :
+            new ObjectParameter("PolicyStartDateTo", typeof(System.DateTime));
+
+
+        var insuranceCompanyIdParameter = insuranceCompanyId.HasValue ?
+            new ObjectParameter("InsuranceCompanyId", insuranceCompanyId) :
+            new ObjectParameter("InsuranceCompanyId", typeof(int));
+
+
+        var productIdParameter = productId.HasValue ?
+            new ObjectParameter("ProductId", productId) :
+            new ObjectParameter("ProductId", typeof(int));
+
+
+        var planIdParameter = planId.HasValue ?
+            new ObjectParameter("PlanId", planId) :
+            new ObjectParameter("PlanId", typeof(int));
+
+
+        var planTypeIdParameter = planTypeId.HasValue ?
+            new ObjectParameter("PlanTypeId", planTypeId) :
+            new ObjectParameter("PlanTypeId", typeof(int));
+
+
+        var dSAIdParameter = dSAId.HasValue ?
+            new ObjectParameter("DSAId", dSAId) :
+            new ObjectParameter("DSAId", typeof(int));
+
+
+        var dSACategoryIdParameter = dSACategoryId.HasValue ?
+            new ObjectParameter("DSACategoryId", dSACategoryId) :
+            new ObjectParameter("DSACategoryId", typeof(int));
+
+
+        var dSAManagedByParameter = dSAManagedBy.HasValue ?
+            new ObjectParameter("DSAManagedBy", dSAManagedBy) :
+            new ObjectParameter("DSAManagedBy", typeof(int));
+
+
+        var fOSIdParameter = fOSId.HasValue ?
+            new ObjectParameter("FOSId", fOSId) :
+            new ObjectParameter("FOSId", typeof(int));
+
+
+        var telecallerIdParameter = telecallerId.HasValue ?
+            new ObjectParameter("TelecallerId", telecallerId) :
+            new ObjectParameter("TelecallerId", typeof(int));
+
+
+        var referenceIdParameter = referenceId.HasValue ?
+            new ObjectParameter("ReferenceId", referenceId) :
+            new ObjectParameter("ReferenceId", typeof(int));
+
+
+        var businessDoneByParameter = businessDoneBy.HasValue ?
+            new ObjectParameter("BusinessDoneBy", businessDoneBy) :
+            new ObjectParameter("BusinessDoneBy", typeof(int));
+
+
+        var policyType1Parameter = policyType1.HasValue ?
+            new ObjectParameter("PolicyType1", policyType1) :
+            new ObjectParameter("PolicyType1", typeof(bool));
+
+
+        var policyType2Parameter = policyType2.HasValue ?
+            new ObjectParameter("PolicyType2", policyType2) :
+            new ObjectParameter("PolicyType2", typeof(bool));
+
+
+        var policyType3Parameter = policyType3.HasValue ?
+            new ObjectParameter("PolicyType3", policyType3) :
+            new ObjectParameter("PolicyType3", typeof(bool));
+
+
+        var policyType4Parameter = policyType4.HasValue ?
+            new ObjectParameter("PolicyType4", policyType4) :
+            new ObjectParameter("PolicyType4", typeof(bool));
+
+
+        var vertical1Parameter = vertical1.HasValue ?
+            new ObjectParameter("Vertical1", vertical1) :
+            new ObjectParameter("Vertical1", typeof(bool));
+
+
+        var vertical2Parameter = vertical2.HasValue ?
+            new ObjectParameter("Vertical2", vertical2) :
+            new ObjectParameter("Vertical2", typeof(bool));
+
+
+        var vertical3Parameter = vertical3.HasValue ?
+            new ObjectParameter("Vertical3", vertical3) :
+            new ObjectParameter("Vertical3", typeof(bool));
+
+
+        var vertical4Parameter = vertical4.HasValue ?
+            new ObjectParameter("Vertical4", vertical4) :
+            new ObjectParameter("Vertical4", typeof(bool));
+
+
+        var vertical5Parameter = vertical5.HasValue ?
+            new ObjectParameter("Vertical5", vertical5) :
+            new ObjectParameter("Vertical5", typeof(bool));
+
+
+        var vertical6Parameter = vertical6.HasValue ?
+            new ObjectParameter("Vertical6", vertical6) :
+            new ObjectParameter("Vertical6", typeof(bool));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_GetRetailCommercialPolicyData_NEW_Result>("Usp_GetRetailCommercialPolicyData_NEW", branchIdParameter, policyStartDateFromParameter, policyStartDateToParameter, insuranceCompanyIdParameter, productIdParameter, planIdParameter, planTypeIdParameter, dSAIdParameter, dSACategoryIdParameter, dSAManagedByParameter, fOSIdParameter, telecallerIdParameter, referenceIdParameter, businessDoneByParameter, policyType1Parameter, policyType2Parameter, policyType3Parameter, policyType4Parameter, vertical1Parameter, vertical2Parameter, vertical3Parameter, vertical4Parameter, vertical5Parameter, vertical6Parameter);
+    }
+
+
+    public virtual ObjectResult<Usp_Report_RenewalPerfomanceReport_Result> Usp_Report_RenewalPerfomanceReport(Nullable<System.DateTime> vardtpFrom, Nullable<System.DateTime> vardtpTo, Nullable<int> varBranchId, Nullable<int> teamMemberId, Nullable<int> businessDoneBy, Nullable<int> insuranceCompanyId)
+    {
+
+        var vardtpFromParameter = vardtpFrom.HasValue ?
+            new ObjectParameter("vardtpFrom", vardtpFrom) :
+            new ObjectParameter("vardtpFrom", typeof(System.DateTime));
+
+
+        var vardtpToParameter = vardtpTo.HasValue ?
+            new ObjectParameter("vardtpTo", vardtpTo) :
+            new ObjectParameter("vardtpTo", typeof(System.DateTime));
+
+
+        var varBranchIdParameter = varBranchId.HasValue ?
+            new ObjectParameter("varBranchId", varBranchId) :
+            new ObjectParameter("varBranchId", typeof(int));
+
+
+        var teamMemberIdParameter = teamMemberId.HasValue ?
+            new ObjectParameter("teamMemberId", teamMemberId) :
+            new ObjectParameter("teamMemberId", typeof(int));
+
+
+        var businessDoneByParameter = businessDoneBy.HasValue ?
+            new ObjectParameter("BusinessDoneBy", businessDoneBy) :
+            new ObjectParameter("BusinessDoneBy", typeof(int));
+
+
+        var insuranceCompanyIdParameter = insuranceCompanyId.HasValue ?
+            new ObjectParameter("insuranceCompanyId", insuranceCompanyId) :
+            new ObjectParameter("insuranceCompanyId", typeof(int));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_Report_RenewalPerfomanceReport_Result>("Usp_Report_RenewalPerfomanceReport", vardtpFromParameter, vardtpToParameter, varBranchIdParameter, teamMemberIdParameter, businessDoneByParameter, insuranceCompanyIdParameter);
     }
 
 }

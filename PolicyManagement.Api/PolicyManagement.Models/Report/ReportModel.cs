@@ -49,8 +49,56 @@ namespace PolicyManagement.Models.Report {
         public int Ncb2 { get; set;}
         public int Ncb3 { get; set;}
         public int PosNameId { get; set;}
-
-
-
     }
+
+
+    public class RetailMotherReport
+    {
+        public int InsuranceCompanyId { get; set; }
+        public string PolicyInspectionDateFrom { get; set; }
+        public string PolicyInspectionDateTo { get; set; }
+        public int BusinessDoneBy { get; set; }
+        public int ReferenceId { get; set; }
+        public int TeleCallerId { get; set; }
+        public int FosId { get; set; }
+        public int BranchId { get; set; }
+        public int PosmanagedBy { get; set; }
+        public bool PolicyType1 { get; set; }
+        public bool PolicyType2 { get; set; }
+        public bool PolicyType3 { get; set; }
+        public bool PolicyType4 { get; set; }
+        public bool PolicyType5 { get; set; }
+        public int PosNameId { get; set; }
+        public bool Vertical1 { get; set; }
+        public bool Vertical2 { get; set; }
+        public bool Vertical3 { get; set; }
+        public bool Vertical4 { get; set; }
+        public bool Vertical5 { get; set; }
+        public bool Vertical6 { get; set; }
+        public int Product { get; set; }
+        public int Plan { get; set; }
+        public int PlanTypes { get; set; }
+    }
+
+
+    public class RenewPerfomance
+    {
+        public int InsuranceCompanyId { get; set; }
+        public string ExpiryDateFrom { get; set; }
+        public string ExpiryDateTo { get; set; }
+        public int InsuranceType { get; set; }
+        public int BusinessType { get; set; }
+        public int TeamMemberId { get; set; }
+        public int TeamMemberType { get; set; }
+        public int BranchId { get; set; }
+      
+    }
+
+
+    public class MotorPolicyData
+    {
+        public dynamic CustomerCode { get; set; }
+        
+    }
+
 }
