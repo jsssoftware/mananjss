@@ -361,7 +361,7 @@ namespace PolicyManagement.Services.Motor
                 catch (Exception ex)
                 {
                     dbContextTransaction.Rollback(); 
-                    log.Error(ex);
+                    log.Error(ex.GetBaseException());
                     return new CommonDto<object>
                     {
 
@@ -863,7 +863,7 @@ namespace PolicyManagement.Services.Motor
                 await _dataContext.SaveChangesAsync();
             } catch (Exception ex)
             {
-                log.Error(ex);
+                log.Error(ex.GetBaseException());
                 Console.WriteLine(ex.Message.ToString());
 
             }

@@ -98,7 +98,7 @@ export class AuthorizationService {
     if (!authCredentails) {
       return false;
     }
-    let string = authCredentails[0].DisplayName;
+    let string = authCredentails[0]?.DisplayName;
     if(string == claimType){
       return true
     }

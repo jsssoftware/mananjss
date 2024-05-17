@@ -33,5 +33,9 @@ namespace PolicyManagement.Api.Controllers.Reports
         [HttpPost]
         public async Task<IHttpActionResult> GetRenewPerfomanceReport(RenewPerfomance renewPerfomance) => Json(await _reportService.GetRenewPerfomanceReport(renewPerfomance));
 
+        [Route("findmotorpolicydata")]
+        [HttpPost]
+        public async Task<IHttpActionResult> GetPolicyDatas(AgentSwapFilter agentSwapFilter) => Json(await _reportService.FindMotorPolicyData(agentSwapFilter));
+
     }
 }

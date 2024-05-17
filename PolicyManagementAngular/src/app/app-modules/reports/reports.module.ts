@@ -14,6 +14,7 @@ import { ReconuploadRetailComponent } from './retail/reconupload/reconupload.com
 import { MotherreportComponent } from './motor/motherreport/motherreport.component';
 import { RetailMotherreportComponent } from './retail/retail-motherreport/retail-motherreport.component';
 import { RenewalPerfomanceMotorComponent } from './motor/renewal-perfomance-motor/renewal-perfomance-motor.component';
+import { AgentSwappingComponent } from './motor/agent-swapping/agent-swapping.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { RenewalPerfomanceMotorComponent } from './motor/renewal-perfomance-moto
     ReconuploadRetailComponent,
     MotherreportComponent,
     RetailMotherreportComponent,
-    RenewalPerfomanceMotorComponent
+    RenewalPerfomanceMotorComponent,
+    AgentSwappingComponent
   ],
 
   imports: [

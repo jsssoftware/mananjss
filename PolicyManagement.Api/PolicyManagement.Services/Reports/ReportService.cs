@@ -320,5 +320,58 @@ namespace PolicyManagement.Services.Reports
             };
 
         }
+
+
+
+
+        public async Task<DataTableDto<List<dynamic>>> FindMotorPolicyData(AgentSwapFilter agentSwapFilter)
+        {
+            var filteredResult = (from policy in _dataContext.tblMotorPolicyDatas
+                                  join vertical in _dataContext.tblVertical on policy.VerticalId equals vertical.VerticalId
+                                  
+                                  join policyType in _dataContext.tblPolicyType on policy.PolicyTypeId equals policyType.PolicyTypeId
+                                  join branch in _dataContext.tblBranch on policy.BranchId equals branch.BranchId into branchJoin
+                                  from branch in branchJoin.DefaultIfEmpty()
+                                  join pos in _dataContext.tblPOS on policy.POSId equals pos.POSId into posJoin
+                                  from pos in posJoin.DefaultIfEmpty()
+                                  join manufacturer in _dataContext.tblManufacturers on policy.ManufacturerId equals manufacturer.ManufacturerId into manufacturerJoin
+                                  from manufacturer in manufacturerJoin.DefaultIfEmpty()
+                                  join insuranceCompany in _dataContext.tblInsuranceCompany on policy.InsuranceCompanyId equals insuranceCompany.InsuranceCompanyId into insuranceCompanyJoin
+                                  from insuranceCompany in insuranceCompanyJoin.DefaultIfEmpty()
+                                  join model in _dataContext.tblModel on policy.ModelId equals model.ModelId into modelJoin
+                                  from model in modelJoin.DefaultIfEmpty()
+                                  where (agentSwapFilter.InsuranceCompanyId == 0 || insuranceCompany.InsuranceCompanyId == agentSwapFilter.InsuranceCompanyId) && (string.IsNullOrEmpty(agentSwapFilter.number) || policy.ControlNo == agentSwapFilter.number) && (agentSwapFilter.PosNameId == 0 || pos.POSId == agentSwapFilter.PosNameId) 
+                                  && (string.IsNullOrEmpty(agentSwapFilter.RegistrationNumber)|| policy.RegistrationNo == agentSwapFilter.RegistrationNumber)
+                                  && branch.BranchId == agentSwapFilter.BranchId || branch.BranchId == agentSwapFilter.BranchId
+                                  select new
+                                  {
+                                      policy.ControlNo,
+                                      policy.VerticalId,                                      
+                                      policy.NameInPolicy,
+                                      policy.RegistrationNo,
+                                      policy.GrossPremium,
+                                      BranchCode = branch != null ? branch.BranchCode : null,
+                                      ManufacturerName = manufacturer != null ? manufacturer.ManufacturerName : null,
+                                      POSName = pos != null ? pos.POSName : null,
+                                      ExpiryDate = policy.PolicyPackageTypeId == 1 ? policy.PolicyEndDate : policy.PolicyEndDateOD,
+                                      StartDate = policy.PolicyPackageTypeId == 1 ? policy.PolicyStartDate :            policy.PolicyStartDateOD,
+                                      PolicyNumber = policy.PolicyNo,
+                                      insuranceCompany.InsuranceCompanyName,
+                                      policy.PolicyRemarks,
+                                      policy.CreatedBy,
+                                      RenewalDone = policy.RenewalDone ?? false,
+                                      policy.VerticalSegmentId,
+                                  }
+                                 ).ToList<dynamic>();
+
+            return new DataTableDto<List<dynamic>>
+            {
+                TotalCount = filteredResult.Count(),
+                Data =  filteredResult,
+            };
+
+            // Replace "YourInsuranceCompanyName", "YourControlNo", and "YourPOSName" with the actual filter values.
+
+        }
     }
 }

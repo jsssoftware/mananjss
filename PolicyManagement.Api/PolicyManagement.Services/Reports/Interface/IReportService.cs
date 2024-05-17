@@ -1,6 +1,7 @@
 ﻿using PolicyManagement.Dtos.Common;
 using PolicyManagement.Models.Common;
 using PolicyManagement.Models.Report;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PolicyManagement.Services.Reports.Interface
@@ -12,5 +13,6 @@ namespace PolicyManagement.Services.Reports.Interface
         Task<CommonDto<object>> GetMotorMotherReport(MotherReport motherReport);
         Task<CommonDto<object>> GetRetailCommercialMotherReport(RetailMotherReport retailMotherReport);
         Task<CommonDto<object>> GetRenewPerfomanceReport(RenewPerfomance renewPerfomance);
+        Task<DataTableDto<List<dynamic>>> FindMotorPolicyData(AgentSwapFilter agentSwapFilter);
     }
 }

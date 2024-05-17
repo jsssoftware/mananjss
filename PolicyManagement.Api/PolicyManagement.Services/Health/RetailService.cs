@@ -412,7 +412,7 @@ namespace PolicyManagement.Services.Health
                 catch (Exception ex)
                 {
                     dbContextTransaction.Rollback(); 
-                    log.Error(ex);
+                    log.Error(ex.GetBaseException());
                     return new CommonDto<object>
                     {
 
@@ -898,7 +898,7 @@ namespace PolicyManagement.Services.Health
                 await _dataContext.SaveChangesAsync();
             } catch (Exception ex)
             {
-                log.Error(ex);
+                log.Error(ex.GetBaseException());
                 Console.WriteLine(ex.Message.ToString());
 
             }
@@ -1235,7 +1235,7 @@ namespace PolicyManagement.Services.Health
             }
             catch (Exception ex)
             {
-                log.Error("AddorUpdateCustomerDetails -", ex);
+                log.Error("AddorUpdateCustomerDetails -", ex.GetBaseException());
                 throw;
             }
             return  tblCustomers;

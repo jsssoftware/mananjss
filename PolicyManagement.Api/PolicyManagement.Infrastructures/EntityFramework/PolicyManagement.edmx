@@ -388,6 +388,12 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblCompanyDetails">
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -1210,8 +1216,8 @@
           <Property Name="CoverageId" Type="int" />
           <Property Name="NoofDays" Type="int" />
           <Property Name="MaxDaysSingleTrip" Type="int" />
-          <Property Name="Occupancy" Type="nvarchar" MaxLength="50" />
-          <Property Name="LineofBusiness" Type="nvarchar" MaxLength="50" />
+          <Property Name="Occupancy" Type="nvarchar(max)" />
+          <Property Name="LineofBusiness" Type="nvarchar(max)" />
           <Property Name="BasementExposerId" Type="tinyint" />
           <Property Name="TerrorismPremium" Type="int" />
           <Property Name="TotalSumInsured" Type="bigint" />
@@ -2016,6 +2022,13 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.tblRefrenceSource' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblVersion">
+          <Property Name="Major" Type="tinyint" />
+          <Property Name="Minor" Type="tinyint" />
+          <Property Name="Revision" Type="tinyint" />
+        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -7272,8 +7285,8 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="CoverageId" Type="Int32" />
           <Property Name="NoofDays" Type="Int32" />
           <Property Name="MaxDaysSingleTrip" Type="Int32" />
-          <Property Name="Occupancy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LineofBusiness" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Occupancy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LineofBusiness" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="BasementExposerId" Type="Byte" />
           <Property Name="TerrorismPremium" Type="Int32" />
           <Property Name="TotalSumInsured" Type="Int64" />

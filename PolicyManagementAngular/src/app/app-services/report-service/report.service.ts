@@ -7,6 +7,7 @@ import { Retail } from "src/app/shared/utilities/api-urls/retail";
 import { Motor } from "../../shared/utilities/api-urls/motor";
 import { IApiManagerService } from "../api-manager/abstracts/api-manager-iservice";
 import { IReportService } from "./abstracts/report.iservice";
+import { IDataTableDto } from "src/app/app-entites/dtos/common/data-table-dto";
 
 @Injectable()
 export class ReportService extends IReportService {
@@ -21,6 +22,8 @@ export class ReportService extends IReportService {
     getMotorMotherReport = (model:any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Report.getMotorMotherReport,model);
     getRetailCommercialMotherReport = (model:any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Report.getretailCommercialMotherReport,model);
     getRenewPeformanceReport = (model:any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Report.getRenewPerfomanceReport,model);
+    getagentSwapReport = (model:any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Report.getRenewPerfomanceReport,model);
+    getPolicyDatas = (model:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.postRequest<ICommonDto<string>>(Report.getPolicyDatas,model);
 
   
 }

@@ -4,6 +4,7 @@ using PolicyManagement.Dtos.Customer;
 using PolicyManagement.Dtos.Motor;
 using PolicyManagement.Infrastructures.EntityFramework;
 using PolicyManagement.Models.Common;
+using PolicyManagement.Models.Report;
 using PolicyManagement.Services.Base;
 using PolicyManagement.Services.Common.Interface;
 using PolicyManagement.Utilities.Enums;
@@ -163,8 +164,8 @@ namespace PolicyManagement.Services.Common
                             Id = s.Id ?? 0,
                             Remarks = s.Remarks,
                             UniqueId = Guid.NewGuid().ToString(),
-                            DocumentTypeId =  s.DocId,
-                            DocumentBase64  = s.DocumentBase64
+                            DocumentTypeId = s.DocId,
+                            DocumentBase64 = s.DocumentBase64
                         })
                         .ToList());
         }
@@ -180,7 +181,7 @@ namespace PolicyManagement.Services.Common
                 })
                 .OrderBy(o => o.Name)
                 .ToListAsync();
-            else if (type == 8 || type ==3 ) //Rollover
+            else if (type == 8 || type == 3) //Rollover
                 return await _dataContext.tblPolicyType.Where(w => w.PolicyTypeId == 3 && w.IsActive).Select(s => new DropDownDto<int>
                 {
                     Name = s.PolicyType,
@@ -498,7 +499,7 @@ namespace PolicyManagement.Services.Common
 
         public async Task<List<DropDownDto<int>>> FindAllCommissionPaidOn(int verticalId)
         {
-            List<tblCommissionPayType> result = await _dataContext.tblCommissionPayType.Where(x=>x.VerticalId == verticalId).OrderBy(o => o.CommissionPayTypeId).ToListAsync();
+            List<tblCommissionPayType> result = await _dataContext.tblCommissionPayType.Where(x => x.VerticalId == verticalId).OrderBy(o => o.CommissionPayTypeId).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
 
@@ -512,21 +513,21 @@ namespace PolicyManagement.Services.Common
                 .OrderBy(o => o.Name)
                 .ToListAsync();
 
-        public async Task<List<AddOnPlanOptionDto>> FindAllAddOnPlanOptions(int addOnRiderId, int verticalId,int policyId)
+        public async Task<List<AddOnPlanOptionDto>> FindAllAddOnPlanOptions(int addOnRiderId, int verticalId, int policyId)
         {
             List<AddOnPlanOptionDto> addOnPlanOptionDtos = new List<AddOnPlanOptionDto>();
             //List<tblAddonPlanOption> addOnPlanOptions = await _dataContext.tblAddonPlanOptions.Where(w => w.VerticalId == verticalId && w.IsActive).OrderBy(o => o.DisplayOrder).ToListAsync();
             List<tblAddonPlanOption> addOnPlanOptions = await _dataContext.tblAddonPlanOption.Where(w => w.VerticalId == verticalId && w.IsActive).ToListAsync();
             List<tblAddonPlanOptionMapping> addOnPlanOptionMappings = await _dataContext.tblAddonPlanOptionMapping.Where(w => w.AddonPlanRiderId == addOnRiderId && w.IsActive).ToListAsync();
             List<tblPolicyAddonOptionDetails> policyAddonOptionDetails = await _dataContext.tblPolicyAddonOptionDetails.Where(x => x.PolicyId == (policyId == 0 ? (int?)null : policyId)).ToListAsync();
-            
+
             addOnPlanOptions.ForEach(f => addOnPlanOptionDtos.Add(new AddOnPlanOptionDto
             {
                 AddonPlanOptionDescripation = f.AddonPlanOptionDescripation,
                 AddonPlanOptionId = f.AddonPlanOptionId,
                 AddonPlanOptionName = f.AddonPlanOptionName,
                 IsPlanAvailable = addOnPlanOptionMappings.Any(a => a.AddonPlanOptionId == f.AddonPlanOptionId),
-                AddonValue = policyAddonOptionDetails.FirstOrDefault(x=>x.AddonPlanOptionId==f.AddonPlanOptionId)?.AddonValue 
+                AddonValue = policyAddonOptionDetails.FirstOrDefault(x => x.AddonPlanOptionId == f.AddonPlanOptionId)?.AddonValue
             }));
 
             return addOnPlanOptionDtos;
@@ -561,7 +562,7 @@ namespace PolicyManagement.Services.Common
                                                             })
                                                             .OrderBy(o => o.Name)
                                                             .ToListAsync();
-                case Vertical.Health :
+                case Vertical.Health:
                 case Vertical.Travel:
                 case Vertical.PersonalAccident:
                     if (branchId > 0)
@@ -826,17 +827,18 @@ namespace PolicyManagement.Services.Common
         public DateDto CalculateDate(string dateString, int year, int days)
         {
             DateTime? date = null;
-            if (!string.IsNullOrEmpty(dateString)){
-                date =  DateTime.ParseExact(dateString, "MM/dd/yyyy", CultureInfo.InvariantCulture) ;
+            if (!string.IsNullOrEmpty(dateString))
+            {
+                date = DateTime.ParseExact(dateString, "MM/dd/yyyy", CultureInfo.InvariantCulture);
                 date = date.Value.AddYears(year);
                 date = date.Value.AddDays(days);
             }
-          
+
             return new DateDto
             {
                 Day = date.HasValue ? date.Value.Day : 0,
                 Month = date.HasValue ? date.Value.Month : 0,
-                Year = date.HasValue ? date.Value.Year:0
+                Year = date.HasValue ? date.Value.Year : 0
             };
         }
 
@@ -1034,17 +1036,17 @@ namespace PolicyManagement.Services.Common
         public async Task<DataTableDto<List<SearchPolicyDto>>> FindAllPolicies(SearchPolicyModel model)
         {
             string query = PreparePolicySearchQuery(model);
-            
+
             int totalCount = await _dataContext.Database.SqlQuery<int>(string.Format(query, "count(1)"), string.Empty).FirstOrDefaultAsync();
             try
             {
                 var result = await _dataContext.Database.SqlQuery<SearchPolicyDto>(string.Format(query, "*"), string.Empty).ToListAsync();
                 result.ToList().ForEach(f =>
                 {
-                    f.StartDateInString = f.StartDate.HasValue ? f.StartDate.Value.ToString("dd-MM-yyyy").Replace('-', '/'):"";
-                    f.ExpiryDateInString = f.ExpiryDate.HasValue ? f.ExpiryDate.Value.ToString("dd-MM-yyyy").Replace('-', '/'):"";
+                    f.StartDateInString = f.StartDate.HasValue ? f.StartDate.Value.ToString("dd-MM-yyyy").Replace('-', '/') : "";
+                    f.ExpiryDateInString = f.ExpiryDate.HasValue ? f.ExpiryDate.Value.ToString("dd-MM-yyyy").Replace('-', '/') : "";
                 });
-                  
+
 
                 return new DataTableDto<List<SearchPolicyDto>>
                 {
@@ -1198,6 +1200,12 @@ namespace PolicyManagement.Services.Common
                 query.Append($"and ControlNo = '{controlNumber}' ");
 
                 return query.ToString();
+            }
+            else if (!string.IsNullOrEmpty(model.ControlNumber.Number) && model.ControlNumber.Number.Length > 6)
+            {
+                query.Append($"and ControlNo = '{model.ControlNumber.Number}' ");
+                return query.ToString();
+
             }
             if (!string.IsNullOrEmpty(model.ControlNumber.Year))
             {
@@ -1382,7 +1390,7 @@ namespace PolicyManagement.Services.Common
         public async Task<List<tblMenuItem>> GetMenus()
         {
             List<tblMenuItem> lst = new List<tblMenuItem>();
-            lst = await _dataContext.tblMenuItem.Where(x=>x.ParentNode==null).ToListAsync();
+            lst = await _dataContext.tblMenuItem.Where(x => x.ParentNode == null).ToListAsync();
             return lst;
         }
 
@@ -1400,27 +1408,27 @@ namespace PolicyManagement.Services.Common
             var data = new List<DropDownDto<int>>();
             if (insuranceCompanyId != 0)
             {
-                 data = await _dataContext.tblPlan.
-                     Where(w => w.IsActive && w.ProductId == _productId && w.InsuranceCompanyId == insuranceCompanyId && w.VerticalId == verticalId)
-                .Select(s => new DropDownDto<int>
-                {
-                    Name = s.PlanName,
-                    Value = s.PlanId
-                })
-                .OrderBy(o => o.Name)
-                .ToListAsync();
+                data = await _dataContext.tblPlan.
+                    Where(w => w.IsActive && w.ProductId == _productId && w.InsuranceCompanyId == insuranceCompanyId && w.VerticalId == verticalId)
+               .Select(s => new DropDownDto<int>
+               {
+                   Name = s.PlanName,
+                   Value = s.PlanId
+               })
+               .OrderBy(o => o.Name)
+               .ToListAsync();
             }
             else
             {
-                 data = await _dataContext.tblPlan.
-                         Where(w => w.IsActive && w.ProductId == _productId  && w.VerticalId == verticalId)
-                    .Select(s => new DropDownDto<int>
-                    {
-                        Name = s.PlanName,
-                        Value = s.PlanId
-                    })
-                    .OrderBy(o => o.Name)
-                    .ToListAsync();
+                data = await _dataContext.tblPlan.
+                        Where(w => w.IsActive && w.ProductId == _productId && w.VerticalId == verticalId)
+                   .Select(s => new DropDownDto<int>
+                   {
+                       Name = s.PlanName,
+                       Value = s.PlanId
+                   })
+                   .OrderBy(o => o.Name)
+                   .ToListAsync();
             }
             return data;
         }
@@ -1460,14 +1468,14 @@ namespace PolicyManagement.Services.Common
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
 
-                                                                                          
+
         public async Task<List<DropDownDto<int>>> FindAllPedData()
         {
             List<DropDownDto<int>> result = await _dataContext.tblPED.Select(s => new DropDownDto<int>
             {
                 Name = s.PED,
                 Value = s.PEDId
-            }).OrderBy(o =>o.Value).ToListAsync();
+            }).OrderBy(o => o.Value).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
 
@@ -1516,7 +1524,7 @@ namespace PolicyManagement.Services.Common
             List<DropDownDto<int>> result = await _dataContext.tblVoyageType.Select(s => new DropDownDto<int>
             {
                 Name = s.VoyageType,
-                Value = s.VoyageTypeId            
+                Value = s.VoyageTypeId
             }).OrderBy(o => o.Value).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
@@ -1530,7 +1538,7 @@ namespace PolicyManagement.Services.Common
             }).OrderBy(o => o.Value).ToListAsync();
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
-        
+
 
         public async Task<List<DropDownDto<int>>> FindStorageRiskId()
         {
@@ -1565,32 +1573,32 @@ namespace PolicyManagement.Services.Common
         public async Task<DataTableDto<List<UserDetailDto>>> FindAllUser(int branchId)
         {
             List<UserDetailDto> result = await (from user in _dataContext.tblUser
-                                           join teamMember in _dataContext.tblTeamMember on user.TeamMemberId equals teamMember.TeamMemberId
-                                           join userRole in _dataContext.tblUserRole on user.UserRoleId equals userRole.UserRoleId into userrole
-                                           join branch in _dataContext.tblBranch on user.BranchId equals branch.BranchId into branchs
-                                           join reportedTo in _dataContext.tblTeamMember on user.ReportedTo equals reportedTo.TeamMemberId into reportedto
-                                            from userRole in userrole.DefaultIfEmpty()
-                                            from branch in branchs.DefaultIfEmpty()
-                                            from reportedTo in reportedto.DefaultIfEmpty()
+                                                join teamMember in _dataContext.tblTeamMember on user.TeamMemberId equals teamMember.TeamMemberId
+                                                join userRole in _dataContext.tblUserRole on user.UserRoleId equals userRole.UserRoleId into userrole
+                                                join branch in _dataContext.tblBranch on user.BranchId equals branch.BranchId into branchs
+                                                join reportedTo in _dataContext.tblTeamMember on user.ReportedTo equals reportedTo.TeamMemberId into reportedto
+                                                from userRole in userrole.DefaultIfEmpty()
+                                                from branch in branchs.DefaultIfEmpty()
+                                                from reportedTo in reportedto.DefaultIfEmpty()
                                                 select new UserDetailDto
-                                           {
-                                               BranchName =  branch.BranchName,
-                                               UserName = user.UserName,
-                                               TeamMember =  teamMember.TeamMemberName,
-                                               UserRole =  userRole.UserRoleName,
-                                               EmailId =  teamMember.TeamMemberEmail1,
-                                               MobileNumber =  teamMember.TeamMemberPhone1,
-                                               Seniority =  teamMember.LevelNumber,
-                                               IsActive = teamMember.IsActive,
-                                               IsLocked  = user.IsLocked,
-                                               TeamMemberId = user.TeamMemberId,
-                                               UserRoleId = user.UserRoleId,
-                                               UserId = user.UserId,
-                                               UserPassword = user.UserPassword,
-                                               BranchId = user.BranchId,
-                                               ReportedTo = user.ReportedTo,
-                                               ReportedToName =  reportedTo.TeamMemberName
-                                                }).Where(x=>x.BranchId == branchId).OrderBy(x=>x.IsActive).ThenBy(x => x.UserRole).ThenBy(x => x.TeamMember).ToListAsync();
+                                                {
+                                                    BranchName = branch.BranchName,
+                                                    UserName = user.UserName,
+                                                    TeamMember = teamMember.TeamMemberName,
+                                                    UserRole = userRole.UserRoleName,
+                                                    EmailId = teamMember.TeamMemberEmail1,
+                                                    MobileNumber = teamMember.TeamMemberPhone1,
+                                                    Seniority = teamMember.LevelNumber,
+                                                    IsActive = teamMember.IsActive,
+                                                    IsLocked = user.IsLocked,
+                                                    TeamMemberId = user.TeamMemberId,
+                                                    UserRoleId = user.UserRoleId,
+                                                    UserId = user.UserId,
+                                                    UserPassword = user.UserPassword,
+                                                    BranchId = user.BranchId,
+                                                    ReportedTo = user.ReportedTo,
+                                                    ReportedToName = reportedTo.TeamMemberName
+                                                }).Where(x => x.BranchId == branchId).OrderBy(x => x.IsActive).ThenBy(x => x.UserRole).ThenBy(x => x.TeamMember).ToListAsync();
             return new DataTableDto<List<UserDetailDto>>
             {
                 TotalCount = result.Count(),
@@ -1610,10 +1618,12 @@ namespace PolicyManagement.Services.Common
 
         public async Task<dynamic> FindTeamMemberById(int teamMemberId)
         {
-           var team =  await _dataContext.tblTeamMember.Where(w => w.IsActive ==  true && w.TeamMemberId == teamMemberId).Select(s => new{
-               s.TeamMemberEmail1,s.TeamMemberMobile1
-               }).FirstOrDefaultAsync();
-           return team;
+            var team = await _dataContext.tblTeamMember.Where(w => w.IsActive == true && w.TeamMemberId == teamMemberId).Select(s => new
+            {
+                s.TeamMemberEmail1,
+                s.TeamMemberMobile1
+            }).FirstOrDefaultAsync();
+            return team;
         }
 
         public async Task<List<DropDownDto<int>>> FindAllDesignation() => await _dataContext.tblDesignation.Where(w => w.IsActive == true)
@@ -1708,7 +1718,7 @@ namespace PolicyManagement.Services.Common
             if (insuranceCompanyId != 0)
             {
                 data = await _dataContext.tblPlan.
-                    Where(w => w.IsActive && w.ProductId == _productId && w.InsuranceCompanyId == insuranceCompanyId )
+                    Where(w => w.IsActive && w.ProductId == _productId && w.InsuranceCompanyId == insuranceCompanyId)
                .Select(s => new DropDownDto<int>
                {
                    Name = s.PlanName,
@@ -1731,6 +1741,7 @@ namespace PolicyManagement.Services.Common
             }
             return data;
         }
+
 
 
     }

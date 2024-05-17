@@ -1113,6 +1113,7 @@ export class CommercialPolicyManagementComponent implements OnInit,AfterViewInit
       return
     }
     let menu = this.MenuVertical;
+    this.IsVerified = false;
     if (this._policyType == SearchPolicyType.Motor_Verify) {
       this.IsVerified = true
     }

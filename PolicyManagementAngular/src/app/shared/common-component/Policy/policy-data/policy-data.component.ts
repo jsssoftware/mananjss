@@ -903,6 +903,10 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   }
   async setPolicySourceRenewal() {
     this._insuranceCompanies = this._savedinsuranceCompanies
+    this.policyForm.get("tpInsuranceCompany")?.enable();
+    this.policyForm.get("policyNumber")?.enable();
+    this.policyForm.get("tpStartDate")?.enable();
+    this.policyForm.get("odInsuranceCompany")?.enable();
     if (this.policyTermForm.value.policyType == PolicyType.SameCompanyRetention) {
       if (this.policyTermForm.value.packageType == PackageType.OD_ONLY) {
 
@@ -1132,6 +1136,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       return
     }
     let menu = this.MenuVertical;
+    this.IsVerified = false;
     if (this._policyType == SearchPolicyType.Motor_Verify) {
       this.IsVerified = true
     }
@@ -2336,7 +2341,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     if (this.policyTermForm.value.policyType === PolicyType.SameCompanyRetention && this.policyTermForm.value.packageType === PackageType.TP_ONLY) {
 
       let startDate: Date = this.commonService.getDateFromIDateDto(this._policyData?.TpPolicy.ExpiryDateDto as IDateDto) as Date;
-
+     
       try {
         startDate = new Date(startDate.setDate(startDate.getDate() + 1));
       } catch (error) {

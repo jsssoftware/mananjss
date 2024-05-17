@@ -94,11 +94,19 @@ namespace PolicyManagement.Models.Report {
       
     }
 
-
-    public class MotorPolicyData
+    public class AgentSwapFilter
     {
-        public dynamic CustomerCode { get; set; }
-        
+        public string number { get; set; }
+        public string CustomerName { get; set; }
+        public short InsuranceCompanyId { get; set; }
+        public long PolicyNumber { get; set; }
+        public string RegistrationNumber { get; set; }
+        public string PolicyStartDateFrom { get; set; }
+        public string PolicyStartDateTo { get; set; }
+        public int PosNameId { get; set; }
+        public int BranchId { get; set; }
+        public int VerticalId { get; set; }
+
     }
 
 }

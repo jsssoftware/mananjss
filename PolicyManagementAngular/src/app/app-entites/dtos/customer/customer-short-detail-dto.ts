@@ -73,5 +73,5 @@ export interface ICustomerInsuranceDetail{
     PpcName? :  string;
     RelationProposerName?: string;
     ProfessionName?: string;
-    Age?: Number;
+    Age?: number;
 }

@@ -483,7 +483,7 @@ namespace PolicyManagement.Services.Commercial
                 catch (Exception ex)
                 {
                     dbContextTransaction.Rollback(); 
-                    log.Error(ex);
+                    log.Error(ex.GetBaseException());
                     return new CommonDto<object>
                     {
 
@@ -989,7 +989,7 @@ namespace PolicyManagement.Services.Commercial
                 await _dataContext.SaveChangesAsync();
             } catch (Exception ex)
             {
-                log.Error(ex);
+                log.Error(ex.GetBaseException());
                 Console.WriteLine(ex.Message.ToString());
 
             }

@@ -44,10 +44,8 @@ export class RenewalPerfomanceMotorComponent implements OnInit {
     expiryDateTo_dump: new FormControl('',Validators.required),
     expiryDateFrom: new FormControl(''),
     expiryDateFrom_dump: new FormControl('',Validators.required),
-    insuranceType: new FormControl(''),
     businessType: new FormControl(''),
     teamMemberId: new FormControl(''),
-    teamMemberType: new FormControl(''),
     branchId: new FormControl(''),
  })
   constructor(
@@ -71,7 +69,7 @@ export class RenewalPerfomanceMotorComponent implements OnInit {
     });
 
     this.getInsuranceCompanies();
-    this.getTeamMembers();
+    this.getTeleCallers(this._branchId);
   }
 
   getInsuranceCompanyName(value: number): string {
@@ -154,5 +152,11 @@ export class RenewalPerfomanceMotorComponent implements OnInit {
 
   
 
+  
+  getTeleCallers(branchId: number): any {
+    this.commonService.getTeleCallers(Vertical.Motor, branchId).subscribe((response: any) => {
+      this._teamMember = response;
+    });
+  }
 
 }

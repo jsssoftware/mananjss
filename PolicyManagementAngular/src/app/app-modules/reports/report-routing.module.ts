@@ -8,6 +8,7 @@ import { RecondownloadRetailComponent } from './retail/recondownload/recondownlo
 import { ReconuploadRetailComponent } from './retail/reconupload/reconupload.component';
 import { RetailMotherreportComponent } from './retail/retail-motherreport/retail-motherreport.component';
 import { RenewalPerfomanceMotorComponent } from './motor/renewal-perfomance-motor/renewal-perfomance-motor.component';
+import { AgentSwappingComponent } from './motor/agent-swapping/agent-swapping.component';
 
 const routes: Routes = [
     {
@@ -40,6 +41,10 @@ const routes: Routes = [
             {
                 path: 'renewalperfomancemotor',
                 component: RenewalPerfomanceMotorComponent,
+            },
+            {
+                path: 'policysearchagentswapp/:vertical',
+                component: AgentSwappingComponent,
             },
           
         ]
