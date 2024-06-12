@@ -71,3 +71,4 @@ PolicyManagement.Api/PolicyManagement.Utilities/bin/
 bin/
 PolicyManagement.Api/PolicyManagement.Api/Web.config
 PolicyManagementAngular/package-lock.json
+*.pubxml
