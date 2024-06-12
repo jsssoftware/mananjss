@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ReportsRoutingModule } from './report-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { MaterialModule } from 'src/app/shared/common-module/material-module';
@@ -15,6 +15,10 @@ import { MotherreportComponent } from './motor/motherreport/motherreport.compone
 import { RetailMotherreportComponent } from './retail/retail-motherreport/retail-motherreport.component';
 import { RenewalPerfomanceMotorComponent } from './motor/renewal-perfomance-motor/renewal-perfomance-motor.component';
 import { AgentSwappingComponent } from './motor/agent-swapping/agent-swapping.component';
+import { AgentSwapDialogComponent } from './shared/agent-swap-dialog/agent-swap-dialog.component';
+import { RenewalDumpComponent } from './shared/renewal-dump/renewal-dump.component';
+import { CustomerClusterComponent } from './shared/customer-cluster/customer-cluster.component';
+import { PosPerfomanceComponent } from './shared/pos-perfomance/pos-perfomance.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,11 @@ import { AgentSwappingComponent } from './motor/agent-swapping/agent-swapping.co
     MotherreportComponent,
     RetailMotherreportComponent,
     RenewalPerfomanceMotorComponent,
-    AgentSwappingComponent
+    AgentSwappingComponent,
+    AgentSwapDialogComponent,
+    RenewalDumpComponent,
+    CustomerClusterComponent,
+    PosPerfomanceComponent
   ],
 
   imports: [
@@ -37,6 +45,6 @@ import { AgentSwappingComponent } from './motor/agent-swapping/agent-swapping.co
     ReactiveFormsModule,
     MaterialFileInputModule
   ],
-  providers:[ReportService,CommonService]
+  providers:[ReportService,CommonService,DatePipe]
 })
 export class ReportsModule { }

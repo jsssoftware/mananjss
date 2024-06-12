@@ -22,6 +22,8 @@ namespace PolicyManagement.Models.Common
         public PolicyManagementType PolicyManagementType { get; set; }
         public int Product { get; set; }
         public int Vertical { get; set; } 
+        public int PlanTypeId { get; set; } 
+        public int PlanId { get; set; } 
         public bool IsForDownload { get; set; } 
         public bool IsForShowAll { get; set; } 
     }

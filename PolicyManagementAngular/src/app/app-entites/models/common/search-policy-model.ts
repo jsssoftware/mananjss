@@ -16,6 +16,8 @@ export interface ISearchPolicyModel {
     MobileNumber: string;
     Vertical: number;
     Product: number;
+    PlanTypeId: number;
+    PlanId: number;
     PolicyManagementType: PolicyManagement;
     // PageNumber: number;
     // PageSize: number;

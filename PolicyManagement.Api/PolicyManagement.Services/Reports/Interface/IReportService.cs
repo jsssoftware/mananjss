@@ -14,5 +14,9 @@ namespace PolicyManagement.Services.Reports.Interface
         Task<CommonDto<object>> GetRetailCommercialMotherReport(RetailMotherReport retailMotherReport);
         Task<CommonDto<object>> GetRenewPerfomanceReport(RenewPerfomance renewPerfomance);
         Task<DataTableDto<List<dynamic>>> FindMotorPolicyData(AgentSwapFilter agentSwapFilter);
+        Task<CommonDto<object>> UpdateAgentsData(AgentSwapUpdate model, BaseModel baseModel);
+        Task<CommonDto<object>> GetRenewalDump(RenewDump renewDump);
+        Task<CommonDto<object>> GetCustomerCluster(CustomerCluster customerCluster);
+        Task<CommonDto<object>> GetPosPerfomanceReports(POSPerfomance pOSPerfomance);
     }
 }

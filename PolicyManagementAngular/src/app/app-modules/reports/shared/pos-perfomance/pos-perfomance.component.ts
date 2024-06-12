@@ -12,15 +12,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { AgentSwapDialogComponent } from '../../shared/agent-swap-dialog/agent-swap-dialog.component';
 import { MatRadioChange } from '@angular/material/radio';
 import { DatePipe } from '@angular/common';
+import { MasterService } from 'src/app/app-services/master-service/master.service';
+import { WorkBook, WorkSheet, utils, writeFile } from 'xlsx';
 
 @Component({
-  selector: 'app-agent-swapping',
-  templateUrl: './agent-swapping.component.html',
-  styleUrls: ['./agent-swapping.component.css'],
-  providers: [DatePipe]  // Add DatePipe to providers
-
+  selector: 'app-pos-perfomance',
+  templateUrl: './pos-perfomance.component.html',
+  styleUrls: ['./pos-perfomance.component.css']
 })
-export class AgentSwappingComponent implements OnInit {
+export class PosPerfomanceComponent implements OnInit {
 
 
   loadingIndicator = false;
@@ -30,33 +30,33 @@ export class AgentSwappingComponent implements OnInit {
   public _filteredInsuranceCompaniesOptions: IDropDownDto<number>[] = [];
   rows :any[] = [];
   public _posDatas: IDropDownDto<number>[] = [];
+  public _teamMembers: any[] = [];
+  public _teamMemberSales: any[] = [];
   private _branchId: any;
   private _vertical: any;
   public isMotor :boolean = true;
 
   columns = [
-    { prop: 'ControlNo', name: 'Control No' },
-    { prop: 'PolicyStartDate', name: 'Policy Start Date'},
-    { prop: 'InsuranceCompanyName', name: 'Insurance Company Name' },
-    { prop: 'NameInPolicy', name: 'Customer Name' },
-   /*  { prop: 'ModelName', name: 'Customer Code' },*/
-    { prop: 'RegistrationNo', name: 'Registration No' }, 
+    { prop: 'TeamMemberName', name: 'Managed By' },
+    { prop: 'CategoryName', name: 'Category Name' },
+    { prop: 'POSCode', name: 'POS Code'},
     { prop: 'POSName', name: 'POS Name' },
+    { prop: 'PolicyType', name: 'Policy Type' },
+    { prop: 'ODSum', name: 'OD Sum' }, 
+    { prop: 'NoOfPolicies', name: 'No Of Policies' },
   ]
   //#region
-  agentsearchPolicyForm = new FormGroup({
-    number: new FormControl(''),
-    customerName: new FormControl(''),
+  posPerfomance = new FormGroup({
     insuranceCompany: new FormControl(''),
-    policyNumber: new FormControl(''),
-    registrationNumber: new FormControl(''),
     policyStartDateFrom: new FormControl(''),
     policyStartDateFrom_dump: new FormControl(''),
     policyStartDateTo: new FormControl(''),
     policyStartDateTo_dump: new FormControl(''),
     posNameId: new FormControl(''),
     branchId: new FormControl(''),
-    verticalId: new FormControl(1),
+    reportType: new FormControl(''),
+    teamMemberId: new FormControl(''),
+    teamMemberSalesId: new FormControl(''),
   });
   ELEMENT_DATA: any;
   constructor(
@@ -65,20 +65,17 @@ export class AgentSwappingComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     public dialog :MatDialog,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private masterService :MasterService
   ) {
     this._branchId = sessionStorage.getItem("branchId");
-    this._vertical = this.route.snapshot.paramMap.get('vertical');
-    if(this._vertical == "1"){
-      this._vertical = Vertical.Motor
-    }
-
   }
 
   ngOnInit(): void {
     this.getPos(this._branchId);
     this.getInsuranceCompanies();
-    this.agentsearchPolicyForm.get("insuranceCompany")?.valueChanges.subscribe(input => {
+    this.getTeamMembers(this._branchId);
+    this.posPerfomance.get("insuranceCompany")?.valueChanges.subscribe(input => {
       if (input == null || input === undefined || input === '')
         return;
 
@@ -94,15 +91,12 @@ export class AgentSwappingComponent implements OnInit {
     return value ? this._insuranceCompanies.filter(f => f.Value == value)[0].Name : '';
   }
 
-  
-  
+
   getInsuranceCompanies(): any {
     this.commonService.getInsuranceCompanies(Vertical.Motor).subscribe((response: IDropDownDto<number>[]) => {
       this._insuranceCompanies =  response;
     });
   }
-
-
 
   getPos(branchId: number): void {
     this.commonService.getPos(Vertical.Motor, branchId).subscribe((response: IDropDownDto<number>[]) => {
@@ -110,58 +104,45 @@ export class AgentSwappingComponent implements OnInit {
     })
   }
   reset(){
-    this.agentsearchPolicyForm.reset()
+    this.posPerfomance.reset()
   }
 
 
-  onActivate(event) {
-    if (event.type === 'dblclick') {
-      this.onRowDoubleClick(event.row);
-    }
-  }
 
-  onRowDoubleClick(row) {
-    // Handle the double-click event
-    this.openDialog(row);
-    // You can do whatever you need with the row data here
-  }
-
-  
-  
   submit(){
-    this.agentsearchPolicyForm.get("branchId").setValue(this._branchId);
-    let policyStartDate = this.commonService.getDateInString(new Date(this.agentsearchPolicyForm.value.policyStartDateFrom_dump));
-    let policyEndDate = this.commonService.getDateInString(new Date(this.agentsearchPolicyForm.value.policyStartDateTo_dump));
+    this.posPerfomance.get("branchId").setValue(this._branchId);
+    let policyStartDate = this.commonService.getDateInString(new Date(this.posPerfomance.value.policyStartDateFrom_dump));
+    let policyEndDate = this.commonService.getDateInString(new Date(this.posPerfomance.value.policyStartDateTo_dump));
 
-    this.agentsearchPolicyForm.patchValue({
+    this.posPerfomance.patchValue({
       policyStartDateFrom: policyStartDate,
       policyStartDateTo :policyEndDate
     });
 
-    this.reportService.getPolicyDatas(this.agentsearchPolicyForm.getRawValue()).subscribe((response: IDataTableDto<any[]>) => {
-      this.rows = [...response.Data];
-      this.rows = this.rows.map(row => ({
-        ...row,
-        PolicyStartDate: this.datePipe.transform(row.PolicyStartDate, 'dd/MM/yyyy')
-      }));
+    this.reportService.getPosPerfomance(this.posPerfomance.getRawValue()).subscribe((response: ICommonDto<any[]>) => {
+      this.rows = [...response.Response];
     });
 
+  }
+
+  async downloadExcel(){
+    this.posPerfomance.get("branchId").setValue(this._branchId);
+    let policyStartDate = this.commonService.getDateInString(new Date(this.posPerfomance.value.policyStartDateFrom_dump));
+    let policyEndDate = this.commonService.getDateInString(new Date(this.posPerfomance.value.policyStartDateTo_dump));
+
+    this.posPerfomance.patchValue({
+      policyStartDateFrom: policyStartDate,
+      policyStartDateTo :policyEndDate
+    });
+
+    this.reportService.getPosPerfomance(this.posPerfomance.getRawValue()).subscribe((response: ICommonDto<any[]>) => {
+      this.rows = [...response.Response];
+       this.exportexcel();
+
+    });
   }
 
   
-  openDialog(row:any) {
-    const dialogRef = this.dialog.open(AgentSwapDialogComponent, {
-      height: '600px',
-      width: '1000px',
-      data: {
-        policyData: row,
-        vertical : this.agentsearchPolicyForm.get("verticalId").value
-      }
-    });
-    this.dialog.afterAllClosed.subscribe(x=>{
-      this.submit();
-    })
-  }
 
   
   filterInsurancerCompaniesData(input: any) {
@@ -172,14 +153,44 @@ export class AgentSwappingComponent implements OnInit {
     });
   }
 
-  onRadioChange(event: MatRadioChange): void {
-    if(event.value == 1){
-      this.isMotor = true;
-    }else{
-      this.isMotor = false;
-    }
+
+  getTeamMembers(branchId: number): any {
+    this.masterService.getTeamMember( branchId).subscribe((response: any) => {
+      debugger
+      this._teamMembers = response?.Data.filter(x=>x.DepartmentId != 8);
+      this._teamMemberSales = response?.Data.filter(x=>x.DepartmentId == 8);
+    });
   }
 
+
   
+  exportexcel(): void
+  {
+    const fileData = this.getExcelData(this.rows);
+    /* pass here the data source */
+    const ws: WorkSheet =utils.json_to_sheet(fileData);
+    /* generate workbook and add the worksheet */
+    const wb: WorkBook = utils.book_new();
+    utils.book_append_sheet(wb, ws, 'Sheet1');
+    /* save to file */  
+    writeFile(wb, 'POS Perfomance-' + this.posPerfomance.value.policyStartDateFrom+ '-'  + this.posPerfomance.value.expiryDateTo +'.xlsx');
+  }
+
+  getExcelData(data:any) {
+    const excelData = [];
+
+    data.map((row:any) => {
+      const newRow = {};
+
+      this.columns.forEach((column) => {
+        newRow[column.name] = row[column.prop];
+      });
+      
+      excelData.push(newRow);
+    });
+
+    return excelData;
+  }
+
 
 }

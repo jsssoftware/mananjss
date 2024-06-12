@@ -9,6 +9,10 @@ import { ReconuploadRetailComponent } from './retail/reconupload/reconupload.com
 import { RetailMotherreportComponent } from './retail/retail-motherreport/retail-motherreport.component';
 import { RenewalPerfomanceMotorComponent } from './motor/renewal-perfomance-motor/renewal-perfomance-motor.component';
 import { AgentSwappingComponent } from './motor/agent-swapping/agent-swapping.component';
+import { RenewalDumpComponent } from './shared/renewal-dump/renewal-dump.component';
+import { SearchPolicyComponent } from 'src/app/shared/common-component/search-policy/search-policy.component';
+import { CustomerClusterComponent } from './shared/customer-cluster/customer-cluster.component';
+import { PosPerfomanceComponent } from './shared/pos-perfomance/pos-perfomance.component';
 
 const routes: Routes = [
     {
@@ -45,6 +49,22 @@ const routes: Routes = [
             {
                 path: 'policysearchagentswapp/:vertical',
                 component: AgentSwappingComponent,
+            },
+            {
+                path: 'renewaldump',
+                component: RenewalDumpComponent,
+            },
+            {
+                path: 'viewallpolicy/:policyType',  
+                component: SearchPolicyComponent,
+            },
+            {
+                path: 'customercluster',  
+                component: CustomerClusterComponent,
+            },
+            {
+                path: 'posperfomance',  
+                component: PosPerfomanceComponent,
             },
           
         ]

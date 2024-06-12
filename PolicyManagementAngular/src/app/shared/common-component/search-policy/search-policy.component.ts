@@ -80,7 +80,8 @@ export class SearchPolicyComponent implements OnInit {
     'policyNumber',
     'grossPremium',
     'policyStatus',
-    'remark'
+    'plan',
+    'plantype',
   ];
   public _policyDatas: MatTableDataSource<ISearchPolicyDto> = new MatTableDataSource<ISearchPolicyDto>();
   public _length: number = 0;
@@ -111,7 +112,9 @@ export class SearchPolicyComponent implements OnInit {
     policyEndDateTo: new FormControl(''),
     mobileNumber: new FormControl('', [Validators.pattern('^[0-9]+$')]),
     vertical: new FormControl(''),
-    product: new FormControl('')
+    product: new FormControl(''),
+    planTypes: new FormControl(''),
+    plan: new FormControl('')
   });
   //#endregion
 
@@ -120,6 +123,9 @@ export class SearchPolicyComponent implements OnInit {
   public _policyTerms: IPolicyTermDto[] = [];
   public _insuranceCompanies: IDropDownDto<number>[] = []; 
   public _manufacturers: IDropDownDto<number>[] = []; 
+  public _plans: IDropDownDto<number>[] = []; 
+  public _planTypes: IDropDownDto<number>[] = []; 
+  public _product: IDropDownDto<number>[] = []; 
   public _models: IDropDownDto<number>[] = [];
   public _posDatas: IDropDownDto<number>[] = [];
   private _branchId: any;
@@ -157,6 +163,8 @@ export class SearchPolicyComponent implements OnInit {
   ngOnInit(): void {
     this.getInsuranceCompanies();
     this.getManufacturers();
+    this.getPlanType();
+    this.getProducts();
     this.getPos(parseInt(this._branchId));
     this._policyType = this.route.snapshot.paramMap.get('policyType');
     if(this._policyType == SearchPolicyType.Motor_Incomplete || this._policyType ==  SearchPolicyType.Motor_Verify){
@@ -221,7 +229,10 @@ export class SearchPolicyComponent implements OnInit {
     })
   }
 
-  routeToMotorPolicy(policyId: number,policyTypeId:number) {
+  routeToMotorPolicy(policyId: number,policyTypeId:number,verticalId:number) {
+    if(!this._verticalTypeId){
+      this._verticalTypeId = verticalId
+    }
     if(this._verticalTypeId==Vertical.Motor){
       this._motorService.vertical$.next("MOTOR");
       this.router.navigate(["/pms/motor", { policyId, policyTypeId: policyTypeId,policyType :this._policyType ,verticalId: Vertical.Motor}]);
@@ -314,7 +325,9 @@ export class SearchPolicyComponent implements OnInit {
       Vertical: this.searchPolicyForm.value.vertical,
       PolicyManagementType: (parseInt)(this._policyType),  // need to do dynamic based on id or type of module 
       IsForDownload:false,
-      IsForShowAll:false
+      IsForShowAll:false,
+      PlanTypeId:this.searchPolicyForm.value.planType,
+      PlanId:this.searchPolicyForm.value.plan
       // PageNumber: this.searchPolicyForm.value.mobileNumber
       // PageSize: this.searchPolicyForm.value.mobileNumber
 
@@ -392,6 +405,28 @@ export class SearchPolicyComponent implements OnInit {
 
   displayFn(data: any): string {
     return data && data.Name ? data.Name : '';
+  }
+
+  
+  
+  getProducts(): void {
+    this.commonService.getProduct().subscribe((response: any) => {
+      this._products = response;
+    });
+  }
+
+  getPlan() {
+   let insuranceCompanyId =  this.searchPolicyForm.value.insuranceCompany;
+   let allproduct =  this.searchPolicyForm.value.allproduct;
+    this.commonService.getAllPlans(allproduct,insuranceCompanyId).subscribe((response: any) => {
+      this._plans = response;
+    });
+  }
+
+  getPlanType() {
+    this.commonService.getPlanType().subscribe((response: any) => {
+      this._planTypes = response;
+    });
   }
 
   showAll() {

@@ -261,7 +261,41 @@
                       </div>
                       <div class="row">
                         <div class="col-lg-4">
-                          <button mat-flat-button color="primary" [ngStyle]="{'background-color':  '#fdcb6e'}"  type="submit">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Product</mat-label>
+                                <mat-select formControlName="product"  (selectionChange)="getPlan()">
+                                  <mat-option>Select</mat-option>
+                                  <mat-option *ngFor="let products of _products" [value]="products.Value">
+                                    {{products.Name}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                          </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-4">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Plan</mat-label>
+                                <mat-select formControlName="plan" >
+                                  <mat-option>Select</mat-option>
+                                  <mat-option *ngFor="let plans of _plans" [value]="plans.Value">
+                                    {{plans.Name}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                          </div>
+                        <div class="col-lg-4">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Plan Type</mat-label>
+                                <mat-select formControlName="planTypes" >
+                                  <mat-option>Select</mat-option>
+                                  <mat-option *ngFor="let planTypes of _planTypes" [value]="planTypes.Value">
+                                    {{planTypes.Name}}</mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-lg-4">
+                          <button mat-flat-button color="primary" [ngStyle]="{'background-color':  '#fdcb6e'}"  type="submit" [disabled]="!fretailmotherreport.valid">
                            Filter
                           </button>
                         </div>

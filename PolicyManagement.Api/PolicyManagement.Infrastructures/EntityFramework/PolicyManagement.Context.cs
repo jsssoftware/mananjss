@@ -5962,6 +5962,38 @@ public partial class DataContext : DbContext
         return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_Report_RenewalPerfomanceReport_Result>("Usp_Report_RenewalPerfomanceReport", vardtpFromParameter, vardtpToParameter, varBranchIdParameter, teamMemberIdParameter, businessDoneByParameter, insuranceCompanyIdParameter);
     }
 
+
+    public virtual ObjectResult<Usp_Report_RenewalDump_Result> Usp_Report_RenewalDump(Nullable<int> varBranchId, Nullable<System.DateTime> vardtpFrom, Nullable<System.DateTime> vardtpTo, Nullable<int> varInsureCompanyId, Nullable<int> isRetailCommercial)
+    {
+
+        var varBranchIdParameter = varBranchId.HasValue ?
+            new ObjectParameter("varBranchId", varBranchId) :
+            new ObjectParameter("varBranchId", typeof(int));
+
+
+        var vardtpFromParameter = vardtpFrom.HasValue ?
+            new ObjectParameter("vardtpFrom", vardtpFrom) :
+            new ObjectParameter("vardtpFrom", typeof(System.DateTime));
+
+
+        var vardtpToParameter = vardtpTo.HasValue ?
+            new ObjectParameter("vardtpTo", vardtpTo) :
+            new ObjectParameter("vardtpTo", typeof(System.DateTime));
+
+
+        var varInsureCompanyIdParameter = varInsureCompanyId.HasValue ?
+            new ObjectParameter("varInsureCompanyId", varInsureCompanyId) :
+            new ObjectParameter("varInsureCompanyId", typeof(int));
+
+
+        var isRetailCommercialParameter = isRetailCommercial.HasValue ?
+            new ObjectParameter("isRetailCommercial", isRetailCommercial) :
+            new ObjectParameter("isRetailCommercial", typeof(int));
+
+
+        return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Usp_Report_RenewalDump_Result>("Usp_Report_RenewalDump", varBranchIdParameter, vardtpFromParameter, vardtpToParameter, varInsureCompanyIdParameter, isRetailCommercialParameter);
+    }
+
 }
 
 }

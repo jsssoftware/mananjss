@@ -1,0 +1,201 @@
+    <mat-card-content>
+      <div class="row">
+        <div class="col-lg-12">
+          <h4>{{_vertical ==  1 ? 'Agent Swapping - Motor' : 'Agent Swapping - Non Motor'}} </h4>
+        </div>
+      </div>
+      <hr class="hrClass" />
+      <div class="row">
+        <div class="col-lg-6">
+          <mat-list>
+            <mat-list-item>
+              <div mat-line>Control Number</div>
+              <div mat-line> {{_policyData.ControlNo}}</div>
+            </mat-list-item>
+            <hr class="hrClass" />
+            <mat-list-item>
+              <div mat-line>Insurance Company</div>
+              <div mat-line> {{_policyData.InsuranceCompanyName}}</div>
+            </mat-list-item>
+          </mat-list>
+          <mat-list>
+            <mat-list-item >
+              <div mat-line>Policy Number</div>
+              <div mat-line>
+                <button mat-flat-button color="primary" [ngStyle]="{'background-color':  '#fdcb6e'}">
+                  {{_policyData.PolicyNumber}}
+                </button>
+              </div>
+            </mat-list-item>           
+          </mat-list>
+        </div>
+       
+        <div class="col-lg-6" *ngIf="_vertical ==  1">
+            <mat-list >
+                <mat-list-item >
+                    <div mat-line>Registration Number</div>
+
+                    <div mat-line> 
+                        {{_policyData.registrationNumber}}
+                    </div>
+                </mat-list-item>
+            </mat-list>
+          
+            <mat-list *ngIf="_vertical ==  1">
+                <mat-list-item >
+                    <div mat-line>Model Name</div>
+                    <div mat-line> 
+                        {{_policyData.ModelName}}
+                    </div>
+                </mat-list-item>
+            </mat-list>
+        </div>
+      </div>
+
+      <hr />
+      <div class="row">
+       
+        <div class="col-lg-6">
+            
+           
+                    <div mat-line>Customer Name</div>
+                    <div mat-line> 
+                        {{_policyData.NameInPolicy}}
+                    </div>
+              
+                <div mat-line>Gross Premium</div>
+
+                <div mat-line> 
+                    {{_policyData.GrossPremium}}
+                </div>
+              
+                    <div mat-line>Pos Name</div>
+                    <div mat-line> 
+                        {{_policyData.POSName}}
+                    </div>
+               
+        </div>
+
+            <div class="col-lg-6" *ngIf="_vertical ==  1">
+              
+                <mat-list >
+                    <mat-list-item >
+                        <div mat-line>Variant Name</div>
+
+                        <div mat-line> 
+                            {{_policyData.VariantName}}
+                        </div>
+                    </mat-list-item>
+                </mat-list>
+                <mat-list>
+                    <mat-list-item >
+                <div mat-line>Total IDV</div>
+
+                <div mat-line> 
+                    {{_policyData.TotalIDV}}
+                </div>
+                    </mat-list-item>
+                </mat-list>
+            </div>
+            <div class="col-lg-6" *ngIf="_vertical !=  1">
+              
+                <mat-list>
+                    <mat-list-item >
+                        <div mat-line>Vertical</div>
+                        <div mat-line> 
+                            {{_policyData.VerticalName}}
+                        </div>
+                    </mat-list-item>
+                </mat-list>
+                <mat-list>
+                    <mat-list-item >
+                        <div mat-line>Product Name</div>
+                        <div mat-line> 
+                            {{_policyData.ProductName}}
+                        </div>
+                    </mat-list-item>
+                </mat-list>
+                <mat-list>
+                    <mat-list-item >
+                <div mat-line>Plan</div>
+                <div mat-line> 
+                    {{_policyData.PlanName}}
+                </div>
+                    </mat-list-item>
+                </mat-list>
+            </div>
+      </div>
+    </mat-card-content>
+    <mat-card-content>
+        <form [formGroup]="agentswapmasterform" autocomplete="off" style="padding-bottom:10px ;"  (ngSubmit)="submit()">
+
+        <div class="row">
+          <div class="col-lg-12">
+            <h4>Agent Swapping </h4>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                <mat-label>Reference</mat-label>
+                <mat-select formControlName="referenceId">
+                    <mat-option>Select</mat-option>
+                    <mat-option *ngFor="let reference of _references" [value]="reference.Value">{{reference.Name}}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                <mat-label>Tele Caller</mat-label>
+                <mat-select formControlName="teleCallerId" >
+                    <mat-option>Select</mat-option>
+                    <mat-option *ngFor="let telecaller of _teleCallers" [value]="telecaller.Value">{{telecaller.Name}}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                <mat-label>FOS Name</mat-label>
+                <mat-select formControlName="fosId" >
+                    <mat-option value="0">Select</mat-option>
+                    <mat-option *ngFor="let fosname of _fosNames" [value]="fosname.Value">{{fosname.Name}}</mat-option>
+                </mat-select>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <mat-form-field appearance="fill">
+                    <mat-label>POS Name</mat-label>
+                    <mat-select formControlName="posNameId">
+                      <mat-option>Select</mat-option>
+                      <mat-option *ngFor="let _posData of _posDatas" [value]="_posData.Value">{{_posData.Name}}
+                      </mat-option>
+                    </mat-select>                          
+                  </mat-form-field>
+            </div>
+            <div class="col-lg-8">
+                <mat-form-field appearance="fill">
+                  <mat-label>Policy Remarks</mat-label>
+                  <textarea matInput rows="3" formControlName="policyRemarks">{{_policyData.PolicyRemarks}}</textarea>
+                </mat-form-field>
+              </div>
+        </div>
+        <div class="row">
+           
+            <div class="col-lg-2">
+                <button type="submit" class="btn-block" mat-raised-button color="primary"  >
+                    <mat-icon style="font-size: 22px;">save</mat-icon>Save
+                </button>
+            </div>
+            <div class="col-lg-2">
+                <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb7e'}"
+                    (click)="reset()">
+                    Reset
+                </button>
+            </div>
+        </div>
+    </form>
+    </mat-card-content>

@@ -488,6 +488,9 @@
     <Compile Include="EntityFramework\Usp_ReconDataDownload_Result.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\Usp_Report_RenewalDump_Result.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\Usp_Report_RenewalPerfomanceReport_Result.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>

@@ -37,5 +37,23 @@ namespace PolicyManagement.Api.Controllers.Reports
         [HttpPost]
         public async Task<IHttpActionResult> GetPolicyDatas(AgentSwapFilter agentSwapFilter) => Json(await _reportService.FindMotorPolicyData(agentSwapFilter));
 
+        [Route("updateagentswap")]
+        [HttpPost]
+        public async Task<IHttpActionResult> UpdateAgentsData(AgentSwapUpdate agentSwapUpdate) => Json(await _reportService.UpdateAgentsData(agentSwapUpdate,  new BaseModel()));
+
+        [Route("renewaldump")]
+        [HttpPost]
+        public async Task<IHttpActionResult> RenewalDump(RenewDump renewDump1) => Json(await _reportService.GetRenewalDump(renewDump1));
+
+        [Route("customercluster")]
+        [HttpPost]
+        public async Task<IHttpActionResult> CustomerCluster(CustomerCluster customerCluster) => Json(await _reportService.GetCustomerCluster(customerCluster));
+
+        [Route("posperfomance")]
+        [HttpPost]
+        public async Task<IHttpActionResult> POSPerfomance(POSPerfomance pOSPerfomance) => Json(await _reportService.GetPosPerfomanceReports(pOSPerfomance));
+
+
+
     }
 }

@@ -1,0 +1,15 @@
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  .label {
+    font-weight: bold;
+    margin-right: 1rem;
+  }
+  
+  .value {
+    flex-grow: 1;
+  }
+  

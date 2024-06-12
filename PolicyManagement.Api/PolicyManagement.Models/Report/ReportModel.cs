@@ -98,7 +98,7 @@ namespace PolicyManagement.Models.Report {
     {
         public string number { get; set; }
         public string CustomerName { get; set; }
-        public short InsuranceCompanyId { get; set; }
+        public short InsuranceCompany { get; set; }
         public long PolicyNumber { get; set; }
         public string RegistrationNumber { get; set; }
         public string PolicyStartDateFrom { get; set; }
@@ -106,7 +106,86 @@ namespace PolicyManagement.Models.Report {
         public int PosNameId { get; set; }
         public int BranchId { get; set; }
         public int VerticalId { get; set; }
+    }
+
+    public class AgentSwapUpdate
+    {
+        public int ReferenceId { get; set; }
+        public short TeleCallerId { get; set; }
+        public short FosId { get; set; }
+        public int PosNameId { get; set; }
+        public string PolicyRemarks { get; set; }
+        public int PolicyId { get; set; }
+        public int BranchId { get; set; }
+    }
+
+    public class RenewDump
+    {
+        public int InsuranceCompanyId { get; set; }
+        public string ExpiryDateFrom { get; set; }
+        public string ExpiryDateTo { get; set; }
+        public int BranchId { get; set; }
+        public int VerticalId { get; set; }
+
 
     }
+
+
+    public class CustomerCluster
+    {
+        public string Number { get; set; }
+        public string CustomerName { get; set; }
+        public string CustomerCode { get; set; }
+        public string CustomerPhoneNo { get; set; }
+        public string  ClusterName { get; set; }
+        public string ClusterCode { get; set; }
+        public string ClusterPhoneNumber { get; set; }
+        public int VerticalId { get; set; }
+        public int PolicyActivation { get; set; }
+        public int Filter { get; set; }
+
+    }
+
+
+    public class POSPerfomanceReport
+    {
+        public string TeamMemberName { get; set; }
+        public string POSCode { get; set; }
+        public string POSName { get; set; }
+        public string CategoryName { get; set; }
+        public string CompanyName { get; set; }
+        public decimal? ODSum { get; set; }
+        public int NoOfPolicies { get; set; }
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public string PolicyType { get; set; }
+        public string ManagedBy { get; set; }
+    }
+
+
+    public class POSPerfomance
+    {
+        public DateTime policyStartDateFrom { get; set; }
+        public DateTime policyStartDateTo { get; set; }
+        public int reportType { get; set; }
+        public int? insureCompanyId { get; set; }
+        public int? posId { get; set; }
+        public int? teamMemberId { get; set; }
+    }
+
+
+    public class DataEntryPerfomance
+    {
+        public int InsuranceCompanyId { get; set; }
+        public int BranchId { get; set; }
+        public int VerticalId { get; set; }
+        public int PosNameId { get; set; }
+        public DateTime policyStartDateFrom { get; set; }
+        public DateTime policyStartDateTo { get; set; }
+        public int reportType { get; set; }
+      
+    }
+
+
 
 }

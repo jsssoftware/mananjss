@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatRadioChange } from '@angular/material/radio';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { ICommonDto } from 'src/app/app-entites/dtos/common/common-dto';
 import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
@@ -7,6 +8,7 @@ import { ICommonService } from 'src/app/app-services/common-service/abstracts/co
 import { ReportService } from 'src/app/app-services/report-service/report.service';
 import { Vertical } from 'src/app/shared/utilities/enums/enum';
 import { WorkBook, WorkSheet, utils, writeFile } from 'xlsx';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-renewal-perfomance-motor',
@@ -17,8 +19,11 @@ export class RenewalPerfomanceMotorComponent implements OnInit {
   public _insuranceCompanies: IDropDownDto<number>[] = [];
   public _filteredInsuranceCompaniesOptions: IDropDownDto<number>[] = [];
   private _branchId: any;
+  private _posManagedBy: any;
   public _teamMember: IDropDownDto<number>[] = [];
-
+  public _filteredPosOptions: IDropDownDto<number>[] = [];
+  public _posDatas: IDropDownDto<number>[] = [];
+  public isMotor :boolean = true;
   rows :any[] = [];
 
   loadingIndicator = false;
@@ -29,8 +34,8 @@ export class RenewalPerfomanceMotorComponent implements OnInit {
     { prop: 'PolicyStartDate', name: 'Policy Start Date' },
     { prop: 'InsuranceCompanyName', name: 'Insurance Company Name' },
     { prop: 'NameInPolicy', name: 'Name In Policy' },
-    { prop: 'ModelName', name: 'Customer Code' },
-    { prop: 'RegistrationNo', name: 'Model Name' },
+    { prop: 'ModelName', name: 'Model Name' },
+    { prop: 'RegistrationNo', name: 'Registration No' },
     { prop: 'MakeYear', name: 'Make Year' },
     { prop: 'POSName', name: 'POS Name' },
     { prop: 'RenewControlNo', name: 'Renewal Control No' },
@@ -47,10 +52,20 @@ export class RenewalPerfomanceMotorComponent implements OnInit {
     businessType: new FormControl(''),
     teamMemberId: new FormControl(''),
     branchId: new FormControl(''),
+    posManagedBy: new FormControl(''),
+    vertical1: new FormControl(''),
+    vertical2: new FormControl(''),
+    vertical3: new FormControl(''),
+    vertical4: new FormControl(''),
+    vertical5: new FormControl(''),
+    vertical6: new FormControl(''),
+    verticalTypeId: new FormControl(''),
+    verticalId: new FormControl(''),
  })
   constructor(
     private commonService: ICommonService,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private datePipe: DatePipe
   ) { 
     this._branchId = sessionStorage.getItem("branchId");
   }
@@ -68,8 +83,40 @@ export class RenewalPerfomanceMotorComponent implements OnInit {
         this.filterInsurancerCompaniesData(input.Name);
     });
 
+    this.renewalperfomancemotor.get('verticalTypeId').valueChanges.subscribe((value: number) => {
+      this.renewalperfomancemotor.get('vertical1').setValue(0, { emitEvent: false });
+      this.renewalperfomancemotor.get('vertical2').setValue(0, { emitEvent: false });
+      this.renewalperfomancemotor.get('vertical3').setValue(0, { emitEvent: false });
+      this.renewalperfomancemotor.get('vertical4').setValue(0, { emitEvent: false });
+      this.renewalperfomancemotor.get('vertical5').setValue(0, { emitEvent: false });
+      this.renewalperfomancemotor.get('vertical6').setValue(0, { emitEvent: false });
+      if (value == 1) {
+        // Checkbox 1 is checked, set numeric value in the form control
+        this.renewalperfomancemotor.get('vertical1').setValue(1, { emitEvent: false });
+        this.renewalperfomancemotor.get('vertical2').setValue(1, { emitEvent: false });
+        this.renewalperfomancemotor.get('vertical3').setValue(1, { emitEvent: false });
+        this.renewalperfomancemotor.get('vertical4').setValue(1, { emitEvent: false });
+        this.renewalperfomancemotor.get('vertical5').setValue(1, { emitEvent: false });
+        this.renewalperfomancemotor.get('vertical6').setValue(1, { emitEvent: false });
+      }else if (value == 2) {
+        // Checkbox 1 is checked, set numeric value in the form control
+        this.renewalperfomancemotor.get('vertical1').setValue(1, { emitEvent: false });
+        this.renewalperfomancemotor.get('vertical2').setValue(1, { emitEvent: false });
+        this.renewalperfomancemotor.get('vertical3').setValue(1, { emitEvent: false });
+      }else if (value == 3) {
+        // Checkbox 1 is checked, set numeric value in the form control
+        this.renewalperfomancemotor.get('vertical4').setValue(1, { emitEvent: false });
+        this.renewalperfomancemotor.get('vertical5').setValue(1, { emitEvent: false });
+        this.renewalperfomancemotor.get('vertical6').setValue(1, { emitEvent: false });
+      } else {
+        // Checkbox 1 is unchecked, set numeric value to 0 or another value
+        this.renewalperfomancemotor.get('policyType5').setValue(0, { emitEvent: false });
+      }
+    });
+
     this.getInsuranceCompanies();
     this.getTeleCallers(this._branchId);
+    this.getPos(this._branchId);
   }
 
   getInsuranceCompanyName(value: number): string {
@@ -107,6 +154,10 @@ export class RenewalPerfomanceMotorComponent implements OnInit {
 
     this.reportService.getRenewPeformanceReport(this.renewalperfomancemotor.getRawValue()).subscribe((response: ICommonDto<any>) => {
       this.rows= response.Response;
+      this.rows = this.rows.map(row => ({
+        ...row,
+        PolicyStartDate: this.datePipe.transform(row.PolicyStartDate, 'dd/MM/yyyy')
+      }));
     });
 
   }
@@ -158,5 +209,26 @@ export class RenewalPerfomanceMotorComponent implements OnInit {
       this._teamMember = response;
     });
   }
+
+
+
+
+  getPos(branchId: number): void {
+    this.commonService.getPos(Vertical.Motor, branchId).subscribe((response: IDropDownDto<number>[]) => {
+      this._posDatas = response;
+    })
+  }  
+
+  
+
+  onRadioChange(event: MatRadioChange): void {
+    if(event.value == 1){
+      this.isMotor = true;
+    }else{
+      this.isMotor = false;
+    }
+  }
+
+
 
 }

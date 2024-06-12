@@ -1235,7 +1235,7 @@ namespace PolicyManagement.Services.Common
                 query.Append($"and NameInPolicy like '{model.CustomerName}%' ");
 
             if (model.InsuranceCompany > 0)
-                query.Append($"and InsuranceCompanyIdNumber = {model.InsuranceCompany} ");
+                query.Append($"and InsuranceCompanyId = {model.InsuranceCompany} ");
 
             if (!string.IsNullOrEmpty(model.PolicyNumber))
                 query.Append($"and PolicyNumber like '%{model.PolicyNumber}%' ");
@@ -1257,6 +1257,12 @@ namespace PolicyManagement.Services.Common
 
             if (model.Product > 0)
                 query.Append($"and ProductId = {model.Product} ");
+
+            if (model.PlanTypeId > 0)
+                query.Append($"and PlanTypeId = {model.PlanTypeId} ");
+
+            if (model.PlanId > 0)
+                query.Append($"and PlanId = {model.PlanId} ");
 
             if (!string.IsNullOrEmpty(model.MobileNumber))
                 query.Append($"and (CustomerMobile1 = '{model.MobileNumber}' or CustomerMobile2 = '{model.MobileNumber}' or CustomerPhone1 = '{model.MobileNumber}' or CustomerPhone2 = '{model.MobileNumber}') ");
@@ -1741,6 +1747,9 @@ namespace PolicyManagement.Services.Common
             }
             return data;
         }
+
+
+
 
 
 
