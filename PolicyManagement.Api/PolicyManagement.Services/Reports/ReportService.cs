@@ -885,218 +885,229 @@ namespace PolicyManagement.Services.Reports
                  Response = null
              };
          }*/
-        public async Task<CommonDto<object>> GetDataEntryPerformance(DataEntryPerfomance dataEntryPerfomance)
+        public async Task<CommonDto<object>> GetLostDataEntry(LostDataCalling lostDataCalling)
         {
-             var vardtpFrom = new DateTime(2020, 1, 1); // Replace with actual date
-                var vardtpTo = new DateTime(2020, 1, 1);   // Replace with actual date
-                int varBranchId = 1; // Replace with actual branch ID
-                int varInsureCompanyId = 0; // Replace with actual Insurance Company ID
-                int varDSAId = 0; // Replace with actual DSA ID
-                int varEmployeeId = 0; // Replace with actual Employee ID
+            var todayDate = DateTime.Today.Date;
 
-                var query = from mpd in _dataContext.tblMotorPolicyDatas
-                            join ic in _dataContext.tblInsuranceCompany on mpd.InsuranceCompanyId equals ic.InsuranceCompanyId
-                            join c in _dataContext.tblCustomer on mpd.CustomerId equals c.CustomerId
-                            join city in _dataContext.tblCity on c.CustomerCityId1 equals city.CityId
-                            join bt in _dataContext.tblBusinessType on c.BusinessTypeId equals bt.BusinessTypeId into btGroup
-                            from bt in btGroup.DefaultIfEmpty()
-                            join ind in _dataContext.tblIndustry on c.IndustryId equals ind.IndustryId into indGroup
-                            from ind in indGroup.DefaultIfEmpty()
-                            join cl in _dataContext.tblCluster on c.ClusterId equals cl.ClusterId
-                            join t in _dataContext.tblTerritory on c.TerritoryId equals t.TerritoryId
-                            join ny in _dataContext.tblNoofYear on mpd.NoofYearId equals ny.NoofYearId
-                            join fi in _dataContext.tblFinancer on mpd.FinancerId equals fi.FinancerId into fiGroup
-                            from fi in fiGroup.DefaultIfEmpty()
-                            join icomp in _dataContext.tblInsuranceCompany on mpd.PreviousInsuranceCompanyId equals icomp.InsuranceCompanyId into icompGroup
-                            from icomp in icompGroup.DefaultIfEmpty()
-                          //  join icompany in _dataContext.tblInspectionCompany on mpd.InspectionCompanyId equals icompany.InspectionCompanyId into icompanyGroup
-                           // from icompany in icompanyGroup.DefaultIfEmpty()
-                            join pt in _dataContext.tblPolicyType on mpd.PolicyTypeId equals pt.PolicyTypeId
-                            join rt in _dataContext.tblRelationShip on mpd.NomineeRelationShipId equals rt.RelationShipId into rtGroup
-                            from rt in rtGroup.DefaultIfEmpty()
-                            join m in _dataContext.tblManufacturers on mpd.ManufacturerId equals m.ManufacturerId
-                            join mdl in _dataContext.tblModel on mpd.ModelId equals mdl.ModelId
-                            join v in _dataContext.tblVariant on mpd.VariantId equals v.VariantId
-                            join my in _dataContext.tblMakeYear on mpd.MakeYearId equals my.MakeYearId
-                            join rz in _dataContext.tblRTOZone on mpd.RTOZoneId equals rz.RTOZoneId into rzGroup
-                            from rz in rzGroup.DefaultIfEmpty()
-                            join vc in _dataContext.tblVehicleClass on mpd.VehicleClassId equals vc.VehicleClassId
-                            join ncb in _dataContext.tblNCB on mpd.NCBId equals ncb.NCBId into ncbGroup
-                            from ncb in ncbGroup.DefaultIfEmpty()
-                            join ar in _dataContext.tblAddonRider on mpd.AddonRiderId equals ar.AddonRiderId into arGroup
-                            from ar in arGroup.DefaultIfEmpty()
-                            join d in _dataContext.tblPOS on mpd.POSId equals d.POSId into dGroup
-                            from d in dGroup.DefaultIfEmpty()
-                            join tc in _dataContext.tblTeamMember on mpd.TeleCallerId equals tc.TeamMemberId into tcGroup
-                            from tc in tcGroup.DefaultIfEmpty()
-                            join fos in _dataContext.tblTeamMember on mpd.FOSId equals fos.TeamMemberId into fosGroup
-                            from fos in fosGroup.DefaultIfEmpty()
-                            join ps in _dataContext.tblPolicyStatus on mpd.PolicyStatusId equals ps.PolicyStatusId
-                            join er in _dataContext.tblEndorsementReason on mpd.PolicyCancelReasonId equals er.EndorsementReasonId into erGroup
-                            from er in erGroup.DefaultIfEmpty()
-                            join r in _dataContext.tblReference on mpd.ReferenceId equals r.ReferenceId into rGroup
-                            from r in rGroup.DefaultIfEmpty()
-                            join mcs in _dataContext.tblMonthCycle on mpd.IRDACommMonthCycleId equals (short)mcs.MonthCycleId into mcGroup
-                            from mc in mcGroup.DefaultIfEmpty()
-                            join cmc in _dataContext.tblMonthCycle on mpd.POSCommMonthCycleId equals  (short)cmc.MonthCycleId into cmcGroup
-                            from cmc in cmcGroup.DefaultIfEmpty()
-                            join dsc in _dataContext.tblCategory on d.CategoryId equals dsc.CategoryId into dscGroup
-                            from dsc in dscGroup.DefaultIfEmpty()
-                            join dsam in _dataContext.tblTeamMember on d.POSManagedBy equals dsam.TeamMemberId into dsamGroup
-                            from dsam in dsamGroup.DefaultIfEmpty()
-                            join gd in _dataContext.tblGender on mpd.NomineeGenderId equals gd.GenderId into gendergroup
-                            from gd in gendergroup.DefaultIfEmpty()
-                            where mpd.BranchId == varBranchId 
-                            //&&
-                               //   (mpd == "Lost Case" || mpd.RenewalStatus == "Not Renew due to Cheque Bounce")
-                            select new
-                            {
-                                mpd.ControlNo,
-                                mpd.LoyaltyCounter,
-                                mpd.POSId,
-                                c.CustomerCode,
-                                ic.InsCompShortName,
-                                mpd.PolicyTypeId,
-                                pt.PolicyType,
-                                mpd.NameInPolicy,
-                                mpd.CustomerType,
-                                c.CustomerAddress1,
-                                city.CityName,
-                                c.CustomerPinCode1,
-                                cl.ClusterName,
-                                cl.ClusterCode,
-                                t.TerritoryName,
-                                c.CustomerPhone1,
-                                c.CustomerPhone2,
-                                c.CustomerMobile1,
-                                c.CustomerMobile2,
-                                c.CustomerEmail1,
-                                c.AadhaarNo,
-                                c.CustomerEmail2,
-                                mpd.CoverNoteNo,
-                                //mpd.IssueDate,
-                                //mpd.IssueTime,
-                                mpd.PolicyNo,
-                                mpd.PolicyStartDate,
-                                mpd.PolicyEndDate,
-                                ny.NoofYear,
-                                fi.FinancerName,
-                                PrevInsCompany = icomp.InsuranceCompanyName,
-                                mpd.PreviousPolicyNo,
-                                mpd.PreviousPolicyEndDate,
-                              //  icompany.InspectionCompanyName,
-                               // mpd.InspectionNo,
-                                //mpd.InspectionDate,
-                                //mpd.InspectionTime,
-                                mpd.NomineeName,
-                                mpd.NomineeAge,
-                                gd.Gender,
-                                NomineeRelation = rt.RelationShipName,
-                                m.ManufacturerName,
-                                mdl.ModelName,
-                                v.VariantName,
-                                mpd.FuelType,
-                                mpd.EngineNo,
-                                mpd.ChassisNo,
-                                mpd.CubicCapacity,
-                                mpd.SeatingCapacity,
-                                my.MakeYear,
-                                mpd.RegistrationNo,
-                                rz.RTOZoneName,
-                                vc.VehicleClass,
-                                mpd.GrossPremium,
-                                mpd.VehicleIDV,
-                                mpd.CNGIDV,
-                                mpd.AssessoriesIDV,
-                                mpd.TotalIDV,
-                                mpd.OD,
-                                ncb.NCBPercentage,
-                                mpd.SpecialDiscount,
-                                mpd.TotalOD,
-                                mpd.TotalGrossPremium,
-                                mpd.Loading,
-                                mpd.FVoucherNo,
-                                mpd.ShortAmt1,
-                                mpd.SVoucherNo,
-                                mpd.ShortAmt2,
-                                mpd.TVoucherNo,
-                                mpd.ShortAmt3,
-                                mpd.ShortFallTotal,
-                                AddonRiderName = ar.AddonRiderName,
-                                mpd.PAN,
-                                mpd.GSTIN,
-                                TeleCaller = tc.EmployeeName,
-                                DSAName = d.DSAName,
-                                FOS = fos.EmployeeName,
-                                mpd.BusinessDoneBy,
-                                mpd.PolicyRemarks,
-                                ps.PolicyStatus,
-                                er.EndorsementReason,
-                                mpd.PolicyCancelDate,
-                                mpd.ServiceTax,
-                                r.ReferenceName,
-                                mpd.EndorseGrossPremium,
-                                mpd.EndorseOD,
-                                mpd.AddonOD,
-                                mpd.GVW,
-                                mpd.Exshowroom,
-                                mpd.RegistrationDate,
-                                mpd.CDVoucherNo,
-                                mpd.CashDiscountAmt,
-                                mpd.IRDACommissionReceived,
-                                MonthCycle = mc.MonthCycle,
-                                mpd.DSACommissionReceived,
-                                CommMonth = cmc.MonthCycle,
-                                dsc.DSACategoryName,
-                                DSAManageByName = dsam.EmployeeName,
-                                c.CustomerContact,
-                                c.CustomerDOB,
-                                c.ClusterId,
-                                c.TerritoryId,
-                                c.IsDecisionMaker,
-                                bt.BusinessTypeName,
-                                ind.IndustryName
-                            };
+            var vardtpFrom = lostDataCalling.policyStartDateFrom; // Replace with actual date
+            var vardtpTo = lostDataCalling.policyStartDateTo;   // Replace with actual date
+            int varBranchId = lostDataCalling.BranchId; // Replace with actual branch ID
+            int? varInsureCompanyId = lostDataCalling.InsuranceCompanyId; // Replace with actual Insurance Company ID
+            int varTeamemberId = lostDataCalling.TeamMemberId; // Replace with actual Employee ID
 
-                if (vardtpFrom != new DateTime(2020, 1, 1) || vardtpTo != new DateTime(2020, 1, 1))
-                {
-                    query = query.Where(mpd => (mpd.PolicyEndDate >= vardtpFrom && mpd.PolicyEndDate <= vardtpTo && pt.PolicyPackageType == "TP only") ||
-                                               (mpd.PolicyEndDateOD >= vardtpFrom && mpd.PolicyEndDateOD <= vardtpTo && (pt.PolicyPackageType == "OD only" || pt.PolicyPackageType == "Comprehensive")));
-                }
+            var query = from mpd in _dataContext.tblMotorPolicyDatas
+                        join ic in _dataContext.tblInsuranceCompany on mpd.InsuranceCompanyId equals ic.InsuranceCompanyId
+                        join c in _dataContext.tblCustomer on mpd.CustomerId equals c.CustomerId
+                        join city in _dataContext.tblCity on c.CustomerCityId1 equals city.CityId
+                        join bt in _dataContext.tblBusinessType on c.BusinessTypeId equals bt.BusinessTypeId into btGroup
+                        from bt in btGroup.DefaultIfEmpty()
+                        join ind in _dataContext.tblIndustry on c.IndustryId equals ind.IndustryId into indGroup
+                        from ind in indGroup.DefaultIfEmpty()
+                        join cl in _dataContext.tblCluster on c.ClusterId equals cl.ClusterId
+                        join t in _dataContext.tblTerritory on c.TerritoryId equals t.TerritoryId
+                        join ny in _dataContext.tblNoofYear on mpd.NoofYearId equals ny.NoofYearId
+                        join fi in _dataContext.tblFinancer on mpd.FinancerId equals fi.FinancerId into fiGroup
+                        from fi in fiGroup.DefaultIfEmpty()
+                        join icomp in _dataContext.tblInsuranceCompany on mpd.PreviousInsuranceCompanyId equals icomp.InsuranceCompanyId into icompGroup
+                        from icomp in icompGroup.DefaultIfEmpty()
+                            //  join icompany in _dataContext.tblInspectionCompany on mpd.InspectionCompanyId equals icompany.InspectionCompanyId into icompanyGroup
+                            // from icompany in icompanyGroup.DefaultIfEmpty()
+                        join pt in _dataContext.tblPolicyType on mpd.PolicyTypeId equals pt.PolicyTypeId
+                        join rt in _dataContext.tblRelationShip on mpd.NomineeRelationShipId equals rt.RelationShipId into rtGroup
+                        from rt in rtGroup.DefaultIfEmpty()
+                        join m in _dataContext.tblManufacturers on mpd.ManufacturerId equals m.ManufacturerId
+                        join mdl in _dataContext.tblModel on mpd.ModelId equals mdl.ModelId
+                        join v in _dataContext.tblVariant on mpd.VariantId equals v.VariantId
+                        join my in _dataContext.tblMakeYear on mpd.MakeYearId equals my.MakeYearId
+                        join rz in _dataContext.tblRTOZone on mpd.RTOZoneId equals rz.RTOZoneId into rzGroup
+                        from rz in rzGroup.DefaultIfEmpty()
+                        join vc in _dataContext.tblVehicleClass on mpd.VehicleClassId equals vc.VehicleClassId
+                        join ncb in _dataContext.tblNCB on mpd.NCBId equals ncb.NCBId into ncbGroup
+                        from ncb in ncbGroup.DefaultIfEmpty()
+                        join ar in _dataContext.tblAddonRider on mpd.AddonRiderId equals ar.AddonRiderId into arGroup
+                        from ar in arGroup.DefaultIfEmpty()
+                        join d in _dataContext.tblPOS on mpd.POSId equals d.POSId into dGroup
+                        from d in dGroup.DefaultIfEmpty()
+                        join tc in _dataContext.tblTeamMember on mpd.TeleCallerId equals tc.TeamMemberId into tcGroup
+                        from tc in tcGroup.DefaultIfEmpty()
+                        join fos in _dataContext.tblTeamMember on mpd.FOSId equals fos.TeamMemberId into fosGroup
+                        from fos in fosGroup.DefaultIfEmpty()
+                        join ps in _dataContext.tblPolicyStatus on mpd.PolicyStatusId equals ps.PolicyStatusId
+                        join er in _dataContext.tblEndorsementReason on mpd.PolicyCancelReasonId equals er.EndorsementReasonId into erGroup
+                        from er in erGroup.DefaultIfEmpty()
+                        join r in _dataContext.tblReference on mpd.ReferenceId equals r.ReferenceId into rGroup
+                        from r in rGroup.DefaultIfEmpty()
+                        join mcs in _dataContext.tblMonthCycle on mpd.IRDACommMonthCycleId equals (short)mcs.MonthCycleId into mcGroup
+                        from mc in mcGroup.DefaultIfEmpty()
+                        join cmc in _dataContext.tblMonthCycle on mpd.POSCommMonthCycleId equals (short)cmc.MonthCycleId into cmcGroup
+                        from cmc in cmcGroup.DefaultIfEmpty()
+                        join dsc in _dataContext.tblCategory on d.CategoryId equals dsc.CategoryId into dscGroup
+                        from dsc in dscGroup.DefaultIfEmpty()
+                        join dsam in _dataContext.tblTeamMember on d.POSManagedBy equals dsam.TeamMemberId into dsamGroup
+                        from dsam in dsamGroup.DefaultIfEmpty()
+                        join gd in _dataContext.tblGender on mpd.NomineeGenderId equals gd.GenderId into gendergroup
+                        from gd in gendergroup.DefaultIfEmpty()
+                        where mpd.BranchId == varBranchId                            //&&
+                        && mpd.RenewalDone ==  false        
+                        && ((mpd.PolicyEndDate.Value.AddMonths(6) <= todayDate && mpd.PolicyPackageType == "TP only") ||
+                                           (mpd.PolicyEndDateOD.Value.AddMonths(6) <= todayDate && (mpd.PolicyPackageType == "OD only" || mpd.PolicyPackageType == "Comprehensive")))
+            //   (mpd == "Lost Case" || mpd.RenewalStatus == "Not Renew due to Cheque Bounce")
+            select new
+                        {
+                            mpd.ControlNo,
+                            mpd.LoyaltyCounter,
+                            mpd.POSId,
+                            c.CustomerCode,
+                            ic.InsCompShortName,
+                            mpd.PolicyTypeId,
+                            pt.PolicyType,
+                            mpd.NameInPolicy,
+                            mpd.CustomerType,
+                            c.CustomerAddress1,
+                            city.CityName,
+                            c.CustomerPinCode1,
+                            cl.ClusterName,
+                            cl.ClusterCode,
+                            t.TerritoryName,
+                            c.CustomerPhone1,
+                            c.CustomerPhone2,
+                            c.CustomerMobile1,
+                            c.CustomerMobile2,
+                            c.CustomerEmail1,
+                            c.AadhaarNo,
+                            c.CustomerEmail2,
+                            mpd.CoverNoteNo,
+                            //  mpd.IssueDate,
+                            //mpd.IssueTime,
+                            mpd.PolicyNo,
+                            mpd.PolicyStartDate,
+                            mpd.PolicyEndDate,
+                            ny.NoofYear,
+                            fi.FinancerName,
+                            PrevInsCompany = icomp.InsuranceCompanyName,
+                            mpd.PreviousPolicyNo,
+                            mpd.PreviousPolicyEndDate,
+                            //  icompany.InspectionCompanyName,
+                            // mpd.InspectionNo,
+                            //mpd.InspectionDate,
+                            //mpd.InspectionTime,
+                            mpd.NomineeName,
+                            mpd.NomineeAge,
+                            gd.Gender,
+                            NomineeRelation = rt.RelationShipName,
+                            m.ManufacturerName,
+                            mdl.ModelName,
+                            v.VariantName,
+                            mpd.FuelType,
+                            mpd.EngineNo,
+                            mpd.ChassisNo,
+                            mpd.CubicCapacity,
+                            mpd.SeatingCapacity,
+                            my.MakeYear,
+                            mpd.RegistrationNo,
+                            rz.RTOZoneName,
+                            vc.VehicleClass,
+                            mpd.GrossPremium,
+                            mpd.VehicleIDV,
+                            mpd.CNGIDV,
+                            mpd.ElectricAssessoriesIDV,
+                            mpd.TotalIDV,
+                            mpd.OD,
+                            ncb.NCBPercentage,
+                            mpd.SpecialDiscount,
+                            mpd.TotalOD,
+                            mpd.TotalGrossPremium,
+                            mpd.Loading,
+                            //mpd.FVoucherNo,
+                            //mpd.ShortAmt1,
+                            //mpd.SVoucherNo,
+                            //mpd.ShortAmt2,
+                            //mpd.TVoucherNo,
+                            //mpd.ShortAmt3,
+                            //mpd.ShortFallTotal,
+                            AddonRiderName = ar.AddonRiderName,
+                            mpd.PAN,
+                            mpd.GSTIN,
+                            TeleCaller = tc.TeamMemberName,
+                            DSAName = d.POSName,
+                            FOS = fos.TeamMemberName,
+                            mpd.BusinessDoneBy,
+                            mpd.PolicyRemarks,
+                            ps.PolicyStatus,
+                            er.EndorsementReason,
+                            mpd.PolicyCancelDate,
+                            r.ReferenceName,
+                            mpd.EndorseGrossPremium,
+                            mpd.EndorseOD,
+                            mpd.AddonOD,
+                            mpd.GVW,
+                            mpd.Exshowroom,
+                            mpd.RegistrationDate,
+                            // mpd.CDVoucherNo,
+                            //mpd.CashDiscountAmt,
+                            mpd.IRDACommissionReceived,
+                            MonthCycle = mc.MonthCycle,
+                            mpd.POSCommissionReceived,
+                            CommMonth = cmc.MonthCycle,
+                            dsc.CategoryName,
+                            DSAManageByName = dsam.TeamMemberName,
+                            c.CustomerContact,
+                            c.CustomerDOB,
+                            c.ClusterId,
+                            c.TerritoryId,
+                            c.IsDecisionMaker,
+                            bt.BusinessTypeName,
+                            ind.IndustryName,
+                            PolicyPackageType = pt.PolicyType,
+                            mpd.PolicyStartDateOD, mpd.PolicyEndDateOD, mpd.InsuranceCompanyId,
+                            mpd.InsuranceCompanyODId,
+                            mpd.FOSId, mpd.TeleCallerId,
 
-                // Apply other filters based on the user's selection
-                if (optInsureCompany)
-                {
-                   
-                    
-                        query = query.Where(mpd => (mpd.InsureCompanyId == varInsureCompanyId && pt.PolicyPackageType == "TP only") ||
-                                                   (mpd.InsureCompanyODId == varInsureCompanyId && (pt.PolicyPackageType == "OD only" || pt.PolicyPackageType == "Comprehensive")));
-                    
-                }
+                        };
 
-                if (optReportTypeAllDSA)
-                {
-                   
-                            query = query.Where(vrp => vrp.DSAId == varDSAId);
-                        
-                   
-                }
-
-                if (optReportTypeAllInhouse)
-                {
-                   
-                            query = query.Where(vrp => vrp.FOSId == varEmployeeId || vrp.TelecallerId == varEmployeeId);
-                       
-                    
-                }
-
-                var result = query.OrderBy(vrp => vrp.ControlNo).ToList();
-
-           
+            if (vardtpFrom != new DateTime(2020, 1, 1) || vardtpTo != new DateTime(2020, 1, 1))
+            {
+                query = query.Where(mpd => (mpd.PolicyEndDate >= vardtpFrom && mpd.PolicyEndDate <= vardtpTo && mpd.PolicyPackageType == "TP only") ||
+                                           (mpd.PolicyEndDateOD >= vardtpFrom && mpd.PolicyEndDateOD <= vardtpTo && (mpd.PolicyPackageType == "OD only" || mpd.PolicyPackageType == "Comprehensive")));
             }
 
-        }
+            // Apply other filters based on the user's selection
+            if (lostDataCalling.InsuranceCompanyId.HasValue)
+            {
 
+
+                query = query.Where(mpd => (mpd.InsuranceCompanyId == varInsureCompanyId && mpd.PolicyPackageType == "TP only") ||
+                                           (mpd.InsuranceCompanyODId == varInsureCompanyId && (mpd.PolicyPackageType == "OD only" || mpd.PolicyPackageType == "Comprehensive")));
+
+            }
+
+            if (lostDataCalling.PosNameId.HasValue)
+            {
+
+                query = query.Where(vrp => vrp.POSId == lostDataCalling.PosNameId);
+
+
+            }
+
+            if (lostDataCalling.Inhouse.HasValue)
+            {
+
+                query = query.Where(vrp => vrp.FOSId == varTeamemberId || vrp.TeleCallerId == varTeamemberId);
+
+
+            }
+
+            
+
+            var result = query.OrderBy(vrp => vrp.ControlNo).ToList();
+            return new CommonDto<object>
+            {
+                Message = "No Data",
+                IsSuccess = true,
+                Response = result
+            };
+
+        }
 
     }
 }

@@ -187,5 +187,20 @@ namespace PolicyManagement.Models.Report {
     }
 
 
+    public class LostDataCalling
+    {
+        public int? InsuranceCompanyId { get; set; }
+        public int BranchId { get; set; }
+        public int VerticalId { get; set; }
+        public int? PosNameId { get; set; }
+        public int? Inhouse { get; set; }
+        public DateTime policyStartDateFrom { get; set; }
+        public DateTime policyStartDateTo { get; set; }
+        public int reportType { get; set; }
+        public int TeamMemberId { get; set; }
+
+    }
+
+
 
 }

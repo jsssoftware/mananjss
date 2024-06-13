@@ -109,7 +109,7 @@
                 </div>
                 <div class="col-lg-1">
                     <button type="button" class="btn-block" mat-raised-button color="primary"
-                        (click)="createPosContactData()" [disabled]="!posContactform.valid">
+                        (click)="createPosContactData()" [disabled]="!posContactform.valid && !_editMode">
                         <mat-icon style="font-size: 22px;">save</mat-icon>Save
                     </button>
                 </div>

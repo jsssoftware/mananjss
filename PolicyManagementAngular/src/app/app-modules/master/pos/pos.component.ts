@@ -61,7 +61,9 @@ export class PosComponent implements OnInit {
   public _pageNumber: number = 0;
   public _input: string = "";
   public _showAll: boolean =false;
+  public _editMode: boolean =false;
   displayedColumns: string[] = [
+    'Modify',
     'POSName',
     'POSManagedBy',
     'CategoryId',
@@ -86,8 +88,7 @@ export class PosComponent implements OnInit {
     'POSDOB',
     'POSDOJ',
     
-    'IsActive',
-    'Modify'
+    'IsActive'
   ];
   constructor(private commonService : ICommonService, private masterSerivice :MasterService,private  commonFunction :CommonFunction) { }
 
@@ -142,6 +143,7 @@ export class PosComponent implements OnInit {
     });
   }
   reset(){
+    this._editMode =  false;
     this.posform.reset();
   }
 
@@ -225,6 +227,7 @@ export class PosComponent implements OnInit {
 
   
   editPosData(data:any){
+    this._editMode =  true;
     let obj = Object.assign({}, data);;
     this.posform.patchValue(obj);
   }

@@ -41,7 +41,10 @@ export class PoscontactComponent implements OnInit {
   public _pageNumber: number = 0;
   public _input: string = "";
   public _showAll: boolean =false;
+  public _editMode: boolean =false;
+
   displayedColumns: string[] = [
+    'Modify',
     'POSId',
     'POSContactName',
     'POSContactMobile2',
@@ -52,8 +55,7 @@ export class PoscontactComponent implements OnInit {
     'IsLife',
     'IsCommercial',
     'IsActive',
-    'IsMessageSend',
-    'Modify'
+    'IsMessageSend'
   ];
   constructor(private commonService : ICommonService, private masterSerivice :MasterService) {
     this._branchId = parseInt(sessionStorage.getItem("branchId") as string);
@@ -92,6 +94,7 @@ export class PoscontactComponent implements OnInit {
 
   
   editPosContactData(data:any){
+    this._editMode =  true;
     let obj = Object.assign({}, data);;
     this.posContactform.patchValue(obj);
   }
@@ -158,6 +161,8 @@ export class PoscontactComponent implements OnInit {
   }
 
   reset(){
+    this._editMode =  false;
+
     this.posContactform.reset();
   }
 
