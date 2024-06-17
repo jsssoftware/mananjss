@@ -387,5 +387,9 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("get-all-plans")]
         [HttpGet]
         public async Task<IHttpActionResult> GetPlans(int productId, int insuranceCompanyId) => Json(await _commonService.GetAllPlans(productId, insuranceCompanyId));
+        
+        [Route("get-all-posmanagedby/{branchId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllPosManagedBy(int branchId) => Json(await _commonService.FindAllPosManagedBy(branchId));
     }
 }

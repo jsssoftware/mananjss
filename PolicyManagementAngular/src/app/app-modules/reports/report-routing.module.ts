@@ -13,6 +13,9 @@ import { RenewalDumpComponent } from './shared/renewal-dump/renewal-dump.compone
 import { SearchPolicyComponent } from 'src/app/shared/common-component/search-policy/search-policy.component';
 import { CustomerClusterComponent } from './shared/customer-cluster/customer-cluster.component';
 import { PosPerfomanceComponent } from './shared/pos-perfomance/pos-perfomance.component';
+import { LostDataCallingComponent } from './shared/lost-data-calling/lost-data-calling.component';
+import { PendingQcComponent } from './shared/pending-qc/pending-qc.component';
+import { RECReportComponent } from './motor/rec-report/rec-report.component';
 
 const routes: Routes = [
     {
@@ -65,6 +68,18 @@ const routes: Routes = [
             {
                 path: 'posperfomance',  
                 component: PosPerfomanceComponent,
+            },
+            {
+                path: 'lostdatacalling',  
+                component: LostDataCallingComponent,
+            },
+            {
+                path: 'pendingqc',  
+                component: PendingQcComponent,
+            },
+            {
+                path: 'recreport',  
+                component: RECReportComponent,
             },
           
         ]

@@ -28,4 +28,6 @@ export class ReportService extends IReportService {
     getRenewalDump = (model:any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Report.getRenewalDump,model);
     getCustomerCluster = (model:any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Report.getCustomerCluster,model);
     getPosPerfomance = (model:any): Observable<ICommonDto<any[]>> => this.apiManagerService.postRequest<ICommonDto<any[]>>(Report.getPosPerfomance,model);
+    getLostData = (model:any): Observable<ICommonDto<any[]>> => this.apiManagerService.postRequest<ICommonDto<any[]>>(Report.getLostData,model);
+    getRECReport = (model:any): Observable<ICommonDto<any[]>> => this.apiManagerService.postRequest<ICommonDto<any[]>>(Report.getRECReport,model);
 }

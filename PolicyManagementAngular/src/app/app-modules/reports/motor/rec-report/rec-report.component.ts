@@ -14,19 +14,19 @@ import { MatRadioChange } from '@angular/material/radio';
 import { DatePipe } from '@angular/common';
 import { MasterService } from 'src/app/app-services/master-service/master.service';
 import { WorkBook, WorkSheet, utils, writeFile } from 'xlsx';
-
 @Component({
-  selector: 'app-pos-perfomance',
-  templateUrl: './pos-perfomance.component.html',
-  styleUrls: ['./pos-perfomance.component.css']
+  selector: 'app-rec-report',
+  templateUrl: './rec-report.component.html',
+  styleUrls: ['./rec-report.component.css']
 })
-export class PosPerfomanceComponent implements OnInit {
-
+export class RECReportComponent implements OnInit {
 
   loadingIndicator = false;
   reorderable = true;
   ColumnMode = ColumnMode;
   public _insuranceCompanies: IDropDownDto<number>[] = [];
+  public _telecallers: IDropDownDto<number>[] = [];
+  public _refrences: IDropDownDto<number>[] = [];
   public _filteredInsuranceCompaniesOptions: IDropDownDto<number>[] = [];
   rows :any[] = [];
   public _posDatas: IDropDownDto<number>[] = [];
@@ -38,35 +38,38 @@ export class PosPerfomanceComponent implements OnInit {
   public isMotor :boolean = true;
 
   columns = [
-    { prop: 'TeamMemberName', name: 'Managed By' },
-    { prop: 'CategoryName', name: 'Category Name' },
-    { prop: 'POSCode', name: 'POS Code'},
+    { prop: 'InsuranceCompanyName', name: 'Insurance Company Name' },
+    { prop: 'ControlNo', name: 'Control No' },
+    { prop: 'CoverNoteNo', name: 'Cover Note No' },
+    { prop: 'PolicyNo', name: 'Policy No' },
+    { prop: 'NameInPolicy', name: 'Name In Policy' },
+    { prop: 'ModelName', name: 'Model Name' },
     { prop: 'POSName', name: 'POS Name' },
-    { prop: 'PolicyType', name: 'Policy Type' },
-    { prop: 'ODSum', name: 'OD Sum' }, 
-    { prop: 'NoOfPolicies', name: 'No Of Policies' },
-  ]
+    { prop: 'RegistrationNo', name: 'Registration No' },
+    { prop: 'EngineNo', name: 'Engine No' },
+    { prop: 'ChassisNo', name: 'Chassis No' },
+    { prop: 'EmployeeName', name: 'Employee Name' },
+    { prop: 'PolicyStatus', name: 'Policy Status' },
+    { prop: 'ReferenceName', name: 'Reference Name' }
+];
   //#region
-  posPerfomance = new FormGroup({
-    insuranceCompany: new FormControl(''),
+  recreport = new FormGroup({
+    insuranceCompanyId: new FormControl(''),
     policyStartDateFrom: new FormControl(''),
     policyStartDateFrom_dump: new FormControl(''),
     policyStartDateTo: new FormControl(''),
     policyStartDateTo_dump: new FormControl(''),
     posNameId: new FormControl(''),
-    posManagedById: new FormControl(''),
+    inhouseId: new FormControl(''),
+    refrenceId: new FormControl(''),
     branchId: new FormControl(''),
-    reportType: new FormControl(''),
-  });
+    rECType: new FormControl(1),
+  }); 
   ELEMENT_DATA: any;
   constructor(
     private commonService: ICommonService,
     private reportService: ReportService,
-    private router: Router,
-    private route: ActivatedRoute,
     public dialog :MatDialog,
-    private datePipe: DatePipe,
-    private masterService :MasterService
   ) {
     this._branchId = sessionStorage.getItem("branchId");
   }
@@ -74,8 +77,10 @@ export class PosPerfomanceComponent implements OnInit {
   ngOnInit(): void {
     this.getPos(this._branchId);
     this.getInsuranceCompanies();
-    this.getAllPosSales(this._branchId);
-    this.posPerfomance.get("insuranceCompany")?.valueChanges.subscribe(input => {
+    this.getTelecaller();
+    this.getRefrence();
+    this.getFosNames();
+    this.recreport.get("insuranceCompany")?.valueChanges.subscribe(input => {
       if (input == null || input === undefined || input === '')
         return;
 
@@ -98,50 +103,66 @@ export class PosPerfomanceComponent implements OnInit {
     });
   }
 
+  getTelecaller(): any {
+    this.commonService.getTeleCallers(Vertical.Motor,this._branchId).subscribe((response: IDropDownDto<number>[]) => {
+      this._telecallers =  response;
+    });
+  }
+
+  getFosNames(): any {
+    this.commonService.getFosNames(Vertical.Motor,this._branchId).subscribe((response: IDropDownDto<number>[]) => {
+      this._telecallers.concat(response);
+    });
+  }
+
+  getRefrence(): any {
+    this.commonService.getReferences(this._branchId).subscribe((response: IDropDownDto<number>[]) => {
+      this._refrences =  response;
+    });
+  }
+
   getPos(branchId: number): void {
     this.commonService.getPos(Vertical.Motor, branchId).subscribe((response: IDropDownDto<number>[]) => {
       this._posDatas = response;
     })
   }
 
-  getAllPosSales(branchId: number): void {
-    this.commonService.getAllPosManagedBy(branchId).subscribe((response: IDropDownDto<number>[]) => {
-      this._posDatasales = response;
-    })
-  }
   reset(){
-    this.posPerfomance.reset()
+    this.recreport.reset()
   }
 
 
 
   submit(){
-    this.posPerfomance.get("branchId").setValue(this._branchId);
-    let policyStartDate = this.commonService.getDateInString(new Date(this.posPerfomance.value.policyStartDateFrom_dump));
-    let policyEndDate = this.commonService.getDateInString(new Date(this.posPerfomance.value.policyStartDateTo_dump));
+    this.recreport.get("branchId").setValue(this._branchId);
+    let policyStartDate = this.commonService.getDateInString(new Date(this.recreport.value.policyStartDateFrom_dump));
+    let policyEndDate = this.commonService.getDateInString(new Date(this.recreport.value.policyStartDateTo_dump));
 
-    this.posPerfomance.patchValue({
+    this.recreport.patchValue({
       policyStartDateFrom: policyStartDate,
       policyStartDateTo :policyEndDate
     });
 
-    this.reportService.getPosPerfomance(this.posPerfomance.getRawValue()).subscribe((response: ICommonDto<any[]>) => {
+    this.reportService.getRECReport(this.recreport.getRawValue()).subscribe((response: ICommonDto<any[]>) => {
       this.rows = [...response.Response];
+     /*   this.columns = Object.keys(this.rows[0]).map(key => {
+        return { prop: key, name: key.split(/(?=[A-Z])/).join(' ') }; // Splitting camelCase and joining with spaces
+      }); */
     });
 
   }
 
   async downloadExcel(){
-    this.posPerfomance.get("branchId").setValue(this._branchId);
-    let policyStartDate = this.commonService.getDateInString(new Date(this.posPerfomance.value.policyStartDateFrom_dump));
-    let policyEndDate = this.commonService.getDateInString(new Date(this.posPerfomance.value.policyStartDateTo_dump));
+    this.recreport.get("branchId").setValue(this._branchId);
+    let policyStartDate = this.commonService.getDateInString(new Date(this.recreport.value.policyStartDateFrom_dump));
+    let policyEndDate = this.commonService.getDateInString(new Date(this.recreport.value.policyStartDateTo_dump));
 
-    this.posPerfomance.patchValue({
+    this.recreport.patchValue({
       policyStartDateFrom: policyStartDate,
       policyStartDateTo :policyEndDate
     });
 
-    this.reportService.getPosPerfomance(this.posPerfomance.getRawValue()).subscribe((response: ICommonDto<any[]>) => {
+    this.reportService.getRECReport(this.recreport.getRawValue()).subscribe((response: ICommonDto<any[]>) => {
       this.rows = [...response.Response];
        this.exportexcel();
 
@@ -159,16 +180,6 @@ export class PosPerfomanceComponent implements OnInit {
     });
   }
 
-
-  getTeamMembers(branchId: number): any {
-    this.masterService.getTeamMember( branchId).subscribe((response: any) => {
-      debugger
-      this._teamMembers = response?.Data.filter(x=>x.DepartmentId != 8);
-      this._teamMemberSales = response?.Data.filter(x=>x.DepartmentId == 8);
-    });
-  }
-
-
   
   exportexcel(): void
   {
@@ -179,7 +190,7 @@ export class PosPerfomanceComponent implements OnInit {
     const wb: WorkBook = utils.book_new();
     utils.book_append_sheet(wb, ws, 'Sheet1');
     /* save to file */  
-    writeFile(wb, 'POS Perfomance-' + this.posPerfomance.value.policyStartDateFrom+ '-'  + this.posPerfomance.value.expiryDateTo +'.xlsx');
+    writeFile(wb, 'Lost Data-' + this.recreport.value.policyStartDateFrom+ '-'  + this.recreport.value.policyStartDateTo +'.xlsx');
   }
 
   getExcelData(data:any) {
@@ -197,6 +208,5 @@ export class PosPerfomanceComponent implements OnInit {
 
     return excelData;
   }
-
 
 }

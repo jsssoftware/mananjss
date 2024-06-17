@@ -19,6 +19,9 @@ import { AgentSwapDialogComponent } from './shared/agent-swap-dialog/agent-swap-
 import { RenewalDumpComponent } from './shared/renewal-dump/renewal-dump.component';
 import { CustomerClusterComponent } from './shared/customer-cluster/customer-cluster.component';
 import { PosPerfomanceComponent } from './shared/pos-perfomance/pos-perfomance.component';
+import { LostDataCallingComponent } from './shared/lost-data-calling/lost-data-calling.component';
+import { PendingQcComponent } from './shared/pending-qc/pending-qc.component';
+import { RECReportComponent } from './motor/rec-report/rec-report.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +36,10 @@ import { PosPerfomanceComponent } from './shared/pos-perfomance/pos-perfomance.c
     AgentSwapDialogComponent,
     RenewalDumpComponent,
     CustomerClusterComponent,
-    PosPerfomanceComponent
+    PosPerfomanceComponent,
+    LostDataCallingComponent,
+    PendingQcComponent,
+    RECReportComponent
   ],
 
   imports: [

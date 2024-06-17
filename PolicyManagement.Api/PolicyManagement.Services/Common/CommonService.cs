@@ -1084,7 +1084,7 @@ namespace PolicyManagement.Services.Common
                     StartDate = item.StartDateInString,
                     ExpiryDate = item.ExpiryDateInString,
                     PolicyNumber = item.PolicyNumber,
-                    InsuranceCompanyIdNumber = item.InsuranceCompanyIdNumber,
+                    InsuranceCompanyIdNumber = item.InsuranceCompanyIdNumber ?? 0,
                     InsuranceCompany = item.InsuranceCompany,
                     PolicyRemarks = item.PolicyRemarks
                 });
@@ -1750,6 +1750,14 @@ namespace PolicyManagement.Services.Common
 
 
 
+        public async Task<List<DropDownDto<int>>> FindAllPosManagedBy(int branchId) => await _dataContext.tblPOS.Join(_dataContext.tblTeamMember, T1 => T1.POSManagedBy, T2 => T2.TeamMemberId, (T1, T2) => new { T1, T2 })
+                                                                                                        .Where(x=>x.T1.BranchId == branchId)
+                                                                                                        .Select(s => new DropDownDto<int>
+                                                                                                        {
+                                                                                                            Name = s.T2.TeamMemberName,
+                                                                                                            Value = s.T1.POSManagedBy
+                                                                                                        }).Distinct()
+                                                                                                        .ToListAsync();
 
 
 

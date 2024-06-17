@@ -18,5 +18,7 @@ namespace PolicyManagement.Services.Reports.Interface
         Task<CommonDto<object>> GetRenewalDump(RenewDump renewDump);
         Task<CommonDto<object>> GetCustomerCluster(CustomerCluster customerCluster);
         Task<CommonDto<object>> GetPosPerfomanceReports(POSPerfomance pOSPerfomance);
+        Task<CommonDto<object>> GetLostDataEntry(LostDataCalling lostDataCalling);
+        Task<CommonDto<object>> GetRECReport(RECReport lostDataCalling);
     }
 }

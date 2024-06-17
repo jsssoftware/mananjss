@@ -32,6 +32,7 @@ using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Office2010.Ink;
 using DocumentFormat.OpenXml.InkML;
 using System.Data.Entity.Infrastructure;
+using DocumentFormat.OpenXml.Office.Word;
 
 namespace PolicyManagement.Services.Reports
 {
@@ -568,7 +569,7 @@ namespace PolicyManagement.Services.Reports
                        from cluster in clusters.DefaultIfEmpty()
                        from policydata in policyDatas.DefaultIfEmpty()
                        where
-                       (string.IsNullOrEmpty(customerCluster.Number) || policydata.ControlNo == customerCluster.Number) &&
+                      //    (string.IsNullOrEmpty(customerCluster.Number) || policydata.ControlNo == customerCluster.Number) &&
                       (string.IsNullOrEmpty(customerCluster.ClusterName) || cluster.ClusterName == customerCluster.ClusterName) &&
                       (string.IsNullOrEmpty(customerCluster.ClusterCode) || cluster.ClusterCode == customerCluster.ClusterCode) &&
                       (string.IsNullOrEmpty(customerCluster.ClusterPhoneNumber) || cluster.ClusterPhone1 == customerCluster.ClusterPhoneNumber) &&
@@ -889,11 +890,11 @@ namespace PolicyManagement.Services.Reports
         {
             var todayDate = DateTime.Today.Date;
 
-            var vardtpFrom = lostDataCalling.policyStartDateFrom; // Replace with actual date
-            var vardtpTo = lostDataCalling.policyStartDateTo;   // Replace with actual date
+            var vardtpFrom = lostDataCalling.policyEndDateFrom; // Replace with actual date
+            var vardtpTo = lostDataCalling.policyEndDateTo;   // Replace with actual date
             int varBranchId = lostDataCalling.BranchId; // Replace with actual branch ID
             int? varInsureCompanyId = lostDataCalling.InsuranceCompanyId; // Replace with actual Insurance Company ID
-            int varTeamemberId = lostDataCalling.TeamMemberId; // Replace with actual Employee ID
+            int? posId = lostDataCalling.PosNameId; // Replace with actual Employee ID
 
             var query = from mpd in _dataContext.tblMotorPolicyDatas
                         join ic in _dataContext.tblInsuranceCompany on mpd.InsuranceCompanyId equals ic.InsuranceCompanyId
@@ -948,11 +949,10 @@ namespace PolicyManagement.Services.Reports
                         join gd in _dataContext.tblGender on mpd.NomineeGenderId equals gd.GenderId into gendergroup
                         from gd in gendergroup.DefaultIfEmpty()
                         where mpd.BranchId == varBranchId                            //&&
-                        && mpd.RenewalDone ==  false        
-                        && ((mpd.PolicyEndDate.Value.AddMonths(6) <= todayDate && mpd.PolicyPackageType == "TP only") ||
-                                           (mpd.PolicyEndDateOD.Value.AddMonths(6) <= todayDate && (mpd.PolicyPackageType == "OD only" || mpd.PolicyPackageType == "Comprehensive")))
-            //   (mpd == "Lost Case" || mpd.RenewalStatus == "Not Renew due to Cheque Bounce")
-            select new
+                        && (mpd.RenewalDone == false || mpd.RenewalDone == null)
+
+                        //   (mpd == "Lost Case" || mpd.RenewalStatus == "Not Renew due to Cheque Bounce")
+                        select new
                         {
                             mpd.ControlNo,
                             mpd.LoyaltyCounter,
@@ -1058,16 +1058,24 @@ namespace PolicyManagement.Services.Reports
                             c.IsDecisionMaker,
                             bt.BusinessTypeName,
                             ind.IndustryName,
-                            PolicyPackageType = pt.PolicyType,
-                            mpd.PolicyStartDateOD, mpd.PolicyEndDateOD, mpd.InsuranceCompanyId,
+                            mpd.PolicyPackageType,
+                            mpd.PolicyStartDateOD,
+                            mpd.PolicyEndDateOD,
+                            mpd.InsuranceCompanyId,
                             mpd.InsuranceCompanyODId,
-                            mpd.FOSId, mpd.TeleCallerId,
+                            mpd.FOSId,
+                            mpd.TeleCallerId,
 
                         };
+            var res = query.ToList();
 
+            var filtered = res
+                .Where(mpd => (mpd.PolicyPackageType == "TP only" && mpd.PolicyEndDate.HasValue && mpd.PolicyEndDate.Value.AddMonths(6) <= todayDate) ||
+                              ((mpd.PolicyPackageType == "OD only" || mpd.PolicyPackageType == "Comprehensive") && mpd.PolicyEndDateOD.HasValue && mpd.PolicyEndDateOD.Value.AddMonths(6) <= todayDate))
+                ;
             if (vardtpFrom != new DateTime(2020, 1, 1) || vardtpTo != new DateTime(2020, 1, 1))
             {
-                query = query.Where(mpd => (mpd.PolicyEndDate >= vardtpFrom && mpd.PolicyEndDate <= vardtpTo && mpd.PolicyPackageType == "TP only") ||
+                filtered.Where(mpd => (mpd.PolicyEndDate >= vardtpFrom && mpd.PolicyEndDate <= vardtpTo && mpd.PolicyPackageType == "TP only") ||
                                            (mpd.PolicyEndDateOD >= vardtpFrom && mpd.PolicyEndDateOD <= vardtpTo && (mpd.PolicyPackageType == "OD only" || mpd.PolicyPackageType == "Comprehensive")));
             }
 
@@ -1076,7 +1084,7 @@ namespace PolicyManagement.Services.Reports
             {
 
 
-                query = query.Where(mpd => (mpd.InsuranceCompanyId == varInsureCompanyId && mpd.PolicyPackageType == "TP only") ||
+                filtered.Where(mpd => (mpd.InsuranceCompanyId == varInsureCompanyId && mpd.PolicyPackageType == "TP only") ||
                                            (mpd.InsuranceCompanyODId == varInsureCompanyId && (mpd.PolicyPackageType == "OD only" || mpd.PolicyPackageType == "Comprehensive")));
 
             }
@@ -1084,22 +1092,22 @@ namespace PolicyManagement.Services.Reports
             if (lostDataCalling.PosNameId.HasValue)
             {
 
-                query = query.Where(vrp => vrp.POSId == lostDataCalling.PosNameId);
+                filtered.Where(vrp => vrp.POSId == lostDataCalling.PosNameId);
 
 
             }
 
-            if (lostDataCalling.Inhouse.HasValue)
+            /*if (lostDataCalling.Inhouse.HasValue)
             {
 
                 query = query.Where(vrp => vrp.FOSId == varTeamemberId || vrp.TeleCallerId == varTeamemberId);
 
 
-            }
+            }*/
 
-            
 
-            var result = query.OrderBy(vrp => vrp.ControlNo).ToList();
+
+            var result = filtered.OrderBy(vrp => vrp.ControlNo).ToList();
             return new CommonDto<object>
             {
                 Message = "No Data",
@@ -1108,6 +1116,101 @@ namespace PolicyManagement.Services.Reports
             };
 
         }
+
+
+        public async Task<CommonDto<object>> GetRECReport(RECReport rECReport)
+        {
+            var varBranchId = rECReport.BranchId;
+            var vardtpFrom = rECReport.policyStartDateFrom;
+            var vardtpTo = rECReport.policyStartDateTo;
+            var varInsureCompanyId = rECReport.InsuranceCompanyId;
+            var varPOSId = rECReport.PosNameId;
+            var varInhouseId = rECReport.InhouseId;
+            var varReferenceId = rECReport.RefrenceId;
+
+            var query = from mpd in _dataContext.tblMotorPolicyDatas
+                        join ic in _dataContext.tblInsuranceCompany on mpd.InsuranceCompanyId equals ic.InsuranceCompanyId
+                        join model in _dataContext.tblModel on mpd.ModelId equals model.ModelId
+                        join ps in _dataContext.tblPolicyStatus on mpd.PolicyStatusId equals ps.PolicyStatusId
+                        join dsa in _dataContext.tblPOS on mpd.POSId equals dsa.POSId into dsaGroup
+                        from dsa in dsaGroup.DefaultIfEmpty()
+                        join emp in _dataContext.tblTeamMember on mpd.FOSId equals emp.TeamMemberId into empGroup
+                        from emp in empGroup.DefaultIfEmpty()
+                        join reference in _dataContext.tblReference on mpd.ReferenceId equals reference.ReferenceId into refGroup
+                        from reference in refGroup.DefaultIfEmpty()
+                        where mpd.BranchId == varBranchId
+                              && mpd.IsVerified == true
+                              && mpd.PolicyStatusId == 1
+                              && ((mpd.PolicyStartDate != DateTime.MinValue &&  mpd.PolicyStartDate >= vardtpFrom) || true)
+                              && ((mpd.PolicyStartDate != DateTime.MinValue && mpd.PolicyStartDate <= vardtpTo) || true)
+                        select new
+                        {
+                            mpd,
+                            ic.InsuranceCompanyName,
+                            mpd.ControlNo,
+                            mpd.CoverNoteNo,
+                            mpd.PolicyNo,
+                            mpd.NameInPolicy,
+                            model.ModelName,
+                            POSName = dsa != null ? dsa.POSName : null,
+                            mpd.RegistrationNo,
+                            mpd.EngineNo,
+                            mpd.ChassisNo,
+                            EmployeeName = emp != null ? emp.TeamMemberName : null,
+                            ps.PolicyStatus,
+                            ReferenceName = reference != null ? reference.ReferenceName : null
+                        };
+            var dat = query.ToList();
+            // Applying Filters
+            if (rECReport.RECType == 1)
+            {
+                query = query.Where(q => q.mpd.EngineNo.Length == 0 && q.mpd.ChassisNo.Length == 0);
+            }
+            else if (rECReport.RECType == 2)
+            {
+                query = query.Where(q => q.mpd.RegistrationNo.Length == 0 || q.mpd.EngineNo.Length == 0 || q.mpd.ChassisNo.Length == 0);
+            }
+
+            if (varInsureCompanyId.HasValue)
+            {
+
+                query = query.Where(q => q.mpd.InsuranceCompanyId == varInsureCompanyId);
+
+            }
+
+            if (varPOSId.HasValue)
+            {
+
+                query = query.Where(q => q.mpd.POSId == varPOSId);
+
+            }
+
+            if (varInhouseId.HasValue)
+            {
+
+                query = query.Where(q => q.mpd.FOSId == varInhouseId || q.mpd.TeleCallerId == varInhouseId);
+
+            }
+
+            if (varReferenceId.HasValue)
+            {
+
+                query = query.Where(q => q.mpd.ReferenceId == varReferenceId);
+
+            }
+
+            query = query.OrderBy(q => q.mpd.AkgSlipIssueDate);
+
+            var result = query.ToList();
+            return new CommonDto<object>
+            {
+                Message = "Success",
+                IsSuccess = true,
+                Response = result
+            };
+
+        }        
+    
 
     }
 }

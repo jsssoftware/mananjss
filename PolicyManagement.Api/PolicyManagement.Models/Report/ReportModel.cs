@@ -194,10 +194,24 @@ namespace PolicyManagement.Models.Report {
         public int VerticalId { get; set; }
         public int? PosNameId { get; set; }
         public int? Inhouse { get; set; }
+        public DateTime policyEndDateFrom { get; set; }
+        public DateTime policyEndDateTo { get; set; }
+        public int teamMemberType { get; set; }
+
+    }
+
+
+    public class RECReport
+    {
+        public int? InsuranceCompanyId { get; set; }
+        public int BranchId { get; set; }
+        public int VerticalId { get; set; }
+        public int? PosNameId { get; set; }
+        public int? InhouseId { get; set; }
+        public int? RefrenceId { get; set; }
         public DateTime policyStartDateFrom { get; set; }
         public DateTime policyStartDateTo { get; set; }
-        public int reportType { get; set; }
-        public int TeamMemberId { get; set; }
+        public int RECType { get; set; }
 
     }
 

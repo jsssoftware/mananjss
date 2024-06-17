@@ -54,6 +54,15 @@ namespace PolicyManagement.Api.Controllers.Reports
         public async Task<IHttpActionResult> POSPerfomance(POSPerfomance pOSPerfomance) => Json(await _reportService.GetPosPerfomanceReports(pOSPerfomance));
 
 
+        [Route("lostdata")]
+        [HttpPost]
+        public async Task<IHttpActionResult> LostDataCalling(LostDataCalling lostDataCalling) => Json(await _reportService.GetLostDataEntry(lostDataCalling));
+
+        [Route("recreport")]
+        [HttpPost]
+        public async Task<IHttpActionResult> RecReport(RECReport rECReport) => Json(await _reportService.GetRECReport(rECReport));
+
+
 
     }
 }

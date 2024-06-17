@@ -35,7 +35,7 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindAllNcbs();
         Task<List<DropDownDto<int>>> FindAllCommissionPaidOn(int vertical);
         Task<List<DropDownDto<int>>> FindAllAddOnRiders(int insuranceCompanyId, int verticalId);
-        Task<List<AddOnPlanOptionDto>> FindAllAddOnPlanOptions(int addOnRiderId, int verticalId,int policyId);
+        Task<List<AddOnPlanOptionDto>> FindAllAddOnPlanOptions(int addOnRiderId, int verticalId, int policyId);
         Task<List<DropDownDto<int>>> FindAllRelations();
         Task<List<DropDownDto<int>>> FindAllTeleCallers(Vertical vertical, int branchId);
         Task<List<DropDownDto<int>>> FindAllReferences(int branchId);
@@ -70,7 +70,7 @@ namespace PolicyManagement.Services.Common.Interface
         Task<DataTableDto<List<SearchPolicyFinalDownloadDto>>> FindAllPoliciesDownload(SearchPolicyModel model);
         Task<List<tblMenuItem>> GetMenus();
         Task<List<DropDownDto<int>>> FindAllProducts();
-        Task<List<DropDownDto<int>>> FindAllPlans(int _productId,int insuranceCompanyId, int verticalId);
+        Task<List<DropDownDto<int>>> FindAllPlans(int _productId, int insuranceCompanyId, int verticalId);
         Task<List<DropDownDto<int>>> FindAllPlanTypes();
         Task<List<DropDownDto<int>>> FindAllPortability();
         Task<List<DropDownDto<int>>> FindAllRisks();
@@ -102,5 +102,6 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<tblMonthCycle>> FindMonthCycle();
         Task<List<tblPolicyTerm>> GetPolicyTerms(short policyPackagetypeId);
         Task<List<DropDownDto<int>>> GetAllPlans(int _productId, int insuranceCompanyId);
+        Task<List<DropDownDto<int>>> FindAllPosManagedBy(int branchId);
     }
 }

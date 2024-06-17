@@ -9,5 +9,7 @@ export class Report {
     public static readonly getRenewalDump = "api/reports/renewaldump";
     public static readonly getCustomerCluster = "api/reports/customercluster";
     public static readonly getPosPerfomance = "api/reports/posperfomance";
+    public static readonly getLostData = "api/reports/lostdata";
+    public static readonly getRECReport = "api/reports/recreport";
 
 }
