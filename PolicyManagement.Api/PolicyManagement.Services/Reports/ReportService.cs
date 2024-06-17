@@ -1164,7 +1164,7 @@ namespace PolicyManagement.Services.Reports
             // Applying Filters
             if (rECReport.RECType == 1)
             {
-                query = query.Where(q => q.mpd.EngineNo.Length == 0 && q.mpd.ChassisNo.Length == 0);
+                query = query.Where(q => q.mpd.RegistrationNo.Length == 0);
             }
             else if (rECReport.RECType == 2)
             {
