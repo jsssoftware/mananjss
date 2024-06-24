@@ -1759,6 +1759,11 @@ namespace PolicyManagement.Services.Common
                                                                                                         }).Distinct()
                                                                                                         .ToListAsync();
 
+        public async Task<List<DropDownDto<int>>> FindAllEndrosementReason(int verticalId) => await _dataContext.tblEndorsementReason.Where(x=>x.InsuranceSegmentId == verticalId).Select(s => new DropDownDto<int>{ Name = s.EndorsementReason,
+                                                                                                           Value = s.EndorsementReasonId
+                                                                                                       }).Distinct()
+                                                                                                       .ToListAsync();
+
 
 
     }

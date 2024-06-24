@@ -216,6 +216,7 @@
     <Compile Include="Controllers\Common\CommonController.cs" />
     <Compile Include="Controllers\Customer\CustomerController.cs" />
     <Compile Include="Controllers\Commercial\CommercialController.cs" />
+    <Compile Include="Controllers\Endrosement\EndrosementController.cs" />
     <Compile Include="Controllers\Health\RetailController.cs" />
     <Compile Include="Controllers\Inspection\InspectionController.cs" />
     <Compile Include="Controllers\Master\MasterController.cs" />

@@ -391,5 +391,9 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("get-all-posmanagedby/{branchId}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAllPosManagedBy(int branchId) => Json(await _commonService.FindAllPosManagedBy(branchId));
+
+        [Route("get-endrosement-reason/{verticalId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetEndrosementReason(int verticalId) => Json(await _commonService.FindAllEndrosementReason(verticalId));
     }
 }

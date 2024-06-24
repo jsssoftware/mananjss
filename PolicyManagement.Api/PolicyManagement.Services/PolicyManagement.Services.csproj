@@ -173,6 +173,8 @@
     <Compile Include="Customer\Interface\ICustomerService.cs" />
     <Compile Include="Commercial\Interface\ICommercialService.cs" />
     <Compile Include="Commercial\CommercialService.cs" />
+    <Compile Include="EndrosementService\EndrosementService.cs" />
+    <Compile Include="EndrosementService\Interface\IEndrosementService.cs" />
     <Compile Include="Inspection\InspectionService.cs" />
     <Compile Include="Inspection\Interface\IInspectionService.cs" />
     <Compile Include="Health\Interface\IRetailService.cs" />

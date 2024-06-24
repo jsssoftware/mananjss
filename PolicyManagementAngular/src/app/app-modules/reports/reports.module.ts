@@ -22,6 +22,7 @@ import { PosPerfomanceComponent } from './shared/pos-perfomance/pos-perfomance.c
 import { LostDataCallingComponent } from './shared/lost-data-calling/lost-data-calling.component';
 import { PendingQcComponent } from './shared/pending-qc/pending-qc.component';
 import { RECReportComponent } from './motor/rec-report/rec-report.component';
+import { EndrosementService } from 'src/app/app-services/endrosement-service/endrosement.service';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,6 @@ import { RECReportComponent } from './motor/rec-report/rec-report.component';
     ReactiveFormsModule,
     MaterialFileInputModule
   ],
-  providers:[ReportService,CommonService,DatePipe]
+  providers:[ReportService,CommonService,DatePipe,EndrosementService]
 })
 export class ReportsModule { }

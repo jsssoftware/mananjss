@@ -16,6 +16,8 @@ import { MarinePolicyManagementComponent } from './commercial/marine-policy-mana
 import { MiscPolicyManagementComponent } from './commercial/misc-policy-management/misc-policy-management.component';
 import { RoleGuard } from 'src/app/shared/auth-guard/authorization.gurad';
 import { FullApplicationAccess } from 'src/app/shared/utilities/enums/enum';
+import { EndrosementSearchPolicyComponent } from '../endrosement/search-policy/search-policy.component';
+import { EndrosementMasterComponent } from '../endrosement/master/master.component';
 
 const routes: Routes = [
   {
@@ -202,6 +204,18 @@ const routes: Routes = [
         data: { requestedClaim: 'misc' ,expectedRole: FullApplicationAccess.AdminBusiness},
         canActivate: [RoleGuard],
         component: MiscPolicyManagementComponent,
+      },
+      {
+        path: 'endrosement/searchpolicy',
+        data: { requestedClaim: 'endrosement' ,expectedRole: FullApplicationAccess.AdminBusiness},
+        canActivate: [RoleGuard],
+        component: EndrosementSearchPolicyComponent,
+      },
+      {
+        path: 'endrosement/master',
+        data: { requestedClaim: 'endrosement' ,expectedRole: FullApplicationAccess.AdminBusiness},
+        canActivate: [RoleGuard],
+        component: EndrosementMasterComponent,
       }
 
     ]

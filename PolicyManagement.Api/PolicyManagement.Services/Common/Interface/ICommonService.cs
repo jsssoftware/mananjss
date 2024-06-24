@@ -103,5 +103,7 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<tblPolicyTerm>> GetPolicyTerms(short policyPackagetypeId);
         Task<List<DropDownDto<int>>> GetAllPlans(int _productId, int insuranceCompanyId);
         Task<List<DropDownDto<int>>> FindAllPosManagedBy(int branchId);
+        Task<List<DropDownDto<int>>> FindAllEndrosementReason(int verticalId);
+
     }
 }

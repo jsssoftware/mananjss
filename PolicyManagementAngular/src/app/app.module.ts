@@ -30,7 +30,7 @@ import { ReportsModule } from './app-modules/reports/reports.module';
     LoginComponent,  
     HeaderComponent,
     TopMenuComponent,
-    MenuItemComponent
+    MenuItemComponent,
   ],
   imports: [
     BrowserModule,

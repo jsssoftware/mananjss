@@ -1,0 +1,442 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header class="card-container" style="display: flow-root">
+        <mat-card-title style="width: 50%; float: left;">
+            <p>Endrosement Master</p>
+        </mat-card-title>
+        <mat-card-title style="width: 10%; float: right;">
+            <!--         <p><button  class="btn-block" style="background: cadetblue;" mat-raised-button color="blue" (click)="backToMaster()">Back</button></p> 
+ -->
+        </mat-card-title>
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+            <div class="row">
+                <div class="col-lg-1">
+                    <mat-label>Insurance Company </mat-label>
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <textarea type="text" matInput readonly >{{policyDetails.InsuranceCompanyName}}</textarea>
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-1">
+                    <mat-label>Policy No</mat-label>
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <input type="text" matInput [(ngModel)]="policyDetails.PolicyNumber" readonly />
+                    </mat-form-field>
+                </div>
+               
+                
+                <div class="col-lg-1">
+                    <mat-label>Control No</mat-label>
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <input type="text" matInput [(ngModel)]="policyDetails.ControlNo" readonly />
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-1">
+                    <mat-label>Customer Name </mat-label>
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <textarea type="text" matInput readonly >{{policyDetails.CustomerName}}</textarea>
+                    </mat-form-field>
+                </div>
+               
+            </div>
+            <div class="row">
+               
+                <div class="col-lg-1">
+                    <mat-label>NCB</mat-label>
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <input type="text" matInput [(ngModel)]="policyDetails.NCBPercentage" readonly />
+                    </mat-form-field>
+                </div>
+               
+                <div class="col-lg-1">
+                    <mat-label>Policy Inception Date</mat-label>
+
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <input type="text" matInput [(ngModel)]="policyDetails.PolicyStartDate" readonly />
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-1">
+                    <mat-label>Gross Premium </mat-label>
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <input type="text" matInput [(ngModel)]="policyDetails.GrossPremium" readonly />
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-1">
+                    <mat-label>Endrose Premium</mat-label>
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <input type="text" matInput [(ngModel)]="policyDetails.endrosePremium" readonly />
+                    </mat-form-field>
+                </div>
+               
+            </div>
+            <div class="row">
+               
+               
+                <div class="col-lg-1">
+                    <mat-label>CN No</mat-label>
+
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <input type="text" matInput [(ngModel)]="policyDetails.CoverNoteNo" readonly />
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-1">
+                    <mat-label>Total IDV</mat-label>
+
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <input type="text" matInput [(ngModel)]="policyDetails.TotalIDV" readonly />
+                    </mat-form-field>
+                </div>
+
+                <div class="col-lg-1">
+                    <mat-label>Model </mat-label>
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <input type="text" matInput [(ngModel)]="policyDetails.ModelName" readonly />
+                    </mat-form-field>
+                </div>
+                <div class="col-lg-1">
+                    <mat-label>Varient</mat-label>
+                </div>
+                <div class="col-lg-2">
+                    <mat-form-field>
+                        <textarea type="text" matInput  readonly>{{policyDetails.VariantName}}</textarea>
+                    </mat-form-field>
+                </div>
+               
+            </div>
+         
+                <form [formGroup]="endrosementMaster" autocomplete="off" style="padding-bottom:10px ;">
+
+                <div class="col-lg-12">
+                  <mat-radio-group formControlName="endrosementType" (change)="onEndrosementChange($event)">
+                      <div class="row">
+                        <div class="col-lg-3">
+                            <mat-label>Endrosement Type</mat-label>
+                        </div>
+                        <div class="col-lg-3">
+                          <mat-radio-button [value]="1" color="primary" [checked]="true" >
+                           Financial
+                          </mat-radio-button>
+                        </div>
+                        <div class="col-lg-3">
+                          <mat-radio-button [value]="2" color="primary">
+                            Non- Financial
+                          </mat-radio-button>
+                        </div>
+                        <div class="col-lg-1">
+                            <mat-label>Endrosement Entry Date</mat-label>
+                        </div>
+                        <div class="col-lg-2">
+                            <mat-form-field>
+                                <input type="text" matInput formControlName="endrosementDate" readonly />
+                            </mat-form-field>
+                        </div>
+                      </div>
+                    </mat-radio-group>
+                </div>
+                <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Endorsement Reason
+                      </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <hr style="margin-top: 0px;" />
+                    <div class="row" >
+                        <mat-form-field appearance="fill">
+                            <mat-label>Endorsement Reason</mat-label>
+
+                            <mat-select formControlName="endrosementReason"   (selectionChange)="onEndrosementReasonChange()">
+                              <mat-option>Select</mat-option>
+                              <mat-option *ngFor="let endrosementReason of _endrosementReason" [value]="endrosementReason.Value">{{endrosementReason.Name}}
+                              </mat-option>
+                            </mat-select>                          
+                          </mat-form-field>
+                    </div>
+                    <div class="col-lg-12">
+
+                        <div class="row" >
+                           
+                            <div class="col-lg-4" *ngIf="isOd">
+                                <mat-form-field>
+                                    <mat-label>OD</mat-label>
+                                    <input type="text" matInput formControlName="OD"  />
+                                </mat-form-field>
+                            </div>
+                            
+                            <div class="col-lg-4" *ngIf="isGrossPremium">
+                                <mat-form-field>
+                                    <mat-label>Gross Premium</mat-label>
+                                    <input type="text" matInput formControlName="grossPremium"  />
+                                </mat-form-field>
+                            </div>
+                            
+                            <div class="col-lg-4" *ngIf="isShortfallAmt">
+                                <mat-form-field>
+                                    <mat-label>Shortfall Amount</mat-label>
+                                    <input type="text" matInput formControlName="shortfallAmount"  />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+
+                        <div class="row" >
+                           
+                            <div class="col-lg-4" *ngIf="isOdRecoverable">
+                                <mat-form-field>
+                                    <mat-label>OD Recoverable</mat-label>
+                                    <input type="text" matInput formControlName="odRecoverable"  />
+                                </mat-form-field>
+                            </div>
+                            
+                            <div class="col-lg-4" *ngIf="isPremiumRecoverable">
+                                <mat-form-field>
+                                    <mat-label>Premium Recoverable</mat-label>
+                                    <input type="text" matInput formControlName="premiumRecoverable"  />
+                                </mat-form-field>
+                            </div>
+                          
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+
+                    <div class="row" >
+                           
+                            <div class="col-lg-4" *ngIf="isAccesoriesIdv">
+                                <mat-form-field>
+                                    <mat-label>Accessories IDV</mat-label>
+                                    <input type="text" matInput formControlName="accessoriesIDV"  />
+                                </mat-form-field>
+                            </div>
+                       
+                            <div class="col-lg-4" *ngIf="isCngIdv">
+                                <mat-form-field>
+                                    <mat-label>CNG IDV</mat-label>
+                                    <input type="text" matInput formControlName="cngidv"  />
+                                </mat-form-field>
+                            </div>
+                            <div class="col-lg-4" *ngIf="isVehicleIdv">
+                                <mat-form-field>
+                                    <mat-label>Vehicle IDV</mat-label>
+                                    <input type="text" matInput formControlName="vehicleIdv"  />
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+
+                    <div class="row" >
+                        <div class="col-lg-4" *ngIf="isNcb">
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>New NCB %</mat-label>
+                            <mat-select formControlName="ncbPercentage">
+                              <mat-option>Select</mat-option>
+                              <mat-option *ngFor="let ncb of _ncbs" [value]="ncb.Value">{{ncb.Name}}</mat-option>
+                            </mat-select>
+                          </mat-form-field>   
+                        </div>                         
+                            <div class="col-lg-4" *ngIf="isChequebounce">
+                                <mat-form-field>
+                                    <mat-label>Bounce Reason</mat-label>
+                                    <input type="text" matInput formControlName="bounceReason"  />
+                                </mat-form-field>
+                            </div>
+                            
+                            <div class="col-lg-4" *ngIf="isChequebounce">
+                                <mat-form-field>
+                                    <mat-label>Cheque Bounce Date</mat-label>
+
+                                    <input matInput [matDatepicker]="chequeBounceDate" formControlName="chequeBounceDate">
+                                    <mat-datepicker-toggle matSuffix [for]="chequeBounceDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #chequeBounceDate></mat-datepicker>                                
+                                </mat-form-field>
+                            </div>
+                        </div>
+                      
+                    </div>
+                    <div class="col-lg-12">
+
+                    <div class="row">
+                        <div class="col-lg-12" *ngIf="isAddonPlan">
+
+                          <mat-form-field appearance="fill">
+                            <mat-label>New Add-On Plan (Rider)</mat-label>
+                            <mat-select formControlName="addOnRiderId" name="addonRider"
+                             >
+                              <mat-option value="">Select</mat-option>
+                              <mat-option *ngFor="let addOnrider of _addOnRiders" [value]="addOnrider.Value">{{addOnrider.Name}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                          </div>
+                        </div>
+                      </div>   
+                    <div class="col-lg-12" *ngIf="isVehicleClass">
+                    <div class="row">
+                        <div class="col-lg-2"  >
+                            <mat-label>Vehicle Class</mat-label>
+                        </div>
+                            <mat-radio-group formControlName="vehicleClassId" >
+                                <div class="row">
+
+                                    <div class="col-lg-2"  >
+
+                                      <mat-radio-button color="primary" [value]="1"  >Private</mat-radio-button>
+                                    </div>
+                                    <div class="col-lg-2"  >
+                                      <mat-radio-button color="primary" [value]="2" >GCV</mat-radio-button>
+                                    </div>
+                                    <div class="col-lg-2"  >
+                                      <mat-radio-button color="primary" [value]="3" >PCV</mat-radio-button>
+                                    </div>
+                                    <div class="col-lg-3"  >
+                                      <mat-radio-button color="primary" [value]="4" >Two Wheeler</mat-radio-button>
+                                    </div>
+                                    <div class="col-lg-2"  >
+                                      <mat-radio-button color="primary" [value]="5" >Misc.</mat-radio-button>
+                                    </div>
+                                </div>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4">
+    
+                                <mat-form-field appearance="fill">
+                                  <mat-label>Manufacturer</mat-label>
+                                  <input type="text" placeholder="Manufacturer" aria-label="Manufacturer" matInput 
+                                    formControlName="manufacturerId" [matAutocomplete]="autoManufacturer" (selectionChange) = "getModels()">
+                                  <mat-autocomplete autoActiveFirstOption #autoManufacturer="matAutocomplete"
+                                    [displayWith]="getManufacturerForBind.bind(this)" (optionSelected)="getModels()">
+                                    <mat-option *ngFor="let manufacturer of _filteredManufacturerOptions"
+                                      [value]="manufacturer.Value">
+                                      {{manufacturer.Name}}
+                                    </mat-option>
+                                  </mat-autocomplete>
+                                </mat-form-field>
+              
+                              </div>
+                              <div class="col-lg-4">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>Model</mat-label>
+                                  <mat-select formControlName="modelId" (selectionChange) = "getVarients()">
+                                    <mat-option>Select</mat-option>
+                                    <mat-option *ngFor="let model of _models" [value]="model.Value">{{model.Name}}</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              <div class="col-lg-4">
+                                <mat-form-field appearance="fill">
+                                  <mat-label>Varient</mat-label>
+                                  <mat-select formControlName="varient">
+                                    <mat-option>Select</mat-option>
+                                    <mat-option *ngFor="let varient of _varients" [value]="varient">{{varient.VarientName}}
+                                    </mat-option>
+                                  </mat-select>
+                                 
+                                </mat-form-field>
+                              </div>
+                          </div>
+                    </div>
+                    <div class="col-lg-12" *ngIf="isRiskExpire">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <mat-form-field>
+                                    <mat-label>Risk Expire Date</mat-label>
+
+                                    <input matInput [matDatepicker]="riskExpireDate" formControlName="riskExpireDate">
+                                    <mat-datepicker-toggle matSuffix [for]="riskExpireDate"></mat-datepicker-toggle>
+                                    <mat-datepicker #riskExpireDate></mat-datepicker>                                
+                                </mat-form-field>
+                            </div>
+                        </div>   
+                    </div> 
+                    <div class="col-lg-12" *ngIf="isRto">
+                        <div class="row">
+                            <div class="col-lg-2"  >
+                                <mat-label>RTO Change</mat-label>
+                            </div>
+                                <mat-radio-group formControlName="vehicleClassId" >
+                                    <div class="row">
+    
+                                        <div class="col-lg-2"  >
+    
+                                          <mat-radio-button color="primary" [value]="1"  >Premium Increase</mat-radio-button>
+                                        </div>
+                                        <div class="col-lg-2"  >
+                                          <mat-radio-button color="primary" [value]="2" >Premium Decrease</mat-radio-button>
+                                        </div>
+                                        
+                                    </div>
+                                </mat-radio-group>
+                            </div>
+    
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <mat-form-field>
+                                      <mat-label>Registration Number</mat-label>
+                                      <input type="text" matInput formControlName="registrationNumber" placeholder="Registration Numbe"
+                                        >
+                                    </mat-form-field>
+                                  </div>
+                                <div class="col-lg-4">
+                                    <mat-form-field appearance="fill">
+                                      <mat-label>RTO Zone</mat-label>
+                                      <mat-select formControlName="rtoZone" 
+                                        (selectionChange)="setRiskZone($event.value)">
+                                        <mat-option>Select</mat-option>
+                                        <mat-option *ngFor="let rtoZone of _rtoZones" [value]="rtoZone">{{rtoZone.Name}}</mat-option>
+                                      </mat-select>
+                                     
+                                    </mat-form-field>
+                                  </div>
+                                  <div class="col-lg-4">
+                                    <mat-form-field>
+                                      <mat-label>Risk Zone</mat-label>
+                                      <input type="text" matInput formControlName="riskZone" placeholder="Risk Zone"
+                                        style="line-height: 28px;">
+                                    </mat-form-field>
+                                  </div>
+                              </div>
+                        </div>
+                        <div class="col-lg-12" *ngIf="isRemarks">
+
+                            <div class="row" >
+                                <div class="col-lg-12">
+                                    <mat-form-field>
+                                        <mat-label>Remarks</mat-label>
+
+                                        <textarea type="text" matInput  formControlName="remark"></textarea>
+                                    </mat-form-field>
+                                </div>
+                            </div>    
+                        </div>    
+                    
+                  </mat-expansion-panel>
+            </form>
+    </mat-card-content>
+</mat-card>

@@ -89,4 +89,5 @@ export class Common {
     public static readonly AllProduct = "api/common/get-all-products";
     public static readonly AllPlans = "api/common/get-all-plans";
     public static readonly AllPosMaanagedBy = "api/common/get-all-posmanagedby";
+    public static readonly AllEndrosementReason = "api/common/get-endrosement-reason";
 }

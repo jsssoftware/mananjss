@@ -23,6 +23,8 @@ using PolicyManagement.Services.UserManagement;
 using PolicyManagement.Services.UserManagement.Interface;
 using PolicyManagement.Services.Voucher;
 using PolicyManagement.Services.Voucher.Interface;
+using PolicyManagement.Services.EndrosementService;
+using PolicyManagement.Services.EndrosementService.Interface;
 using System.Data.Entity;
 using System.Web.Http;
 using Unity;
@@ -56,6 +58,7 @@ namespace PolicyManagement.Api
             container.RegisterType<IUserManagementService, UserManagementService>(new HierarchicalLifetimeManager());
             container.RegisterType<IMasterService, MasterService>(new HierarchicalLifetimeManager());
             container.RegisterType<IReportService, ReportService>(new HierarchicalLifetimeManager());
+            container.RegisterType<IEndrosementService, EndrosementService>(new HierarchicalLifetimeManager());
 
             //Register Mapper
             IMapper mapper = AutoMapperConfiguration.Register().CreateMapper();

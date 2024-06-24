@@ -207,5 +207,6 @@ export class CommonService extends ICommonService {
     getAllPolicyTerms = (policyPackageTypeId : number): Observable<any[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.AllPolicyTerms}/${policyPackageTypeId}`);
     getAllPlans = (productId: number,insuranceCompanyId:number): Observable<any[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.AllPlans}?productId=${productId}&insuranceCompanyId=${insuranceCompanyId}`);
     getAllPosManagedBy = (branchId: number): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.AllPosMaanagedBy}/${branchId}`);
+    getAllEndrosementReason = (verticalId: number): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.AllEndrosementReason}/${verticalId}`);
 
 }

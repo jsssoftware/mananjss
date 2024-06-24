@@ -32,6 +32,8 @@ import { EngineeringPolicyManagementComponent } from './commercial/engineering-p
 import { GmcPolicyManagementComponent } from './commercial/gmc-policy-management/gmc-policy-management.component';
 import { MiscPolicyManagementComponent } from './commercial/misc-policy-management/misc-policy-management.component';
 import { CommercialService } from 'src/app/app-services/commercial-service/commercial.service';
+import { EndrosementSearchPolicyComponent } from '../endrosement/search-policy/search-policy.component';
+import { EndrosementMasterComponent } from '../endrosement/master/master.component';
 
 @NgModule({
   declarations: [  
@@ -57,7 +59,9 @@ import { CommercialService } from 'src/app/app-services/commercial-service/comme
     LiabalityPolicyManagementComponent,
     EngineeringPolicyManagementComponent,
     GmcPolicyManagementComponent,
-    MiscPolicyManagementComponent
+    MiscPolicyManagementComponent,
+    EndrosementSearchPolicyComponent,
+    EndrosementMasterComponent
   ],
   imports: [
     CommonModule,
