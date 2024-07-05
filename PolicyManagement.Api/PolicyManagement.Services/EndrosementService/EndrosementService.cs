@@ -244,18 +244,18 @@ namespace PolicyManagement.Services.EndrosementService
                     endrosementData.BounceReasonId = model.BounceReason;
 
                 if (model.ChequeBounceDate.HasValue)
-                    endrosementData.BounceDate = model.ChequeBounceDate.Value;
+                    endrosementData.BounceDate = model.ChequeBounceDate.Value.ToLocalTime();
 
                 if (model.OdRecoverable.HasValue)
                 {
-                    motorPolicyData.EndorseOD = model.OD;
-                    endrosementData.AmtODChange = model.OD;
+                    motorPolicyData.EndorseOD = model.OdRecoverable;
+                    endrosementData.AmtODChange = model.OdRecoverable;
                 }
 
                 if (model.PremiumRecoverable.HasValue)
                 {
-                    motorPolicyData.EndorseGrossPremium = model.GrossPremium;
-                    endrosementData.AmtGrossPremiumChange = model.GrossPremium;
+                    motorPolicyData.EndorseGrossPremium = model.PremiumRecoverable;
+                    endrosementData.AmtGrossPremiumChange = model.PremiumRecoverable;
                 }
 
                 if (model.VehicleClassId.HasValue)
@@ -292,11 +292,11 @@ namespace PolicyManagement.Services.EndrosementService
                 {
                     if(motorPolicyData.PolicyPackageTypeId == 1)
                     {
-                        motorPolicyData.PolicyEndDate = model.RiskExpireDate.Value;
+                        motorPolicyData.PolicyEndDate = model.RiskExpireDate.Value.ToLocalTime();
                     }
                     else
                     {
-                        motorPolicyData.PolicyEndDateOD = model.RiskExpireDate.Value;
+                        motorPolicyData.PolicyEndDateOD = model.RiskExpireDate.Value.ToLocalTime();
                     }
                 }
 
@@ -313,7 +313,7 @@ namespace PolicyManagement.Services.EndrosementService
 
                 if(model.AlternateInceptionDate.HasValue)
                 {
-                    endrosementData.AlternateInceptionDate = model.AlternateInceptionDate.Value;
+                    endrosementData.AlternateInceptionDate = model.AlternateInceptionDate.Value.ToLocalTime();
                 }
 
                 if (model.AlternateInsuranceCompanyId.HasValue)
@@ -326,7 +326,7 @@ namespace PolicyManagement.Services.EndrosementService
                     endrosementData.AlternatePolicyNo = model.AlternatePolicyNumber;
                 }
 
-                if (model.PolicyReinstate.HasValue)
+                if (model.PolicyReinstate)
                 {
                     endrosementData.PolicyReinstate = model.PolicyReinstate;
                     endrosementData.EndorsementReasonId = (short)EndorsementReason.PolicyReinstateChequeBounce;
@@ -334,13 +334,16 @@ namespace PolicyManagement.Services.EndrosementService
                     motorPolicyData.PolicyCancelReasonId = null;
                     motorPolicyData.PolicyCancelDate= null;
                 }
-                 if (model.CancelledNCBRecoverable.HasValue)
+                 if (model.CancelledNCBRecoverable)
                 {
-                    endrosementData.NCBRecoveredCancel = model.CancelledNCBRecoverable;                  
+                    endrosementData.NCBRecoveredCancel = (short?)((bool)model.CancelledNCBRecoverable ? 1 : 0);
+                    endrosementData.EndorsementReasonId = (short)EndorsementReason.NCBRecoverableCancel;
                 }
-                  if (model.NCBRecovered.HasValue)
+                  if (model.NCBRecovered)
                 {
-                    endrosementData.NCBRecovered = model.NCBRecovered;                  
+                    endrosementData.NCBRecovered = model.NCBRecovered;
+                    endrosementData.EndorsementReasonId = (short)EndorsementReason.NCBRecoveredCancel;
+
                 }
 
 
@@ -350,7 +353,11 @@ namespace PolicyManagement.Services.EndrosementService
                 endrosementData.IDVChange = totalIdv;
                 motorPolicyData.ModifiedBy = baseModel.LoginUserId;
                 motorPolicyData.ModifiedTime = DateTime.Now;
-                if (( !model.PolicyReinstate.HasValue ||  !model.NCBRecovered.HasValue || !model.CancelledNCBRecoverable.HasValue) && !model.IsModified)
+                
+                if (( !model.PolicyReinstate ||  !model.NCBRecovered || !model.CancelledNCBRecoverable) && !model.IsModified
+                    && (model.EndrosementReason  != (int)EndorsementReason.NCBRecovered &&
+              model.EndrosementReason != (int)EndorsementReason.NCBRecoverable &&
+              model.EndrosementReason != (int)EndorsementReason.CancellationChequeBounce))
                 {
                     var endrosementDataList = _dataContext.tblEndorsementData.Where(x => x.EndorsementId == model.EndorsementId).ToList();
                     var isduplicateEndroement = endrosementDataList.Select(x => x.EndorsementReasonId == model.EndrosementReason).Count();
@@ -358,13 +365,19 @@ namespace PolicyManagement.Services.EndrosementService
                     {
                         return new CommonDto<object>
                         {
-
-                            Message = "Selected Endrosement Reason already present in database"
+                            Message = "Selected Endrosement Reason entry already present"
                         };
                     }
                 }
+                else if ((model.PolicyReinstate || model.NCBRecovered || model.CancelledNCBRecoverable) && model.IsModified
+                    && (model.EndrosementReason == (int)EndorsementReason.NCBRecovered ||
+                      model.EndrosementReason == (int)EndorsementReason.NCBRecoverable ||
+                      model.EndrosementReason == (int)EndorsementReason.CancellationChequeBounce))
+                {
+                    endrosementData.EndorsementId = 0;
+                }
                 _dataContext.tblEndorsementData.AddOrUpdate(endrosementData);
-                if (isCancellationReason(model.EndrosementReason) && !model.PolicyReinstate.HasValue)
+                if (isCancellationReason(model.EndrosementReason) && !model.PolicyReinstate)
                 {
                     motorPolicyData.PolicyCancelReasonId = model.EndrosementReason;
                     motorPolicyData.Flag1 = false;
@@ -376,7 +389,7 @@ namespace PolicyManagement.Services.EndrosementService
                 return new CommonDto<object>
                 {
                     IsSuccess = true,
-                    Message = $"Endrosement successfully",
+                    Message = model.IsModified ?  $"Endrosement successfully Modified": $"Endrosement Successfully Saved",
                 };
             }
             catch (DbUpdateException ex)
@@ -405,7 +418,7 @@ namespace PolicyManagement.Services.EndrosementService
         {
             var res = await _dataContext.tblEndorsementData.Join(_dataContext.tblEndorsementReason, T1 => T1.EndorsementReasonId, T2 => T2.EndorsementReasonId, (T1, T2) => new { T1, T2.EndorsementReason }).Select(x=>new
             {
-                x.T1.AmtGrossPremiumChange, x.T1.AmtODChange,x.T1.EndorsementEntryDate,x.EndorsementReason,x.T1.IsActive,x.T1.PolicyId,x.T1
+                x.T1.AmtGrossPremiumChange, x.T1.AmtODChange,x.T1.EndorsementEntryDate,x.EndorsementReason,x.T1.IsActive,x.T1.PolicyId,x.T1.EndorsementRemark,x.T1
             }).Where(w => w.T1.IsActive == true && w.T1.PolicyId == policyId).ToListAsync();
             return res;
         }

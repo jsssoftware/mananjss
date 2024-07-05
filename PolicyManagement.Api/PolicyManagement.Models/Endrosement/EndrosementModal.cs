@@ -40,8 +40,8 @@ namespace PolicyManagement.Models.Endrosement
         public short? NcbPercentage { get; set; }
         public short? BounceReason { get; set; }
         public DateTime? ChequeBounceDate { get; set; }
-        public decimal? OdRecoverable { get; set; }
-        public decimal? PremiumRecoverable { get; set; }
+        public int? OdRecoverable { get; set; }
+        public int? PremiumRecoverable { get; set; }
         public short? VehicleClassId { get; set; }
         public short? ManufacturerId { get; set; }
         public short? ModelId { get; set; }
@@ -56,9 +56,9 @@ namespace PolicyManagement.Models.Endrosement
         public string AlternatePolicyNumber { get; set; }
         public DateTime? AlternateInceptionDate { get; set; }
         public short PolicyTypeId { get; set; }
-        public bool? PolicyReinstate { get; set; }
-        public short? CancelledNCBRecoverable { get; set; }
-        public bool? NCBRecovered { get; set; }
+        public bool PolicyReinstate { get; set; } = false;
+        public bool CancelledNCBRecoverable { get; set; } = false;
+        public bool NCBRecovered { get; set; } = false;
         public bool IsModified { get; set; }
         public int PolicyNo { get; set; }
 
@@ -123,7 +123,8 @@ namespace PolicyManagement.Models.Endrosement
         RTOLocationChange = 58,
         PolicyNotCancel = 60,
         AdditionOfIDV = 61,
-        RemovalOfIDV = 62
+        RemovalOfIDV = 62,
+        NCBRecoveredCancel = 63
     }
 
 }

@@ -122,8 +122,8 @@ export class EndrosementMasterComponent implements OnInit {
     shortfallVoucherNo : new FormControl(''),
     policyTypeId : new FormControl(''),
     policyReinstate : new FormControl(''),
-    checkboxNcbRecoverable : new FormControl(''),
-    checkboxNcbRecovered : new FormControl(''),
+    cancelledNCBRecoverable : new FormControl(''),
+    nCBRecovered : new FormControl(''),
     isModified : new FormControl(false)
   });
   dateTime :  any =   new Date();
@@ -291,7 +291,7 @@ export class EndrosementMasterComponent implements OnInit {
     if(this._selectedEndrosementReason ==  EndorsementReason.NCBRecoverable){
       this.isOdRecoverable =  true;
       this.isPremiumRecoverable = true;
-      this.IsNcbRecovered =  true;
+      this.IsCancelNcbRec =  true;
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.RemovalOfAccessoriesPassengerDiscount){
       this.isOd =  true;
@@ -302,7 +302,7 @@ export class EndrosementMasterComponent implements OnInit {
     if(this._selectedEndrosementReason ==  EndorsementReason.NCBRecovered){
       this.isOdRecoverable =  true;
       this.isPremiumRecoverable = true;
-      this.IsCancelNcbRec =  true;
+      this.IsNcbRecovered =  true;
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.RTOLocationChange){
       this.isOd =  true;
@@ -424,6 +424,9 @@ export class EndrosementMasterComponent implements OnInit {
     this.endrosementMaster.get("branchId").setValue(this._branchId);
     this.endrosementMaster.get("policyId").setValue(this.policyDetails.PolicyId);
     this.endrosementMaster.get("policyTypeId").setValue(this.policyDetails.PolicyTypeId);
+    this.endrosementMaster.patchValue({
+      isModified : this.IsModified
+    });
     this.endrosementService.createUpdateEndrosmentMaster(this.endrosementMaster.getRawValue()).subscribe((response: ICommonDto<any>) => {
       if (response.IsSuccess) {
         Swal.fire({
@@ -507,9 +510,9 @@ export class EndrosementMasterComponent implements OnInit {
     this.endrosementMaster.patchValue({
       endrosementReason: row.T1.EndorsementReasonId,
       endorsementId: row.T1.EndorsementId,
-      isModified : true
     });
     this.IsModified =  true;
+    this.endrosepanel.open();
     this.onEndrosementReasonUpdate(row?.T1);
     this.onEndrosementReasonChange();
   }
@@ -517,6 +520,8 @@ export class EndrosementMasterComponent implements OnInit {
   reset() {
     this.endrosementMaster.reset();
     this.IsModified = false; 
+    this.route.navigate(['./pms/endrosement/searchpolicy']);
+
   }
 
   isCancellationReason(reason: EndorsementReason): boolean {
@@ -638,9 +643,9 @@ export class EndrosementMasterComponent implements OnInit {
     if(this._selectedEndrosementReason ==  EndorsementReason.NCBRecoverable){
     
       this.endrosementMaster.patchValue({
-        OD :  endroseData.AmtODChange,
-        grossPremiumm : endroseData.AmtGrossPremiumChange,
-        checkboxNcbRecoverable: this.IsModified ?  endroseData.NCBRecoveredCancel : null,
+        odRecoverable :  endroseData.AmtODChange,
+        premiumRecoverable : endroseData.AmtGrossPremiumChange,
+        odRecobe: this.IsModified ?  endroseData.NCBRecoveredCancel : null,
 
       });
     }
@@ -656,9 +661,9 @@ export class EndrosementMasterComponent implements OnInit {
     if(this._selectedEndrosementReason ==  EndorsementReason.NCBRecoverable){
       debugger
       this.endrosementMaster.patchValue({
-        OD :  endroseData.AmtODChange,
-        grossPremiumm : endroseData.AmtGrossPremiumChange,
-        checkboxNcbRecovered: this.IsModified ?  endroseData.NCBRecovered : null,
+        odRecoverable :  endroseData.AmtODChange,
+        premiumRecoverable : endroseData.AmtGrossPremiumChange,
+        nCBRecovered: this.IsModified ?  endroseData.NCBRecovered : null,
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.RTOLocationChange){
