@@ -1759,10 +1759,9 @@ namespace PolicyManagement.Services.Common
                                                                                                         }).Distinct()
                                                                                                         .ToListAsync();
 
-        public async Task<List<DropDownDto<int>>> FindAllEndrosementReason(int verticalId) => await _dataContext.tblEndorsementReason.Where(x=>x.InsuranceSegmentId == verticalId).Select(s => new DropDownDto<int>{ Name = s.EndorsementReason,
-                                                                                                           Value = s.EndorsementReasonId
-                                                                                                       }).Distinct()
-                                                                                                       .ToListAsync();
+        public async Task<List<DropDownDto<int>>> FindAllEndrosementReason(int verticalId,int endrosementType) => await _dataContext.tblEndorsementReason.Where(x=>x.InsuranceSegmentId == verticalId || x.InsuranceSegmentId ==  1 && x.IsActive ==  true  && x.EndorsementTypeId ==  endrosementType).Select(s => new DropDownDto<int>{ Name = s.EndorsementReason,Value = s.EndorsementReasonId}).ToListAsync();
+
+        public async Task<List<DropDownDto<int>>> FindBounceReason() => await _dataContext.tblBounceReason.Where(x=>x.IsActive==  true).Select(s => new DropDownDto<int> { Name = s.BounceReason, Value = s.BounceReasonId }).ToListAsync();
 
 
 

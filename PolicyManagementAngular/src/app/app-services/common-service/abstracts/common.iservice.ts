@@ -106,6 +106,7 @@ export abstract class ICommonService {
     abstract getAllPolicyTerms(policyPackageTypeId:number): Observable<any>;
     abstract getAllPlans(productId: number,insuranceCompanyId:number): Observable<IDropDownDto<number>[]>;
     abstract getAllPosManagedBy(branchId: number): Observable<IDropDownDto<number>[]>;
-    abstract getAllEndrosementReason(verticalId: number): Observable<IDropDownDto<number>[]> ;
+    abstract getAllEndrosementReason(verticalId: number,endrosementTyoe : number): Observable<IDropDownDto<number>[]> ;
+    abstract getBounceReason(): Observable<IDropDownDto<number>[]> ;
 
 }

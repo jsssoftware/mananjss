@@ -1,4 +1,5 @@
-﻿using PolicyManagement.Models.Endrosement;
+﻿using PolicyManagement.Models.Common;
+using PolicyManagement.Models.Endrosement;
 using PolicyManagement.Models.Report;
 using PolicyManagement.Services.EndrosementService.Interface;
 using PolicyManagement.Services.Reports;
@@ -23,5 +24,13 @@ namespace PolicyManagement.Api.Controllers.Endrosement
         [Route("findpolicydata")]
         [HttpPost]
         public async Task<IHttpActionResult> GetPolicyDatas(EndrosementModalFilter endrosementModalFilter) => Json(await _endrosementService.FindPolicyData(endrosementModalFilter));
+
+        [Route("addupdateEndrosement")]
+        [HttpPost]
+        public async Task<IHttpActionResult> AddUpdateEndrosementData(EndorsementMasterModel endorsementMasterModel) => Json(await _endrosementService.AddUpdateEndrosementMaster(endorsementMasterModel,  new BaseModel()));
+
+        [Route("previousEndrosement/{policyId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetPreviousEndrosement(int policyId) => Json(await _endrosementService.GetPreviousEndromentInfo(policyId));
     }
 }

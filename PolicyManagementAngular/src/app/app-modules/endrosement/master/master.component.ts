@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ColumnMode } from '@swimlane/ngx-datatable';
 import { ICommonDto } from 'src/app/app-entites/dtos/common/common-dto';
@@ -16,6 +16,8 @@ import { PolicyDetails } from 'src/app/app-entites/models/endrosement/policy-det
 import { map } from 'rxjs/operators';
 import { IVarientDto } from 'src/app/app-entites/dtos/motor/varient-dto';
 import { IRtoZoneDto } from 'src/app/app-entites/dtos/motor/rto-zone-dto';
+import Swal from 'sweetalert2';
+import { MatExpansionPanel } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-master',
@@ -24,6 +26,7 @@ import { IRtoZoneDto } from 'src/app/app-entites/dtos/motor/rto-zone-dto';
 })
 
 export class EndrosementMasterComponent implements OnInit {
+  @ViewChild('endrosepanel') endrosepanel!: MatExpansionPanel;
 
 
   //#region
@@ -36,14 +39,31 @@ export class EndrosementMasterComponent implements OnInit {
   public _addOnRiders: IDropDownDto<number>[] = [];;
   public _ncbs: IDropDownDto<number>[] = [];;
   public _rtoZones: IDropDownDto<number>[] = [];;
+  public _bounceReason: IDropDownDto<number>[] = [];;
   public _varients: IVarientDto[] = [];
   public _filteredManufacturerOptions: IDropDownDto<number>[] = [];
   public _selectedEndrosementReason: number;
+  public _isCancellationEndrosementReason: boolean = false;
+  public _insuranceCompanies: IDropDownDto<number>[] = [];
+  public _filteredInsuranceCompaniesOptions: IDropDownDto<number>[] = [];
+  public _branchId: string;
+  ColumnMode = ColumnMode;
+  loadingIndicator = false;
+  reorderable = true;
+  previousPolicyrows :any[] = [];
+
+  columns = [
+    { name: 'Endrosement Reason', prop: 'EndorsementReason' },
+    { name: 'Entry Date', prop: 'EndorsementEntryDate'},
+    { name: 'OD Change', prop: 'AmtODChange' },
+    { name: 'Gross Premium', prop: 'AmtGrossPremiumChange' },
+    { name: 'Remarks', prop: 'EndorsementRemark' }
+  ]
   endrosementReason :any = EndorsementReason;
   endrosementType: number = 1;
   isOd: boolean = false;
   isGrossPremium: boolean = false;
-  isShortfallAmt: boolean = false;
+  isShortfall: boolean = false;
   isAccesoriesIdv: boolean = false;
   isCngIdv: boolean = false;
   isVehicleIdv: boolean = false;
@@ -56,12 +76,19 @@ export class EndrosementMasterComponent implements OnInit {
   isOdRecoverable: boolean = false;
   isPremiumRecoverable: boolean = false;
   isRto: boolean = false;
+  isShortVoucherNo: boolean = false;
+  isPolicyReInstate: boolean = false;
+  IsCancelNcbRec: boolean = false;
+  IsNcbRecovered: boolean = false;
+  IsModified: boolean = false;
+  isMotor: boolean = false;
 
 
   endrosementMaster = new FormGroup({
    
     endrosementType: new FormControl(1),
     branchId: new FormControl(''),
+    policyId: new FormControl(''),
     verticalId: new FormControl(1),
     endrosementDate : new FormControl(''),
     endrosementReason : new FormControl(''),
@@ -69,7 +96,8 @@ export class EndrosementMasterComponent implements OnInit {
     OD : new FormControl(''),
     grossPremium : new FormControl(''),
     shortfallAmount : new FormControl(''),
-    accessoriesIDV : new FormControl(''),
+    electricAccessoriesIDV : new FormControl(''),
+    nonElectricaccessoriesIDV : new FormControl(''),
     cngidv : new FormControl(''),
     vehicleIdv : new FormControl(''),
     ncbPercentage : new FormControl(''),
@@ -87,23 +115,38 @@ export class EndrosementMasterComponent implements OnInit {
     rtoZone : new FormControl(''),
     riskZone : new FormControl(''),
     registrationNumber : new FormControl(''),
-    
+    alternateInsuranceCompanyId : new FormControl(''),
+    alternatePolicyNumber : new FormControl(''),
+    alternateInceptionDate : new FormControl(''),
+    endorsementId : new FormControl(''),
+    shortfallVoucherNo : new FormControl(''),
+    policyTypeId : new FormControl(''),
+    policyReinstate : new FormControl(''),
+    checkboxNcbRecoverable : new FormControl(''),
+    checkboxNcbRecovered : new FormControl(''),
+    isModified : new FormControl(false)
   });
   dateTime :  any =   new Date();
   constructor(private route: Router,private router: ActivatedRoute,private datePipe : DatePipe,
-    private commonService: ICommonService,
+    private commonService: ICommonService,private endrosementService : EndrosementService
   ) { }
 
   ngOnInit(): void {
    this.dateTime = this.datePipe.transform(this.dateTime, 'dd-MM-yyyy');
+   this._branchId = sessionStorage.getItem("branchId");
    this.endrosementMaster.get("endrosementDate").setValue(this.dateTime);
-   debugger
    this.router.paramMap
       .pipe(map(() => window.history.state))
       .subscribe(state => {
         this.policyDetails = state;
     });
 
+
+    if(this.policyDetails.VerticalId == Vertical.Motor){
+      this.isMotor =  true
+    }else{
+      this.isMotor =  false
+    }
     this.endrosementMaster.get("manufacturer")?.valueChanges.subscribe(input => {
       if (input == null || input === undefined || input === '')
         return;
@@ -113,22 +156,53 @@ export class EndrosementMasterComponent implements OnInit {
       else
         this.filterdManufacturerData(input.Name);
     });
+
+    this.endrosementMaster.get("alternateInsuranceCompany")?.valueChanges.subscribe(input => {
+      if (input == null || input === undefined || input === '')
+        return;
+
+      if (typeof (input) == "string")
+        this.filterInsurancerCompaniesData(input);
+      else
+        this.filterInsurancerCompaniesData(input.Name);
+    });
     this.getAllEndrosementReason();
     this.getAddOnRiders();
     this.getNcbs();
     this.getManufacturers();
     this.getRtoZones();
+    this.getBounceReason();
+    this.getInsuranceCompanies();
+    this.getPreviousEndrosementInfo();
   }
 
-  
+  filterInsurancerCompaniesData(input: any) {
+    if (input === undefined)
+      return;
+    this._filteredInsuranceCompaniesOptions = this._insuranceCompanies.filter(item => {
+      return item.Name?.toLowerCase().indexOf(input.toLowerCase()) > -1
+    });
+  }
   
   getAllEndrosementReason(): void {
-    this.commonService.getAllEndrosementReason(this.policyDetails.VerticalSegmentId).subscribe((response: IDropDownDto<number>[]) => {
+    let endrosementType = this.endrosementMaster.value.endrosementType;
+    let insuranceSegementId =  1
+    if(this.policyDetails.VerticalId == Vertical.Motor){
+      insuranceSegementId =  2
+    }else{
+      insuranceSegementId =  3
+    }
+    this.commonService.getAllEndrosementReason(insuranceSegementId,endrosementType).subscribe((response: IDropDownDto<number>[]) => {
       this._endrosementReason = response;
     })
   }
 
 
+  getInsuranceCompanies(): any {
+    this.commonService.getInsuranceCompanies(this.policyDetails.VerticalId).subscribe((response: IDropDownDto<number>[]) => {
+      this._insuranceCompanies =  response;
+    });
+  }
   
   getManufacturers(): void {
     this.commonService.getManufacturers().subscribe((response: any) => {
@@ -158,19 +232,20 @@ export class EndrosementMasterComponent implements OnInit {
 
   onEndrosementReasonChange(){
     this._selectedEndrosementReason = this.endrosementMaster.value.endrosementReason;
+    this._isCancellationEndrosementReason = this.isCancellationReason(this._selectedEndrosementReason)
     this.resetFields()
     if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfAccessoriesPassengerDiscount
       || this._selectedEndrosementReason ==  EndorsementReason.RemovalOfAccessoriesPassengerDiscount
     ){
       this.isOd =  true;
       this.isGrossPremium = true;
-      this.isShortfallAmt=  true;
+      this.isShortfall=  true;
       this.isAccesoriesIdv=  true;
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfAddOnPlan){
       this.isOd =  true;
       this.isGrossPremium = true;
-      this.isShortfallAmt=  true;
+      this.isShortfall=  true;
       this.isAddonPlan =  true;
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfCNGLPG
@@ -178,7 +253,7 @@ export class EndrosementMasterComponent implements OnInit {
     ){
       this.isOd =  true;
       this.isGrossPremium = true;
-      this.isShortfallAmt=  true;
+      this.isShortfall=  true;
       this.isCngIdv =  true;
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfIDV
@@ -186,7 +261,7 @@ export class EndrosementMasterComponent implements OnInit {
     ){
       this.isOd =  true;
       this.isGrossPremium = true;
-      this.isShortfallAmt=  true;
+      this.isShortfall=  true;
       this.isVehicleIdv =  true;
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.CancellationCaseRejectedByCompany || 
@@ -203,39 +278,42 @@ export class EndrosementMasterComponent implements OnInit {
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.CancellationChequeBounce){
       this.isChequebounce =  true;
+      this.isPolicyReInstate =  true;
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfOwnershipNCBAdjustment
        || this._selectedEndrosementReason ==  EndorsementReason.NCBPercentAddedClientRequest
     ){
       this.isOd =  true;
       this.isGrossPremium = true;
-      this.isShortfallAmt=  true;
+      this.isShortfall=  true;
       this.isNcb =  true;    
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.NCBRecoverable){
       this.isOdRecoverable =  true;
       this.isPremiumRecoverable = true;
+      this.IsNcbRecovered =  true;
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.RemovalOfAccessoriesPassengerDiscount){
       this.isOd =  true;
       this.isGrossPremium = true;
-      this.isShortfallAmt=  true;
+      this.isShortfall=  true;
       this.isAccesoriesIdv =  true;  
     }
-    if(this._selectedEndrosementReason ==  EndorsementReason.NCBRecoverable){
+    if(this._selectedEndrosementReason ==  EndorsementReason.NCBRecovered){
       this.isOdRecoverable =  true;
       this.isPremiumRecoverable = true;
+      this.IsCancelNcbRec =  true;
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.RTOLocationChange){
       this.isOd =  true;
       this.isGrossPremium = true;
-      this.isShortfallAmt=  true;
+      this.isShortfall=  true;
       this.isRto =  true;
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.VehicleModelOrVariantOrClassChange){
       this.isOd =  true;
       this.isGrossPremium = true;
-      this.isShortfallAmt=  true;
+      this.isShortfall=  true;
       this.isVehicleClass =  true;
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.CancellationNCBFalsificationShortScale){
@@ -245,7 +323,7 @@ export class EndrosementMasterComponent implements OnInit {
       this._selectedEndrosementReason ==  EndorsementReason.AdditionOfLocationFire
     ){
       this.isGrossPremium = true;
-      this.isShortfallAmt=  true;    
+      this.isShortfall=  true;    
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfDOBDecreaseSlabHealth
     ){
@@ -254,7 +332,7 @@ export class EndrosementMasterComponent implements OnInit {
     if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfDOBIncreaseSlabHealth
     ){
       this.isGrossPremium = true;
-      this.isShortfallAmt=  true;    
+      this.isShortfall=  true;    
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfPolicyPeriodDecreaseTravel
     ||  this._selectedEndrosementReason ==  EndorsementReason.ChangeRiskClassToLowerPA
@@ -272,7 +350,7 @@ export class EndrosementMasterComponent implements OnInit {
     ||  this._selectedEndrosementReason ==  EndorsementReason.MemberAdditionAndDeletionGPAMisc 
     ||  this._selectedEndrosementReason ==  EndorsementReason.ReturnExtensionDateChangeTravel){
       this.isGrossPremium = true;
-      this.isShortfallAmt=  true;    
+      this.isShortfall=  true;    
     }
     this.isRemarks =  true;
 
@@ -293,11 +371,12 @@ export class EndrosementMasterComponent implements OnInit {
     }else{
       this.endrosementType = 2;
     }
+
+    this.getAllEndrosementReason()
   }
 
 
   getAddOnRiders(): void {    
-    debugger
       this.commonService.getAddOnRiders(this.policyDetails.InsuranceCompanyId,this.policyDetails.VerticalId).subscribe((response: IDropDownDto<number>[]) => {
         this._addOnRiders = response;
       });
@@ -323,12 +402,82 @@ export class EndrosementMasterComponent implements OnInit {
       this._rtoZones = response;
     });
   }
+  
+  getBounceReason(): void {
+    this.commonService.getBounceReason().subscribe((response: any[]) => {
+      this._bounceReason = response;
+    });
+  }
+
+   
+  getPreviousEndrosementInfo(): void {
+    this.endrosementService.getPreviousEndrosement(this.policyDetails.PolicyId).subscribe((response: any[]) => {
+      this.previousPolicyrows= response;
+      this.previousPolicyrows = this.previousPolicyrows.map(row => ({
+        ...row,
+        EndorsementEntryDate: this.datePipe.transform(row.EndorsementEntryDate, 'dd/MM/yyyy')
+      }));
+    });
+  }
+
+  submit(){
+    this.endrosementMaster.get("branchId").setValue(this._branchId);
+    this.endrosementMaster.get("policyId").setValue(this.policyDetails.PolicyId);
+    this.endrosementMaster.get("policyTypeId").setValue(this.policyDetails.PolicyTypeId);
+    this.endrosementService.createUpdateEndrosmentMaster(this.endrosementMaster.getRawValue()).subscribe((response: ICommonDto<any>) => {
+      if (response.IsSuccess) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Done',
+          text: response.Message,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.reset();
+          };
+        })
+      }
+      else {
+        if (response.Response == null) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Sorry',
+            text: response.Message,
+          });
+        }
+        else {
+          if (response.Response.IsError) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Sorry',
+              text: response.Message,
+            });
+          }
+          else {
+            Swal.fire({
+              title: 'Warning',
+              text: response.Message,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Yes, Save it!',
+              cancelButtonText: 'Cancel'
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                
+
+              }
+            })
+          }
+        }
+      }
+    });
+
+  }
 
 
   resetFields(){
     this.isOd= false;
     this.isGrossPremium= false;
-    this.isShortfallAmt= false;
+    this.isShortfall= false;
     this.isAccesoriesIdv= false;
     this.isCngIdv= false;
     this.isVehicleIdv= false;
@@ -341,7 +490,249 @@ export class EndrosementMasterComponent implements OnInit {
     this.isOdRecoverable =  false;
     this.isPremiumRecoverable = false;
     this.isRto = false;
+    this.isPolicyReInstate = false;
+    this.IsNcbRecovered =  false;
+    this.IsCancelNcbRec =  false;
   }
+
+    
+  getInsuranceCompanyName(value: number): string {
+    return value ? this._insuranceCompanies.filter(f => f.Value == value)[0].Name : '';
+  }
+
+
+
+
+  onRowDoubleClick(row) {
+    this.endrosementMaster.patchValue({
+      endrosementReason: row.T1.EndorsementReasonId,
+      endorsementId: row.T1.EndorsementId,
+      isModified : true
+    });
+    this.IsModified =  true;
+    this.onEndrosementReasonUpdate(row?.T1);
+    this.onEndrosementReasonChange();
+  }
+
+  reset() {
+    this.endrosementMaster.reset();
+    this.IsModified = false; 
+  }
+
+  isCancellationReason(reason: EndorsementReason): boolean {
+    const cancellationReasons: EndorsementReason[] = [
+      EndorsementReason.CancellationChequeBounce,
+      EndorsementReason.CancellationTheft,
+      EndorsementReason.CancellationTotalLoss,
+      EndorsementReason.CancellationNCBFalsificationForfeit,
+      EndorsementReason.CancellationCustomerRequest,
+      EndorsementReason.CancellationDoubleInsuranceByInsCo,
+      EndorsementReason.CancellationVehicleNotDelivered,
+      EndorsementReason.CancellationByInsuranceCompany,
+      EndorsementReason.CancellationNCBReservingFalsificationRefund,
+      EndorsementReason.CancellationDoubleEntryMistakeInSoftware,
+      EndorsementReason.CancellationWrongRiskDate,
+      EndorsementReason.CancellationVehicleSold,
+      EndorsementReason.CancellationAsPerCommissionStatementSMS,
+      EndorsementReason.CancellationNonDisclosureHealth,
+      EndorsementReason.CancellationChangeOfPlanTravel,
+      EndorsementReason.CancellationTripCancelledTravel,
+      EndorsementReason.CancellationCaseRejectedByCompany,
+      EndorsementReason.CancellationNCBFalsificationShortScale
+    ];
+  
+    return cancellationReasons.includes(reason);
+  }
+
+
+  
+  onActivate(event) {
+    if (event.type === 'dblclick') {
+      this.onRowDoubleClick(event.row);
+    }
+  }
+
+
+  onEndrosementReasonUpdate(endroseData){
+    this._selectedEndrosementReason = this.endrosementMaster.value.endrosementReason;
+    if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfAccessoriesPassengerDiscount
+      || this._selectedEndrosementReason ==  EndorsementReason.RemovalOfAccessoriesPassengerDiscount
+    ){
+
+      this.endrosementMaster.patchValue({
+        OD :  endroseData.AmtODChange,
+        grossPremiumm : endroseData.AmtODChange,
+        shortfallAmount:   endroseData.EndoresementShortfallAmt,
+        electricAccessoriesIDV : endroseData.ElectricAssessoriesIDV,
+        nonElectricAccessoriesIDV : endroseData.NonElectricAssessoriesIDV,
+      });
+     
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfAddOnPlan){
+    
+      this.endrosementMaster.patchValue({
+        OD :  endroseData.AmtODChange,
+        grossPremiumm : endroseData.AmtODChange,
+        shortfallAmount:   endroseData.EndoresementShortfallAmt,
+        addOnRiderId : endroseData.NewAddOnPlanId
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfCNGLPG
+      || this._selectedEndrosementReason ==  EndorsementReason.RemovalOfCNGLPG
+    ){
+     
+
+      this.endrosementMaster.patchValue({
+        OD :  endroseData.AmtODChange,
+        grossPremiumm : endroseData.AmtODChange,
+        shortfallAmount:   endroseData.EndoresementShortfallAmt,
+        cngidv : endroseData.CNGIDV,
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfIDV
+      || this._selectedEndrosementReason ==  EndorsementReason.RemovalOfIDV
+    ){
+    
+
+      this.endrosementMaster.patchValue({
+        OD :  endroseData.AmtODChange,
+        grossPremiumm : endroseData.AmtODChange,
+        shortfallAmount:   endroseData.EndoresementShortfallAmt,
+        vehicleIdv : endroseData.VehicleIDV,
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.CancellationCaseRejectedByCompany || 
+      this._selectedEndrosementReason ==  EndorsementReason.CancellationCustomerRequest || 
+      this._selectedEndrosementReason ==  EndorsementReason.CancellationDoubleEntryMistakeInSoftware || 
+      this._selectedEndrosementReason ==  EndorsementReason.CancellationDoubleInsuranceByInsCo || 
+      this._selectedEndrosementReason ==  EndorsementReason.CancellationNCBReservingFalsificationRefund || 
+      this._selectedEndrosementReason ==  EndorsementReason.CancellationVehicleNotDelivered || 
+      this._selectedEndrosementReason ==  EndorsementReason.CancellationVehicleSold || 
+      this._selectedEndrosementReason ==  EndorsementReason.CancellationWrongRiskDate
+    ){
+     
+      this.endrosementMaster.patchValue({
+        OD :  endroseData.AmtODChange,
+        grossPremiumm : endroseData.AmtODChange,
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.CancellationChequeBounce){
+      
+      this.endrosementMaster.patchValue({
+        chequeBounceDate :  endroseData.BounceDate,
+        bounceReason : endroseData.BounceReasonId,
+        policyReinstate:   endroseData.PolicyReinstate,
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfOwnershipNCBAdjustment
+       || this._selectedEndrosementReason ==  EndorsementReason.NCBPercentAddedClientRequest
+    ){
+     
+      this.endrosementMaster.patchValue({
+        OD :  endroseData.AmtODChange,
+        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        shortfallAmount:   endroseData.EndoresementShortfallAmt,
+        ncbPercentage : endroseData.NewNCBId
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.NCBRecoverable){
+    
+      this.endrosementMaster.patchValue({
+        OD :  endroseData.AmtODChange,
+        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        checkboxNcbRecoverable: this.IsModified ?  endroseData.NCBRecoveredCancel : null,
+
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.RemovalOfAccessoriesPassengerDiscount){
+      this.endrosementMaster.patchValue({
+        OD :  endroseData.AmtODChange,
+        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        shortfallAmount:   endroseData.EndoresementShortfallAmt,
+        electricAccessoriesIDV : endroseData.ElectricAssessoriesIDV,
+        nonElectricAccessoriesIDV : endroseData.NonElectricAssessoriesIDV,
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.NCBRecoverable){
+      debugger
+      this.endrosementMaster.patchValue({
+        OD :  endroseData.AmtODChange,
+        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        checkboxNcbRecovered: this.IsModified ?  endroseData.NCBRecovered : null,
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.RTOLocationChange){
+      this.endrosementMaster.patchValue({
+        OD :  endroseData.AmtODChange,
+        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        shortfallAmount:   endroseData.EndoresementShortfallAmt,
+        rtoZone : endroseData.RTOZoneId,
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.VehicleModelOrVariantOrClassChange){
+     
+      this.endrosementMaster.patchValue({
+        OD :  endroseData.AmtODChange,
+        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        shortfallAmount:   endroseData.EndoresementShortfallAmt,
+        vehicleClassId : endroseData.NewVehicleClassId,
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.CancellationNCBFalsificationShortScale){
+      this.isRiskExpire =  true;
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfSumInsuredFire || 
+      this._selectedEndrosementReason ==  EndorsementReason.AdditionOfLocationFire
+    ){
+       
+      this.endrosementMaster.patchValue({
+        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        shortfallAmount:   endroseData.EndoresementShortfallAmt,
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfDOBDecreaseSlabHealth
+    ){
+      this.endrosementMaster.patchValue({
+        grossPremiumm : endroseData.AmtGrossPremiumChange,
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfDOBIncreaseSlabHealth
+    ){
+    
+      this.endrosementMaster.patchValue({
+        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        shortfallAmount:   endroseData.EndoresementShortfallAmt,
+      });
+    }
+    if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfPolicyPeriodDecreaseTravel
+    ||  this._selectedEndrosementReason ==  EndorsementReason.ChangeRiskClassToLowerPA
+    ||  this._selectedEndrosementReason ==  EndorsementReason.CollectionAtEndMarineOpen
+  ||  this._selectedEndrosementReason ==  EndorsementReason.DeletionOfLocationFire
+  ||  this._selectedEndrosementReason ==  EndorsementReason.DeletionOfSumInsuredFireMarine
+  ||  this._selectedEndrosementReason ==  EndorsementReason.MemberDeletionHealth){
+      this.endrosementMaster.patchValue({
+        grossPremiumm : endroseData.AmtGrossPremiumChange,
+      });
+    }
+
+    if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfPolicyPeriodIncreaseTravel
+      ||  this._selectedEndrosementReason ==  EndorsementReason.EnhancedSumInsuredMarineOpen
+    ||  this._selectedEndrosementReason ==  EndorsementReason.ExtensionOfTripTravel
+    ||  this._selectedEndrosementReason ==  EndorsementReason.MemberAdditionHealth
+    ||  this._selectedEndrosementReason ==  EndorsementReason.MemberAdditionAndDeletionGPAMisc 
+    ||  this._selectedEndrosementReason ==  EndorsementReason.ReturnExtensionDateChangeTravel){
+      this.endrosementMaster.patchValue({
+        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        shortfallAmount:   endroseData.EndoresementShortfallAmt,
+      });
+    }
+
+    this.endrosementMaster.patchValue({
+      remark:   endroseData.EndorsementRemark
+    });
+
+  }
+
 
 
 }

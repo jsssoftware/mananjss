@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Office.Word;
 using log4net;
 using PolicyManagement.Dtos.Common;
 using PolicyManagement.Infrastructures.EntityFramework;
+using PolicyManagement.Models.Common;
 using PolicyManagement.Models.Endrosement;
 using PolicyManagement.Models.Report;
 using PolicyManagement.Services.Base;
@@ -11,9 +12,14 @@ using PolicyManagement.Services.Reports.Interface;
 using PolicyManagement.Utilities.Enums;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using System.Data.Entity.Migrations;
+using System.Globalization;
 
 namespace PolicyManagement.Services.EndrosementService
 {
@@ -58,6 +64,8 @@ namespace PolicyManagement.Services.EndrosementService
                                   join ncb in _dataContext.tblNCB on policy.NCBId equals ncb.NCBId into ncbs
                                   from ncb in ncbs.DefaultIfEmpty()
 
+                                  join planType in _dataContext.tblPlanType on policy.PlanTypeId equals (short)planType.PlanTypeId into planTypeJoin
+                                  from planType in planTypeJoin.DefaultIfEmpty()
 
                                   where (agentSwapFilter.InsuranceCompany == 0 || insuranceCompany.InsuranceCompanyId == agentSwapFilter.InsuranceCompany) &&
                                   (string.IsNullOrEmpty(agentSwapFilter.number) || policy.ControlNo == agentSwapFilter.number) &&
@@ -102,7 +110,9 @@ namespace PolicyManagement.Services.EndrosementService
                                       policy.ProductId,
                                       c.CustomerName,
                                       NCBPercentage = ncb.NCBPercentage == null ? 0 : ncb.NCBPercentage,
-                                      policy.CoverNoteNo
+                                      policy.CoverNoteNo,
+                                      policy.PolicyTypeId,
+                                      planType.PlanTypeName
                                   }
                                  ).ToList<dynamic>();
 
@@ -115,5 +125,315 @@ namespace PolicyManagement.Services.EndrosementService
             // Replace "YourInsuranceCompanyName", "YourControlNo", and "YourPOSName" with the actual filter values.
 
         }
+
+        public async Task<CommonDto<object>> AddUpdateEndrosementMaster(EndorsementMasterModel model, BaseModel baseModel)
+        {
+            try
+            {
+
+                tblMotorPolicyData motorPolicyData = await _dataContext.tblMotorPolicyDatas.FirstOrDefaultAsync(f => f.PolicyId == model.PolicyId);
+                var endrosementData = new tblEndorsementData();
+
+                endrosementData.PolicyId =  model.PolicyId;
+                endrosementData.EndorsementTypeId = model.EndrosementType;
+                endrosementData.EndorsementReasonId = model.EndrosementReason;
+                endrosementData.BranchId = model.BranchId;
+                endrosementData.CreatedBy = baseModel.LoginUserId;
+                endrosementData.CreatedTime =  DateTime.Now;
+                endrosementData.EndorsementEntryDate = model.EndrosementDate.Value;
+
+                endrosementData.IsActive = true;
+                endrosementData.PolicyTypeId = model.PolicyTypeId;
+                if (model.EndorsementId != 0)
+                {
+                    endrosementData.EndorsementId = model.EndorsementId;
+
+                }
+                var totalIdv = 0;
+                if (motorPolicyData == null) return new CommonDto<object>
+                {
+                    Message = "Invalid Policy Id"
+                };
+
+                if (model.EndrosementDate.HasValue)
+                {
+
+                   endrosementData.EndorsementDate =DateTime.Now;
+                }
+
+                if (model.ManufactureId != 0)
+                {
+                    motorPolicyData.ManufacturerId = model.ManufactureId;
+                    endrosementData.NewManufacturerId = model.ManufactureId;
+                }
+
+                if (model.OD.HasValue)
+                {
+                    motorPolicyData.EndorseOD = model.OD;
+                    endrosementData.AmtODChange = model.OD;
+                }
+
+                if (model.GrossPremium.HasValue)
+                {
+                    motorPolicyData.EndorseGrossPremium = model.GrossPremium;
+                    endrosementData.AmtGrossPremiumChange = model.GrossPremium;
+                }
+
+                if (model.ShortfallAmount.HasValue || !string.IsNullOrEmpty(model.ShortfallVoucherNo))
+                {
+                   
+                    var existingtblVoucher = _dataContext.tblVoucherDetails.Where(x=>x.PolicyId == model.PolicyId).FirstOrDefault();
+                    var tblVoucherDetails = new tblVoucherDetails();
+                    if (existingtblVoucher != null)
+                    {
+                        tblVoucherDetails.VoucherId = existingtblVoucher.VoucherId ;
+                    }
+                    endrosementData.EndoresementShortfallAmt = model.ShortfallAmount;
+                    endrosementData.EndoresementShortfallVoucherNo = model.ShortfallVoucherNo;
+                    tblVoucherDetails.PolicyId = model.PolicyId;
+                    tblVoucherDetails.PolicyNo = motorPolicyData.PolicyNo;
+                    tblVoucherDetails.BranchId = model.BranchId;
+                    tblVoucherDetails.VoucherAmount = (int)model.ShortfallAmount;
+                    tblVoucherDetails.VoucherNo = model.ShortfallVoucherNo;
+                    tblVoucherDetails.InsuranceCompanyId = motorPolicyData.InsuranceCompanyId ?? 0;
+                    tblVoucherDetails.CustomerId= motorPolicyData.CustomerId;
+                    tblVoucherDetails.CustomerName = motorPolicyData.NameInPolicy;
+                    tblVoucherDetails.VoucherTypeId = 1;
+                    tblVoucherDetails.VoucherStatusId = 1;
+                    tblVoucherDetails.POSId = motorPolicyData.POSId;
+                    tblVoucherDetails.ReferenceId = motorPolicyData.ReferenceId;
+                    tblVoucherDetails.ControlNo = motorPolicyData.ControlNo;
+                    tblVoucherDetails.CreatedBy = baseModel.LoginUserId;
+                    tblVoucherDetails.CreatedTime = DateTime.Now;
+                    tblVoucherDetails.VoucherDate =  DateTime.Now;
+                   _dataContext.tblVoucherDetails.AddOrUpdate(tblVoucherDetails);
+
+                }
+
+                if (model.ElectricAccessoriesIDV.HasValue)
+                {
+                    motorPolicyData.ElectricAssessoriesIDV = model.ElectricAccessoriesIDV;
+                    totalIdv += model.ElectricAccessoriesIDV ?? 0;
+                }
+
+                if (model.NonElectricAccessoriesIDV.HasValue)
+                {
+                    motorPolicyData.NonElectricAssessoriesIDV = model.NonElectricAccessoriesIDV;
+                    totalIdv += model.NonElectricAccessoriesIDV ?? 0;
+                }
+
+                if (model.Cngidv.HasValue)
+                {
+                    motorPolicyData.CNGIDV = model.Cngidv;
+                    totalIdv += model.Cngidv ?? 0;
+                }
+
+                if (model.VehicleIdv.HasValue)
+                {
+                    motorPolicyData.VehicleIDV = model.VehicleIdv;
+                    totalIdv += model.VehicleIdv ?? 0;
+                }
+
+                if (model.NcbPercentage.HasValue)
+                {
+                    motorPolicyData.NCBId = model.NcbPercentage ?? 0;
+                    endrosementData.NewNCBId = model.NcbPercentage;
+                }
+
+                if (model.BounceReason != 0)
+                    endrosementData.BounceReasonId = model.BounceReason;
+
+                if (model.ChequeBounceDate.HasValue)
+                    endrosementData.BounceDate = model.ChequeBounceDate.Value;
+
+                if (model.OdRecoverable.HasValue)
+                {
+                    motorPolicyData.EndorseOD = model.OD;
+                    endrosementData.AmtODChange = model.OD;
+                }
+
+                if (model.PremiumRecoverable.HasValue)
+                {
+                    motorPolicyData.EndorseGrossPremium = model.GrossPremium;
+                    endrosementData.AmtGrossPremiumChange = model.GrossPremium;
+                }
+
+                if (model.VehicleClassId.HasValue)
+                {
+                    motorPolicyData.VehicleClassId = model.VehicleClassId ?? 0;
+                    endrosementData.NewVehicleClassId = model.VehicleClassId;
+                }
+
+                if (model.ModelId.HasValue)
+                {
+                    motorPolicyData.ModelId = model.ModelId ?? 0;
+                    endrosementData.NewModelId = model.ModelId;
+                }
+
+                if (model.Variant.HasValue)
+                {
+                    motorPolicyData.VariantId = model.Variant ?? 0;
+                    endrosementData.NewVariantId = model.Variant;
+                }
+
+                if (!string.IsNullOrWhiteSpace(model.Remark))
+                {
+                    endrosementData.EndorsementRemark = model.Remark;
+                    motorPolicyData.PolicyRemarks = motorPolicyData.PolicyRemarks + " " + model.Remark;
+                }
+
+                if (model.AddOnRiderId.HasValue)
+                {
+                    motorPolicyData.AddonRiderId = model.AddOnRiderId ?? 0;
+                    endrosementData.NewAddOnPlanId = model.AddOnRiderId;
+                }
+
+                if (model.RiskExpireDate.HasValue)
+                {
+                    if(motorPolicyData.PolicyPackageTypeId == 1)
+                    {
+                        motorPolicyData.PolicyEndDate = model.RiskExpireDate.Value;
+                    }
+                    else
+                    {
+                        motorPolicyData.PolicyEndDateOD = model.RiskExpireDate.Value;
+                    }
+                }
+
+                if (model.RtoZone.HasValue)
+                {
+                    motorPolicyData.RTOZoneId = model.RtoZone ?? 0;
+                    endrosementData.RTOZoneId = model.RtoZone;
+                }
+
+                if (model.RiskZone.HasValue)
+                {
+                  //  endrosementData.Ris = model.RtoZone;
+                }
+
+                if(model.AlternateInceptionDate.HasValue)
+                {
+                    endrosementData.AlternateInceptionDate = model.AlternateInceptionDate.Value;
+                }
+
+                if (model.AlternateInsuranceCompanyId.HasValue)
+                {
+                    endrosementData.AlternateInsureCompanyId = model.AlternateInsuranceCompanyId;
+                }
+
+                if (!string.IsNullOrEmpty(model.AlternatePolicyNumber))
+                {
+                    endrosementData.AlternatePolicyNo = model.AlternatePolicyNumber;
+                }
+
+                if (model.PolicyReinstate.HasValue)
+                {
+                    endrosementData.PolicyReinstate = model.PolicyReinstate;
+                    endrosementData.EndorsementReasonId = (short)EndorsementReason.PolicyReinstateChequeBounce;
+                    motorPolicyData.Flag1 = true;
+                    motorPolicyData.PolicyCancelReasonId = null;
+                    motorPolicyData.PolicyCancelDate= null;
+                }
+                 if (model.CancelledNCBRecoverable.HasValue)
+                {
+                    endrosementData.NCBRecoveredCancel = model.CancelledNCBRecoverable;                  
+                }
+                  if (model.NCBRecovered.HasValue)
+                {
+                    endrosementData.NCBRecovered = model.NCBRecovered;                  
+                }
+
+
+                if (!string.IsNullOrWhiteSpace(model.RegistrationNumber))
+                    motorPolicyData.RegistrationNo = model.RegistrationNumber;
+
+                endrosementData.IDVChange = totalIdv;
+                motorPolicyData.ModifiedBy = baseModel.LoginUserId;
+                motorPolicyData.ModifiedTime = DateTime.Now;
+                if (( !model.PolicyReinstate.HasValue ||  !model.NCBRecovered.HasValue || !model.CancelledNCBRecoverable.HasValue) && !model.IsModified)
+                {
+                    var endrosementDataList = _dataContext.tblEndorsementData.Where(x => x.EndorsementId == model.EndorsementId).ToList();
+                    var isduplicateEndroement = endrosementDataList.Select(x => x.EndorsementReasonId == model.EndrosementReason).Count();
+                    if (isduplicateEndroement > 0)
+                    {
+                        return new CommonDto<object>
+                        {
+
+                            Message = "Selected Endrosement Reason already present in database"
+                        };
+                    }
+                }
+                _dataContext.tblEndorsementData.AddOrUpdate(endrosementData);
+                if (isCancellationReason(model.EndrosementReason) && !model.PolicyReinstate.HasValue)
+                {
+                    motorPolicyData.PolicyCancelReasonId = model.EndrosementReason;
+                    motorPolicyData.Flag1 = false;
+                    motorPolicyData.PolicyCancelDate= DateTime.Now;
+
+                }
+
+                await _dataContext.SaveChangesAsync();
+                return new CommonDto<object>
+                {
+                    IsSuccess = true,
+                    Message = $"Endrosement successfully",
+                };
+            }
+            catch (DbUpdateException ex)
+            {
+                log.Error(ex.GetBaseException());
+                return new CommonDto<object>
+                {
+
+                    Message = ex.GetBaseException().Message,
+                };
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+                return new CommonDto<object>
+                {
+
+                    Message = ex.Message
+                };
+            }
+
+        }
+
+
+        public async Task<dynamic> GetPreviousEndromentInfo(int policyId)
+        {
+            var res = await _dataContext.tblEndorsementData.Join(_dataContext.tblEndorsementReason, T1 => T1.EndorsementReasonId, T2 => T2.EndorsementReasonId, (T1, T2) => new { T1, T2.EndorsementReason }).Select(x=>new
+            {
+                x.T1.AmtGrossPremiumChange, x.T1.AmtODChange,x.T1.EndorsementEntryDate,x.EndorsementReason,x.T1.IsActive,x.T1.PolicyId,x.T1
+            }).Where(w => w.T1.IsActive == true && w.T1.PolicyId == policyId).ToListAsync();
+            return res;
+        }
+
+        public bool isCancellationReason(short endorsementReason) {
+            var cancellationReasons = new int[]{
+              (int)EndorsementReason.CancellationChequeBounce,
+              (int)EndorsementReason.CancellationTheft,
+              (int)EndorsementReason.CancellationTotalLoss,
+              (int)EndorsementReason.CancellationNCBFalsificationForfeit,
+               (int)EndorsementReason.CancellationCustomerRequest,
+               (int)EndorsementReason.CancellationDoubleInsuranceByInsCo,
+               (int)EndorsementReason.CancellationVehicleNotDelivered,
+              (int)EndorsementReason.CancellationByInsuranceCompany,
+              (int)EndorsementReason.CancellationNCBReservingFalsificationRefund,
+               (int)EndorsementReason.CancellationDoubleEntryMistakeInSoftware,
+               (int)EndorsementReason.CancellationWrongRiskDate,
+               (int)EndorsementReason.CancellationVehicleSold,
+              (int)EndorsementReason.CancellationAsPerCommissionStatementSMS,
+               (int)EndorsementReason.CancellationNonDisclosureHealth,
+               (int)EndorsementReason.CancellationChangeOfPlanTravel,
+               (int)EndorsementReason.CancellationTripCancelledTravel,
+               (int)EndorsementReason.CancellationCaseRejectedByCompany,
+               (int)EndorsementReason.CancellationNCBFalsificationShortScale
+            };
+
+            return cancellationReasons.Contains(endorsementReason);
+        }
     }
 }
+

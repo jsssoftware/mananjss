@@ -20,5 +20,8 @@ export class EndrosementService extends IEndrosementService {
  
    
     getPolicyDatas = (model:any): Observable<IDataTableDto<any[]>> => this.apiManagerService.postRequest<ICommonDto<string>>(Endrosement.getPolicyDatas,model);
-  
+    createUpdateEndrosmentMaster = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Endrosement.AddUpdateEndrosement, model);
+    getPreviousEndrosement= (policyId : number): Observable<any[]> => this.apiManagerService.getRequest<any>(`${Endrosement.GetPreviousEndrosement}/${policyId}`);
+
+
 }

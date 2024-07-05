@@ -2,6 +2,7 @@
 using PolicyManagement.Dtos.Motor;
 using PolicyManagement.Infrastructures.EntityFramework;
 using PolicyManagement.Models.Common;
+using PolicyManagement.Models.Endrosement;
 using PolicyManagement.Utilities.Enums;
 using System;
 using System.Collections.Generic;
@@ -103,7 +104,7 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<tblPolicyTerm>> GetPolicyTerms(short policyPackagetypeId);
         Task<List<DropDownDto<int>>> GetAllPlans(int _productId, int insuranceCompanyId);
         Task<List<DropDownDto<int>>> FindAllPosManagedBy(int branchId);
-        Task<List<DropDownDto<int>>> FindAllEndrosementReason(int verticalId);
-
+        Task<List<DropDownDto<int>>> FindAllEndrosementReason(int verticalId,int endrosementType);
+        Task<List<DropDownDto<int>>> FindBounceReason();
     }
 }

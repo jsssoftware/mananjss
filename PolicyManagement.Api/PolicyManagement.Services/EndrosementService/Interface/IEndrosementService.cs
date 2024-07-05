@@ -1,4 +1,5 @@
 ﻿using PolicyManagement.Dtos.Common;
+using PolicyManagement.Models.Common;
 using PolicyManagement.Models.Endrosement;
 using System;
 using System.Collections.Generic;
@@ -11,5 +12,7 @@ namespace PolicyManagement.Services.EndrosementService.Interface
    public interface  IEndrosementService
     {
         Task<DataTableDto<List<dynamic>>> FindPolicyData(EndrosementModalFilter endrosementModalFilter);
+        Task<CommonDto<object>> AddUpdateEndrosementMaster(EndorsementMasterModel model, BaseModel baseModel);
+        Task<dynamic> GetPreviousEndromentInfo(int policyId);
     }
 }
