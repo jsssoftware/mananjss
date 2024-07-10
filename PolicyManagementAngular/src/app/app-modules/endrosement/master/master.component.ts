@@ -264,6 +264,7 @@ export class EndrosementMasterComponent implements OnInit {
       this.isShortfall=  true;
       this.isVehicleIdv =  true;
     }
+    debugger
     if(this._selectedEndrosementReason ==  EndorsementReason.CancellationCaseRejectedByCompany || 
       this._selectedEndrosementReason ==  EndorsementReason.CancellationCustomerRequest || 
       this._selectedEndrosementReason ==  EndorsementReason.CancellationDoubleEntryMistakeInSoftware || 

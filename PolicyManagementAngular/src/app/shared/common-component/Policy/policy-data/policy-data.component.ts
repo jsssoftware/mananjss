@@ -44,6 +44,8 @@ import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 import { MatDialogRef } from '@angular/material/dialog';
 import { PreviewDialogComponent } from 'src/app/shared/utilities/dialog/preview-dialog/preview-dialog.component';
 import { CommonFunction } from 'src/app/shared/utilities/helpers/common-function';
+import { EndrosementService } from 'src/app/app-services/endrosement-service/endrosement.service';
+import { DatePipe } from '@angular/common';
 
 export interface PeriodicElement {
   endorsementReason: string;
@@ -464,6 +466,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _dataSourceUploadDocuments: MatTableDataSource<IPolicyDocumentDto> = new MatTableDataSource<IPolicyDocumentDto>();
   public _dataSourceCustomerCluster: MatTableDataSource<ICustomerInsuranceDetail> = new MatTableDataSource<ICustomerInsuranceDetail>();
   public _dataInsuranceCustomerCluster: MatTableDataSource<ICustomerInsuranceDetail> = new MatTableDataSource<ICustomerInsuranceDetail>();
+  public _dataEndrosement: MatTableDataSource<any> = new MatTableDataSource<any>();
 
   public _controlNumber: string = "";
   public _headerTitle: string = "";
@@ -493,6 +496,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
   public _filteredPosOptions: IDropDownDto<number>[] = [];
   public _filteredManufacturerOptions: IDropDownDto<number>[] = [];
 
+  public endrosementData :any[] = [];
 
   public _products: IDropDownDto<number>[] = [];
   public _plans: IDropDownDto<number>[] = [];
@@ -524,7 +528,9 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     public dialog: MatDialog,
     public mainmotorService: MotorService,
     public _sanitizer: DomSanitizer,
-    public _commonFunction: CommonFunction
+    public _commonFunction: CommonFunction,
+    public _endrosementService:EndrosementService,
+    private datePipe : DatePipe
   ) {
     this._type = 1;
     this._branchId = sessionStorage.getItem("branchId");
@@ -1114,7 +1120,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this.commonService.getPosManagedByPosId(posId).subscribe((response: IDropDownDto<number>) => {
         this._posManagedBy = response;
         this.policySourceForm.patchValue({
-          posManagedBy: this._posManagedBy.Name
+          posManagedBy: this._posManagedBy?.Name
         });
       });
     }
@@ -1935,7 +1941,7 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
       this._policyData = response;
       this.setMotorPolicyData(response);
       this.getPolicyDocuments();
-
+      this.getPreviousEndrosementInfo();
     });
   }
 
@@ -3279,6 +3285,21 @@ export class PolicyDataComponent implements OnInit, AfterViewInit, ErrorStateMat
     if (Number(number) > maxValue) {
       event.target.value = maxValue
     }
+  }
+
+
+  getPreviousEndrosementInfo(): void {
+    this._endrosementService.getPreviousEndrosement(this._policyId).subscribe((response: any[]) => {
+      this.endrosementData= response;
+      response = response.map(row => ({
+        ...row,
+        EndorsementEntryDate: this.datePipe.transform(row.EndorsementEntryDate, 'dd/MM/yyyy')
+      }));
+      this._dataEndrosement = new MatTableDataSource<IPolicyDocumentDto>(response);
+      this._dataEndrosement._updateChangeSubscription(); // <-- Refresh the datasource
+    
+    
+    });
   }
 
 }

@@ -1723,38 +1723,38 @@
           <form>
             <hr style="margin-top: 0px;" />
             <div class="row">
-              <table mat-table [dataSource]="dataSource">
+              <table mat-table [dataSource]="_dataEndrosement">
                 <ng-container matColumnDef="endorsementReason">
                   <th mat-header-cell *matHeaderCellDef>Endorsement Reason</th>
-                  <td mat-cell *matCellDef="let element">{{element.endorsementReason}}</td>
+                  <td mat-cell *matCellDef="let element">{{element.EndorsementReason}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="entryDate">
                   <th mat-header-cell *matHeaderCellDef>Entry Date</th>
-                  <td mat-cell *matCellDef="let element">{{element.entryDate}}</td>
+                  <td mat-cell *matCellDef="let element">{{element.EndorsementEntryDate}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="odChanges">
                   <th mat-header-cell *matHeaderCellDef> OD Changes </th>
-                  <td mat-cell *matCellDef="let element"> {{element.odChanges}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.T1.AmtODChange}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="premiumChange">
                   <th mat-header-cell *matHeaderCellDef> Premium Change </th>
-                  <td mat-cell *matCellDef="let element"> {{element.premiumChange}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.T1.AmtGrossPremiumChange}} </td>
                 </ng-container>
 
                 <ng-container matColumnDef="idvChange">
                   <th mat-header-cell *matHeaderCellDef> IDV Change </th>
-                  <td mat-cell *matCellDef="let element"> {{element.idvChange}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.T1.IDVChange}} </td>
                 </ng-container>
                 <ng-container matColumnDef="newNcb">
                   <th mat-header-cell *matHeaderCellDef> New NCB </th>
-                  <td mat-cell *matCellDef="let element"> {{element.newNcb}}</td>
+                  <td mat-cell *matCellDef="let element"> {{element.T1.newNcb}}</td>
                 </ng-container>
                 <ng-container matColumnDef="endrosementRemark">
                   <th mat-header-cell *matHeaderCellDef> Endorsement Remark </th>
-                  <td mat-cell *matCellDef="let element"> {{element.endrosementRemark}} </td>
+                  <td mat-cell *matCellDef="let element"> {{element.T1.EndorsementRemark}} </td>
                 </ng-container>
                 <ng-container matColumnDef="voucherNumber">
                   <th mat-header-cell *matHeaderCellDef> Voucher Number </th>

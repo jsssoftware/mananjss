@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Security.Claims;
 using System.Data.Entity.Migrations;
 using System.Globalization;
+using DocumentFormat.OpenXml.EMMA;
 
 namespace PolicyManagement.Services.EndrosementService
 {
@@ -37,6 +38,8 @@ namespace PolicyManagement.Services.EndrosementService
 
         public async Task<DataTableDto<List<dynamic>>> FindPolicyData(EndrosementModalFilter agentSwapFilter)
         {
+           
+
             var filteredResult = (from policy in _dataContext.tblMotorPolicyDatas
                                   join c in _dataContext.tblCustomer on policy.CustomerId equals c.CustomerId
 
@@ -68,7 +71,6 @@ namespace PolicyManagement.Services.EndrosementService
                                   from planType in planTypeJoin.DefaultIfEmpty()
 
                                   where (agentSwapFilter.InsuranceCompany == 0 || insuranceCompany.InsuranceCompanyId == agentSwapFilter.InsuranceCompany) &&
-                                  (string.IsNullOrEmpty(agentSwapFilter.number) || policy.ControlNo == agentSwapFilter.number) &&
                                   (agentSwapFilter.PosNameId == 0 || pos.POSId == agentSwapFilter.PosNameId)
                                  
                                   && branch.BranchId == agentSwapFilter.BranchId
@@ -112,10 +114,31 @@ namespace PolicyManagement.Services.EndrosementService
                                       NCBPercentage = ncb.NCBPercentage == null ? 0 : ncb.NCBPercentage,
                                       policy.CoverNoteNo,
                                       policy.PolicyTypeId,
-                                      planType.PlanTypeName
+                                      planType.PlanTypeName,
+                                      controlNumberDigit =  0
+
                                   }
                                  ).ToList<dynamic>();
 
+           /* if (agentSwapFilter.number != null)
+            {
+                if (agentSwapFilter.number.Length < 7)
+                {
+                    var lastdigit = Convert.ToDouble(agentSwapFilter.number) % 100000;
+                    List<Dictionary<string, object>> filteredResults = filteredResult  // Initialize this list with your filtered results
+
+                    foreach (var fs in filteredResult)
+                    {
+                        fs["controlNumberDigit"] = convertToDigit((int)fs["ControlNo"]);
+                    }
+                    filteredResult = filteredResult.Where(x => x.controlNumberDigit == lastdigit).ToList();
+                }
+                else
+                {
+                    filteredResult = filteredResult.Where(x => x.ControlNo == agentSwapFilter.number).ToList();
+
+                }
+            }*/
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = filteredResult.Count(),
@@ -125,7 +148,10 @@ namespace PolicyManagement.Services.EndrosementService
             // Replace "YourInsuranceCompanyName", "YourControlNo", and "YourPOSName" with the actual filter values.
 
         }
-
+        public double convertToDigit(string ControlNo)
+        {
+            return Convert.ToDouble(ControlNo.Substring(ControlNo.Length - 6)); 
+        }
         public async Task<CommonDto<object>> AddUpdateEndrosementMaster(EndorsementMasterModel model, BaseModel baseModel)
         {
             try
@@ -171,12 +197,15 @@ namespace PolicyManagement.Services.EndrosementService
                 {
                     motorPolicyData.EndorseOD = model.OD;
                     endrosementData.AmtODChange = model.OD;
+                    motorPolicyData.TotalOD = model.OD + motorPolicyData.TotalOD;
+
                 }
 
                 if (model.GrossPremium.HasValue)
                 {
                     motorPolicyData.EndorseGrossPremium = model.GrossPremium;
                     endrosementData.AmtGrossPremiumChange = model.GrossPremium;
+                    motorPolicyData.TotalGrossPremium = model.GrossPremium + motorPolicyData.TotalGrossPremium;
                 }
 
                 if (model.ShortfallAmount.HasValue || !string.IsNullOrEmpty(model.ShortfallVoucherNo))
@@ -214,6 +243,7 @@ namespace PolicyManagement.Services.EndrosementService
                 {
                     motorPolicyData.ElectricAssessoriesIDV = model.ElectricAccessoriesIDV;
                     totalIdv += model.ElectricAccessoriesIDV ?? 0;
+
                 }
 
                 if (model.NonElectricAccessoriesIDV.HasValue)
@@ -345,6 +375,7 @@ namespace PolicyManagement.Services.EndrosementService
                     endrosementData.EndorsementReasonId = (short)EndorsementReason.NCBRecoveredCancel;
 
                 }
+                motorPolicyData.TotalIDV = motorPolicyData.TotalIDV + totalIdv;
 
 
                 if (!string.IsNullOrWhiteSpace(model.RegistrationNumber))
@@ -359,7 +390,7 @@ namespace PolicyManagement.Services.EndrosementService
               model.EndrosementReason != (int)EndorsementReason.NCBRecoverable &&
               model.EndrosementReason != (int)EndorsementReason.CancellationChequeBounce))
                 {
-                    var endrosementDataList = _dataContext.tblEndorsementData.Where(x => x.EndorsementId == model.EndorsementId).ToList();
+                    var endrosementDataList = _dataContext.tblEndorsementData.Where(x => x.PolicyId == model.PolicyId).ToList();
                     var isduplicateEndroement = endrosementDataList.Select(x => x.EndorsementReasonId == model.EndrosementReason).Count();
                     if (isduplicateEndroement > 0)
                     {
