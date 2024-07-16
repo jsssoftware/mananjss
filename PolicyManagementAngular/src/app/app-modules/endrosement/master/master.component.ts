@@ -272,7 +272,8 @@ export class EndrosementMasterComponent implements OnInit {
       this._selectedEndrosementReason ==  EndorsementReason.CancellationNCBReservingFalsificationRefund || 
       this._selectedEndrosementReason ==  EndorsementReason.CancellationVehicleNotDelivered || 
       this._selectedEndrosementReason ==  EndorsementReason.CancellationVehicleSold || 
-      this._selectedEndrosementReason ==  EndorsementReason.CancellationWrongRiskDate
+      this._selectedEndrosementReason ==  EndorsementReason.CancellationWrongRiskDate ||
+      this._selectedEndrosementReason ==  EndorsementReason.CancellationNCBFalsificationForfeit
     ){
       this.isOd =  true;
       this.isGrossPremium = true;
