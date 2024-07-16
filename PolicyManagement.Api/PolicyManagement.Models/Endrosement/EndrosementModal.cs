@@ -127,4 +127,46 @@ namespace PolicyManagement.Models.Endrosement
         NCBRecoveredCancel = 63
     }
 
+    public class PolicyResult
+    {
+        public int PolicyId { get; set; }
+        public string ControlNo { get; set; }
+        public short VerticalId { get; set; }
+        public string NameInPolicy { get; set; }
+        public string RegistrationNo { get; set; }
+        public decimal? GrossPremium { get; set; }
+        public string BranchCode { get; set; }
+        public string ManufacturerName { get; set; }
+        public string POSName { get; set; }
+        public DateTime? PolicyStartDate { get; set; }
+        public DateTime? PolicyEndDate { get; set; }
+        public DateTime? ExpiryDate { get; set; }
+        public DateTime? StartDate { get; set; }
+        public string PolicyNumber { get; set; }
+        public string InsuranceCompanyName { get; set; }
+        public string PolicyRemarks { get; set; }
+        public int? CreatedBy { get; set; }
+        public bool RenewalDone { get; set; }
+        public short? VerticalSegmentId { get; set; }
+        public string ModelName { get; set; }
+        public int? TotalIDV { get; set; }
+        public string VariantName { get; set; }
+        public int? ReferenceId { get; set; }
+        public int? TeleCallerId { get; set; }
+        public int? FOSId { get; set; }
+        public int POSId { get; set; }
+        public string PlanName { get; set; }
+        public string ProductName { get; set; }
+        public string VerticalName { get; set; }
+        public short? InsuranceCompanyId { get; set; }
+        public short? ProductId { get; set; }
+        public string CustomerName { get; set; }
+        public int NCBPercentage { get; set; }
+        public string CoverNoteNo { get; set; }
+        public short PolicyTypeId { get; set; }
+        public string PlanTypeName { get; set; }
+        public double controlNumberDigit { get; set; }
+    }
+
+
 }

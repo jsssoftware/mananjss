@@ -38,7 +38,7 @@ namespace PolicyManagement.Services.EndrosementService
 
         public async Task<DataTableDto<List<dynamic>>> FindPolicyData(EndrosementModalFilter agentSwapFilter)
         {
-           
+
 
             var filteredResult = (from policy in _dataContext.tblMotorPolicyDatas
                                   join c in _dataContext.tblCustomer on policy.CustomerId equals c.CustomerId
@@ -72,65 +72,61 @@ namespace PolicyManagement.Services.EndrosementService
 
                                   where (agentSwapFilter.InsuranceCompany == 0 || insuranceCompany.InsuranceCompanyId == agentSwapFilter.InsuranceCompany) &&
                                   (agentSwapFilter.PosNameId == 0 || pos.POSId == agentSwapFilter.PosNameId)
-                                 
+
                                   && branch.BranchId == agentSwapFilter.BranchId
                                   && (agentSwapFilter.VerticalId == (int)Vertical.Motor ? policy.VerticalId == (short)Vertical.Motor : policy.VerticalId != (short)Vertical.Motor)
                                   && policy.IsVerified == true
 
-                                  select new
+                                  select new PolicyResult
                                   {
-                                      policy.PolicyId,
-                                      policy.ControlNo,
-                                      policy.VerticalId,
-                                      policy.NameInPolicy,
-                                      policy.RegistrationNo,
-                                      policy.GrossPremium,
+                                      PolicyId = policy.PolicyId,
+                                      ControlNo = policy.ControlNo,
+                                      VerticalId = policy.VerticalId,
+                                      NameInPolicy = policy.NameInPolicy,
+                                      RegistrationNo = policy.RegistrationNo,
+                                      GrossPremium = policy.GrossPremium,
                                       BranchCode = branch != null ? branch.BranchCode : null,
                                       ManufacturerName = manufacturer != null ? manufacturer.ManufacturerName : null,
                                       POSName = pos != null ? pos.POSName : null,
-                                      policy.PolicyStartDate,
-                                      policy.PolicyEndDate,
-                                      ExpiryDate = policy.PolicyPackageTypeId == 1 ? policy.PolicyEndDate :                       policy.PolicyEndDateOD,
-                                      StartDate = policy.PolicyPackageTypeId == 1 ? policy.PolicyStartDate :        policy.PolicyStartDateOD,
+                                      PolicyStartDate = policy.PolicyStartDate,
+                                      PolicyEndDate = policy.PolicyEndDate,
+                                      ExpiryDate = policy.PolicyPackageTypeId == 1 ? policy.PolicyEndDate :                         policy.PolicyEndDateOD,
+                                      StartDate = policy.PolicyPackageTypeId == 1 ? policy.PolicyStartDate :policy.PolicyStartDateOD,
                                       PolicyNumber = policy.PolicyNo,
-                                      insuranceCompany.InsuranceCompanyName,
-                                      policy.PolicyRemarks,
-                                      policy.CreatedBy,
+                                      InsuranceCompanyName = insuranceCompany != null ? insuranceCompany.InsuranceCompanyName : null,
+                                      PolicyRemarks = policy.PolicyRemarks,
+                                      CreatedBy = policy.CreatedBy,
                                       RenewalDone = policy.RenewalDone ?? false,
-                                      policy.VerticalSegmentId,
-                                      model.ModelName,
-                                      policy.TotalIDV,
-                                      varient.VariantName,
-                                      policy.ReferenceId,
-                                      policy.TeleCallerId,
-                                      policy.FOSId,
-                                      policy.POSId,
-                                      plan.PlanName,
-                                      product.ProductName,
-                                      vertical.VerticalName,
-                                      policy.InsuranceCompanyId,
-                                      policy.ProductId,
-                                      c.CustomerName,
-                                      NCBPercentage = ncb.NCBPercentage == null ? 0 : ncb.NCBPercentage,
-                                      policy.CoverNoteNo,
-                                      policy.PolicyTypeId,
-                                      planType.PlanTypeName,
-                                      controlNumberDigit =  0
+                                      VerticalSegmentId = policy.VerticalSegmentId,
+                                      ModelName = model != null ? model.ModelName : null,
+                                      TotalIDV = policy.TotalIDV,
+                                      VariantName = varient != null ? varient.VariantName : null,
+                                      ReferenceId = policy.ReferenceId,
+                                      TeleCallerId = policy.TeleCallerId,
+                                      FOSId = policy.FOSId,
+                                      POSId = policy.POSId,
+                                      PlanName = plan != null ? plan.PlanName : null,
+                                      ProductName = product != null ? product.ProductName : null,
+                                      VerticalName = vertical.VerticalName,
+                                      InsuranceCompanyId = policy.InsuranceCompanyId,
+                                      ProductId = policy.ProductId,
+                                      CustomerName = c.CustomerName,
+                                      NCBPercentage = ncb != null ? ncb.NCBPercentage : 0,
+                                      CoverNoteNo = policy.CoverNoteNo,
+                                      PolicyTypeId = policy.PolicyTypeId,
+                                      PlanTypeName = planType != null ? planType.PlanTypeName : null,
+                                      controlNumberDigit = 0 // Default value
 
                                   }
                                  ).ToList<dynamic>();
 
-           /* if (agentSwapFilter.number != null)
+            if (!string.IsNullOrEmpty(agentSwapFilter.number))
             {
+                filteredResult.ForEach(x => { x.controlNumberDigit = convertToDigit(x.ControlNo); });
                 if (agentSwapFilter.number.Length < 7)
                 {
                     var lastdigit = Convert.ToDouble(agentSwapFilter.number) % 100000;
-                    List<Dictionary<string, object>> filteredResults = filteredResult  // Initialize this list with your filtered results
-
-                    foreach (var fs in filteredResult)
-                    {
-                        fs["controlNumberDigit"] = convertToDigit((int)fs["ControlNo"]);
-                    }
+                   
                     filteredResult = filteredResult.Where(x => x.controlNumberDigit == lastdigit).ToList();
                 }
                 else
@@ -138,15 +134,12 @@ namespace PolicyManagement.Services.EndrosementService
                     filteredResult = filteredResult.Where(x => x.ControlNo == agentSwapFilter.number).ToList();
 
                 }
-            }*/
+            }
             return new DataTableDto<List<dynamic>>
             {
                 TotalCount = filteredResult.Count(),
                 Data = filteredResult,
             };
-
-            // Replace "YourInsuranceCompanyName", "YourControlNo", and "YourPOSName" with the actual filter values.
-
         }
         public double convertToDigit(string ControlNo)
         {
@@ -195,6 +188,7 @@ namespace PolicyManagement.Services.EndrosementService
 
                 if (model.OD.HasValue)
                 {
+
                     motorPolicyData.EndorseOD = model.OD;
                     endrosementData.AmtODChange = model.OD;
                     motorPolicyData.TotalOD = model.OD + motorPolicyData.TotalOD;
@@ -254,14 +248,31 @@ namespace PolicyManagement.Services.EndrosementService
 
                 if (model.Cngidv.HasValue)
                 {
-                    motorPolicyData.CNGIDV = model.Cngidv;
-                    totalIdv += model.Cngidv ?? 0;
+                    if(endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfCNGLPG)
+                    {
+                        motorPolicyData.CNGIDV  = motorPolicyData.CNGIDV -  model.Cngidv;
+                        totalIdv -= model.Cngidv?? 0;
+                    }
+                    else
+                    {
+                        motorPolicyData.CNGIDV = model.Cngidv;
+                        totalIdv += model.Cngidv ?? 0;
+
+                    }
                 }
 
                 if (model.VehicleIdv.HasValue)
                 {
-                    motorPolicyData.VehicleIDV = model.VehicleIdv;
-                    totalIdv += model.VehicleIdv ?? 0;
+                    if (endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfCNGLPG)
+                    {
+                        motorPolicyData.VehicleIDV = motorPolicyData.VehicleIDV - model.VehicleIdv;
+                        totalIdv -= model.VehicleIdv ?? 0;
+                    }
+                    else
+                    {
+                        motorPolicyData.VehicleIDV = model.VehicleIdv;
+                        totalIdv += model.VehicleIdv ?? 0;
+                    }
                 }
 
                 if (model.NcbPercentage.HasValue)
