@@ -71,7 +71,7 @@ namespace PolicyManagement.Services.EndrosementService
                                   from planType in planTypeJoin.DefaultIfEmpty()
 
                                   where (agentSwapFilter.InsuranceCompany == 0 || insuranceCompany.InsuranceCompanyId == agentSwapFilter.InsuranceCompany) &&
-                                  ((string.IsNullOrEmpty(agentSwapFilter.CustomerName) || policy.NameInPolicy == agentSwapFilter.CustomerName)
+                                  (string.IsNullOrEmpty(agentSwapFilter.CustomerName) || policy.NameInPolicy == agentSwapFilter.CustomerName) &&
                                   (agentSwapFilter.PosNameId == 0 || pos.POSId == agentSwapFilter.PosNameId)
 
                                   && branch.BranchId == agentSwapFilter.BranchId
