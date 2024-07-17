@@ -33,6 +33,7 @@
     </div>
     <div class="row">
         <div class="col-lg-6">
+
             <ng-select  
             [items]="_insuranceCompanies"
             formControlName="insuranceCompanyId"
@@ -42,9 +43,9 @@
             bindValue="Value" 
             dropdownPosition = "bottom"
             [hideSelected]	=  "true"
+            aria-required=""
           >
           </ng-select>
-          <span style="color:red">*</span>
           </div>
       </div>  
     <div class="row">
@@ -102,14 +103,16 @@
         
         <div class="col-lg-6">
           <mat-form-field >
-            <mat-label>Special Discount Slab</mat-label>
+            <mat-label>Special Discount Slab<span style="color:red">*</span>
+            </mat-label>
             <input matInput formControlName="spldiscountslab" type="number" max="100">
           </mat-form-field>
         </div>
        
         <div class="col-lg-6">
           <mat-form-field >
-            <mat-label>Special Discount Slab Up To</mat-label>
+            <mat-label>Special Discount Slab Up To<span style="color:red">*</span>
+            </mat-label>
             <input matInput type="number" formControlName="spldiscountslabupto" max="100"> 
           </mat-form-field>
         </div>
@@ -204,7 +207,7 @@
                     [items]="_commisonSlabType"
                     formControlName="volumeCriteria"
                     [multiple]="false"
-                    placeholder="Volume Criteria"
+                    placeholder="Volume Criteria *"
                     bindLabel="Name" 
                     bindValue="Value" 
                     dropdownPosition = "bottom"
@@ -214,19 +217,20 @@
                 </div>
                 <div class="col-lg-2">
                     <mat-form-field >
-                    <mat-label>Slab Start (Rs)</mat-label>
+                    <mat-label>Slab Start (Rs) <span style="color:red">*</span>
+                    </mat-label>
                     <input matInput  formControlName="slabStartRs">
                     </mat-form-field>
                 </div>
                 <div class="col-lg-2">
                     <mat-form-field >
-                    <mat-label>Slab Up To (Rs)</mat-label>
+                    <mat-label>Slab Up To (Rs)<span style="color:red">*</span></mat-label>
                     <input matInput  formControlName="slabUptoRs">
                     </mat-form-field>
                 </div>
                 <div class="col-lg-2">
                     <mat-form-field >
-                    <mat-label>Commission Applicable</mat-label>
+                    <mat-label>Commission Applicable<span style="color:red">*</span></mat-label>
                     <input matInput  formControlName="commapplicable" appTwoDigitDecimaNumber>
                     </mat-form-field>
                 </div>
