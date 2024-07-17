@@ -25,7 +25,6 @@
         <EntityTypeShape EntityType="PolicyManagerModel.tblClaimType" Width="1.5" PointX="16.75" PointY="4.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblCluster" Width="1.5" PointX="3" PointY="4.625" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblCommissionPayType" Width="1.5" PointX="16.75" PointY="8.75" />
-        <EntityTypeShape EntityType="PolicyManagerModel.tblCommissionSlab" Width="1.5" PointX="16.75" PointY="12.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblCommissionSlabType" Width="1.5" PointX="5.75" PointY="17.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblCommissionTurnoverType" Width="1.5" PointX="7.75" PointY="17.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblCoverage" Width="1.5" PointX="9.75" PointY="17.75" />
@@ -140,6 +139,8 @@
         <AssociationConnector Association="PolicyManagerModel.FK_tblModal_tblManufacturer" />
         <EntityTypeShape EntityType="PolicyManagerModel.tblRefrenceSource" Width="1.5" PointX="37.375" PointY="0.75" />
         <EntityTypeShape EntityType="PolicyManagerModel.ReconDataDownload" Width="1.5" PointX="16.375" PointY="37.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCommissionSlabNew" Width="1.5" PointX="28.375" PointY="37.75" />
+        <EntityTypeShape EntityType="PolicyManagerModel.tblCommissionSlab" Width="1.5" PointX="0.75" PointY="38.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

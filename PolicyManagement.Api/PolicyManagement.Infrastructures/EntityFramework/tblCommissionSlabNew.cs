@@ -15,10 +15,10 @@ namespace PolicyManagement.Infrastructures.EntityFramework
 using System;
     using System.Collections.Generic;
     
-public partial class tblCommissionSlab
+public partial class tblCommissionSlabNew
 {
 
-    public int CommissionSlabId { get; set; }
+    public int CommissionSlabNewId { get; set; }
 
     public string InsureCompanyId { get; set; }
 
@@ -40,7 +40,7 @@ public partial class tblCommissionSlab
 
     public string FuelTypeId { get; set; }
 
-    public Nullable<int> CommissionSlabTypeId { get; set; }
+    public Nullable<int> CommissionSlabNewTypeId { get; set; }
 
     public Nullable<int> CommissionTurnoverTypeId { get; set; }
 
@@ -71,10 +71,6 @@ public partial class tblCommissionSlab
     public string PolicyTermId { get; set; }
 
     public string BranchId { get; set; }
-
-    public string NcbId { get; set; }
-
-    public string PackageTypeId { get; set; }
 
 }
 

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Newtonsoft.Json;
 using PolicyManagement.Dtos.Common;
 using PolicyManagement.Dtos.Voucher;
 using PolicyManagement.Infrastructures.EntityFramework;
+using PolicyManagement.Models.Common;
 using PolicyManagement.Models.Voucher;
 using PolicyManagement.Services.Base;
 using PolicyManagement.Services.Common.Interface;
@@ -478,6 +480,62 @@ namespace PolicyManagement.Services.Voucher
                 voucher.VerifiedBy = await _dataContext.tblUser.Where(w => w.UserId == voucher.VerifiedId).Select(s => s.UserFullName).FirstOrDefaultAsync();
 
             return voucher;
+        }
+
+        public async Task<CommonDto<string>> AddCommisionSlab(List<CommisionSlabModel> model,BaseModel baseModel)
+        {
+            var commisionSlab =  new tblCommissionSlab();
+            foreach (var v in model) {
+                  commisionSlab.ManufacturerId = JsonConvert.SerializeObject(v.ManufacturerId);
+                  commisionSlab.ProductId = JsonConvert.SerializeObject(v.ManufacturerId);
+                  commisionSlab.ModelId = JsonConvert.SerializeObject(v.ModelId);
+                  commisionSlab.FuelTypeId = JsonConvert.SerializeObject(v.FuelTypeId);
+                  commisionSlab.InsureCompanyId = JsonConvert.SerializeObject(v.InsuranceCompanyId);
+                  commisionSlab.PolicyTypeId = JsonConvert.SerializeObject(v.PolicyType);
+                  commisionSlab.VehicleClassId = JsonConvert.SerializeObject(v.VehicleClassTypeId);
+                  commisionSlab.SlabStart = v.SlabStartRs;
+                  commisionSlab.SlabEnd = v.SlabUptoRs;
+                  commisionSlab.ExshowroomValueEnd = v.ExShowroomUpTo;
+                  commisionSlab.ExshowroomValueStart = v.ExShowroomStart;
+                  commisionSlab.SplDiscountFrom = v.SplDiscountSlab;
+                  commisionSlab.SplDiscountUpTo = v.SplDiscountSlabUpto;
+                  commisionSlab.IsActive = 1;
+                  commisionSlab.CreatedBy = baseModel.LoginUserId;
+                  commisionSlab.CreatedTime = DateTime.Now;
+                  commisionSlab.BranchId = v.BranchId;
+                  commisionSlab.VerticalId = v.VerticalId;
+                  commisionSlab.NcbId = JsonConvert.SerializeObject(v.Ncb);
+                  commisionSlab.PackageTypeId = JsonConvert.SerializeObject(v.PackageType);
+                  commisionSlab.CommissionPercent = v.CommApplicable;
+                _dataContext.tblCommissionSlab.Add(commisionSlab);
+                _dataContext.SaveChanges();
+            }
+
+            return new CommonDto<string>
+            {
+                IsSuccess = true,
+                Message = $"C successfully"
+            };
+
+        }
+
+        public async Task<List<dynamic>> GetCommisionSlab(int branchId)
+        {
+            var query = from slab in _dataContext.tblCommissionSlab
+                        let fuelTypeIds = JsonConvert.DeserializeObject<List<int>>(slab.FuelTypeId ?? "[]") // Handle null JSON
+                        from fuelTypeId in fuelTypeIds.DefaultIfEmpty()
+                        join fuelType in _dataContext.tblFuelType on fuelTypeId equals fuelType.FuelTypeId into fuelTypeGroup
+                        from fuelType in fuelTypeGroup.DefaultIfEmpty()
+                        select new
+                        {
+                            slab.CommissionSlabId,
+                            slab.InsureCompanyId,
+                            FuelTypeId = fuelType.FuelTypeId,
+                            FuelTypeName = fuelType.FuelTypeName
+                        };
+            var result = query.ToList<dynamic>();
+            return result;
+
         }
     }
 }

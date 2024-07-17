@@ -83,6 +83,8 @@ export class Common {
     public static readonly FuelType = "api/common/fueltype";
     public static readonly VehicleClassSegment= "api/common/vehiclesegment";
     public static readonly ManufacturersVehicleClassType = "api/common/manufacturersVehicleclasstype";
+    public static readonly ManufacturersVehicleClassTypeMulti = "api/common/manufacturersVehicleclasstypeMulti";
+    public static readonly ManufacturersModelMulti = "api/common/manufacturersModelMulti";
     public static readonly State = "api/common/state";
     public static readonly MonthCycle = "api/common/monthcycle";
     public static readonly AllPolicyTerms = "api/common/get-all-policyTerms";
@@ -91,4 +93,5 @@ export class Common {
     public static readonly AllPosMaanagedBy = "api/common/get-all-posmanagedby";
     public static readonly AllEndrosementReason = "api/common/get-endrosement-reason";
     public static readonly AllBounceReason = "api/common/bouncereason";
+    public static readonly AllCommisionSlabType = "api/common/commisionslabtype";
 }

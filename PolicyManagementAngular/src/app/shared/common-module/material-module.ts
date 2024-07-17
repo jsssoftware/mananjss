@@ -44,6 +44,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatMomentDateModule } from "@angular/material-moment-adapter";
 import { HasClaimDirective } from '../directives/has-claim.directive';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
     declarations: [
@@ -95,7 +96,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
         MatDatepickerModule,
         MatMomentDateModule,
         HasClaimDirective,
-        NgxDatatableModule
+        NgxDatatableModule,
+        NgSelectModule
     ]
 })
 export class MaterialModule { }

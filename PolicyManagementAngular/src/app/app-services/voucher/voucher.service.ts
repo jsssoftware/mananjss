@@ -32,4 +32,6 @@ export class VoucherService extends IVoucherService {
     verifyVoucher = (voucherId: number, model: any): Observable<ICommonDto<string>> => this.apiManagerService.patchRequest<ICommonDto<string>>(`${Voucher.VerifyVoucher}/${voucherId}`, model);
 
     getVoucherById = (voucherId: number): Observable<IVoucherDto> => this.apiManagerService.getRequest<IVoucherDto>(`${Voucher.VoucherById}/${voucherId}`);
+    addCommisionSlab = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Voucher.AddCommisionSlab, model);
+
 }

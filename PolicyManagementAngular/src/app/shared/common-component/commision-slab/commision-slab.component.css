@@ -1,0 +1,20 @@
+.ngx-datatable.fixed-header .datatable-header .datatable-header-inner .datatable-header-cell {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: normal !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+  }
+
+  ::ng-deep .datatable-scroll {
+    display: block !important;
+}
+
+::ng-deep .datatable-row-wrapper {
+    display: block !important;
+    break-inside: avoid;
+}
+
+.ngx-datatable.material {
+    overflow-wrap: break-word;
+    }

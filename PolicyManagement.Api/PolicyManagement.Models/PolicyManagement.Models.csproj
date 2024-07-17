@@ -87,6 +87,7 @@
     <Compile Include="UserManagement\FormListModel.cs" />
     <Compile Include="UserManagement\UserManagement.cs" />
     <Compile Include="Voucher\AddUpdateVoucherModel.cs" />
+    <Compile Include="Voucher\CommisionSlabModel.cs" />
     <Compile Include="Voucher\SearchVoucherModel.cs" />
     <Compile Include="Voucher\VoucherSearchPolicyModel.cs" />
   </ItemGroup>

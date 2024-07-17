@@ -1706,6 +1706,19 @@ namespace PolicyManagement.Services.Common
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
 
+        public async Task<List<DropDownDto<int>>> FindManufacturersVehicleclassTypeMulti(string VehicleClassTypeId)
+        {
+
+            List<tblManufacturer> result = new List<tblManufacturer>();
+            string[] veharray = VehicleClassTypeId.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var vehClass in veharray)
+            {
+                var vehicleClassTypeId = Int16.Parse(vehClass);
+                result.AddRange (await _dataContext.tblManufacturers.Where(w => w.IsActive == true && w.VehicleClassTypeId == vehicleClassTypeId).OrderBy(o => o.ManufacturerName).ToListAsync());
+            }
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
+
         public async Task<List<DropDownDto<int>>> FindState() => await _dataContext.tblState.Select(s => new DropDownDto<int>
         {
             Name = s.StateName,
@@ -1762,6 +1775,22 @@ namespace PolicyManagement.Services.Common
         public async Task<List<DropDownDto<int>>> FindAllEndrosementReason(int verticalId,int endrosementType) => await _dataContext.tblEndorsementReason.Where(x=>x.InsuranceSegmentId == verticalId || x.InsuranceSegmentId ==  1 && x.IsActive ==  true  && x.EndorsementTypeId ==  endrosementType).Select(s => new DropDownDto<int>{ Name = s.EndorsementReason,Value = s.EndorsementReasonId}).ToListAsync();
 
         public async Task<List<DropDownDto<int>>> FindBounceReason() => await _dataContext.tblBounceReason.Where(x=>x.IsActive==  true).Select(s => new DropDownDto<int> { Name = s.BounceReason, Value = s.BounceReasonId }).ToListAsync();
+
+        public async Task<List<DropDownDto<int>>> FindCommisionSlabType() => await _dataContext.tblCommissionSlabType.Where(x => x.IsActive == true).OrderBy(x=>x.ProcessSequance).Select(s => new DropDownDto<int> { Name = s.CommissionSlabTypeName, Value = s.CommissionSlabTypeId }).ToListAsync();
+
+
+        public async Task<List<DropDownDto<int>>> FindMultModelManufacture(string ManufactureId)
+        {   
+
+            List<tblModel> result = new List<tblModel>();
+            string[] veharray = ManufactureId.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var vehClass in veharray)
+            {
+                var manufactureId = Int16.Parse(vehClass);
+                result.AddRange(await _dataContext.tblModel.Where(w => w.IsActive == true && w.ManufacturerId == manufactureId).ToListAsync());
+            }
+            return _mapper.Map<List<DropDownDto<int>>>(result);
+        }
 
 
 

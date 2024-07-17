@@ -209,5 +209,8 @@ export class CommonService extends ICommonService {
     getAllPosManagedBy = (branchId: number): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.AllPosMaanagedBy}/${branchId}`);
     getAllEndrosementReason = (verticalId: number,endrosementType : number): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.AllEndrosementReason}/${verticalId}/${endrosementType}`);
     getBounceReason = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.AllBounceReason}`);
+    getManufactureByVehicleClassTypeMulti = (vehicleclasstypeId : number[]): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.ManufacturersVehicleClassTypeMulti}/${vehicleclasstypeId}`);
+    getManufacturersModelMulti = (manufactueId : number[]): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.ManufacturersModelMulti}/${manufactueId}`);
+    getCommisonSlabType = (): Observable<IDropDownDto<number>[]> => this.apiManagerService.getRequest<IDropDownDto<string>>(`${Common.AllCommisionSlabType}`);
 
 }

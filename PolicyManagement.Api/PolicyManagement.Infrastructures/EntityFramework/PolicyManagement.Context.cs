@@ -75,8 +75,6 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<tblCommissionPayType> tblCommissionPayType { get; set; }
 
-    public virtual DbSet<tblCommissionSlab> tblCommissionSlab { get; set; }
-
     public virtual DbSet<tblCommissionSlabType> tblCommissionSlabType { get; set; }
 
     public virtual DbSet<tblCommissionTurnoverType> tblCommissionTurnoverType { get; set; }
@@ -286,6 +284,10 @@ public partial class DataContext : DbContext
     public virtual DbSet<tblRefrenceSource> tblRefrenceSource { get; set; }
 
     public virtual DbSet<ReconDataDownload> ReconDataDownload { get; set; }
+
+    public virtual DbSet<tblCommissionSlabNew> tblCommissionSlabNew { get; set; }
+
+    public virtual DbSet<tblCommissionSlab> tblCommissionSlab { get; set; }
 
 
     public virtual int GetOtherHelathPolicy(Nullable<int> policyId, Nullable<int> customerID)

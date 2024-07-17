@@ -102,11 +102,14 @@ export abstract class ICommonService {
     abstract getVehicleSegment(): Observable<IDropDownDto<number>[]>;
     abstract getFuelType(): Observable<IDropDownDto<number>[]>;
     abstract getManufactureByVehicleClassType(VehicleClassId :number): Observable<any>;
+    abstract getManufactureByVehicleClassTypeMulti(VehicleClassId :number[]): Observable<any>;
     abstract getState(): Observable<IDropDownDto<number>[]>;
     abstract getAllPolicyTerms(policyPackageTypeId:number): Observable<any>;
     abstract getAllPlans(productId: number,insuranceCompanyId:number): Observable<IDropDownDto<number>[]>;
     abstract getAllPosManagedBy(branchId: number): Observable<IDropDownDto<number>[]>;
     abstract getAllEndrosementReason(verticalId: number,endrosementTyoe : number): Observable<IDropDownDto<number>[]> ;
     abstract getBounceReason(): Observable<IDropDownDto<number>[]> ;
+    abstract getCommisonSlabType(): Observable<IDropDownDto<number>[]> ;
+    abstract getManufacturersModelMulti(ManufactureId :number[]): Observable<any>;
 
 }

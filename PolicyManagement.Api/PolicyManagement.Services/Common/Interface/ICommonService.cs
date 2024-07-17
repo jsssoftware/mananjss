@@ -106,5 +106,8 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindAllPosManagedBy(int branchId);
         Task<List<DropDownDto<int>>> FindAllEndrosementReason(int verticalId,int endrosementType);
         Task<List<DropDownDto<int>>> FindBounceReason();
+        Task<List<DropDownDto<int>>> FindManufacturersVehicleclassTypeMulti(string VehicleClassTypeId);
+        Task<List<DropDownDto<int>>> FindCommisionSlabType();
+        Task<List<DropDownDto<int>>> FindMultModelManufacture(string ManufactureId);
     }
 }

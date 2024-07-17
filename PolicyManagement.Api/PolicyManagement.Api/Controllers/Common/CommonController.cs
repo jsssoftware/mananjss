@@ -399,5 +399,18 @@ namespace PolicyManagement.Api.Controllers.Common
         [Route("bouncereason")]
         [HttpGet]
         public async Task<IHttpActionResult> GetBounceReason() => Json(await _commonService.FindBounceReason());
+
+        [Route("manufacturersVehicleclasstypeMulti/{vehicleClassTypeId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetManufacturersVehicleclassTypeMulti(string vehicleClassTypeId) => Json(await _commonService.FindManufacturersVehicleclassTypeMulti(vehicleClassTypeId));
+
+        [Route("commisionslabtype")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCommisionSlabType() => Json(await _commonService.FindCommisionSlabType());
+
+        [Route("manufacturersModelMulti/{manufactureId}")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetManufacturersModelMulti(string manufactureId) => Json(await _commonService.FindMultModelManufacture(manufactureId));
+
     }
 }

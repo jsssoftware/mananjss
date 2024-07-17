@@ -1,5 +1,7 @@
-﻿using PolicyManagement.Models.Voucher;
+﻿using PolicyManagement.Models.Common;
+using PolicyManagement.Models.Voucher;
 using PolicyManagement.Services.Voucher.Interface;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -44,5 +46,13 @@ namespace PolicyManagement.Api.Controllers.Voucher
         [Route("{voucherId:int}")]
         [HttpGet]
         public async Task<IHttpActionResult> FindVoucherById(int voucherId) => Json(await _voucherService.FindVoucherById(voucherId));
+
+        [Route("commisionslab")]
+        [HttpPost]
+        public async Task<IHttpActionResult> AddCommisionSlab(List<CommisionSlabModel> commisionSlabModel) => Json(await _voucherService.AddCommisionSlab(commisionSlabModel, new BaseModel()));
+
+        [Route("getcommisionslab")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetCommisionSlab(int branchId) => Json(await _voucherService.GetCommisionSlab(branchId));
     }
 }

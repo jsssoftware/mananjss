@@ -19,8 +19,8 @@ import { InspectionComponent } from './inspection/inspection.component';
 import { AddInspectionComponent } from './inspection/add-inspection/add-inspection.component';
 import { SearchInspectionComponent } from './inspection/search-inspection/search-inspection.component';
 import { SearchPolicyInspectionComponent } from './inspection/search-policy-inspection/search-policy-inspection.component';
-
-
+import { CommisionSlabComponent } from 'src/app/shared/common-component/commision-slab/commision-slab.component';
+import { VoucherService } from 'src/app/app-services/voucher/voucher.service';
 
 @NgModule({
   declarations: [  
@@ -38,6 +38,7 @@ import { SearchPolicyInspectionComponent } from './inspection/search-policy-insp
     AddInspectionComponent,
     SearchInspectionComponent,
     SearchPolicyInspectionComponent,
+    CommisionSlabComponent,
   ],
   imports: [
     CommonModule,
@@ -47,6 +48,7 @@ import { SearchPolicyInspectionComponent } from './inspection/search-policy-insp
     FormsModule,
     ReactiveFormsModule,
     MaterialFileInputModule
-  ]
+  ],
+  providers : [VoucherService]
 })
 export class SubSystemModule { }

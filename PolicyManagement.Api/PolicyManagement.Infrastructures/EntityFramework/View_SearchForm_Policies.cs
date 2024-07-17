@@ -84,6 +84,12 @@ public partial class View_SearchForm_Policies
 
     public short PolicyTypeId { get; set; }
 
+    public string PlanName { get; set; }
+
+    public string PlanTypeName { get; set; }
+
+    public Nullable<int> POSId { get; set; }
+
 }
 
 }

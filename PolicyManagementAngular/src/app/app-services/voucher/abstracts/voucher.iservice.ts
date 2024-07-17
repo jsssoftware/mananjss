@@ -17,4 +17,5 @@ export abstract class IVoucherService {
     abstract updateVoucherControlNumber(voucherId: number, model: any): Observable<ICommonDto<string>>;
     abstract verifyVoucher(voucherId: number, model: any): Observable<ICommonDto<string>>;
     abstract getVoucherById(voucherId: number): Observable<IVoucherDto>;
+    abstract addCommisionSlab(model: any): Observable<any>;
 }

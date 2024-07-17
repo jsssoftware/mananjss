@@ -11,6 +11,7 @@ import { SearchInspectionComponent } from './inspection/search-inspection/search
 import { AddVoucherComponent } from './voucher/add-voucher/add-voucher.component';
 import { SearchVoucherComponent } from './voucher/search-voucher/search-voucher.component';
 import { VoucherComponent } from './voucher/voucher.component';
+import { CommisionSlabComponent } from 'src/app/shared/common-component/commision-slab/commision-slab.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,10 @@ const routes: Routes = [
       {
         path: 'inspection-search/:form-type',
         component: SearchInspectionComponent,
+      },
+      {
+        path: 'commisionslab',
+        component: CommisionSlabComponent,
       }
     ]
   }
