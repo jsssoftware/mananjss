@@ -7,11 +7,8 @@ import { IDropDownDto } from 'src/app/app-entites/dtos/common/drop-down-dto';
 import { ICommonService } from 'src/app/app-services/common-service/abstracts/common.iservice';
 import { ReportService } from 'src/app/app-services/report-service/report.service';
 import { Vertical } from 'src/app/shared/utilities/enums/enum';
-import { WorkBook, WorkSheet, utils, writeFile } from 'xlsx';
 import { DatePipe } from '@angular/common';
-import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { VoucherService } from 'src/app/app-services/voucher/voucher.service';
-import { TwoDigitDecimaNumberDirective } from 'src/app/shared/utilities/directive/twodecimal.directive';
 
 @Component({
   selector: 'app-commision-slab',
@@ -93,7 +90,7 @@ export class CommisionSlabComponent implements OnInit {
     this._branchId = sessionStorage.getItem("branchId");
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
    
     this.commisionslab.get("insuranceCompanyId")?.valueChanges.subscribe(input => {
       this.commisionslab.patchValue({
@@ -148,14 +145,15 @@ export class CommisionSlabComponent implements OnInit {
     });
 
     
-    this.getInsuranceCompanies();
-    this.getPolicyTypes();
-    this.getVehicleClasses();
-    this.getNcbs();
-    this.getFuelType();
-    this.getPackageTypes();
-    this.getCommisonSlabType();
-    this.getManufacturers();
+  await  this.getInsuranceCompanies();
+  await  this.getPolicyTypes();
+  await  this.getVehicleClasses();
+  await  this.getNcbs();
+  await  this.getFuelType();
+  await  this.getPackageTypes();
+  await  this.getCommisonSlabType();
+  await  this.getManufacturers();
+  await  this.getCommisionSlab();
   }
 
   getInsuranceCompanyName(value: number): string {
@@ -300,6 +298,16 @@ export class CommisionSlabComponent implements OnInit {
   getManufacturers(): void {
     this.commonService.getManufacturers().subscribe((response: any) => {
       this._manufacturers = response;
+    });
+  }
+
+
+  getCommisionSlab(): void {
+    this.voucherService.getCommisionSlab(this._branchId).subscribe((response: any) => {
+      debugger
+      this.rows.forEach(element => {
+        insuranceCompanyName : this.convertIdsToCommaSeperatedString(element.commison.InsureCompanyId, this._insuranceCompanies)
+      });
     });
   }
 
