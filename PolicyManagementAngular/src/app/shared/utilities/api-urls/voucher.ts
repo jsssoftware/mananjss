@@ -7,4 +7,5 @@ export class Voucher {
     public static readonly SearchVouchers = "api/voucher/search";
     public static readonly VoucherById = "api/voucher";
     public static readonly AddCommisionSlab = "api/voucher/commisionslab";
+    public static readonly GetCommsionSlab = "api/voucher/getcommisionslab";
 }

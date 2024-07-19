@@ -51,7 +51,7 @@ namespace PolicyManagement.Api.Controllers.Voucher
         [HttpPost]
         public async Task<IHttpActionResult> AddCommisionSlab(List<CommisionSlabModel> commisionSlabModel) => Json(await _voucherService.AddCommisionSlab(commisionSlabModel, new BaseModel()));
 
-        [Route("getcommisionslab")]
+        [Route("getcommisionslab/{branchId:int}")]
         [HttpGet]
         public async Task<IHttpActionResult> GetCommisionSlab(int branchId) => Json(await _voucherService.GetCommisionSlab(branchId));
     }

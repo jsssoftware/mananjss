@@ -521,17 +521,11 @@ namespace PolicyManagement.Services.Voucher
 
         public async Task<List<dynamic>> GetCommisionSlab(int branchId)
         {
-            var query = from slab in _dataContext.tblCommissionSlab
-                        let fuelTypeIds = JsonConvert.DeserializeObject<List<int>>(slab.FuelTypeId ?? "[]") // Handle null JSON
-                        from fuelTypeId in fuelTypeIds.DefaultIfEmpty()
-                        join fuelType in _dataContext.tblFuelType on fuelTypeId equals fuelType.FuelTypeId into fuelTypeGroup
-                        from fuelType in fuelTypeGroup.DefaultIfEmpty()
+            var query = from commison in _dataContext.tblCommissionSlab
+                    
                         select new
                         {
-                            slab.CommissionSlabId,
-                            slab.InsureCompanyId,
-                            FuelTypeId = fuelType.FuelTypeId,
-                            FuelTypeName = fuelType.FuelTypeName
+                            commison
                         };
             var result = query.ToList<dynamic>();
             return result;
