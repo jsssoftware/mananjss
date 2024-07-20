@@ -94,4 +94,6 @@ export class Common {
     public static readonly AllEndrosementReason = "api/common/get-endrosement-reason";
     public static readonly AllBounceReason = "api/common/bouncereason";
     public static readonly AllCommisionSlabType = "api/common/commisionslabtype";
+    public static readonly AllCommisionSlabTurnOverType = "api/common/commisionturnoverratio";
+    public static readonly AllModels = "api/common/mastermodels";
 }

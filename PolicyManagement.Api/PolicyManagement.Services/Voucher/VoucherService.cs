@@ -12,6 +12,7 @@ using PolicyManagement.Utilities.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Migrations;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -486,6 +487,12 @@ namespace PolicyManagement.Services.Voucher
         {
             var commisionSlab =  new tblCommissionSlab();
             foreach (var v in model) {
+                if (v.CommisionSlabId != 0)
+                {
+                    commisionSlab.ModifiedBy = baseModel.LoginUserId;
+                    commisionSlab.ModifiedTime = DateTime.Now;
+                }
+                commisionSlab.CommissionSlabId = v.CommisionSlabId;
                   commisionSlab.ManufacturerId = JsonConvert.SerializeObject(v.ManufacturerId);
                   commisionSlab.ProductId = JsonConvert.SerializeObject(v.ManufacturerId);
                   commisionSlab.ModelId = JsonConvert.SerializeObject(v.ModelId);
@@ -507,28 +514,26 @@ namespace PolicyManagement.Services.Voucher
                   commisionSlab.NcbId = JsonConvert.SerializeObject(v.Ncb);
                   commisionSlab.PackageTypeId = JsonConvert.SerializeObject(v.PackageType);
                   commisionSlab.CommissionPercent = v.CommApplicable;
-                _dataContext.tblCommissionSlab.Add(commisionSlab);
+                  commisionSlab.VerticalId = v.VerticalId;
+                  commisionSlab.CommissionSlabTypeId = v.VolumeCriteria;
+                  commisionSlab.CommissionTurnoverTypeId = v.TurnOverRatio;
+
+                _dataContext.tblCommissionSlab.AddOrUpdate(commisionSlab);
                 _dataContext.SaveChanges();
             }
 
             return new CommonDto<string>
             {
                 IsSuccess = true,
-                Message = $"C successfully"
+                Message = $"Commission Slab successfully"
             };
 
         }
 
-        public async Task<List<dynamic>> GetCommisionSlab(int branchId)
+        public async Task<List<dynamic>> GetCommisionSlab(string branchId,int verticalId)
         {
-            var query = from commison in _dataContext.tblCommissionSlab
-                    
-                        select new
-                        {
-                            commison
-                        };
-            var result = query.ToList<dynamic>();
-            return result;
+            var query = await _dataContext.tblCommissionSlab.Where(x=>x.BranchId == branchId && x.VerticalId ==  verticalId).ToListAsync<dynamic>();
+            return query;
 
         }
     }

@@ -9,6 +9,8 @@ import { ReportService } from 'src/app/app-services/report-service/report.servic
 import { Vertical } from 'src/app/shared/utilities/enums/enum';
 import { DatePipe } from '@angular/common';
 import { VoucherService } from 'src/app/app-services/voucher/voucher.service';
+import { CommonFunction } from '../../utilities/helpers/common-function';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-commision-slab',
@@ -25,10 +27,14 @@ export class CommisionSlabComponent implements OnInit {
   public _vehicleClass: IDropDownDto<number>[] = [];
   public _fuelType: IDropDownDto<number>[] = [];
   public _commisonSlabType: IDropDownDto<number>[] = [];
+  public _commisonSlabTurnOverRation: IDropDownDto<number>[] = [];
   public _manufactures: IDropDownDto<number>[] = [];
   public _ncbs: IDropDownDto<number>[] = [];
   public _model: IDropDownDto<number>[] = [];
+  public _allmodel: IDropDownDto<number>[] = [];
   public _manufacturers: IDropDownDto<number>[] = [];
+  public _products: IDropDownDto<number>[] = [];
+  public _verticals: IDropDownDto<number>[] = [];
   public _filteredInsuranceCompaniesOptions: IDropDownDto<number>[] = [];
   private _branchId: any;
   public isMotor :boolean = true;
@@ -57,6 +63,7 @@ export class CommisionSlabComponent implements OnInit {
     insuranceCompanyId: new FormControl('', [Validators.required]),
     policyType: new FormControl(''),
     verticalId: new FormControl(''),
+    verticalClassId: new FormControl(1),
     vehicleClassTypeId: new FormControl(''),
     manufacturerId: new FormControl(''),
     modelId: new FormControl(''),
@@ -79,13 +86,18 @@ export class CommisionSlabComponent implements OnInit {
     policyTypeName: new FormControl(''),
     fuelTypeName: new FormControl(''),
     packageTypeName: new FormControl(''),
-    branchId :  new FormControl('')
+    branchId :  new FormControl(''),
+    turnOverRatio :  new FormControl(''),
+    productId :  new FormControl(''),
+    rowIndex :  new FormControl(0),
+    commisionSlabId :  new FormControl(null)
  })
   constructor(
     private commonService: ICommonService,
     private reportService: ReportService,
     private datePipe: DatePipe,
-    private voucherService: VoucherService
+    private voucherService: VoucherService,
+    private commonFunction :CommonFunction
   ) { 
     this._branchId = sessionStorage.getItem("branchId");
   }
@@ -108,7 +120,7 @@ export class CommisionSlabComponent implements OnInit {
     this.commisionslab.get("manufacturerId")?.valueChanges.subscribe(input => {
     
       this.commisionslab.patchValue({
-        manufactureName : this.convertIdsToCommaSeperatedString(input, this._manufactures)
+        manufactureName : this.convertIdsToCommaSeperatedString(input, this._manufacturers)
       });
 
       
@@ -153,7 +165,10 @@ export class CommisionSlabComponent implements OnInit {
   await  this.getPackageTypes();
   await  this.getCommisonSlabType();
   await  this.getManufacturers();
-  await  this.getCommisionSlab();
+  await  this.getCommsionTurnOverType();
+  await this.getAllModels();
+  await  this.getCommisionSlab(true);
+
   }
 
   getInsuranceCompanyName(value: number): string {
@@ -165,6 +180,11 @@ export class CommisionSlabComponent implements OnInit {
   getInsuranceCompanies(): any {
     this.commonService.getInsuranceCompanies(Vertical.Motor).subscribe((response: any[]) => {
       this._insuranceCompanies =  response;
+    });
+  }
+  getCommsionTurnOverType(): any {
+    this.commonService.getCommsionTurnOverType().subscribe((response: any[]) => {
+      this._commisonSlabTurnOverRation =  response;
     });
   }
 
@@ -185,7 +205,6 @@ export class CommisionSlabComponent implements OnInit {
   }
   
   submit(){
-    this.commisionslab.get("branchId").setValue(this._branchId);
     let policyStartDate = this.commonService.getDateInString(new Date(this.commisionslab.value.expiryDateFrom_dump));
     let policyEndDate = this.commonService.getDateInString(new Date(this.commisionslab.value.expiryDateTo_dump));
 
@@ -195,20 +214,66 @@ export class CommisionSlabComponent implements OnInit {
     });
 
     this.voucherService.addCommisionSlab(this.rows).subscribe((response: ICommonDto<any>) => {
-     
+      if (response.IsSuccess) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Done',
+          text: response.Message,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.reset();
+            this.getCommisionSlab(this.isMotor);
+          };
+        })
+      }
+      else {
+        if (response.Response == null) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Sorry',
+            text: response.Message,
+          });
+        }
+        else {
+          if (response.Response.IsError) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Sorry',
+              text: response.Message,
+            });
+          }
+          else {
+            Swal.fire({
+              title: 'Warning',
+              text: response.Message,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Yes, Save it!',
+              cancelButtonText: 'Cancel'
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                
+
+              }
+            })
+          }
+        }
+      }
     });
 
   }
 
   reset(){
-    this.commisionslab.reset()
+    this.commisionslab.reset();
+    this.isUpdate = false;
+    this.commisionslab.patchValue({
+      verticalClassId: 1
+    });
   }
 
   getPolicyTypes(): any {
-    this.commonService.getPolicyTypes(Vertical.Motor).subscribe((response: any) => {
+    this.commonService.getPolicyTypes(6).subscribe((response: any) => {
       this._policyTypes = response;
-     
-      this.getPolicyTerms()
     });
   }
 
@@ -225,12 +290,14 @@ export class CommisionSlabComponent implements OnInit {
     });
   }
 
-  
-
-  
-
   getModels(): any {
     this.commonService.getManufacturersModelMulti(this.commisionslab.value.manufacturerId).subscribe((response: IDropDownDto<number>[]) => {
+      this._model  = response;
+      
+    });
+  }
+  getModelsValue(value): any {
+    this.commonService.getManufacturersModelMulti(value).subscribe((response: IDropDownDto<number>[]) => {
       this._model  = response;
       
     });
@@ -246,7 +313,15 @@ export class CommisionSlabComponent implements OnInit {
   onRadioChange(event: MatRadioChange): void {
     if(event.value == 1){
       this.isMotor = true;
+      this.commisionslab.patchValue({
+        verticalClassId: 1
+      });
     }else{
+      this.getProducts();
+      this.getVerticals();
+      this.commisionslab.patchValue({
+        verticalClassId: 2
+      });
       this.isMotor = false;
     }
   }
@@ -258,12 +333,32 @@ export class CommisionSlabComponent implements OnInit {
     });
   }
   addcommision(){
+    if( this.commisionslab.value.verticalClassId == 1){
+      this.commisionslab.patchValue({
+        verticalId: 1,
+      });
+    }
+    this.commisionslab.get("branchId").setValue(this._branchId);
     const formData = this.commisionslab.value;
-    // Add formData to your ngx-datatable rows or handle as needed
-    this.rows = [...this.rows, formData]; // Create a new array with updated data
+    if(!this.isUpdate){
+      var rowIndex = this.rows.length  == 0 ? 0 :this.rows.length + 1;
+      this.rows = [...this.rows,formData];
 
-    // Optional: Clear the form after submission
-    this.commisionslab.reset();
+    }else{
+    this.rows.splice(this.commisionslab.value.rowIndex, 1, formData);
+    this.rows = [...this.rows];
+    }
+    this.commisionslab.patchValue({
+      rowIndex : rowIndex
+    })
+
+    this.reset();
+  }
+
+
+   updateCommision(index: any) {
+    this.rows.splice(index, 1);
+    this.rows = [...this.rows]; 
   }
 
   
@@ -282,7 +377,7 @@ export class CommisionSlabComponent implements OnInit {
   convertIdsToCommaSeperatedString(ids: number[], data: any[]): string {
     // Filter data based on IDs passed
     if(ids!= null && ids.length >0){
-    const filteredData = data.filter(item => ids.includes(item.Value));
+    const filteredData = data.filter(item => ids.some(id => id === item.Value));
   
     // Extract names from filtered data
     const names = filteredData.map(item => item.Name);
@@ -302,29 +397,87 @@ export class CommisionSlabComponent implements OnInit {
   }
 
 
-  getCommisionSlab(): void {
-    this.voucherService.getCommisionSlab(this._branchId).subscribe((response: any) => {
-      debugger
-      this.rows.forEach(element => {
-        insuranceCompanyName : this.convertIdsToCommaSeperatedString(element.commison.InsureCompanyId, this._insuranceCompanies)
-      });
+  getAllModels(): void {
+    this.commonService.getAllModels().subscribe((response: any) => {
+      this._allmodel = response;
     });
   }
 
 
+  getCommisionSlab(boolean): void {
+    this.commisionslab.patchValue({
+      verticalId: 1
+    });
+    this.voucherService.getCommisionSlab(this._branchId,this.commisionslab.value.verticalId).subscribe(async (response: any) => {
+      let incrementNumber = 0
+      let models = this.commonFunction.mergeArrays(response,['ManufacturerId'])
+      await this.getModelsValue(models);
+      this.rows = await response.map(x => ({
+        insuranceCompanyName: this.convertIdsToCommaSeperatedString(JSON.parse(x.InsureCompanyId), this._insuranceCompanies),
+        vehicleClassName: this.convertIdsToCommaSeperatedString(JSON.parse(x.VehicleClassId), this._vehicleClass),
+        manufactureName: this.convertIdsToCommaSeperatedString(JSON.parse(x.ManufacturerId), this._manufacturers),
+        modelName: this.convertIdsToCommaSeperatedString(JSON.parse(x.ModelId), this._allmodel),
+        fuelTypeName: this.convertIdsToCommaSeperatedString(JSON.parse(x.FuelTypeId), this._fuelType),
+        policyTypeName: this.convertIdsToCommaSeperatedString(JSON.parse(x.PolicyTypeId), this._policyTypes),
+        insuranceCompanyId: JSON.parse(x.InsureCompanyId),
+        policyType: JSON.parse(x.PolicyTypeId),
+        verticalId: JSON.parse(x.VerticalId),
+        vehicleClassTypeId: JSON.parse(x.VehicleClassId),
+        manufacturerId: JSON.parse(x.ManufacturerId),
+        modelId: JSON.parse(x.ModelId),
+        spldiscountslab: x.SplDiscountFrom,
+        spldiscountslabupto: x.SplDiscountUpTo,
+        packageType:JSON.parse(x.PackageTypeId),
+        fuelTypeId:JSON.parse(x.FuelTypeId),
+        ncb: JSON.parse(x.NcbId),
+        volumeCriteria: x.CommissionSlabTypeId,
+        slabStartRs:x.SlabStart,
+        exShowroomStart: x.ExshowroomValueStart,
+        slabUptoRs: x.SlabEnd ,
+        exShowroomUpTo: x.ExshowroomValueEnd,
+        commapplicable:x.CommissionPercent,
+        turnOverRatio: x.CommissionTurnoverTypeId,
+        rowIndex :  incrementNumber++,
+        commisionSlabId: x.CommissionSlabId,
+        branchId: x.BranchId
+      }));
+      this.rows = [...this.rows];
+    });
+  }
+
+
+  
   onActivate(event) {
     if (event.type === 'dblclick') {
       this.onRowDoubleClick(event.row);
     }
   }
 
-  onRowDoubleClick(row) {
+  isUpdate: boolean =  false
+  onRowDoubleClick(row:any) {
+    const lowerCaseFormValues:any =this.commonFunction.lowerCaseFirstCharacter(row);
     this.commisionslab.patchValue({
-      ...row
+      ...lowerCaseFormValues
+    });
+    this.getModels();
+    this.commisionslab.patchValue({
+      modelId: row.modelId
+    });
+    this.isUpdate = true
+  }
+
+  
+  getProducts(): void {
+    this.commonService.getProduct().subscribe((response: any) => {
+      this._products = response;
     });
   }
-  
-  
+
+  getVerticals(): void {
+    this.commonService.getVerticals().subscribe((response: any) => {
+      this._verticals = response;
+    });
+  }
 
 
 }

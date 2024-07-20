@@ -412,5 +412,13 @@ namespace PolicyManagement.Api.Controllers.Common
         [HttpGet]
         public async Task<IHttpActionResult> GetManufacturersModelMulti(string manufactureId) => Json(await _commonService.FindMultModelManufacture(manufactureId));
 
+        [Route("commisionturnoverratio")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetTurnOverRation() => Json(await _commonService.FindTurnOverRation());
+
+        [Route("mastermodels")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAllModels() => Json(await _commonService.FindAllModels());
+
     }
 }

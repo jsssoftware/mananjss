@@ -111,5 +111,7 @@ export abstract class ICommonService {
     abstract getBounceReason(): Observable<IDropDownDto<number>[]> ;
     abstract getCommisonSlabType(): Observable<IDropDownDto<number>[]> ;
     abstract getManufacturersModelMulti(ManufactureId :number[]): Observable<any>;
+    abstract getCommsionTurnOverType(): Observable<any>;
+    abstract getAllModels(): Observable<any>;
 
 }

@@ -73,4 +73,16 @@ export class CommonFunction {
     }
     return null;
   }
+
+  mergeArrays(array: any[], properties: string[]): number[] {
+    return array.reduce((acc, item) => {
+      properties.forEach(prop => {
+        if (item[prop]) {
+          const parsedArray = Array.isArray(item[prop]) ? item[prop] : JSON.parse(item[prop]);
+          acc = acc.concat(parsedArray);
+        }
+      });
+      return acc;
+    }, []);
+  }
 }

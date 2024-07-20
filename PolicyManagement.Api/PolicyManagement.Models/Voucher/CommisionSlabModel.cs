@@ -20,7 +20,7 @@ namespace PolicyManagement.Models.Voucher
         public List<int> PackageType { get; set; }
         public List<int> FuelTypeId { get; set; }
         public List<int> Ncb { get; set; }
-        public string VolumeCriteria { get; set; }
+        public int? VolumeCriteria { get; set; }
         public int? SlabStartRs { get; set; }
         public int? ExShowroomStart { get; set; }
         public int? SlabUptoRs { get; set; }
@@ -35,5 +35,8 @@ namespace PolicyManagement.Models.Voucher
         public string FuelTypeName { get; set; }
         public string PackageTypeName { get; set; }
         public string BranchId { get; set; }
+        public int? TurnOverRatio { get; set; }
+        public int CommisionSlabId { get; set; }
+
     }
 }

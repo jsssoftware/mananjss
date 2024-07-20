@@ -1792,7 +1792,17 @@ namespace PolicyManagement.Services.Common
             return _mapper.Map<List<DropDownDto<int>>>(result);
         }
 
+        public async Task<List<DropDownDto<int>>> FindTurnOverRation() => await _dataContext.tblCommissionTurnoverType.Where(x => x.IsActive == true).Select(s => new DropDownDto<int> { Name = s.CommissionTurnoverTypeName, Value = s.CommissionTurnoverTypeId }).ToListAsync();
 
+        public async Task<List<DropDownDto<int>>> FindAllModels() =>
+        await _dataContext.tblModel.Where(w => w.IsActive == true)
+                                .Select(s => new DropDownDto<int>
+                                {
+                                    Name = s.ModelName,
+                                    Value = s.ModelId
+                                })
+                                .OrderBy(o => o.Name)
+                                .ToListAsync();
 
     }
 }

@@ -109,5 +109,7 @@ namespace PolicyManagement.Services.Common.Interface
         Task<List<DropDownDto<int>>> FindManufacturersVehicleclassTypeMulti(string VehicleClassTypeId);
         Task<List<DropDownDto<int>>> FindCommisionSlabType();
         Task<List<DropDownDto<int>>> FindMultModelManufacture(string ManufactureId);
+        Task<List<DropDownDto<int>>> FindTurnOverRation();
+        Task<List<DropDownDto<int>>> FindAllModels();
     }
 }
