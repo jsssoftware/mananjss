@@ -26,7 +26,7 @@ namespace PolicyManagement.Models.Endrosement
         public int PolicyId { get; set; }
         public short? BranchId { get; set; }
         public int VerticalId { get; set; }
-        public DateTime? EndrosementDate { get; set; }
+        public string EndrosementDate { get; set; }
         public short EndrosementReason { get; set; }
         public short ManufactureId { get; set; }
         public int? OD { get; set; }

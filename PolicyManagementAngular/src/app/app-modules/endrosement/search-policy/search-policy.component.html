@@ -132,7 +132,8 @@
   
           <div  class="col-sm-1">
            
-              <button mat-flat-button color="primary" [ngStyle]="{'background-color':  '#fdcb6e'}"  type="submit"  [disabled]="!endrosementSearch.valid">
+              <button mat-flat-button color="primary" [ngStyle]="{'background-color':  '#fdcb6e'}"  type="submit" 
+              [disabled]="!endrosementSearch.valid && (endrosementSearch.touched ||  endrosementSearch.dirty)">
                Search
               </button>
           </div>

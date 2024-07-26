@@ -150,6 +150,8 @@ namespace PolicyManagement.Services.EndrosementService
         {
             try
             {
+               // var EndrosementDate = DateTime.ParseExact(model.EndrosementDate, "MM/dd/yyyy", CultureInfo.InvariantCulture);
+
 
                 tblMotorPolicyData motorPolicyData = await _dataContext.tblMotorPolicyDatas.FirstOrDefaultAsync(f => f.PolicyId == model.PolicyId);
                 var endrosementData = new tblEndorsementData();
@@ -160,7 +162,8 @@ namespace PolicyManagement.Services.EndrosementService
                 endrosementData.BranchId = model.BranchId;
                 endrosementData.CreatedBy = baseModel.LoginUserId;
                 endrosementData.CreatedTime =  DateTime.Now;
-                endrosementData.EndorsementEntryDate = model.EndrosementDate.Value;
+                endrosementData.EndorsementEntryDate = DateTime.Now;
+                endrosementData.EndorsementDate = DateTime.Now;
 
                 endrosementData.IsActive = true;
                 endrosementData.PolicyTypeId = model.PolicyTypeId;
@@ -175,11 +178,9 @@ namespace PolicyManagement.Services.EndrosementService
                     Message = "Invalid Policy Id"
                 };
 
-                if (model.EndrosementDate.HasValue)
-                {
+                
 
-                   endrosementData.EndorsementDate =DateTime.Now;
-                }
+                
 
                 if (model.ManufactureId != 0)
                 {
@@ -249,7 +250,7 @@ namespace PolicyManagement.Services.EndrosementService
 
                 if (model.Cngidv.HasValue)
                 {
-                    if(endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfCNGLPG)
+                    if(endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfCNGLPG || endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfIDV)
                     {
                         motorPolicyData.CNGIDV  = motorPolicyData.CNGIDV -  model.Cngidv;
                         totalIdv -= model.Cngidv?? 0;
@@ -264,7 +265,7 @@ namespace PolicyManagement.Services.EndrosementService
 
                 if (model.VehicleIdv.HasValue)
                 {
-                    if (endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfCNGLPG)
+                    if (endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfCNGLPG || endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfIDV)
                     {
                         motorPolicyData.VehicleIDV = motorPolicyData.VehicleIDV - model.VehicleIdv;
                         totalIdv -= model.VehicleIdv ?? 0;
