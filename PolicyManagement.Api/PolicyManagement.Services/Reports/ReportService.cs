@@ -414,6 +414,12 @@ namespace PolicyManagement.Services.Reports
                 {
                     Message = "Invalid Policy Id"
                 };
+
+                var oldpos =  _dataContext.tblPOS.FirstOrDefault(x => x.POSId == motorPolicyData.POSId)?.POSName;
+                var oldtelecaller =  _dataContext.tblTeamMember.FirstOrDefault(x => x.TeamMemberId == motorPolicyData.TeleCallerId)?.TeamMemberName;
+                var oldfos =  _dataContext.tblTeamMember.FirstOrDefault(x => x.TeamMemberId == motorPolicyData.FOSId)?.TeamMemberName;
+                var oldrefrence =  _dataContext.tblTeamMember.FirstOrDefault(x => x.TeamMemberId == motorPolicyData.ReferenceId)?.TeamMemberName;
+              
                 motorPolicyData.ReferenceId = model.ReferenceId;
                 motorPolicyData.TeleCallerId = model.TeleCallerId;
                 motorPolicyData.FOSId = model.FosId;
@@ -422,6 +428,54 @@ namespace PolicyManagement.Services.Reports
                 motorPolicyData.CreatedTime = DateTime.Now;
                 motorPolicyData.ModifiedBy = baseModel.LoginUserId;
                 motorPolicyData.ModifiedTime = DateTime.Now;
+                motorPolicyData.POSCommissionReceived = (int)POSCommsisionStatus.NOTRECIEVED;
+                motorPolicyData.POSCommMonthCycleId = null;
+
+                var tblAgentSwap = new tblAgentSwapping();
+                tblAgentSwap.FOS = motorPolicyData.FOSId.ToString();
+                tblAgentSwap.Reference = motorPolicyData.ReferenceId.ToString();
+                tblAgentSwap.PolicyRemarks = motorPolicyData.PolicyRemarks;
+                tblAgentSwap.BranchId = motorPolicyData.BranchId;
+                tblAgentSwap.BusinessDoneBy = motorPolicyData.BusinessDoneBy;
+                tblAgentSwap.SwappingDate = DateTime.Now;
+                tblAgentSwap.VerticalId = motorPolicyData.VerticalId;
+                tblAgentSwap.PolicyId = motorPolicyData.PolicyId;
+                tblAgentSwap.POSId = motorPolicyData.POSId;
+                tblAgentSwap.DataChangeType = "Old Data";
+                tblAgentSwap.IsActive = true;
+                tblAgentSwap.POS = oldpos;
+                tblAgentSwap.Reference = oldtelecaller;
+                tblAgentSwap.FOS = oldfos;
+                tblAgentSwap.Telecaller = oldrefrence;
+                tblAgentSwap.DSACommissionReceived = motorPolicyData.POSCommissionReceived ?? 0;
+                tblAgentSwap.DSACommMonthCycleIId = motorPolicyData.POSCommMonthCycleId ?? 0;
+
+                var tblcommsionCalculations = _dataContext.tblCommissionCalculation.Where(x => x.PolicyId == motorPolicyData.PolicyId && x.POsId == motorPolicyData.POSId).FirstOrDefault();
+                tblcommsionCalculations.PolicyMainType = "Agent Swap Update - old OD" + tblcommsionCalculations.OD;
+                tblcommsionCalculations.OD = 0;
+                tblcommsionCalculations.CommisionPercentage= 0;
+
+                var tblAgentSwap1 = new tblAgentSwapping();
+                tblAgentSwap1.FOS = model.FosId.ToString();
+                tblAgentSwap1.Reference = model.ReferenceId.ToString();
+                tblAgentSwap1.PolicyRemarks = model.PolicyRemarks;
+                tblAgentSwap1.BranchId = motorPolicyData.BranchId;
+                tblAgentSwap1.BusinessDoneBy = motorPolicyData.BusinessDoneBy;
+                tblAgentSwap1.SwappingDate = DateTime.Now;
+                tblAgentSwap1.VerticalId = motorPolicyData.VerticalId;
+                tblAgentSwap1.PolicyId = motorPolicyData.PolicyId;
+                tblAgentSwap1.POSId = model.PosNameId;
+                tblAgentSwap1.DataChangeType = "New Data";
+                tblAgentSwap1.IsActive = true;
+                tblAgentSwap1.POS = model.Pos;
+                tblAgentSwap1.Reference = model.Reference;
+                tblAgentSwap1.FOS = model.Fos;
+                tblAgentSwap1.Telecaller = model.Telecaller;
+
+                _dataContext.tblAgentSwapping.Add(tblAgentSwap1);
+                _dataContext.tblAgentSwapping.Add(tblAgentSwap);
+                _dataContext.tblCommissionCalculation.Add(tblcommsionCalculations);
+
                 await _dataContext.SaveChangesAsync();
                 return new CommonDto<object>
                 {

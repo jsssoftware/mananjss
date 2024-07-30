@@ -12,6 +12,7 @@ import { AddVoucherComponent } from './voucher/add-voucher/add-voucher.component
 import { SearchVoucherComponent } from './voucher/search-voucher/search-voucher.component';
 import { VoucherComponent } from './voucher/voucher.component';
 import { CommisionSlabComponent } from 'src/app/shared/common-component/commision-slab/commision-slab.component';
+import { DsaCommisonComponent } from 'src/app/shared/common-component/dsa-commison/dsa-commison.component';
 
 const routes: Routes = [
   {
@@ -60,6 +61,10 @@ const routes: Routes = [
       {
         path: 'commisionslab',
         component: CommisionSlabComponent,
+      },
+      {
+        path: 'dsacommission',
+        component: DsaCommisonComponent,
       }
     ]
   }

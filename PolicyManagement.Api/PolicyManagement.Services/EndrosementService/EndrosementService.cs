@@ -403,8 +403,8 @@ namespace PolicyManagement.Services.EndrosementService
               model.EndrosementReason != (int)EndorsementReason.NCBRecoverable &&
               model.EndrosementReason != (int)EndorsementReason.CancellationChequeBounce))
                 {
-                    var endrosementDataList = _dataContext.tblEndorsementData.Where(x => x.PolicyId == model.PolicyId).ToList();
-                    var isduplicateEndroement = endrosementDataList.Select(x => x.EndorsementReasonId == model.EndrosementReason).Count();
+                    var endrosementDataList = _dataContext.tblEndorsementData.Where(x => x.PolicyId == model.PolicyId && x.EndorsementReasonId == model.EndrosementReason).ToList();
+                    var isduplicateEndroement = endrosementDataList.Count();
                     if (isduplicateEndroement > 0)
                     {
                         return new CommonDto<object>

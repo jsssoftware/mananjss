@@ -21,6 +21,7 @@ import { SearchInspectionComponent } from './inspection/search-inspection/search
 import { SearchPolicyInspectionComponent } from './inspection/search-policy-inspection/search-policy-inspection.component';
 import { CommisionSlabComponent } from 'src/app/shared/common-component/commision-slab/commision-slab.component';
 import { VoucherService } from 'src/app/app-services/voucher/voucher.service';
+import { DsaCommisonComponent } from 'src/app/shared/common-component/dsa-commison/dsa-commison.component';
 
 @NgModule({
   declarations: [  
@@ -39,6 +40,7 @@ import { VoucherService } from 'src/app/app-services/voucher/voucher.service';
     SearchInspectionComponent,
     SearchPolicyInspectionComponent,
     CommisionSlabComponent,
+    DsaCommisonComponent
   ],
   imports: [
     CommonModule,

@@ -143,13 +143,13 @@
     <Compile Include="EntityFramework\tblCluster.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\tblCommissionCalculation.cs">
+      <DependentUpon>PolicyManagement.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\tblCommissionPayType.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\tblCommissionSlab.cs">
-      <DependentUpon>PolicyManagement.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityFramework\tblCommissionSlabNew.cs">
       <DependentUpon>PolicyManagement.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\tblCommissionSlabType.cs">

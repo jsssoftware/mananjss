@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using DocumentFormat.OpenXml.Office.Word;
+using DocumentFormat.OpenXml.Office2019.Drawing.Model3D;
 using Newtonsoft.Json;
 using PolicyManagement.Dtos.Common;
 using PolicyManagement.Dtos.Voucher;
 using PolicyManagement.Infrastructures.EntityFramework;
 using PolicyManagement.Models.Common;
+using PolicyManagement.Models.Report;
 using PolicyManagement.Models.Voucher;
 using PolicyManagement.Services.Base;
 using PolicyManagement.Services.Common.Interface;
@@ -530,11 +533,469 @@ namespace PolicyManagement.Services.Voucher
 
         }
 
-        public async Task<List<dynamic>> GetCommisionSlab(string branchId,int verticalId)
+        public async Task<List<dynamic>> GetCommisionSlab(int branchId,int verticalId)
         {
             var query = await _dataContext.tblCommissionSlab.Where(x=>x.BranchId == branchId && x.VerticalId ==  verticalId).ToListAsync<dynamic>();
             return query;
 
         }
+
+        public async Task<CommonDto<string>> InsertCommisionSlabCalculation(PosCommisonMotorModel posCommisonMotorModel)
+        {
+
+            var varMonthCycleId = posCommisonMotorModel.MonthCycleId;
+            var varBranchId = posCommisonMotorModel.BranchId;
+            var dtpChkTo = posCommisonMotorModel.MonthCycleId;
+
+            var combinedQuery =
+                    from motorPolicy in _dataContext.tblMotorPolicyDatas
+                    join insuranceCompany in _dataContext.tblInsuranceCompany on motorPolicy.InsuranceCompanyId equals insuranceCompany.InsuranceCompanyId
+                    join policyType in _dataContext.tblPolicyType on motorPolicy.PolicyTypeId equals policyType.PolicyTypeId
+                    join manufacturer in _dataContext.tblManufacturers on motorPolicy.ManufacturerId equals manufacturer.ManufacturerId
+                    join model in _dataContext.tblModel on motorPolicy.ModelId equals model.ModelId
+                    join variant in _dataContext.tblVariant on motorPolicy.VariantId equals variant.VariantId
+                    join makeYear in _dataContext.tblMakeYear on motorPolicy.MakeYearId equals makeYear.MakeYearId
+                    join vehicleClass in _dataContext.tblVehicleClass on motorPolicy.VehicleClassId equals vehicleClass.VehicleClassId
+                    join policyStatus in _dataContext.tblPolicyStatus on motorPolicy.PolicyStatusId equals policyStatus.PolicyStatusId
+                    join ncb in _dataContext.tblNCB on motorPolicy.NCBId equals ncb.NCBId into ncbJoin
+                    from ncb in ncbJoin.DefaultIfEmpty()
+                    join endorsementReason in _dataContext.tblEndorsementReason on motorPolicy.PolicyCancelReasonId equals endorsementReason.EndorsementReasonId into endorsementJoin
+                    from endorsementReason in endorsementJoin.DefaultIfEmpty()
+                    join addonRider in _dataContext.tblAddonRider on motorPolicy.AddonRiderId equals addonRider.AddonRiderId into addonRiderJoin
+                    from addonRider in addonRiderJoin.DefaultIfEmpty()
+                    join policyTerm in _dataContext.tblPolicyTerm on motorPolicy.PolicyTermId equals policyTerm.PolicyTermId into policyTermJoin
+                    from policyTerm in policyTermJoin.DefaultIfEmpty()
+                    join insuranceCompanyOD in _dataContext.tblInsuranceCompany on motorPolicy.InsuranceCompanyODId equals insuranceCompanyOD.InsuranceCompanyId into insuranceCompanyODJoin
+                    from insuranceCompanyOD in insuranceCompanyODJoin.DefaultIfEmpty()
+                    join voucherDetails in _dataContext.tblVoucherDetails on motorPolicy.PolicyId equals voucherDetails.PolicyId
+                     into voucherDetailsJoin
+                    from voucherDetails in voucherDetailsJoin.DefaultIfEmpty()
+
+                    join pos in _dataContext.tblPOS on motorPolicy.POSId equals pos.POSId into posJoin
+                    from pos in posJoin.DefaultIfEmpty()
+
+                    join tc in _dataContext.tblTeamMember on motorPolicy.TeleCallerId equals tc.TeamMemberId into tcGroup
+                    from tc in tcGroup.DefaultIfEmpty()
+                    join fos in _dataContext.tblTeamMember on motorPolicy.FOSId equals fos.TeamMemberId into fosGroup
+                    from fos in fosGroup.DefaultIfEmpty()
+
+                    join r in _dataContext.tblReference on motorPolicy.ReferenceId equals r.ReferenceId into rGroup
+                    from r in rGroup.DefaultIfEmpty()
+
+                    where motorPolicy.BranchId == varBranchId
+                          && motorPolicy.IsVerified == true
+                         && (motorPolicy.POSCommissionReceived == (int)POSCommsisionStatus.NOTRECIEVED || !motorPolicy.POSCommissionReceived.HasValue) //1 -== - rec and 0 --  
+                          && motorPolicy.VerticalId == (int)Vertical.Motor
+                    /*   && ((motorPolicy.PolicyStartDate <= datefrom && policyTerm.PolicyPackageType == "TP only")
+                            || (motorPolicy.PolicyStartDateOD <= datefrom && (policyTerm.PolicyPackageType == "OD only" || policyTerm.PolicyPackageType == "Comprehensive")))*/
+                    orderby motorPolicy.POSId, insuranceCompany.InsuranceCompanyName, policyType.PolicyType, vehicleClass.VehicleMainClass, variant.ExShowroomValue, motorPolicy.PolicyStartDate
+                    select new 
+                    {
+                        POSName = pos.POSName,
+                        POsId = motorPolicy.POSId,
+                        CompanyName = insuranceCompanyOD.InsuranceCompanyName !=null ? insuranceCompanyOD.InsuranceCompanyName : insuranceCompany.InsuranceCompanyName ?? null,
+                        PolicyMainType = "Motor Policy",
+                        VehicleMainClass = vehicleClass.VehicleMainClass ?? null,
+                        ExShowroomValue = variant.ExShowroomValue,
+                        OD = motorPolicy.OD,
+                        NameInPolicy =motorPolicy.NameInPolicy ?? null,
+                         IssueDate = motorPolicy.PolicyStartDate,
+                        PolicyId =motorPolicy.PolicyId,
+                        ControlNo = motorPolicy.ControlNo ?? null,
+                        RegistrationNo = motorPolicy.RegistrationNo ?? null,
+                        GrossPremium = motorPolicy.GrossPremium,
+                        TotalIDV = motorPolicy.TotalIDV ?? null,
+                        PolicyNo = motorPolicy.PolicyNoOD != null ? motorPolicy.PolicyNoOD : motorPolicy.PolicyNo,
+                        ManufacturerName = manufacturer.ManufacturerName ?? null,
+                        ModelName = model.ModelName ?? null,
+                        FuelType  =motorPolicy.FuelType ?? null,
+                        CubicCapacity = motorPolicy.CubicCapacity ?? null,
+                        SeatingCapacity=  motorPolicy.SeatingCapacity ?? null,
+                        Loading = motorPolicy.Loading ?? null,
+                        TeleCaller = tc.TeamMemberName,
+                        FOS = fos.TeamMemberName,
+                        BusinessDoneBy  = motorPolicy.BusinessDoneBy,
+                       VerticleId = motorPolicy.VerticalId,
+                        PolicyRemarks = motorPolicy.PolicyRemarks,
+                        PolicyStatus = policyStatus.PolicyStatus ?? null,
+                        EndorsementReason = endorsementReason.EndorsementReason ?? null,
+                       PolicyCancelDate = motorPolicy.PolicyCancelDate,
+                        ReferenceName = r.ReferenceName,
+                        EndorseGrossPremium = motorPolicy.EndorseGrossPremium ?? null,
+                        EndorseOD =motorPolicy.EndorseOD ?? null,
+                        VehicleClass = vehicleClass.VehicleClass ?? null,
+                        PolicyType = policyType.PolicyType,
+                        CommissionMonthId = varMonthCycleId,
+                       InsureCompanyId = motorPolicy.InsuranceCompanyODId != null ? motorPolicy.InsuranceCompanyODId :  motorPolicy.InsuranceCompanyId,
+                        VehicleMainClassId = vehicleClass.VehicleMainClassId ?? null,
+                        PolicyMainTypeId = policyType.PolicyMainTypeId ?? null,
+                        ManufacturerId = motorPolicy.ManufacturerId,
+                        ModelId = motorPolicy.ModelId,
+                        AddonPlan = addonRider.AddonRiderName ?? null,
+                        VehicleClassId = motorPolicy.VehicleClassId,
+                        PolicyTermId = motorPolicy.PolicyTermId,
+                        PolicyTermName = policyTerm.PolicyTermName ?? null,
+                        BranchId = varBranchId,
+                        NCBPercent = ncb!= null ? ncb.NCBPercentage : (int?)null,
+                        NCBId = motorPolicy.NCBId ,
+                        FuelTypeId = variant != null ? variant.FuelTypeId : (int?)null ,
+                        PolicyStartDate   = motorPolicy.PolicyPackageType == "TP only" ?   motorPolicy.PolicyStartDate : motorPolicy.PolicyStartDateOD ,
+                       ShortFallTotal = voucherDetails !=null ? voucherDetails.VoucherAmount : (int?)null,
+                        motorPolicy.PolicyPackageType,
+                        motorPolicy.SpecialDiscount
+                    };
+
+            var resultList = combinedQuery.AsEnumerable().Select(x => new tblCommissionCalculation
+            {
+                POSName = x.POSName,
+                POsId = x.POsId,
+                CompanyName = x.CompanyName,
+                PolicyMainType = x.PolicyMainType,
+                VehicleMainClass = x.VehicleMainClass,
+                ExShowroomValue = x.ExShowroomValue,
+                OD = x.OD,
+                NameInPolicy = x.NameInPolicy,
+                IssueDate = x.IssueDate,
+                PolicyId = x.PolicyId,
+                ControlNo = x.ControlNo,
+                RegistrationNo = x.RegistrationNo,
+                GrossPremium = x.GrossPremium,
+                TotalIDV = x.TotalIDV,
+                PolicyNo = x.PolicyNo,
+                ManufacturerName = x.ManufacturerName,
+                ModelName = x.ModelName,
+                FuelType = x.FuelType,
+                CubicCapacity = x.CubicCapacity,
+                SeatingCapacity = x.SeatingCapacity,
+                Loading = x.Loading,
+                TeleCaller = x.TeleCaller,
+                FOS = x.FOS,
+                BusinessDoneBy = x.BusinessDoneBy,
+                VerticleId = x.VerticleId,
+                PolicyRemarks = x.PolicyRemarks,
+                PolicyStatus = x.PolicyStatus,
+                EndorsementReason = x.EndorsementReason,
+                PolicyCancelDate = x.PolicyCancelDate,
+                ReferenceName = x.ReferenceName,
+                EndorseGrossPremium = x.EndorseGrossPremium,
+                EndorseOD = x.EndorseOD,
+                VehicleClass = x.VehicleClass,
+                PolicyType = x.PolicyType,
+                CommissionMonthId = x.CommissionMonthId,
+                InsureCompanyId = x.InsureCompanyId,
+                VehicleMainClassId = x.VehicleMainClassId,
+                PolicyMainTypeId = x.PolicyMainTypeId,
+                ManufacturerId = x.ManufacturerId,
+                ModelId = x.ModelId,
+                AddonPlan = x.AddonPlan,
+                VehicleClassId = x.VehicleClassId,
+                PolicyTermId = x.PolicyTermId,
+                PolicyTermName = x.PolicyTermName,
+                BranchId = x.BranchId,
+                NCBPercent = x.NCBPercent,
+                NCBId = x.NCBId,
+                FuelTypeId = x.FuelTypeId,
+                PolicyStartDate = x.PolicyStartDate,
+                ShortFallTotal = x.ShortFallTotal,
+                PolicyPackageType= x.PolicyPackageType,
+                SpecialDiscount = x.SpecialDiscount,
+            }).ToList();
+            _dataContext.tblCommissionCalculation.AddRange(resultList);
+            _dataContext.SaveChanges();
+            await CommisionSlabCalculation(posCommisonMotorModel);
+            return new CommonDto<string>
+            {
+                IsSuccess = true,
+                Message = $"Commission Calculation Slab successfully",
+                Response = "Ok"
+            };
+
+        }
+
+        public async Task CommisionSlabCalculation(PosCommisonMotorModel posCommisonMotorModel)
+        {
+            var commissionSlabs = _dataContext.tblCommissionSlab
+                            .Where(cs => cs.VerticalId == 1 && cs.BranchId == posCommisonMotorModel.BranchId)
+                           .OrderBy(cs => cs.InsureCompanyId)
+                            .ThenBy(cs => cs.CommissionSlabTypeId)
+                            .ThenBy(cs => cs.PolicyMainTypeId)
+                            .ThenBy(cs => cs.VehicleMainClassId)
+                            .ThenBy(cs => cs.SplDiscountFrom)
+                            .ThenBy(cs => cs.FuelTypeId)
+                            .ThenBy(cs => cs.ExshowroomValueStart)
+                            .ThenBy(cs => cs.ManufacturerId)
+                            .ThenBy(cs => cs.ModelId)
+                            .ToList();
+            var tblCommisonCalculation = _dataContext.tblCommissionCalculation.ToList();
+            foreach (var slab in commissionSlabs)
+            {
+                List<int?> insureCompanyIds = null;
+                List<int?> vehicleClassIds = null;
+                List<int?> policyTypeIds = null;
+                List<int?> policyTermIds = null;
+                List<int?> manufacturerIds = null;
+                List<int?> modelIds = null;
+                List<int?> fuelTypeIds = null;
+                List<int?> ncbIds = null;
+                // Check if the properties are not null before deserialization
+                if (slab.InsureCompanyId != null)
+                {
+                    insureCompanyIds = JsonConvert.DeserializeObject<List<int?>>(slab.InsureCompanyId);
+                }
+
+                if (slab.VehicleClassId != null)
+                {
+                    vehicleClassIds = JsonConvert.DeserializeObject<List<int?>>(slab.VehicleClassId);
+                }
+
+                if (slab.PolicyTypeId != null)
+                {
+                    policyTypeIds = JsonConvert.DeserializeObject<List<int?>>(slab.PolicyTypeId);
+                }
+
+                if (slab.PolicyTermId != null)
+                {
+                    policyTermIds = JsonConvert.DeserializeObject<List<int?>>(slab.PolicyTermId);
+                }
+
+                if (slab.ManufacturerId != null)
+                {
+                    manufacturerIds = JsonConvert.DeserializeObject<List<int?>>(slab.ManufacturerId);
+                }
+
+                if (slab.ModelId != null)
+                {
+                    modelIds = JsonConvert.DeserializeObject<List<int?>>(slab.ModelId);
+                }
+
+                if (slab.FuelTypeId != null)
+                {
+                    fuelTypeIds = JsonConvert.DeserializeObject<List<int?>>(slab.FuelTypeId);
+                }
+
+                if (slab.NcbId != null)
+                {
+                    ncbIds = JsonConvert.DeserializeObject<List<int?>>(slab.NcbId);
+                }
+
+                if (slab.CommissionSlabTypeId == 1) // Volume Slab
+                {
+                    var tblCommisonCalculationVolumeSlab = tblCommisonCalculation;
+                    var query = tblCommisonCalculationVolumeSlab
+                                .Where(cc =>  insureCompanyIds.Contains(cc.InsureCompanyId) &&
+                                             cc.VerticleId == (int)Vertical.Motor && cc.CommissionMonthId == posCommisonMotorModel.MonthCycleId)
+                                            ;
+                    var test = query.ToList();
+                    if (vehicleClassIds.Any())
+                    {
+                        if (slab.CommissionTurnoverTypeId == 2 || slab.CommissionTurnoverTypeId == 4)
+                        {
+                            query = query.Where(cc => vehicleClassIds.Contains(cc.VehicleClassId));
+                        }
+                    }
+
+                    if (policyTypeIds.Any())
+                    {
+                        query = query.Where(cc => policyTypeIds.Contains(cc.PolicyTypeId));
+                    }
+
+                    if (policyTermIds.Any())
+                    {
+                        query = query.Where(cc => policyTermIds.Contains(cc.PolicyTermId));
+                    }
+
+                    if (manufacturerIds.Any())
+                    {
+                        query = query.Where(cc => manufacturerIds.Contains(cc.ManufacturerId));
+                    }
+
+                    if (modelIds.Any())
+                    {
+                        query = query.Where(cc => modelIds.Contains(cc.ModelId));
+                    }
+
+                    if (slab.CommissionTurnoverTypeId == 1 || slab.CommissionTurnoverTypeId == 4)
+                    {
+                        query = query.Where(cc => cc.SpecialDiscount >= slab.SplDiscountFrom && cc.SpecialDiscount <= slab.SplDiscountUpTo);
+                    }
+
+                    if (slab.ExshowroomValueEnd != 0)
+                    {
+                        query = query.Where(cc => cc.ExShowroomValue >= slab.ExshowroomValueStart && cc.ExShowroomValue <= slab.ExshowroomValueEnd);
+                    }
+
+                    if (fuelTypeIds.Any() )
+                    {
+                        query = query.Where(cc => fuelTypeIds.Contains(cc.FuelTypeId));
+                    }
+
+                    if (ncbIds.Any())
+                    {
+                        query = query.Where(cc => ncbIds.Contains (cc.NCBId));
+                    }
+
+                    var dsaGroups = query.GroupBy(cc => cc.POsId)
+                                         .Select(g => new { POSID = g.Key, ODSum = g.Sum(x => x.OD) })
+                                         .ToList();
+
+                    foreach (var group in dsaGroups)
+                    {
+                        if (group.ODSum >= slab.SlabStart && group.ODSum <= slab.SlabEnd)
+                        {
+                            var tblCommisonCalculationODSum = tblCommisonCalculation;
+
+                            var updateQuery = tblCommisonCalculationODSum
+                                .Where(cc => cc.InsureCompanyId.ToString() == slab.InsureCompanyId &&
+                                             cc.VerticleId == (int)Vertical.Motor &&
+                                             cc.POsId == group.POSID &&
+                                             cc.CommissionMonthId == posCommisonMotorModel.MonthCycleId);
+
+                            if (vehicleClassIds.Any())
+                            {
+                                updateQuery = updateQuery.Where(cc => vehicleClassIds.Contains(cc.VehicleClassId));
+                            }
+
+                            if (policyTypeIds.Any())
+                            {
+                                updateQuery = updateQuery.Where(cc => policyTypeIds.Contains(cc.PolicyTypeId));
+                            }
+
+                            if (manufacturerIds.Any())
+                            {
+                                updateQuery = updateQuery.Where(cc => manufacturerIds.Contains(cc.ManufacturerId));
+                            }
+
+                            if (!string.IsNullOrEmpty(slab.ModelId ))
+                            {
+                                updateQuery = updateQuery.Where(cc => cc.ModelId.ToString() == slab.ModelId);
+                            }
+
+                            if (slab.ExshowroomValueEnd !=0)
+                            {
+                                updateQuery = updateQuery.Where(cc => cc.ExShowroomValue >= slab.ExshowroomValueStart && cc.ExShowroomValue <= slab.ExshowroomValueEnd);
+                            }
+
+                            if (fuelTypeIds.Any())
+                            {
+                                updateQuery = updateQuery.Where(cc => fuelTypeIds.Contains(cc.FuelTypeId));
+                            }
+
+                            updateQuery.ToList().ForEach(cc => cc.CommisionPercentage = slab.CommissionPercent);
+                            _dataContext.SaveChanges();
+                        }
+                    }
+                }
+                else if (slab.CommissionSlabTypeId == 2) // Single Case
+                {
+                    var tblCommisonCalculationSingleCase = tblCommisonCalculation;
+
+                    var updateQuery = tblCommisonCalculationSingleCase.Where(cc => cc.InsureCompanyId.ToString() == slab.InsureCompanyId &&
+                                     cc.VerticleId == 1 &&
+                                     cc.CommissionMonthId == posCommisonMotorModel.MonthCycleId);
+
+                    if (!string.IsNullOrEmpty(slab.VehicleClassId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.VehicleClassId.ToString() == slab.VehicleClassId);
+                    }
+
+                    if (!string.IsNullOrEmpty(slab.PolicyTermId ))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.PolicyTermId.ToString() == slab.PolicyTermId);
+                    }
+
+                    if (!string.IsNullOrEmpty(slab.PolicyTypeId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.PolicyTypeId.ToString() == slab.PolicyMainTypeId);
+                    }
+
+                    if (!string.IsNullOrEmpty(slab.ManufacturerId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.ManufacturerId.ToString() == slab.ManufacturerId);
+                    }
+
+                    if (!string.IsNullOrEmpty(slab.ModelId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.ModelId.ToString() == slab.ModelId);
+                    }
+
+                    if (slab.ExshowroomValueEnd != 0)
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.ExShowroomValue >= slab.ExshowroomValueStart && cc.ExShowroomValue <= slab.ExshowroomValueEnd);
+                    }
+
+                    if (!string.IsNullOrEmpty(slab.FuelTypeId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.FuelTypeId.ToString() == slab.FuelTypeId);
+                    }
+
+                    if (!string.IsNullOrEmpty(slab.NcbId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.NCBId.ToString() == slab.NcbId);
+                    }
+
+                    if (slab.CommissionTurnoverTypeId == 1 || slab.CommissionTurnoverTypeId == 4)
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.SpecialDiscount >= slab.SplDiscountFrom && cc.SpecialDiscount <= slab.SplDiscountUpTo);
+                    }
+
+                    updateQuery.ToList().ForEach(cc => cc.CommisionPercentage = slab.CommissionPercent);
+                    _dataContext.SaveChanges();
+                }
+                else if (slab.CommissionSlabTypeId == 4) // Flat Slab
+                {
+                    var tblCommisonCalculationFlatCase = tblCommisonCalculation;
+
+                    var updateQuery = tblCommisonCalculationFlatCase.Where(cc => cc.InsureCompanyId.ToString() == slab.InsureCompanyId &&
+                                     cc.VerticleId == 1 &&
+                                     cc.CommissionMonthId == posCommisonMotorModel.MonthCycleId);
+
+                    if (!string.IsNullOrEmpty(slab.VehicleClassId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.VehicleClassId.ToString() == slab.VehicleClassId);
+                    }
+
+                    if (!string.IsNullOrEmpty(slab.PolicyTermId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.PolicyTermId.ToString() == slab.PolicyTermId);
+                    }
+
+                    if (!string.IsNullOrEmpty(slab.PolicyTypeId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.PolicyTypeId.ToString() == slab.PolicyMainTypeId);
+                    }
+
+                    if (!string.IsNullOrEmpty(slab.ManufacturerId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.ManufacturerId.ToString() == slab.ManufacturerId);
+                    }
+
+                    if (!string.IsNullOrEmpty(slab.ModelId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.ModelId.ToString() == slab.ModelId);
+                    }
+
+                    if (slab.ExshowroomValueEnd != 0)
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.ExShowroomValue >= slab.ExshowroomValueStart && cc.ExShowroomValue <= slab.ExshowroomValueEnd);
+                    }
+
+                    if (!string.IsNullOrEmpty(slab.FuelTypeId))
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.FuelTypeId.ToString() == slab.FuelTypeId);
+                    }
+
+                   
+                    if (slab.CommissionTurnoverTypeId == 1 || slab.CommissionTurnoverTypeId == 4)
+                    {
+                        updateQuery = updateQuery.Where(cc => cc.SpecialDiscount >= slab.SplDiscountFrom && cc.SpecialDiscount <= slab.SplDiscountUpTo);
+                    }
+
+                    updateQuery.ToList().ForEach(cc => cc.CommisionPercentage = slab.CommissionPercent);
+                    _dataContext.SaveChanges();
+                }
+            }
+
+        }
+
     }
 }

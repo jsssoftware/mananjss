@@ -70,7 +70,7 @@ public partial class tblCommissionSlab
 
     public string PolicyTermId { get; set; }
 
-    public string BranchId { get; set; }
+    public Nullable<int> BranchId { get; set; }
 
     public string NcbId { get; set; }
 

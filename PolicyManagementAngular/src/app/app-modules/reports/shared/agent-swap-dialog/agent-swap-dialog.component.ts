@@ -51,6 +51,10 @@ export class AgentSwapDialogComponent implements OnInit {
     policyRemarks: new FormControl(''),
     policyId: new FormControl(''),
     branchId: new FormControl(''),
+    pos: new FormControl(''),
+    fos: new FormControl(''),
+    tellecaller: new FormControl(''),
+    reference: new FormControl(''),
   });
 
   
@@ -89,6 +93,14 @@ export class AgentSwapDialogComponent implements OnInit {
   
   submit(){
     this.agentswapmasterform.get("branchId").setValue(this._branchId);
+    let pos =  this._posDatas.find(x=>x.Value == this.agentswapmasterform.value.posNameId)?.Name;
+    let tellecaller =  this._teleCallers.find(x=>x.Value == this.agentswapmasterform.value.teleCallerId)?.Name;
+    let reference =  this._references.find(x=>x.Value == this.agentswapmasterform.value.referenceId)?.Name;
+    let fos =  this._fosNames.find(x=>x.Value == this.agentswapmasterform.value.fosId)?.Name;
+    this.agentswapmasterform.get("pos").setValue(pos);
+    this.agentswapmasterform.get("tellecaller").setValue(tellecaller);
+    this.agentswapmasterform.get("reference").setValue(reference);
+    this.agentswapmasterform.get("fos").setValue(fos);
     this.agentswapmasterform.get("policyId").setValue(this._policyData.PolicyId);
     this.reportService.updateAgentSwap(this.agentswapmasterform.getRawValue()).subscribe((response: ICommonDto<any>) => {
       if (response.IsSuccess) {

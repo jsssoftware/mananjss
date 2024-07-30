@@ -1,4 +1,6 @@
-﻿namespace PolicyManagement.Models.Voucher
+﻿using System;
+
+namespace PolicyManagement.Models.Voucher
 {
     public class VoucherSearchPolicyModel
     {
@@ -10,5 +12,16 @@
         public short? InsuranceCompanyId { get; set; }
         public string PolicyStartFromDate { get; set; }
         public string PolicyStartToDate { get; set; }
+    }
+
+    public class PosCommisonMotorModel
+    {
+        public int BranchId { get; set; }
+        public DateTime MonthCycle { get; set; }
+        public int MonthCycleId { get; set; }
+        public string PolicyStartToDate { get; set; }
+        public int VerticalType { get; set; }
+        public string MonthCycleStart { get; set; }
+
     }
 }

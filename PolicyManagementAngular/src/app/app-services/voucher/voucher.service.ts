@@ -34,5 +34,6 @@ export class VoucherService extends IVoucherService {
     getVoucherById = (voucherId: number): Observable<IVoucherDto> => this.apiManagerService.getRequest<IVoucherDto>(`${Voucher.VoucherById}/${voucherId}`);
     addCommisionSlab = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Voucher.AddCommisionSlab, model);
     getCommisionSlab = (branchId: number,verticalId: number): Observable<IVoucherDto> => this.apiManagerService.getRequest<IVoucherDto>(`${Voucher.GetCommsionSlab}/${branchId}/${verticalId}`);
+    CommisionSlabCalculation = (model: any): Observable<ICommonDto<string>> => this.apiManagerService.postRequest<ICommonDto<string>>(Voucher.CommisionCalculation, model);
 
 }

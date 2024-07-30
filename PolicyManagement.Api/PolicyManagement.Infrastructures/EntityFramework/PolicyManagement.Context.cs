@@ -285,7 +285,7 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<ReconDataDownload> ReconDataDownload { get; set; }
 
-    public virtual DbSet<tblCommissionSlabNew> tblCommissionSlabNew { get; set; }
+    public virtual DbSet<tblCommissionCalculation> tblCommissionCalculation { get; set; }
 
     public virtual DbSet<tblCommissionSlab> tblCommissionSlab { get; set; }
 

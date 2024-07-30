@@ -34,7 +34,7 @@ namespace PolicyManagement.Models.Voucher
         public string PolicyTypeName { get; set; }
         public string FuelTypeName { get; set; }
         public string PackageTypeName { get; set; }
-        public string BranchId { get; set; }
+        public int? BranchId { get; set; }
         public int? TurnOverRatio { get; set; }
         public int CommisionSlabId { get; set; }
 

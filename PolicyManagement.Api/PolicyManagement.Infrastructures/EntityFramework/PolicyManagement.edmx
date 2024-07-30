@@ -317,6 +317,71 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <EntityType Name="tblCommissionCalculation">
+          <Key>
+            <PropertyRef Name="tblCommissionCalculationId" />
+          </Key>
+          <Property Name="tblCommissionCalculationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="POSName" Type="nvarchar" MaxLength="255" />
+          <Property Name="POsId" Type="int" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="255" />
+          <Property Name="PolicyMainType" Type="nvarchar" MaxLength="255" />
+          <Property Name="VehicleMainClass" Type="nvarchar" MaxLength="255" />
+          <Property Name="ExShowroomValue" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ShortFallTotal" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="SpecialDiscount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OD" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="NameInPolicy" Type="nvarchar" MaxLength="255" />
+          <Property Name="PolicyStartDate" Type="datetime" />
+          <Property Name="PolicyId" Type="int" />
+          <Property Name="ControlNo" Type="nvarchar" MaxLength="255" />
+          <Property Name="CoverNoteIssueType" Type="nvarchar" MaxLength="255" />
+          <Property Name="CoverNotePrefix" Type="nvarchar" MaxLength="255" />
+          <Property Name="CoverNoteNo" Type="nvarchar" MaxLength="255" />
+          <Property Name="RegistrationNo" Type="nvarchar" MaxLength="255" />
+          <Property Name="GrossPremium" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalIDV" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="IssueDate" Type="datetime" />
+          <Property Name="PolicyNo" Type="nvarchar" MaxLength="255" />
+          <Property Name="ManufacturerName" Type="nvarchar" MaxLength="255" />
+          <Property Name="ModelName" Type="nvarchar" MaxLength="255" />
+          <Property Name="FuelType" Type="nvarchar" MaxLength="255" />
+          <Property Name="CubicCapacity" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="SeatingCapacity" Type="int" />
+          <Property Name="MakeYear" Type="int" />
+          <Property Name="Loading" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TeleCaller" Type="nvarchar" MaxLength="255" />
+          <Property Name="FOS" Type="nvarchar" MaxLength="255" />
+          <Property Name="BusinessDoneBy" Type="nvarchar" MaxLength="255" />
+          <Property Name="VerticleId" Type="int" />
+          <Property Name="PolicyPackageType" Type="nvarchar" MaxLength="255" />
+          <Property Name="PolicyTermName" Type="nvarchar" MaxLength="255" />
+          <Property Name="PolicyRemarks" Type="nvarchar" MaxLength="255" />
+          <Property Name="PolicyStatus" Type="nvarchar" MaxLength="255" />
+          <Property Name="EndorsementReason" Type="nvarchar" MaxLength="255" />
+          <Property Name="PolicyCancelDate" Type="datetime" />
+          <Property Name="ServiceTax" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ReferenceName" Type="nvarchar" MaxLength="255" />
+          <Property Name="EndorseGrossPremium" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="EndorseOD" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="VehicleClass" Type="nvarchar" MaxLength="255" />
+          <Property Name="PolicyType" Type="nvarchar" MaxLength="255" />
+          <Property Name="CommissionMonthId" Type="int" />
+          <Property Name="InsureCompanyId" Type="int" />
+          <Property Name="VehicleMainClassId" Type="int" />
+          <Property Name="PolicyMainTypeId" Type="int" />
+          <Property Name="ManufacturerId" Type="int" />
+          <Property Name="ModelId" Type="int" />
+          <Property Name="AddonPlan" Type="nvarchar" MaxLength="255" />
+          <Property Name="VehicleClassId" Type="int" />
+          <Property Name="PolicyTypeId" Type="int" />
+          <Property Name="PolicyTermId" Type="int" />
+          <Property Name="BranchId" Type="int" />
+          <Property Name="NCBPercent" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="NCBId" Type="int" />
+          <Property Name="FuelTypeId" Type="int" />
+          <Property Name="CommisionPercentage" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
         <EntityType Name="tblCommissionPayType">
           <Key>
             <PropertyRef Name="CommissionPayTypeId" />
@@ -361,41 +426,9 @@
           <Property Name="PolicyTypeId" Type="nvarchar(max)" />
           <Property Name="VehicleClassId" Type="nvarchar(max)" />
           <Property Name="PolicyTermId" Type="nvarchar(max)" />
-          <Property Name="BranchId" Type="nchar" MaxLength="10" />
+          <Property Name="BranchId" Type="int" />
           <Property Name="NcbId" Type="nchar" MaxLength="10" />
           <Property Name="PackageTypeId" Type="nchar" MaxLength="10" />
-        </EntityType>
-        <EntityType Name="tblCommissionSlabNew">
-          <Key>
-            <PropertyRef Name="CommissionSlabNewId" />
-          </Key>
-          <Property Name="CommissionSlabNewId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="InsureCompanyId" Type="nvarchar(max)" />
-          <Property Name="VehicleMainClassId" Type="nvarchar(max)" />
-          <Property Name="PolicyMainTypeId" Type="nvarchar(max)" />
-          <Property Name="SplDiscountFrom" Type="decimal" Precision="4" Scale="1" />
-          <Property Name="SplDiscountUpTo" Type="decimal" Precision="4" Scale="1" />
-          <Property Name="ManufacturerId" Type="nvarchar(max)" />
-          <Property Name="ModelId" Type="nvarchar(max)" />
-          <Property Name="ExshowroomValueStart" Type="int" />
-          <Property Name="ExshowroomValueEnd" Type="int" />
-          <Property Name="FuelTypeId" Type="nvarchar(max)" />
-          <Property Name="CommissionSlabNewTypeId" Type="int" />
-          <Property Name="CommissionTurnoverTypeId" Type="int" />
-          <Property Name="SlabStart" Type="int" />
-          <Property Name="SlabEnd" Type="int" />
-          <Property Name="CommissionPercent" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="IsActive" Type="tinyint" />
-          <Property Name="CreatedBy" Type="int" />
-          <Property Name="CreatedTime" Type="smalldatetime" />
-          <Property Name="ModifiedBy" Type="int" />
-          <Property Name="ModifiedTime" Type="smalldatetime" />
-          <Property Name="VerticalId" Type="int" />
-          <Property Name="ProductId" Type="nvarchar(max)" />
-          <Property Name="PolicyTypeId" Type="nvarchar(max)" />
-          <Property Name="VehicleClassId" Type="nvarchar(max)" />
-          <Property Name="PolicyTermId" Type="nvarchar(max)" />
-          <Property Name="BranchId" Type="nchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="tblCommissionSlabType">
           <Key>
@@ -422,12 +455,6 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblCompanyDetails">
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
-        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -2056,13 +2083,6 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.tblRefrenceSource' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblVersion">
-          <Property Name="Major" Type="tinyint" />
-          <Property Name="Minor" Type="tinyint" />
-          <Property Name="Revision" Type="tinyint" />
-        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -3084,9 +3104,9 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySet Name="tblClaimSubStatus" EntityType="Self.tblClaimSubStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblClaimType" EntityType="Self.tblClaimType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCluster" EntityType="Self.tblCluster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblCommissionCalculation" EntityType="Self.tblCommissionCalculation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCommissionPayType" EntityType="Self.tblCommissionPayType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCommissionSlab" EntityType="Self.tblCommissionSlab" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="tblCommissionSlabNew" EntityType="Self.tblCommissionSlabNew" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCommissionSlabType" EntityType="Self.tblCommissionSlabType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCommissionTurnoverType" EntityType="Self.tblCommissionTurnoverType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="tblCoverage" EntityType="Self.tblCoverage" Schema="dbo" store:Type="Tables" />
@@ -4878,7 +4898,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
             <Parameter Name="varInsureCompanyId" Mode="In" Type="Int32" />
             <Parameter Name="isRetailCommercial" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="tblCommissionSlabNew" EntityType="PolicyManagerModel.tblCommissionSlabNew" />
+          <EntitySet Name="tblCommissionCalculation" EntityType="PolicyManagerModel.tblCommissionCalculation" />
           <EntitySet Name="tblCommissionSlab" EntityType="PolicyManagerModel.tblCommissionSlab" />
         </EntityContainer>
         <ComplexType Name="GetPolicyFamilyDtl_Result">
@@ -8128,37 +8148,70 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Type="String" Name="BusinessTypeName" Nullable="true" MaxLength="30" />
           <Property Type="String" Name="IndustryName" Nullable="true" MaxLength="30" />
         </ComplexType>
-        <EntityType Name="tblCommissionSlabNew">
+        <EntityType Name="tblCommissionCalculation">
           <Key>
-            <PropertyRef Name="CommissionSlabNewId" />
+            <PropertyRef Name="tblCommissionCalculationId" />
           </Key>
-          <Property Name="CommissionSlabNewId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="InsureCompanyId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="VehicleMainClassId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PolicyMainTypeId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SplDiscountFrom" Type="Decimal" Precision="4" Scale="1" />
-          <Property Name="SplDiscountUpTo" Type="Decimal" Precision="4" Scale="1" />
-          <Property Name="ManufacturerId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ModelId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ExshowroomValueStart" Type="Int32" />
-          <Property Name="ExshowroomValueEnd" Type="Int32" />
-          <Property Name="FuelTypeId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CommissionSlabNewTypeId" Type="Int32" />
-          <Property Name="CommissionTurnoverTypeId" Type="Int32" />
-          <Property Name="SlabStart" Type="Int32" />
-          <Property Name="SlabEnd" Type="Int32" />
-          <Property Name="CommissionPercent" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="IsActive" Type="Byte" />
-          <Property Name="CreatedBy" Type="Int32" />
-          <Property Name="CreatedTime" Type="DateTime" Precision="0" />
-          <Property Name="ModifiedBy" Type="Int32" />
-          <Property Name="ModifiedTime" Type="DateTime" Precision="0" />
-          <Property Name="VerticalId" Type="Int32" />
-          <Property Name="ProductId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PolicyTypeId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="VehicleClassId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="PolicyTermId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BranchId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="tblCommissionCalculationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="POSName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="POsId" Type="Int32" />
+          <Property Name="CompanyName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyMainType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="VehicleMainClass" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ExShowroomValue" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ShortFallTotal" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="SpecialDiscount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OD" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NameInPolicy" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyStartDate" Type="DateTime" Precision="3" />
+          <Property Name="PolicyId" Type="Int32" />
+          <Property Name="ControlNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CoverNoteIssueType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CoverNotePrefix" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CoverNoteNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="GrossPremium" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalIDV" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="IssueDate" Type="DateTime" Precision="3" />
+          <Property Name="PolicyNo" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ManufacturerName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ModelName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FuelType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CubicCapacity" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="SeatingCapacity" Type="Int32" />
+          <Property Name="MakeYear" Type="Int32" />
+          <Property Name="Loading" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TeleCaller" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="FOS" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="BusinessDoneBy" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="VerticleId" Type="Int32" />
+          <Property Name="PolicyPackageType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyTermName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyRemarks" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyStatus" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EndorsementReason" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyCancelDate" Type="DateTime" Precision="3" />
+          <Property Name="ServiceTax" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ReferenceName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="EndorseGrossPremium" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EndorseOD" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="VehicleClass" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="PolicyType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CommissionMonthId" Type="Int32" />
+          <Property Name="InsureCompanyId" Type="Int32" />
+          <Property Name="VehicleMainClassId" Type="Int32" />
+          <Property Name="PolicyMainTypeId" Type="Int32" />
+          <Property Name="ManufacturerId" Type="Int32" />
+          <Property Name="ModelId" Type="Int32" />
+          <Property Name="AddonPlan" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="VehicleClassId" Type="Int32" />
+          <Property Name="PolicyTypeId" Type="Int32" />
+          <Property Name="PolicyTermId" Type="Int32" />
+          <Property Name="BranchId" Type="Int32" />
+          <Property Name="NCBPercent" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="NCBId" Type="Int32" />
+          <Property Name="FuelTypeId" Type="Int32" />
+          <Property Name="CommisionPercentage" Type="Decimal" Precision="18" Scale="2" />
         </EntityType>
         <EntityType Name="tblCommissionSlab">
           <Key>
@@ -8190,7 +8243,7 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="PolicyTypeId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="VehicleClassId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="PolicyTermId" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="BranchId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="BranchId" Type="Int32" />
           <Property Name="NcbId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="PackageTypeId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
@@ -11445,36 +11498,69 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="tblCommissionSlabNew">
-            <EntityTypeMapping TypeName="PolicyManagerModel.tblCommissionSlabNew">
-              <MappingFragment StoreEntitySet="tblCommissionSlabNew">
+          <EntitySetMapping Name="tblCommissionCalculation">
+            <EntityTypeMapping TypeName="PolicyManagerModel.tblCommissionCalculation">
+              <MappingFragment StoreEntitySet="tblCommissionCalculation">
+                <ScalarProperty Name="CommisionPercentage" ColumnName="CommisionPercentage" />
+                <ScalarProperty Name="FuelTypeId" ColumnName="FuelTypeId" />
+                <ScalarProperty Name="NCBId" ColumnName="NCBId" />
+                <ScalarProperty Name="NCBPercent" ColumnName="NCBPercent" />
                 <ScalarProperty Name="BranchId" ColumnName="BranchId" />
                 <ScalarProperty Name="PolicyTermId" ColumnName="PolicyTermId" />
-                <ScalarProperty Name="VehicleClassId" ColumnName="VehicleClassId" />
                 <ScalarProperty Name="PolicyTypeId" ColumnName="PolicyTypeId" />
-                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
-                <ScalarProperty Name="VerticalId" ColumnName="VerticalId" />
-                <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
-                <ScalarProperty Name="ModifiedBy" ColumnName="ModifiedBy" />
-                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
-                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="CommissionPercent" ColumnName="CommissionPercent" />
-                <ScalarProperty Name="SlabEnd" ColumnName="SlabEnd" />
-                <ScalarProperty Name="SlabStart" ColumnName="SlabStart" />
-                <ScalarProperty Name="CommissionTurnoverTypeId" ColumnName="CommissionTurnoverTypeId" />
-                <ScalarProperty Name="CommissionSlabNewTypeId" ColumnName="CommissionSlabNewTypeId" />
-                <ScalarProperty Name="FuelTypeId" ColumnName="FuelTypeId" />
-                <ScalarProperty Name="ExshowroomValueEnd" ColumnName="ExshowroomValueEnd" />
-                <ScalarProperty Name="ExshowroomValueStart" ColumnName="ExshowroomValueStart" />
+                <ScalarProperty Name="VehicleClassId" ColumnName="VehicleClassId" />
+                <ScalarProperty Name="AddonPlan" ColumnName="AddonPlan" />
                 <ScalarProperty Name="ModelId" ColumnName="ModelId" />
                 <ScalarProperty Name="ManufacturerId" ColumnName="ManufacturerId" />
-                <ScalarProperty Name="SplDiscountUpTo" ColumnName="SplDiscountUpTo" />
-                <ScalarProperty Name="SplDiscountFrom" ColumnName="SplDiscountFrom" />
                 <ScalarProperty Name="PolicyMainTypeId" ColumnName="PolicyMainTypeId" />
                 <ScalarProperty Name="VehicleMainClassId" ColumnName="VehicleMainClassId" />
                 <ScalarProperty Name="InsureCompanyId" ColumnName="InsureCompanyId" />
-                <ScalarProperty Name="CommissionSlabNewId" ColumnName="CommissionSlabNewId" />
+                <ScalarProperty Name="CommissionMonthId" ColumnName="CommissionMonthId" />
+                <ScalarProperty Name="PolicyType" ColumnName="PolicyType" />
+                <ScalarProperty Name="VehicleClass" ColumnName="VehicleClass" />
+                <ScalarProperty Name="EndorseOD" ColumnName="EndorseOD" />
+                <ScalarProperty Name="EndorseGrossPremium" ColumnName="EndorseGrossPremium" />
+                <ScalarProperty Name="ReferenceName" ColumnName="ReferenceName" />
+                <ScalarProperty Name="ServiceTax" ColumnName="ServiceTax" />
+                <ScalarProperty Name="PolicyCancelDate" ColumnName="PolicyCancelDate" />
+                <ScalarProperty Name="EndorsementReason" ColumnName="EndorsementReason" />
+                <ScalarProperty Name="PolicyStatus" ColumnName="PolicyStatus" />
+                <ScalarProperty Name="PolicyRemarks" ColumnName="PolicyRemarks" />
+                <ScalarProperty Name="PolicyTermName" ColumnName="PolicyTermName" />
+                <ScalarProperty Name="PolicyPackageType" ColumnName="PolicyPackageType" />
+                <ScalarProperty Name="VerticleId" ColumnName="VerticleId" />
+                <ScalarProperty Name="BusinessDoneBy" ColumnName="BusinessDoneBy" />
+                <ScalarProperty Name="FOS" ColumnName="FOS" />
+                <ScalarProperty Name="TeleCaller" ColumnName="TeleCaller" />
+                <ScalarProperty Name="Loading" ColumnName="Loading" />
+                <ScalarProperty Name="MakeYear" ColumnName="MakeYear" />
+                <ScalarProperty Name="SeatingCapacity" ColumnName="SeatingCapacity" />
+                <ScalarProperty Name="CubicCapacity" ColumnName="CubicCapacity" />
+                <ScalarProperty Name="FuelType" ColumnName="FuelType" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
+                <ScalarProperty Name="PolicyNo" ColumnName="PolicyNo" />
+                <ScalarProperty Name="IssueDate" ColumnName="IssueDate" />
+                <ScalarProperty Name="TotalIDV" ColumnName="TotalIDV" />
+                <ScalarProperty Name="GrossPremium" ColumnName="GrossPremium" />
+                <ScalarProperty Name="RegistrationNo" ColumnName="RegistrationNo" />
+                <ScalarProperty Name="CoverNoteNo" ColumnName="CoverNoteNo" />
+                <ScalarProperty Name="CoverNotePrefix" ColumnName="CoverNotePrefix" />
+                <ScalarProperty Name="CoverNoteIssueType" ColumnName="CoverNoteIssueType" />
+                <ScalarProperty Name="ControlNo" ColumnName="ControlNo" />
+                <ScalarProperty Name="PolicyId" ColumnName="PolicyId" />
+                <ScalarProperty Name="PolicyStartDate" ColumnName="PolicyStartDate" />
+                <ScalarProperty Name="NameInPolicy" ColumnName="NameInPolicy" />
+                <ScalarProperty Name="OD" ColumnName="OD" />
+                <ScalarProperty Name="SpecialDiscount" ColumnName="SpecialDiscount" />
+                <ScalarProperty Name="ShortFallTotal" ColumnName="ShortFallTotal" />
+                <ScalarProperty Name="ExShowroomValue" ColumnName="ExShowroomValue" />
+                <ScalarProperty Name="VehicleMainClass" ColumnName="VehicleMainClass" />
+                <ScalarProperty Name="PolicyMainType" ColumnName="PolicyMainType" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="POsId" ColumnName="POsId" />
+                <ScalarProperty Name="POSName" ColumnName="POSName" />
+                <ScalarProperty Name="tblCommissionCalculationId" ColumnName="tblCommissionCalculationId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

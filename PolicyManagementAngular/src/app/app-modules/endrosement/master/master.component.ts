@@ -92,7 +92,7 @@ export class EndrosementMasterComponent implements OnInit {
     verticalId: new FormControl(1),
     endrosementDate : new FormControl(''),
     endrosementReason : new FormControl(''),
-    manufactureId : new FormControl(''),
+    manufacturerId : new FormControl(''),
     OD : new FormControl(''),
     grossPremium : new FormControl(''),
     shortfallAmount : new FormControl(''),
@@ -106,7 +106,6 @@ export class EndrosementMasterComponent implements OnInit {
     odRecoverable : new FormControl(''),
     premiumRecoverable : new FormControl(''),
     vehicleClassId : new FormControl(''),
-    manufacturerId : new FormControl(''),
     modelId : new FormControl(''),
     varient : new FormControl(''),
     remark : new FormControl(''),
@@ -147,7 +146,7 @@ export class EndrosementMasterComponent implements OnInit {
     }else{
       this.isMotor =  false
     }
-    this.endrosementMaster.get("manufacturer")?.valueChanges.subscribe(input => {
+    this.endrosementMaster.get("manufacturerId")?.valueChanges.subscribe(input => {
       if (input == null || input === undefined || input === '')
         return;
 
@@ -224,7 +223,8 @@ export class EndrosementMasterComponent implements OnInit {
   }
 
   getModels(): any {
-    let manufacturerId = this.endrosementMaster.value.manufactureId;
+    debugger
+    let manufacturerId = this.endrosementMaster.value.manufacturerId;
     this.commonService.getModels(manufacturerId).subscribe((response: IDropDownDto<number>[]) => {
       this._models = response;
     });
@@ -359,12 +359,15 @@ export class EndrosementMasterComponent implements OnInit {
   }
 
   getVarients(): void {
-    let manufacturerId = this.endrosementMaster.value.manufacturer;
-    let modelId = this.endrosementMaster.value.model;
+    debugger
+    let manufacturerId = this.endrosementMaster.value.manufacturerId;
+    let modelId = this.endrosementMaster.value.modelId;
     let vehicleClassId = this.endrosementMaster.value.vehicleClassId;
-    this.commonService.getVarients(manufacturerId, modelId, vehicleClassId).subscribe((response: IVarientDto[]) => {
-      this._varients = response;
-    });
+    if(manufacturerId && modelId && vehicleClassId){
+      this.commonService.getVarients(manufacturerId, modelId, vehicleClassId).subscribe((response: IVarientDto[]) => {
+        this._varients = response;
+      });
+    }
   }
 
   onEndrosementChange(event: MatRadioChange): void {
@@ -561,6 +564,7 @@ export class EndrosementMasterComponent implements OnInit {
 
 
   onEndrosementReasonUpdate(endroseData){
+    debugger
     this._selectedEndrosementReason = this.endrosementMaster.value.endrosementReason;
     if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfAccessoriesPassengerDiscount
       || this._selectedEndrosementReason ==  EndorsementReason.RemovalOfAccessoriesPassengerDiscount
@@ -568,10 +572,11 @@ export class EndrosementMasterComponent implements OnInit {
 
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremiumm : endroseData.AmtODChange,
+        grossPremium : endroseData.AmtODChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
         electricAccessoriesIDV : endroseData.ElectricAssessoriesIDV,
         nonElectricAccessoriesIDV : endroseData.NonElectricAssessoriesIDV,
+        shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
       });
      
     }
@@ -579,9 +584,11 @@ export class EndrosementMasterComponent implements OnInit {
     
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremiumm : endroseData.AmtODChange,
+        grossPremium : endroseData.AmtODChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
-        addOnRiderId : endroseData.NewAddOnPlanId
+        addOnRiderId : endroseData.NewAddOnPlanId,
+        shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
+
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfCNGLPG
@@ -591,9 +598,10 @@ export class EndrosementMasterComponent implements OnInit {
 
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremiumm : endroseData.AmtODChange,
+        grossPremium : endroseData.AmtODChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
-        cngidv : endroseData.CNGIDV,
+        cngidv : endroseData.IDVChange,
+        shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.AdditionOfIDV
@@ -603,9 +611,10 @@ export class EndrosementMasterComponent implements OnInit {
 
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremiumm : endroseData.AmtODChange,
+        grossPremium : endroseData.AmtODChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
         vehicleIdv : endroseData.VehicleIDV,
+        shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.CancellationCaseRejectedByCompany || 
@@ -620,7 +629,7 @@ export class EndrosementMasterComponent implements OnInit {
      
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremiumm : endroseData.AmtODChange,
+        grossPremium : endroseData.AmtODChange,
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.CancellationChequeBounce){
@@ -637,9 +646,11 @@ export class EndrosementMasterComponent implements OnInit {
      
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
-        ncbPercentage : endroseData.NewNCBId
+        ncbPercentage : endroseData.NewNCBId,
+        shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
+
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.NCBRecoverable){
@@ -647,17 +658,18 @@ export class EndrosementMasterComponent implements OnInit {
       this.endrosementMaster.patchValue({
         odRecoverable :  endroseData.AmtODChange,
         premiumRecoverable : endroseData.AmtGrossPremiumChange,
-        odRecobe: this.IsModified ?  endroseData.NCBRecoveredCancel : null,
+        odRecobe: this.IsModified ?  endroseData.NCBRecovredCancel : null,
 
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.RemovalOfAccessoriesPassengerDiscount){
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
         electricAccessoriesIDV : endroseData.ElectricAssessoriesIDV,
         nonElectricAccessoriesIDV : endroseData.NonElectricAssessoriesIDV,
+        shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.NCBRecoverable){
@@ -671,18 +683,20 @@ export class EndrosementMasterComponent implements OnInit {
     if(this._selectedEndrosementReason ==  EndorsementReason.RTOLocationChange){
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
         rtoZone : endroseData.RTOZoneId,
+        shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.VehicleModelOrVariantOrClassChange){
      
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
         vehicleClassId : endroseData.NewVehicleClassId,
+        shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.CancellationNCBFalsificationShortScale){
@@ -693,22 +707,24 @@ export class EndrosementMasterComponent implements OnInit {
     ){
        
       this.endrosementMaster.patchValue({
-        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
+        shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfDOBDecreaseSlabHealth
     ){
       this.endrosementMaster.patchValue({
-        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfDOBIncreaseSlabHealth
     ){
     
       this.endrosementMaster.patchValue({
-        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
+        shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.ChangeOfPolicyPeriodDecreaseTravel
@@ -718,7 +734,7 @@ export class EndrosementMasterComponent implements OnInit {
   ||  this._selectedEndrosementReason ==  EndorsementReason.DeletionOfSumInsuredFireMarine
   ||  this._selectedEndrosementReason ==  EndorsementReason.MemberDeletionHealth){
       this.endrosementMaster.patchValue({
-        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
       });
     }
 
@@ -729,8 +745,10 @@ export class EndrosementMasterComponent implements OnInit {
     ||  this._selectedEndrosementReason ==  EndorsementReason.MemberAdditionAndDeletionGPAMisc 
     ||  this._selectedEndrosementReason ==  EndorsementReason.ReturnExtensionDateChangeTravel){
       this.endrosementMaster.patchValue({
-        grossPremiumm : endroseData.AmtGrossPremiumChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
+        shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
+      
       });
     }
 

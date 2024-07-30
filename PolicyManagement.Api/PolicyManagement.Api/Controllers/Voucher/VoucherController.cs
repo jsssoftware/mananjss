@@ -53,6 +53,12 @@ namespace PolicyManagement.Api.Controllers.Voucher
 
         [Route("getcommisionslab/{branchId}/{verticalId:int}")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetCommisionSlab(string branchId,int verticalId) => Json(await _voucherService.GetCommisionSlab(branchId, verticalId));
+        public async Task<IHttpActionResult> GetCommisionSlab(int branchId,int verticalId) => Json(await _voucherService.GetCommisionSlab(branchId, verticalId));
+
+        [Route("commisioncalculation")]
+        [HttpPost]
+        public async Task<IHttpActionResult> AddCommisionCalculation(PosCommisonMotorModel posCommisonMotorModel) => Json(await _voucherService.InsertCommisionSlabCalculation(posCommisonMotorModel));
+
+
     }
 }

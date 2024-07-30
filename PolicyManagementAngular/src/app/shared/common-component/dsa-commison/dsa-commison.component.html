@@ -1,0 +1,154 @@
+<mat-card class="mat-elevation-z2">
+    <mat-card-header  class="card-container" style="display: flow-root"> 
+      <mat-card-title style="width: 50%; float: left;">
+        <p>POS Commision</p>
+      </mat-card-title>
+     
+    </mat-card-header>
+    <hr class="hrClass" />
+    <mat-card-content>
+      <form [formGroup]="poscommision" autocomplete="off" style="padding-bottom:10px ;"  >
+       
+        <div class="row">
+          <div class="col-lg-4">
+           <mat-form-field>
+            <mat-label>Commision Cycle</mat-label>
+            <mat-select formControlName="commisoncycle" >
+                <mat-option *ngFor="let monthCycle of _monthCycle" [value]="monthCycle.MonthCycleId">{{monthCycle.MonthCycle}}</mat-option>
+            </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-lg-4">
+            <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb6e'}"  (click)="commisonSlabMotor()" type="button">
+             Commision Process Motor
+            </button>
+          </div>
+          <div class="col-lg-4">
+            <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb6e'}"  (click)="exportexcel()" type="button">
+            Excel Print (Motor)
+            </button>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <div class="col-lg-4">
+          
+          </div>
+          <div class="col-lg-4">
+            <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb6e'}"  (click)="exportexcel()" type="button">
+             Commision Process (Retail & Commercial)
+            </button>
+          </div>
+          <div class="col-lg-4">
+            <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb6e'}"  (click)="exportexcel()" type="button">
+            Excel Print (Retail & Commercial)
+            </button>
+          </div>
+        </div>
+        <div class="row" style="margin-top: 10px;">
+          <div class="col-lg-4">
+          
+          </div>
+          <div class="col-lg-4">
+            <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb6e'}"  (click)="exportexcel()" type="button">
+              Commision Freze (Motor)
+            </button>
+          </div>
+          <div class="col-lg-4">
+            <button mat-flat-button color="secondary" [ngStyle]="{'background-color':  '#fdcb6e'}"  (click)="exportexcel()" type="button">
+              Commision Freze (Retail & Commerce)
+            </button>
+          </div>
+        </div>
+        <label>Update DSA Commision Cycle</label>
+        <hr class="hrClass" />
+
+        <div class="row" style="margin-top: 10px;">
+            <div class="col-lg-2">
+              <label>Control Number</label>
+            </div>
+              <div class="col-lg-4">
+                <mat-form-field>
+                  <mat-label>Control Number</mat-label>
+
+                  <input type="text" matInput formControlName="controlNumber" placeholder="Control Number" />
+                </mat-form-field>
+            </div>
+            <div class="col-lg-2">
+              <button type="reset" class="btn-block" mat-raised-button color="accent" (click)="search()">
+                 Search
+              </button>           
+             </div>
+          </div>
+          
+        <div class="row">
+          <div class="col-lg-2">
+            <label>Insurance Company</label>
+          </div>
+          <div class="col-lg-4">
+            <mat-form-field > 
+              <input type="text" placeholder="Insurance Company" aria-label="Insurance Company" matInput
+              formControlName="insuranceCompany">
+            </mat-form-field>
+          </div>
+        </div>
+      
+        <div class="row" >
+          <div class="col-lg-2">
+            <label>Customer Name</label>
+          </div>
+          <div class="col-lg-4">
+            <mat-form-field>
+              <input type="text" matInput formControlName="customerName" placeholder="Customer Name" class="uppercase">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row" >
+          <div class="col-lg-2">
+            <label>POS Name</label>
+          </div>
+          <div class="col-lg-4">
+            <mat-form-field>
+              <mat-label>POS Name</mat-label>
+              <input type="text" matInput formControlName="posNameId" placeholder="POS Name" class="uppercase">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row" >
+          <div class="col-lg-2">
+            <label>Commision Percentage</label>
+          </div>
+          <div class="col-lg-4">
+            <mat-form-field>
+              <mat-label>Commision Percentage</mat-label>
+              <input type="number" matInput formControlName="commisionper" placeholder="Customer (%)" class="uppercase">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-4">
+          </div>
+          <div class="col-lg-2">
+            <button type="button" class="btn-block" mat-raised-button color="accent" (click)="reset()">
+              Update Commision
+            </button>
+          </div>
+        </div>
+
+
+        <div class="row" >
+          <div class="col-lg-2">
+            <mat-label>POS Name</mat-label>
+          </div>
+          <div class="col-lg-4">
+            <mat-form-field >
+              <mat-select formControlName="posNameId">
+                <mat-option *ngFor="let _posData of _posDatas" [value]="_posData.Value">{{_posData.Name}}
+                </mat-option>
+              </mat-select>                          
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+     
+    </mat-card-content>
+  </mat-card> 

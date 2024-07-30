@@ -76,4 +76,10 @@
         COMPREHENSIVE,
         USAGE_BASE
     }
+
+    public enum POSCommsisionStatus
+    {
+        RECIEVED = 2,
+        NOTRECIEVED =1
+    }
 }

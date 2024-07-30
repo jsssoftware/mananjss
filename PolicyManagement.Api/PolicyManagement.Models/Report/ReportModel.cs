@@ -117,6 +117,11 @@ namespace PolicyManagement.Models.Report {
         public string PolicyRemarks { get; set; }
         public int PolicyId { get; set; }
         public int BranchId { get; set; }
+        public string Pos { get; set; }
+        public string Telecaller { get; set; }
+        public string Reference { get; set; }
+        public string Fos { get; set; }
+
     }
 
     public class RenewDump
