@@ -22,6 +22,7 @@ namespace PolicyManagement.Models.Voucher
         public string PolicyStartToDate { get; set; }
         public int VerticalType { get; set; }
         public string MonthCycleStart { get; set; }
+        public bool IsRecalculation { get; set; } = false;
 
     }
 }

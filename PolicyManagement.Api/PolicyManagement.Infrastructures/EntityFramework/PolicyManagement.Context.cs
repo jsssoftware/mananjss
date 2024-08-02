@@ -285,9 +285,9 @@ public partial class DataContext : DbContext
 
     public virtual DbSet<ReconDataDownload> ReconDataDownload { get; set; }
 
-    public virtual DbSet<tblCommissionCalculation> tblCommissionCalculation { get; set; }
-
     public virtual DbSet<tblCommissionSlab> tblCommissionSlab { get; set; }
+
+    public virtual DbSet<tblCommissionCalculation> tblCommissionCalculation { get; set; }
 
 
     public virtual int GetOtherHelathPolicy(Nullable<int> policyId, Nullable<int> customerID)

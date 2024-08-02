@@ -138,6 +138,16 @@ public partial class tblCommissionCalculation
 
     public Nullable<decimal> CommisionPercentage { get; set; }
 
+    public Nullable<System.DateTime> AlternateInceptionDate { get; set; }
+
+    public string AlternatePolicyNo { get; set; }
+
+    public string AlternateCompanyName { get; set; }
+
+    public Nullable<int> EndorsementId { get; set; }
+
+    public Nullable<int> EndorsementReasonId { get; set; }
+
 }
 
 }

@@ -12,6 +12,7 @@ import { CommonFunction } from '../../utilities/helpers/common-function';
 import Swal from 'sweetalert2';
 import { CommonService } from 'src/app/app-services/common-service/common.service';
 import { VoucherService } from 'src/app/app-services/voucher/voucher.service';
+import { callbackify } from 'util';
 
 @Component({
   selector: 'app-dsa-commison',
@@ -31,8 +32,9 @@ export class DsaCommisonComponent implements OnInit {
     controlNumber: new FormControl(''),   
     posNameId: new FormControl(''),   
     branchId: new FormControl(''),   
-    monthCycle: new FormControl(''),   
-    monthCycleId: new FormControl(''),   
+    monthCycleStart: new FormControl(''),   
+    monthCycleId: new FormControl(''),  
+    isRecalculation  : new FormControl(false)
  })
   constructor(
     private commonService: CommonService,
@@ -55,7 +57,7 @@ export class DsaCommisonComponent implements OnInit {
   }
 
   reset(){
-
+    this.isConfirmed =  false;
   }
 
   
@@ -72,18 +74,82 @@ export class DsaCommisonComponent implements OnInit {
     });
   }
 
-  commisonSlabMotor(){
+  isConfirmed :boolean=  true
+  commisonSlabMotor(type : number){
     let monthcycle:any =  this._monthCycle.find(x=>x.MonthCycleId == this.poscommision.value.commisoncycle)?.CycleStartDate
     this.poscommision.patchValue({
       branchId : this._branchId,
-      monthCycle :monthcycle?.split("T")[0],
+      monthCycleStart :monthcycle?.split("T")[0],
       monthCycleId :this.poscommision.value.commisoncycle
     });
     
-
     this.voucherService.CommisionSlabCalculation(this.poscommision.value).subscribe(async (response: any) => {
-    });
+      if (!response.IsSuccess &&  this.isConfirmed) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Done',
+          text: response.Message,
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No'
+        }).then((result) => {
+          this.poscommision.patchValue({
+            isRecalculation: false
+          });
+          if (result.isConfirmed) {
+           this.isConfirmed =  true;
+           this.poscommision.patchValue({
+            isRecalculation : true
+          });
+          };
+        })
+      }
+      else
+      if (response.IsSuccess) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Done',
+          text: response.Message,
+          }).then((result) => {
+          if (result.isConfirmed) {
+           this.reset()
+          };
+        })
+      }
+      else {
+        if (response.Response == null) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Sorry',
+            text: response.Message,
+          });
+        }
+        else {
+          if (response.Response.IsError) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Sorry',
+              text: response.Message,
+            });
+          }
+          else {
+            Swal.fire({
+              title: 'Warning',
+              text: response.Message,
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Yes, Save it!',
+              cancelButtonText: 'Cancel'
+            }).then(async (result) => {
+              if (result.isConfirmed) {
+                
 
-  }
+              }
+            })
+          }
+        }
+      }
+  });
+}
 
 }
