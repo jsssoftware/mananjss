@@ -82,7 +82,7 @@
                 </div>
                 <div class="col-lg-2">
                     <mat-form-field>
-                        <input type="text" matInput [(ngModel)]="policyDetails.endrosePremium" readonly />
+                        <input type="text" matInput [(ngModel)]="policyDetails.EndorseGrossPremium" readonly />
                     </mat-form-field>
                 </div>
                
@@ -195,7 +195,8 @@
                         <mat-form-field appearance="fill">
                             <mat-label>Endorsement Reason</mat-label>
 
-                            <mat-select formControlName="endrosementReason"   (selectionChange)="onEndrosementReasonChange()">
+                            <mat-select formControlName="endrosementReason"   (selectionChange)="onEndrosementReasonChange()" 
+                             [disabled]="IsModified">
                               <mat-option>Select</mat-option>
                               <mat-option *ngFor="let endrosementReason of _endrosementReason" [value]="endrosementReason.Value">{{endrosementReason.Name}}
                               </mat-option>

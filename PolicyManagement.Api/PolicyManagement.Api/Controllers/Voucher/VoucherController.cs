@@ -57,7 +57,7 @@ namespace PolicyManagement.Api.Controllers.Voucher
 
         [Route("commisioncalculation")]
         [HttpPost]
-        public async Task<IHttpActionResult> AddCommisionCalculation(PosCommisonMotorModel posCommisonMotorModel) => Json(await _voucherService.InsertCommisionSlabCalculation(posCommisonMotorModel));
+        public async Task<IHttpActionResult> AddCommisionCalculation(PosCommisonMotorModel posCommisonMotorModel) => Json(await _voucherService.InsertCommisionSlabMotorCalculation(posCommisonMotorModel));
 
 
     }

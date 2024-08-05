@@ -166,6 +166,7 @@ namespace PolicyManagement.Models.Endrosement
         public short PolicyTypeId { get; set; }
         public string PlanTypeName { get; set; }
         public double controlNumberDigit { get; set; }
+        public decimal? EndorseGrossPremium { get; set; }
     }
 
 

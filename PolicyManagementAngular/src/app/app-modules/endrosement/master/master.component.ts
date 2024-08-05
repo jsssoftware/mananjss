@@ -572,7 +572,7 @@ export class EndrosementMasterComponent implements OnInit {
 
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremium : endroseData.AmtODChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
         electricAccessoriesIDV : endroseData.ElectricAssessoriesIDV,
         nonElectricAccessoriesIDV : endroseData.NonElectricAssessoriesIDV,
@@ -584,7 +584,7 @@ export class EndrosementMasterComponent implements OnInit {
     
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremium : endroseData.AmtODChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
         addOnRiderId : endroseData.NewAddOnPlanId,
         shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
@@ -598,7 +598,7 @@ export class EndrosementMasterComponent implements OnInit {
 
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremium : endroseData.AmtODChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
         cngidv : endroseData.IDVChange,
         shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
@@ -611,7 +611,7 @@ export class EndrosementMasterComponent implements OnInit {
 
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremium : endroseData.AmtODChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
         shortfallAmount:   endroseData.EndoresementShortfallAmt,
         vehicleIdv : endroseData.VehicleIDV,
         shortfallVoucherNo : endroseData.EndoresementShortfallVoucherNo
@@ -629,7 +629,7 @@ export class EndrosementMasterComponent implements OnInit {
      
       this.endrosementMaster.patchValue({
         OD :  endroseData.AmtODChange,
-        grossPremium : endroseData.AmtODChange,
+        grossPremium : endroseData.AmtGrossPremiumChange,
       });
     }
     if(this._selectedEndrosementReason ==  EndorsementReason.CancellationChequeBounce){

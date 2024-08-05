@@ -36,7 +36,7 @@ namespace PolicyManagement.Services.EndrosementService
 
         }
 
-        public async Task<DataTableDto<List<dynamic>>> FindPolicyData(EndrosementModalFilter agentSwapFilter)
+        public async Task<DataTableDto<List<dynamic>>> FindPolicyData(EndrosementModalFilter endrosementModalFilter)
         {
 
 
@@ -70,12 +70,12 @@ namespace PolicyManagement.Services.EndrosementService
                                   join planType in _dataContext.tblPlanType on policy.PlanTypeId equals (short)planType.PlanTypeId into planTypeJoin
                                   from planType in planTypeJoin.DefaultIfEmpty()
 
-                                  where (agentSwapFilter.InsuranceCompany == 0 || insuranceCompany.InsuranceCompanyId == agentSwapFilter.InsuranceCompany) &&
-                                  (string.IsNullOrEmpty(agentSwapFilter.CustomerName) || policy.NameInPolicy == agentSwapFilter.CustomerName) &&
-                                  (agentSwapFilter.PosNameId == 0 || pos.POSId == agentSwapFilter.PosNameId)
+                                  where (endrosementModalFilter.InsuranceCompany == 0 || insuranceCompany.InsuranceCompanyId == endrosementModalFilter.InsuranceCompany) &&
+                                  (string.IsNullOrEmpty(endrosementModalFilter.CustomerName) || policy.NameInPolicy == endrosementModalFilter.CustomerName) &&
+                                  (endrosementModalFilter.PosNameId == 0 || pos.POSId == endrosementModalFilter.PosNameId)
 
-                                  && branch.BranchId == agentSwapFilter.BranchId
-                                  && (agentSwapFilter.VerticalId == (int)Vertical.Motor ? policy.VerticalId == (short)Vertical.Motor : policy.VerticalId != (short)Vertical.Motor)
+                                  && branch.BranchId == endrosementModalFilter.BranchId
+                                  && (endrosementModalFilter.VerticalId == (int)Vertical.Motor ? policy.VerticalId == (short)Vertical.Motor : policy.VerticalId != (short)Vertical.Motor)
                                   && policy.IsVerified == true
 
                                   select new PolicyResult
@@ -116,23 +116,24 @@ namespace PolicyManagement.Services.EndrosementService
                                       CoverNoteNo = policy.CoverNoteNo,
                                       PolicyTypeId = policy.PolicyTypeId,
                                       PlanTypeName = planType != null ? planType.PlanTypeName : null,
-                                      controlNumberDigit = 0 // Default value
+                                      controlNumberDigit = 0 ,
+                                      EndorseGrossPremium = policy.EndorseGrossPremium
 
                                   }
                                  ).ToList<dynamic>();
 
-            if (!string.IsNullOrEmpty(agentSwapFilter.number))
+            if (!string.IsNullOrEmpty(endrosementModalFilter.number))
             {
                 filteredResult.ForEach(x => { x.controlNumberDigit = convertToDigit(x.ControlNo); });
-                if (agentSwapFilter.number.Length < 7)
+                if (endrosementModalFilter.number.Length < 7)
                 {
-                    var lastdigit = Convert.ToDouble(agentSwapFilter.number) % 100000;
+                    var lastdigit = Convert.ToDouble(endrosementModalFilter.number) % 100000;
                    
                     filteredResult = filteredResult.Where(x => x.controlNumberDigit == lastdigit).ToList();
                 }
                 else
                 {
-                    filteredResult = filteredResult.Where(x => x.ControlNo == agentSwapFilter.number).ToList();
+                    filteredResult = filteredResult.Where(x => x.ControlNo == endrosementModalFilter.number).ToList();
 
                 }
             }
@@ -190,18 +191,36 @@ namespace PolicyManagement.Services.EndrosementService
 
                 if (model.OD.HasValue)
                 {
+                    if (endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfCNGLPG || endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfIDV)
+                    {
 
-                    motorPolicyData.EndorseOD = model.OD;
-                    endrosementData.AmtODChange = model.OD;
-                    motorPolicyData.TotalOD = model.OD + motorPolicyData.TotalOD;
+                        motorPolicyData.EndorseOD = model.OD;
+                        endrosementData.AmtODChange = model.OD;
+                        motorPolicyData.TotalOD =motorPolicyData.TotalOD - model.OD;
+                    }
+                    else
+                    {
+                        motorPolicyData.EndorseOD = model.OD;
+                        endrosementData.AmtODChange = model.OD;
+                        motorPolicyData.TotalOD = model.OD + motorPolicyData.TotalOD;
+                    }
 
                 }
 
                 if (model.GrossPremium.HasValue)
                 {
-                    motorPolicyData.EndorseGrossPremium = model.GrossPremium;
-                    endrosementData.AmtGrossPremiumChange = model.GrossPremium;
-                    motorPolicyData.TotalGrossPremium = model.GrossPremium + motorPolicyData.TotalGrossPremium;
+                    if (endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfCNGLPG || endrosementData.EndorsementReasonId == (short)EndorsementReason.RemovalOfIDV)
+                    {
+                        motorPolicyData.EndorseGrossPremium = model.GrossPremium;
+                        endrosementData.AmtGrossPremiumChange = model.GrossPremium;
+                        motorPolicyData.TotalGrossPremium = motorPolicyData.TotalGrossPremium - model.GrossPremium;
+                    }
+                    else
+                    {
+                        motorPolicyData.EndorseGrossPremium = model.GrossPremium;
+                        endrosementData.AmtGrossPremiumChange = model.GrossPremium;
+                        motorPolicyData.TotalGrossPremium = model.GrossPremium + motorPolicyData.TotalGrossPremium;
+                    }
                 }
 
                 if (model.ShortfallAmount.HasValue || !string.IsNullOrEmpty(model.ShortfallVoucherNo))
@@ -424,9 +443,8 @@ namespace PolicyManagement.Services.EndrosementService
                 if (isCancellationReason(model.EndrosementReason) && !model.PolicyReinstate)
                 {
                     motorPolicyData.PolicyCancelReasonId = model.EndrosementReason;
-                    motorPolicyData.Flag1 = false;
                     motorPolicyData.PolicyCancelDate= DateTime.Now;
-
+                    motorPolicyData.IsActive = false;
                 }
 
                 await _dataContext.SaveChangesAsync();

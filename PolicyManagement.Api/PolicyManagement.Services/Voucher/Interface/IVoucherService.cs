@@ -19,6 +19,6 @@ namespace PolicyManagement.Services.Voucher.Interface
         Task<VoucherDto> FindVoucherById(int voucherId);
         Task<CommonDto<string>> AddCommisionSlab(List<CommisionSlabModel> model, BaseModel baseModel);
         Task<List<dynamic>> GetCommisionSlab(int branchId, int verticalId);
-        Task<CommonDto<string>> InsertCommisionSlabCalculation(PosCommisonMotorModel posCommisonMotorModel);
+        Task<CommonDto<string>> InsertCommisionSlabMotorCalculation(PosCommisonMotorModel posCommisonMotorModel);
     }
 }
