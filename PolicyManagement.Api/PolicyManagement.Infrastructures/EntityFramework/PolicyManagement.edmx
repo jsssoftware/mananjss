@@ -386,6 +386,16 @@
           <Property Name="AlternateCompanyName" Type="nvarchar" MaxLength="50" />
           <Property Name="EndorsementId" Type="int" />
           <Property Name="EndorsementReasonId" Type="int" />
+          <Property Name="PortabilityId" Type="int" />
+          <Property Name="TerrorismPremium" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalSumInsured" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Portability" Type="varchar" MaxLength="50" />
+          <Property Name="InsuredMaxAge" Type="int" />
+          <Property Name="PlanName" Type="varchar" MaxLength="50" />
+          <Property Name="NoofYear" Type="int" />
+          <Property Name="NoofYearId" Type="int" />
+          <Property Name="ProductName" Type="varchar" MaxLength="50" />
+          <Property Name="ProductId" Type="int" />
         </EntityType>
         <EntityType Name="tblCommissionPayType">
           <Key>
@@ -460,6 +470,12 @@
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblCompanyDetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblCompanyDetails">
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmpGroup" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
         <EntityType Name="tblCoverage">
           <Key>
             <PropertyRef Name="CoverageId" />
@@ -2088,6 +2104,13 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.tblRefrenceSource' does not ha
           <Property Name="ModifiedBy" Type="int" />
           <Property Name="ModifiedTime" Type="smalldatetime" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'PolicyManagerQA.dbo.tblVersion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblVersion">
+          <Property Name="Major" Type="tinyint" />
+          <Property Name="Minor" Type="tinyint" />
+          <Property Name="Revision" Type="tinyint" />
+        </EntityType>-->
         <EntityType Name="tblVertical">
           <Key>
             <PropertyRef Name="VerticalId" />
@@ -8256,6 +8279,16 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <Property Name="AlternateCompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EndorsementId" Type="Int32" />
           <Property Name="EndorsementReasonId" Type="Int32" />
+          <Property Name="PortabilityId" Type="Int32" />
+          <Property Name="TerrorismPremium" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalSumInsured" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Portability" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="InsuredMaxAge" Type="Int32" />
+          <Property Name="PlanName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NoofYear" Type="Int32" />
+          <Property Name="NoofYearId" Type="Int32" />
+          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProductId" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -11546,6 +11579,16 @@ warning 6002: The table/view 'PolicyManagerQA.dbo.ViewPersonDataBirthdayWish' do
           <EntitySetMapping Name="tblCommissionCalculation">
             <EntityTypeMapping TypeName="PolicyManagerModel.tblCommissionCalculation">
               <MappingFragment StoreEntitySet="tblCommissionCalculation">
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="NoofYearId" ColumnName="NoofYearId" />
+                <ScalarProperty Name="NoofYear" ColumnName="NoofYear" />
+                <ScalarProperty Name="PlanName" ColumnName="PlanName" />
+                <ScalarProperty Name="InsuredMaxAge" ColumnName="InsuredMaxAge" />
+                <ScalarProperty Name="Portability" ColumnName="Portability" />
+                <ScalarProperty Name="TotalSumInsured" ColumnName="TotalSumInsured" />
+                <ScalarProperty Name="TerrorismPremium" ColumnName="TerrorismPremium" />
+                <ScalarProperty Name="PortabilityId" ColumnName="PortabilityId" />
                 <ScalarProperty Name="EndorsementReasonId" ColumnName="EndorsementReasonId" />
                 <ScalarProperty Name="EndorsementId" ColumnName="EndorsementId" />
                 <ScalarProperty Name="AlternateCompanyName" ColumnName="AlternateCompanyName" />

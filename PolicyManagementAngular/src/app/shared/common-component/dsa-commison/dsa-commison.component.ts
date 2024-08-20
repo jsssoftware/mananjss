@@ -32,6 +32,7 @@ export class DsaCommisonComponent implements OnInit {
     controlNumber: new FormControl(''),   
     posNameId: new FormControl(''),   
     branchId: new FormControl(''),   
+    verticalType: new FormControl(''),   
     monthCycleStart: new FormControl(''),   
     monthCycleId: new FormControl(''),  
     isRecalculation  : new FormControl(false)
@@ -80,7 +81,8 @@ export class DsaCommisonComponent implements OnInit {
     this.poscommision.patchValue({
       branchId : this._branchId,
       monthCycleStart :monthcycle?.split("T")[0],
-      monthCycleId :this.poscommision.value.commisoncycle
+      monthCycleId :this.poscommision.value.commisoncycle,
+      verticalType : type
     });
     
     this.voucherService.CommisionSlabCalculation(this.poscommision.value).subscribe(async (response: any) => {

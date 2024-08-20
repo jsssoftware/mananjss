@@ -148,6 +148,26 @@ public partial class tblCommissionCalculation
 
     public Nullable<int> EndorsementReasonId { get; set; }
 
+    public Nullable<int> PortabilityId { get; set; }
+
+    public Nullable<decimal> TerrorismPremium { get; set; }
+
+    public Nullable<decimal> TotalSumInsured { get; set; }
+
+    public string Portability { get; set; }
+
+    public Nullable<int> InsuredMaxAge { get; set; }
+
+    public string PlanName { get; set; }
+
+    public Nullable<int> NoofYear { get; set; }
+
+    public Nullable<int> NoofYearId { get; set; }
+
+    public string ProductName { get; set; }
+
+    public Nullable<int> ProductId { get; set; }
+
 }
 
 }

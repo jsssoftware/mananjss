@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.EMMA;
 using DocumentFormat.OpenXml.Office.Word;
 using DocumentFormat.OpenXml.Office2019.Drawing.Model3D;
@@ -20,9 +22,12 @@ using System.Data;
 using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using DataTable = System.Data.DataTable;
 
 namespace PolicyManagement.Services.Voucher
 {
@@ -543,6 +548,22 @@ namespace PolicyManagement.Services.Voucher
             return query;
 
         }
+
+        public async Task<CommonDto<string>> InsertCommisionCalculation(PosCommisonMotorModel CommisonCalculationModel)
+        {
+            var response = new CommonDto<string>();
+            if (CommisonCalculationModel.VerticalType == 1)
+            {
+                response= await InsertCommisionSlabMotorCalculation(CommisonCalculationModel);
+            }
+            else
+            {
+                response = await InsertRetailSlabCommisionCalculation(CommisonCalculationModel);
+            }
+
+            return response;
+        }
+
 
         public async Task<CommonDto<string>> InsertCommisionSlabMotorCalculation(PosCommisonMotorModel posCommisonMotorModel)
         {
@@ -1294,79 +1315,334 @@ namespace PolicyManagement.Services.Voucher
         }
 
 
-    /*    public async Task<CommonDto<object>> GetMotorReconDownload(ReportModel reportModel)
+        public async Task<CommonDto<string>> InsertRetailSlabCommisionCalculation(PosCommisonMotorModel posCommisonMotorModel)
         {
-            var dataRecon = new List<dynamic>();
-            DataTable data = new DataTable();
-            data.TableName = "Recon List";
-            data.Columns.Add("PolicyId", typeof(string));
-            data.Columns.Add("ControlNo", typeof(string));
-            data.Columns.Add("TPPremium", typeof(string));
-            data.Columns.Add("RegistrationDate", typeof(string));
-            data.Columns.Add("MakeYear", typeof(string));
-            data.Columns.Add("InsuranceCompanyName", typeof(string));
-            data.Columns.Add("NameInPolicy", typeof(string));
-            data.Columns.Add("PolicyNo", typeof(string));
-            data.Columns.Add("OD", typeof(string));
-            data.Columns.Add("GrossPremium", typeof(string));
-            data.Columns.Add("EndorsementReason", typeof(string));
-            data.Columns.Add("ModelName", typeof(string));
-            data.Columns.Add("RegistrationNo", typeof(string));
-            data.Columns.Add("EndorseOD", typeof(string));
-            data.Columns.Add("TotalOD", typeof(string));
-            data.Columns.Add("AddonOD", typeof(string));
-            data.Columns.Add("EndorseGrossPremium", typeof(string));
-            data.Columns.Add("TotalGrossPremium", typeof(string));
-            data.Columns.Add("EngineNo", typeof(string));
-            data.Columns.Add("ChassisNo", typeof(string));
-            data.Columns.Add("VehicleClass", typeof(string));
-            data.Columns.Add("PolicyStatus", typeof(string));
-            data.Columns.Add("PolicyType", typeof(string));
-            data.Columns.Add("PolicyStartDate", typeof(string));
-            data.Columns.Add("PolicyTypeId", typeof(string));
-            data.Columns.Add("BusinessDoneBy", typeof(string));
-            data.Columns.Add("CommRecived", typeof(string));
-            data.Columns.Add("MonthCycle", typeof(string));
-            data.Columns.Add("MonthCycleId", typeof(string));
-            data.Columns.Add("PolicyEndDate", typeof(string));
-            data.Columns.Add("PolicyNoOD", typeof(string));
-            data.Columns.Add("PolicyPackageType", typeof(string));
-            data.Columns.Add("PolicyTermName", typeof(string));
-            data.Columns.Add("PolicyStartDateOD", typeof(string));
-            data.Columns.Add("PolicyEndDateOD", typeof(string));
-            data.Columns.Add("ODCompany", typeof(string));
-            data.Columns.Add("InsuranceCompanyODId", typeof(string));
-            if (reportModel.DataType == 1)
+            var datefrom = new DateTime();
+            if (!string.IsNullOrEmpty(posCommisonMotorModel.MonthCycleStart))
             {
-                
-                    dataRecon = _dataContext.Usp_ReconDataDownloadRetailCommerceWithCom(reportModel.InsuranceCompanyId, reportModel.BranchId, reportModel.MonthCycle).ToList<dynamic>(); ;
-
-                
-
+                datefrom = DateTime.ParseExact(posCommisonMotorModel.MonthCycleStart, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             }
-            
-            if (dataRecon.Count > 0)
+
+            var checkCommisionFreze = _dataContext.tblMonthCycle.Where(x => x.MonthCycleId == posCommisonMotorModel.MonthCycleId && x.CommissionFreeze == 1).Any();
+            if (checkCommisionFreze)
             {
-                dataRecon.ForEach(x =>
+                return new CommonDto<string>
                 {
-                    data.Rows.Add(x.PolicyId, x.ControlNo, x.TPPremium, x.RegistrationDate, x.MakeYear, x.InsuranceCompanyName, x.NameInPolicy, x.PolicyNo
-                    , x.OD, x.GrossPremium, x.EndorsementReason, x.ModelName, x.RegistrationNo, x.EndorseOD, x.TotalOD, x.AddonOD, x.EndorseGrossPremium
-                    , x.TotalGrossPremium, x.EngineNo, x.ChassisNo, x.VehicleClass, x.PolicyStatus, x.PolicyType, x.PolicyStartDate, x.PolicyTypeId, x.BusinessDoneBy
-                    , x.CommRecived, x.MonthCycle, x.MonthCycleId, x.PolicyEndDate, x.PolicyNoOD, x.PolicyPackageType, x.PolicyTermName
-                    , x.PolicyStartDateOD, x.PolicyEndDateOD, x.ODCompany, x.InsuranceCompanyODId);
-                });
-               // var response = await GenrateReconExcel(data, "MotorRecon.xlsx");
-                return response;
+                    IsSuccess = true,
+                    Message = $"This Month Commission Statement (Retail & Commercial) already Freeze, Can not Process Again.",
+                    Response = "Ok"
+                };
             }
-            return new CommonDto<object>
+
+
+            var commisonAlreadyPresent = _dataContext.tblCommissionCalculation.Where(x => x.CommissionMonthId == posCommisonMotorModel.MonthCycleId && x.VerticleId > 1).ToList();
+            if (commisonAlreadyPresent.Count() > 0)
             {
-                Message = "No Data",
+
+                return new CommonDto<string>
+                {
+                    IsSuccess = false,
+                    Message = $"This Month Commission statement (Retail & Commercial) already processed, Want to do Process Commissions again on New Commission Structure?",
+                    Response = "Ok"
+                };
+            }
+
+            if (commisonAlreadyPresent.Count() > 0 && posCommisonMotorModel.IsRecalculation)
+            {
+                _dataContext.tblCommissionCalculation.RemoveRange(commisonAlreadyPresent);
+            }
+
+            var varMonthCycleId = posCommisonMotorModel.MonthCycleId;
+            var varBranchId = posCommisonMotorModel.BranchId;
+            var dtpChkTo = posCommisonMotorModel.MonthCycleId;
+
+             var combinedQuery =
+                      from motorPolicy in _dataContext.tblMotorPolicyDatas
+                      join insuranceCompany in _dataContext.tblInsuranceCompany on motorPolicy.InsuranceCompanyId equals insuranceCompany.InsuranceCompanyId
+                      join policyType in _dataContext.tblPolicyType on motorPolicy.PolicyTypeId equals policyType.PolicyTypeId
+                      join policyStatus in _dataContext.tblPolicyStatus on motorPolicy.PolicyStatusId equals policyStatus.PolicyStatusId
+                      join endorsementReason in _dataContext.tblEndorsementReason on motorPolicy.PolicyCancelReasonId equals endorsementReason.EndorsementReasonId into endorsementJoin
+                      from endorsementReason in endorsementJoin.DefaultIfEmpty()
+                      join policyTerm in _dataContext.tblPolicyTerm on motorPolicy.PolicyTermId equals policyTerm.PolicyTermId into policyTermJoin
+                      from policyTerm in policyTermJoin.DefaultIfEmpty()
+                      join voucherDetails in _dataContext.tblVoucherDetails on motorPolicy.PolicyId equals voucherDetails.PolicyId
+                       into voucherDetailsJoin
+                      from voucherDetails in voucherDetailsJoin.DefaultIfEmpty()
+                      join productDetails in _dataContext.tblProduct on motorPolicy.ProductId equals productDetails.ProductId
+                      join plans in _dataContext.tblPlan on motorPolicy.PlanId equals plans.PlanId into plansJoin
+                      from plans in plansJoin.DefaultIfEmpty()
+                      join plantypes in _dataContext.tblPlanType on motorPolicy.PlanTypeId equals (short)plantypes.PlanTypeId into plantypesJoin
+                      from plantypes in plantypesJoin.DefaultIfEmpty()
+                      join portabality in _dataContext.tblPortability on motorPolicy.PortabilityId equals portabality.PortabilityId into portabalityJoin
+                      from portabality in portabalityJoin.DefaultIfEmpty()
+
+                      join tc in _dataContext.tblTeamMember on motorPolicy.TeleCallerId equals tc.TeamMemberId into tcGroup
+                      from tc in tcGroup.DefaultIfEmpty()
+                      join fos in _dataContext.tblTeamMember on motorPolicy.FOSId equals fos.TeamMemberId into fosGroup
+                      from fos in fosGroup.DefaultIfEmpty()
+                      join r in _dataContext.tblReference on motorPolicy.ReferenceId equals r.ReferenceId into rGroup
+                      from r in rGroup.DefaultIfEmpty()
+                      join pos in _dataContext.tblPOS on motorPolicy.POSId equals pos.POSId into posJoin
+                      from pos in posJoin.DefaultIfEmpty()
+                      join ny in _dataContext.tblNoofYear on motorPolicy.NoofYearId equals ny.NoofYearId
+
+                      where motorPolicy.BranchId == varBranchId
+                            && motorPolicy.IsVerified == true
+                           && (motorPolicy.POSCommissionReceived == (int)POSCommsisionStatus.NOTRECIEVED || !motorPolicy.POSCommissionReceived.HasValue) && motorPolicy.VerticalId != (int)Vertical.Motor
+                       // && motorPolicy.PolicyStartDate <= datefrom
+                      orderby policyType.PolicyType, motorPolicy.PolicyStartDate
+                      select new
+                      {
+                          POSName = pos.POSName,
+                          POsId = motorPolicy.POSId,
+                          CompanyName = insuranceCompany!= null && insuranceCompany.InsuranceCompanyName != null ? insuranceCompany.InsuranceCompanyName : insuranceCompany.InsuranceCompanyName ?? null,
+                          PolicyMainType = "Retail & CommercialPolicy",
+                          OD = motorPolicy.OD,
+                          NameInPolicy = motorPolicy.NameInPolicy ?? null,
+                          IssueDate = motorPolicy.PolicyStartDate,
+                          PolicyId = motorPolicy.PolicyId,
+                          ControlNo = motorPolicy.ControlNo ?? null,
+                          GrossPremium = motorPolicy.GrossPremium,
+                          PolicyNo = motorPolicy.PolicyNo,
+                          VerticleId = motorPolicy.VerticalId,
+                          PolicyRemarks = motorPolicy.PolicyRemarks,
+                          PolicyStatus = policyStatus.PolicyStatus ?? null,
+                          EndorsementReason = endorsementReason.EndorsementReason ?? null,
+                          PolicyCancelDate = motorPolicy.PolicyCancelDate,
+                          EndorseGrossPremium = motorPolicy.EndorseGrossPremium ?? null,
+                          EndorseOD = motorPolicy.EndorseOD ?? null,
+                          PolicyType = policyType.PolicyType,
+                          CommissionMonthId = varMonthCycleId,
+                          InsureCompanyId = motorPolicy.InsuranceCompanyId,
+                          PolicyMainTypeId = policyType.PolicyMainTypeId ?? null,
+                          PolicyTermId = motorPolicy.PolicyTermId,
+                          PolicyTermName = policyTerm.PolicyTermName ?? null,
+                          BranchId = varBranchId,
+                          PolicyStartDate =  motorPolicy.PolicyStartDate ,
+                          ShortFallTotal = voucherDetails != null ? voucherDetails.VoucherAmount : (int?)null,
+                          motorPolicy.PolicyPackageType,
+                          motorPolicy.SpecialDiscount,
+                          motorPolicy.PolicyTypeId,
+                          productDetails.ProductName,
+                          motorPolicy.ProductId,
+                          NoofYear = ny != null ?  ny.NoofYear : null,
+                          NoofYearId = motorPolicy.NoofYearId,
+                          PlanName = plans!= null ? plans.PlanName : null,
+                          PlanTypeName= plantypes != null ? plantypes.PlanTypeName : null,
+                          Portability= portabality != null ? portabality.Portability : null,
+                          GSTRate =   motorPolicy.GSTRate,
+                          ReferenceName = r != null ? r.ReferenceName : null,
+                          TeleCaller = tc!= null?  tc.TeamMemberName : null,
+                          FOS = fos != null ? fos.TeamMemberName : null,
+                          BusinessDoneBy = motorPolicy.BusinessDoneBy,
+                          TerrorismPremium = motorPolicy.TerrorismPremium,
+                          TotalSumInsured = motorPolicy.TotalSumInsured,
+                          InsuredMaxAge = motorPolicy.InsuredMaxAge,
+                          PortabilityId = motorPolicy.PortabilityId,
+
+                      };
+
+              var resultList = combinedQuery.AsEnumerable().Select(x => new tblCommissionCalculation
+              {
+                  CompanyName = x.CompanyName,
+                  PolicyMainType = x.PolicyMainType,
+                  OD = x.OD,
+                  NameInPolicy = x.NameInPolicy,
+                  IssueDate = x.IssueDate,
+                  PolicyId = x.PolicyId,
+                  ControlNo = x.ControlNo,
+                  GrossPremium = x.GrossPremium,
+                  VerticleId = x.VerticleId,
+                  PolicyRemarks = x.PolicyRemarks,
+                  PolicyStatus = x.PolicyStatus,
+                  EndorsementReason = x.EndorsementReason,
+                  PolicyCancelDate = x.PolicyCancelDate,
+                  EndorseGrossPremium = x.EndorseGrossPremium,
+                  EndorseOD = x.EndorseOD,
+                  PolicyType = x.PolicyType,
+                  CommissionMonthId = x.CommissionMonthId,
+                  InsureCompanyId = x.InsureCompanyId,
+                  PolicyMainTypeId = x.PolicyMainTypeId,
+                  PolicyTermId = x.PolicyTermId,
+                  PolicyTermName = x.PolicyTermName,
+                  BranchId = x.BranchId,
+                  PolicyStartDate = x.PolicyStartDate,
+                  ShortFallTotal = x.ShortFallTotal,
+                  PolicyPackageType = x.PolicyPackageType,
+                  SpecialDiscount = x.SpecialDiscount,
+                  PolicyTypeId = x.PolicyTypeId,
+                  ProductId =  x.ProductId,
+                  ProductName = x.ProductName,  
+                  PortabilityId = x.PortabilityId,
+                  Portability = x.Portability,
+                  InsuredMaxAge = x.InsuredMaxAge,
+                  TerrorismPremium = x.TerrorismPremium,
+                  TotalSumInsured = x.TotalSumInsured,
+                  PlanName = x.PlanName,
+                  NoofYearId = x.NoofYearId,
+                  
+              }).ToList();
+
+            _dataContext.tblCommissionCalculation.AddRange(resultList);
+            _dataContext.SaveChanges();
+
+            // Step 1: Update tblEndorsementData for DSA Commission Process for processing month
+            var monthCycleId = posCommisonMotorModel.MonthCycleId; // Assuming varMonthCycleId is already defined
+            var endorsementReasons = new dynamic[] { 1, 18, 28, 29, 39, 40, 42, 55 };
+
+            _dataContext.tblEndorsementData
+                .Where(ed => _dataContext.tblCommissionCalculation
+                    .Any(cc => cc.EndorsementId == ed.EndorsementId && cc.CommissionMonthId == monthCycleId && cc.VerticleId > 1))
+                .ToList()
+                .ForEach(ed =>
+                {
+                    ed.DSACommMonthCycleId = (short)monthCycleId;
+                    ed.DSACommissionReceived = 2;
+                });
+            _dataContext.SaveChanges();
+
+            // Step 2: Update tblCommissionCalculation - every endorsement should 10% commission on endorsement OD
+            _dataContext.tblCommissionCalculation
+                .Where(cc => cc.EndorsementId != null && cc.CommissionMonthId == monthCycleId && cc.VerticleId > 1)
+                .ToList()
+                .ForEach(cc => cc.CommisionPercentage = 10);
+            _dataContext.SaveChanges();
+
+            // Step 3: Process all endorsement cases where OD decrease
+            var selectedRecords = _dataContext.tblCommissionCalculation
+                .Where(cc => endorsementReasons.Contains(cc.EndorsementReasonId) &&
+                             cc.CommissionMonthId == monthCycleId &&
+                             cc.VerticleId > 1)
+                .ToList();
+
+            foreach (var record in selectedRecords)
+            {
+                var commissionPercent = _dataContext.tblCommissionCalculation
+                    .Where(cc => cc.PolicyId > 0 && cc.ControlNo == record.ControlNo)
+                    .Select(cc => cc.CommisionPercentage)
+                    .FirstOrDefault();
+
+                if (commissionPercent !=null)
+                {
+                    record.CommisionPercentage = commissionPercent;
+                    _dataContext.SaveChanges();
+                }
+            }
+
+
+            return new CommonDto<string>
+            {
                 IsSuccess = true,
-                Response = "No Data"
+                Message = $"Commission Calculation (Retail & Commercial) Slab successfully",
+                Response = "Ok"
             };
 
         }
-    */
+
+
+
+           public async Task<CommonDto<object>> GetMotorReconDownload(ReportModel reportModel)
+            {
+                var dataRecon = new List<dynamic>();
+                DataTable data = new DataTable();
+                data.TableName = "Recon List";
+                data.Columns.Add("PolicyId", typeof(string));
+                data.Columns.Add("ControlNo", typeof(string));
+                data.Columns.Add("TPPremium", typeof(string));
+                data.Columns.Add("RegistrationDate", typeof(string));
+                data.Columns.Add("MakeYear", typeof(string));
+                data.Columns.Add("InsuranceCompanyName", typeof(string));
+                data.Columns.Add("NameInPolicy", typeof(string));
+                data.Columns.Add("PolicyNo", typeof(string));
+                data.Columns.Add("OD", typeof(string));
+                data.Columns.Add("GrossPremium", typeof(string));
+                data.Columns.Add("EndorsementReason", typeof(string));
+                data.Columns.Add("ModelName", typeof(string));
+                data.Columns.Add("RegistrationNo", typeof(string));
+                data.Columns.Add("EndorseOD", typeof(string));
+                data.Columns.Add("TotalOD", typeof(string));
+                data.Columns.Add("AddonOD", typeof(string));
+                data.Columns.Add("EndorseGrossPremium", typeof(string));
+                data.Columns.Add("TotalGrossPremium", typeof(string));
+                data.Columns.Add("EngineNo", typeof(string));
+                data.Columns.Add("ChassisNo", typeof(string));
+                data.Columns.Add("VehicleClass", typeof(string));
+                data.Columns.Add("PolicyStatus", typeof(string));
+                data.Columns.Add("PolicyType", typeof(string));
+                data.Columns.Add("PolicyStartDate", typeof(string));
+                data.Columns.Add("PolicyTypeId", typeof(string));
+                data.Columns.Add("BusinessDoneBy", typeof(string));
+                data.Columns.Add("CommRecived", typeof(string));
+                data.Columns.Add("MonthCycle", typeof(string));
+                data.Columns.Add("MonthCycleId", typeof(string));
+                data.Columns.Add("PolicyEndDate", typeof(string));
+                data.Columns.Add("PolicyNoOD", typeof(string));
+                data.Columns.Add("PolicyPackageType", typeof(string));
+                data.Columns.Add("PolicyTermName", typeof(string));
+                data.Columns.Add("PolicyStartDateOD", typeof(string));
+                data.Columns.Add("PolicyEndDateOD", typeof(string));
+                data.Columns.Add("ODCompany", typeof(string));
+                data.Columns.Add("InsuranceCompanyODId", typeof(string));
+                if (reportModel.DataType == 1)
+                {
+
+                        dataRecon = _dataContext.Usp_ReconDataDownloadRetailCommerceWithCom(reportModel.InsuranceCompanyId, reportModel.BranchId, reportModel.MonthCycle).ToList<dynamic>(); ;
+
+
+
+                }
+
+                if (dataRecon.Count > 0)
+                {
+                    dataRecon.ForEach(x =>
+                    {
+                        data.Rows.Add(x.PolicyId, x.ControlNo, x.TPPremium, x.RegistrationDate, x.MakeYear, x.InsuranceCompanyName, x.NameInPolicy, x.PolicyNo
+                        , x.OD, x.GrossPremium, x.EndorsementReason, x.ModelName, x.RegistrationNo, x.EndorseOD, x.TotalOD, x.AddonOD, x.EndorseGrossPremium
+                        , x.TotalGrossPremium, x.EngineNo, x.ChassisNo, x.VehicleClass, x.PolicyStatus, x.PolicyType, x.PolicyStartDate, x.PolicyTypeId, x.BusinessDoneBy
+                        , x.CommRecived, x.MonthCycle, x.MonthCycleId, x.PolicyEndDate, x.PolicyNoOD, x.PolicyPackageType, x.PolicyTermName
+                        , x.PolicyStartDateOD, x.PolicyEndDateOD, x.ODCompany, x.InsuranceCompanyODId);
+                    });
+                   var response = await GenrateReconExcel(data, "MotorRecon.xlsx");
+                    return response;
+                }
+                return new CommonDto<object>
+                {
+                    Message = "No Data",
+                    IsSuccess = true,
+                    Response = "No Data"
+                };
+
+            }
+
+        private async Task<CommonDto<object>> GenrateReconExcel(DataTable data, string filename)
+        {
+
+            string base64String;
+            using (var wb = new XLWorkbook())
+            {
+                var sheet = wb.AddWorksheet(data, "IRDA");
+
+                // Apply font color to columns 1 to 5
+                sheet.Columns(1, 5).Style.Font.FontColor = XLColor.Black;
+
+                using (var ms = new MemoryStream())
+                {
+                    wb.SaveAs(ms);
+
+                    // Convert the Excel workbook to a base64-encoded string
+                    base64String = Convert.ToBase64String(ms.ToArray());
+                }
+            }
+
+            return new CommonDto<object>
+            {
+                Message = filename,
+                IsSuccess = true,
+                Response = base64String
+            };
+        }
+
+
 
     }
 }
