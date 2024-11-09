@@ -456,7 +456,7 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
     if (input === undefined)
       return;
     this._filteredPosOptions = this._posDatas.filter(item => {
-      return item.Name.toLowerCase().indexOf(input.toLowerCase()) > -1
+      return item.Name?.toLowerCase().indexOf(input.toLowerCase()) > -1
     });
   }
 
@@ -464,7 +464,7 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
     if (input === undefined)
       return;
     this._filteredCustomerOptions = this._customersNamePhone.filter(item => {
-      return item.Name.toLowerCase().indexOf(input.toLowerCase()) > -1
+      return item.Name?.toLowerCase().indexOf(input?.toLowerCase()) > -1
     });
   }
 
