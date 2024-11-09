@@ -142,7 +142,7 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
         userFullName: this._teamMember.find(x =>x.Value == data?.TeamMemberId).Name,
         isActive: data?.IsActive 
     });
-    this.manageuserform.controls.teamMemberId.disable();
+    //this.manageuserform.controls.teamMemberId.disable();
     this._mobileNumber =  data?.MobileNumber
     this._emailId =  data?.EmailId
 
@@ -160,7 +160,7 @@ export class ManageUserComponent implements OnInit,AfterViewInit {
   }
 
   createUser(){
-   let x=  this._teamMember.find(x =>x.Value == this.manageuserform.value.teamMemberId).Name
+   let x=  this._teamMember.find(x =>x.Value == this.manageuserform.getRawValue().teamMemberId).Name
     this.manageuserform.patchValue({
       userFullName: this._teamMember.find(x =>x.Value == this.manageuserform.value.teamMemberId).Name,
     });
