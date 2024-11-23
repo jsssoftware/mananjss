@@ -514,8 +514,8 @@ namespace PolicyManagement.Services.Claims
         }
 
         public async Task<List<ClaimsDocumentDto>> FindClaimsDocumentsByPolicyId(int policyId)
-            => await _dataContext.tblUploadedDocuments.Join(_dataContext.tblDocmentType, T1 => T1.DocumentId, T2 => T2.DocId, (T1, T2) => new { T1, T2 })
-            .Where(w => w.T1.PolicyId == policyId && (w.T1.IsDelete == null || w.T1.IsDelete.HasValue && !w.T1.IsDelete.Value))
+            => await _dataContext.tblUploadedDocuments.Join(_dataContext.tblDocmentType, T1 => T1.DocId, T2 => T2.DocId, (T1, T2) => new { T1, T2 })
+            .Where(w => w.T1.PolicyId == policyId )
             .Select(s => new ClaimsDocumentDto
             {
                 Id = s.T1.DocumentId,

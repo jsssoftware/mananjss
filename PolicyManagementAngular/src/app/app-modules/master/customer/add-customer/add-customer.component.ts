@@ -368,6 +368,7 @@ export class AddCustomerComponent implements OnInit, AfterViewInit, ErrorStateMa
       }
       else {
         if (response.Response == null) {
+          this._isSaveDisable = false
           Swal.fire({
             icon: 'error',
             text: response.Message,

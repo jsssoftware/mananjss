@@ -193,12 +193,12 @@ export class AddVoucherComponent implements OnInit, AfterViewInit {
         this.voucherForm.patchValue({ searchcustomer: '' });
       }
       else {
-        this.voucherForm.get('inhouse')?.setValidators(Validators.required);
-        this.voucherForm.get('inhouse')?.updateValueAndValidity();
+        this.voucherForm.get('pos')?.setValidators(Validators.required);
+        this.voucherForm.get('pos')?.updateValueAndValidity();
         this.voucherForm.get('searchcustomer')?.clearValidators();
         this.voucherForm.get('searchcustomer')?.updateValueAndValidity();
-        this.voucherForm.get('pos')?.clearValidators();
-        this.voucherForm.get('pos')?.updateValueAndValidity();
+        this.voucherForm.get('inhouse')?.clearValidators();
+        this.voucherForm.get('inhouse')?.updateValueAndValidity();
         this.voucherForm.patchValue({ inhouse: '' });
       }
     });
